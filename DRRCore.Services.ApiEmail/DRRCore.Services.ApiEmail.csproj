@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.9" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DRRCore.Application.Interfaces\DRRCore.Application.Interfaces.csproj" />
+    <ProjectReference Include="..\DRRCore.Application.Main\DRRCore.Application.Main.csproj" />
+    <ProjectReference Include="..\DRRCore.Domain.Interfaces\DRRCore.Domain.Interfaces.csproj" />
+    <ProjectReference Include="..\DRRCore.Domain.Main\DRRCore.Domain.Main.csproj" />
+    <ProjectReference Include="..\DRRCore.Infraestructure.Configuration\DRRCore.Infraestructure.Configuration.csproj" />
+    <ProjectReference Include="..\DRRCore.Infraestructure.Interfaces\DRRCore.Infraestructure.Interfaces.csproj" />
+    <ProjectReference Include="..\DRRCore.Infraestructure.Repository\DRRCore.Infraestructure.Repository.csproj" />
+  </ItemGroup>
+
+</Project>

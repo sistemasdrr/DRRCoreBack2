@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DRRCore.Application.DTO\DRRCore.Application.DTO.csproj" />
+    <ProjectReference Include="..\DRRCore.Domain.Entities\DRRCore.Domain.Entities.csproj" />
+    <ProjectReference Include="..\DRRCore.Transversal.Common\DRRCore.Transversal.Common.csproj" />
+  </ItemGroup>
+
+</Project>
