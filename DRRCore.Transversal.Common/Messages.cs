@@ -22,5 +22,6 @@
 
         public static readonly string MessageNoDataFoundEmployee = "No se encontró datos del empleado";
         public static readonly string MessageNoDataCompany = "No se encontró datos de la empresa";
+        public static readonly string m = "";
     }
 }
