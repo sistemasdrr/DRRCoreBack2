@@ -20,7 +20,9 @@
        Por_Referencia = 17,
        Por_Despachar = 18,
        Por_Supervisar=19,
-        Por_Digitar = 20,
-        Por_Traducir = 21
+       Por_Digitar = 20,
+       Por_Traducir = 21,
+       En_Observacion = 22,
+       Despachado_con_Observacion = 23
     }
 }

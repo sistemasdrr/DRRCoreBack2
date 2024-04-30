@@ -57,5 +57,9 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<List<string>>> GetOtherUserCode(int idUser);
         Task<Response<List<GetTicketHistoryResponseDto>>> getCountAsignation();
         Task<Response<bool>> TicketToDispatch(int idTicketHistory,int idTicket);
+        Task<Response<List<PendingTaskResponseDto>>> PendingTask(string userTo);
+        Task<Response<int?>> DailyProduction(string userTo); 
+        Task<Response<int?>> MonthlyProduction(string userTo);
+        Task<Response<List<ObservedTickets?>>> ObservedTickets(int idEmployee);
     }
 }

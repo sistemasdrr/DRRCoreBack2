@@ -1,17 +1,12 @@
 ﻿using AspNetCore.Reporting;
-using AspNetCore.ReportingServices.ReportProcessing.ReportObjectModel;
 using AutoMapper;
-using AutoMapper.Execution;
 using CoreFtp;
-using DRRCore.Application.DTO.API;
 using DRRCore.Application.DTO.Core.Request;
 using DRRCore.Application.DTO.Core.Response;
 using DRRCore.Application.DTO.Email;
 using DRRCore.Application.DTO.Enum;
 using DRRCore.Application.Interfaces.CoreApplication;
 using DRRCore.Application.Interfaces.EmailApplication;
-using DRRCore.Domain.Entities.MYSQLContext;
-using DRRCore.Domain.Entities.SqlContext;
 using DRRCore.Domain.Entities.SQLContext;
 using DRRCore.Domain.Entities.SqlCoreContext;
 using DRRCore.Domain.Interfaces.CoreDomain;
@@ -21,12 +16,8 @@ using DRRCore.Transversal.Common;
 using DRRCore.Transversal.Common.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using MySqlX.XDevAPI.Common;
 using Newtonsoft.Json;
-using System.IO;
-using System.ServiceModel.Channels;
-using ZstdSharp.Unsafe;
+using System.Collections.Generic;
 
 namespace DRRCore.Application.Main.CoreApplication
 {
@@ -874,6 +865,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         foreach (var item1 in listTicketHistory)
                         {
                             item1.Flag = true;
+                            item1.ShippingDate = DateTime.Today;
                             await _ticketHistoryDomain.UpdateAsync(item1);
                         }
                         var assignetTo = item.IdReceptor == 21 ? "PA1" : item.IdReceptor == 33 ? "PA2" : item.IdReceptor == 37 ? "PA3" :
@@ -1658,6 +1650,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                         ticket.UpdateDate = DateTime.Now;
                                         ticket.IdStatusTicket = (int)TicketStatusEnum.Pre_Asignacion;
                                         history.Flag = true;
+                                        history.ShippingDate = DateTime.Today;
                                         history.UpdateDate = DateTime.Now;
 
                                         context.Tickets.Update(ticket);
@@ -1711,6 +1704,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                         ticket.UpdateDate = DateTime.Now;
                                         ticket.IdStatusTicket = (int)TicketStatusEnum.Asig_Reportero;
                                         history.Flag = true;
+                                        history.ShippingDate = DateTime.Today;
                                         history.UpdateDate = DateTime.Now;
 
                                       
@@ -1824,6 +1818,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                        
                                         ticket.UpdateDate = DateTime.Now;
                                         history.Flag = true;
+                                        history.ShippingDate = DateTime.Today;
                                         history.UpdateDate = DateTime.Now;
 
                                        
@@ -1937,6 +1932,7 @@ namespace DRRCore.Application.Main.CoreApplication
 
                                         ticket.UpdateDate = DateTime.Now;
                                         history.Flag = true;
+                                        history.ShippingDate = DateTime.Today;
                                         history.UpdateDate = DateTime.Now;
 
 
@@ -2034,6 +2030,7 @@ namespace DRRCore.Application.Main.CoreApplication
 
                                             ticket.UpdateDate = DateTime.Now;
                                             history.Flag = true;
+                                            history.ShippingDate = DateTime.Today;
                                             history.UpdateDate = DateTime.Now;
 
 
@@ -2132,6 +2129,7 @@ namespace DRRCore.Application.Main.CoreApplication
 
                                             ticket.UpdateDate = DateTime.Now;
                                             history.Flag = true;
+                                            history.ShippingDate = DateTime.Today;
                                             history.UpdateDate = DateTime.Now;
 
 
@@ -2228,6 +2226,7 @@ namespace DRRCore.Application.Main.CoreApplication
 
 
                                             history.Flag = true;
+                                            history.ShippingDate = DateTime.Today;
                                             history.UpdateDate = DateTime.Now;
 
 
@@ -2325,6 +2324,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     history.UserFrom = idUser + "";
                     history.IdStatusTicket = (int?)TicketStatusEnum.Despachado;
                     history.Flag = true;
+                    history.ShippingDate = DateTime.Today;
                     history.NumberAssign = ticketHistory.Last().NumberAssign + 1;
                     await context.TicketHistories.AddAsync(history);
                     
@@ -2582,6 +2582,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                 ticket.UpdateDate = DateTime.Now;
                                 ticket.IdStatusTicket = (int)TicketStatusEnum.Por_Despachar;
                                 history.Flag = true;
+                                history.ShippingDate = DateTime.Today;
                                 history.UpdateDate = DateTime.Now;
 
                                 context.Tickets.Update(ticket);
@@ -2939,6 +2940,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     if(ticketHistory != null)
                     {
                         ticketHistory.Flag = true;
+                        ticketHistory.ShippingDate = DateTime.Today;
                         context.TicketHistories.Update(ticketHistory);
                     }
                 }
@@ -2949,6 +2951,114 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 _logger.LogError(ex.Message);
                 response.IsSuccess = false;
+            }
+            return response;
+        }
+
+        public async Task<Response<List<PendingTaskResponseDto>>> PendingTask(string userTo)
+        {
+            var response = new Response<List<PendingTaskResponseDto>>();
+            response.Data = new List<PendingTaskResponseDto>();
+
+            try
+            {
+                using var context = new SqlCoreContext();
+                var ticketHistory = await context.TicketHistories
+                    .Where(x => x.UserTo == userTo && x.Flag == false
+                        && x.IdStatusTicket != (int?)TicketStatusEnum.Despachado
+                        && x.IdStatusTicket != (int)TicketStatusEnum.Observado
+                        && x.IdStatusTicket != (int)TicketStatusEnum.Rechazado)
+                    .ToListAsync();
+
+                var groupedTickets = ticketHistory
+                    .GroupBy(x => x.AsignedTo)
+                    .Select(g => new PendingTaskResponseDto
+                    {
+                        AsignedTo = g.Key, 
+                        Count = g.Count() 
+                    })
+                    .ToList();
+
+                response.Data = groupedTickets;
+                response.IsSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                response.IsSuccess = false;
+                response.Message = ex.Message;  // Opcional: Agregar mensaje de error en la respuesta
+            }
+            return response;
+        }
+
+        public async Task<Response<int?>> DailyProduction(string userTo)
+        {
+            var response = new Response<int?>();
+            try
+            {
+                var today = DateTime.Today;
+                using var context = new SqlCoreContext();
+                var ticketHistory = await context.TicketHistories
+                    .Where(x => x.UserTo.Contains(userTo) && x.Flag == true && x.ShippingDate.HasValue && x.ShippingDate.Value.Date == today)
+                    .ToListAsync();
+                response.Data = ticketHistory?.Count();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                response.IsSuccess = false;
+            }
+            return response;
+        }
+
+        public async Task<Response<int?>> MonthlyProduction(string userTo)
+        {
+            var response = new Response<int?>();
+            try
+            {
+                var today = DateTime.Today;
+                using var context = new SqlCoreContext();
+                var ticketHistory = await context.TicketHistories
+                    .Where(x => x.UserTo.Contains(userTo) && x.Flag == true && x.ShippingDate.HasValue && x.ShippingDate.Value.Month == today.Month)
+                    .ToListAsync();
+                response.Data = ticketHistory?.Count();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                response.IsSuccess = false;
+            }
+            return response;
+        }
+
+        public async Task<Response<List<ObservedTickets?>>> ObservedTickets(int idEmployee)
+        {
+            var response = new Response<List<ObservedTickets?>>();
+            response.Data = new List<ObservedTickets?>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var personal = await context.Personals.Where(x => x.IdEmployee == idEmployee).ToListAsync();
+                foreach (var item in personal)
+                {
+                    var listTicketObservations = await context.DetailsTicketObservations.Include(x => x.IdTicketObservationsNavigation). Include(x => x.IdTicketObservationsNavigation.IdTicketNavigation)
+                        .Where(x => x.AssignedTo.Contains(item.Code) && x.IdTicketObservationsNavigation.IdStatusTicketObservations == 1).ToListAsync();
+                    foreach (var item1 in listTicketObservations)
+                    {
+                        response.Data.Add(new ObservedTickets
+                        {
+                            AsignedTo = item1.AssignedTo,
+                            IdTicket = item1.IdTicketObservationsNavigation.IdTicket,
+                            Ticket = item1.IdTicketObservationsNavigation.IdTicketNavigation.Number.ToString("D6")
+                        });
+                    }
+                    
+                }
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                response.IsSuccess = true;
             }
             return response;
         }

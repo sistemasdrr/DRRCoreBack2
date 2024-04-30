@@ -201,8 +201,6 @@ public partial class SqlCoreContext : DbContext
         modelBuilder.Entity<CompanyLegalEventsData>().ToSqlQuery("EXEC LegalEventsCompanyCredendo").HasNoKey();
         modelBuilder.Entity<CompanyRelatedData>().ToSqlQuery("EXEC RelatedCompanyCredendo").HasNoKey();
         modelBuilder.Entity<WhoIsWhoSP>().ToSqlQuery("EXEC WhoIsWho");
-
-
         modelBuilder.Entity<Agent>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Agent__3213E83FAB71BE05");
@@ -1388,11 +1386,9 @@ public partial class SqlCoreContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Commentary)
-                .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("commentary");
             entity.Property(e => e.CommentaryEng)
-                .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("commentaryEng");
             entity.Property(e => e.CreationDate)
@@ -1514,11 +1510,9 @@ public partial class SqlCoreContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Commentary)
-                .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("commentary");
             entity.Property(e => e.CommentaryEng)
-                .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("commentaryEng");
             entity.Property(e => e.CreationDate)
@@ -4502,6 +4496,9 @@ public partial class SqlCoreContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("observations");
             entity.Property(e => e.References).HasColumnName("references");
+            entity.Property(e => e.ShippingDate)
+                .HasColumnType("datetime")
+                .HasColumnName("shippingDate");
             entity.Property(e => e.StartDate)
                 .HasColumnType("datetime")
                 .HasColumnName("startDate");

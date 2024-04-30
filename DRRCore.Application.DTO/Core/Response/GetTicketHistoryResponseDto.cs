@@ -36,4 +36,16 @@
 
         public DateTime? EndDate { get; set; }
     }
+
+    public class PendingTaskResponseDto
+    {
+        public string? AsignedTo { get; set; }
+        public int? Count { get; set; }
+    }
+    public class ObservedTickets
+    {
+        public string? AsignedTo { get; set; }
+        public int? IdTicket { get; set; }
+        public string? Ticket { get; set; }
+    }
 }
