@@ -186,6 +186,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                         .Include(x => x.Traductions)
                         .Include(x => x.IdCreditRiskNavigation)
                         .Include(x => x.IdCountryNavigation)
+                        .Include(x => x.CompanyPartners.Where(x => x.MainExecutive == true)).ThenInclude(x => x.IdPersonNavigation)
                         .Where(x => (idCountry == 0 || x.IdCountry == idCountry) &&
                                     (form == "C" ? x.Name.Contains(name) : form == "I" ? x.Name.StartsWith(name) : false) &&
                                     x.HaveReport == true)
@@ -198,6 +199,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                        .Include(x => x.Traductions)
                        .Include(x => x.IdCreditRiskNavigation)
                        .Include(x => x.IdCountryNavigation)
+                        .Include(x => x.CompanyPartners.Where(x => x.MainExecutive == true)).ThenInclude(x => x.IdPersonNavigation)
                        .Where(x => (idCountry == 0 || x.IdCountry == idCountry) &&
                                    (form == "C" ? x.Name.Contains(name) : form == "I" ? x.Name.StartsWith(name) : false))
                        .Take(100)
@@ -212,6 +214,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                         .Include(x => x.Traductions)
                         .Include(x => x.IdCreditRiskNavigation)
                         .Include(x => x.IdCountryNavigation)
+                        .Include(x => x.CompanyPartners.Where(x => x.MainExecutive == true)).ThenInclude(x => x.IdPersonNavigation)
                         .Where(x => (idCountry == 0 || x.IdCountry == idCountry) &&
                                     (form == "C" ? x.Address.Contains(name) : form == "I" ? x.Address.StartsWith(name) : false) &&
                                     x.HaveReport == true)
@@ -224,6 +227,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                        .Include(x => x.Traductions)
                        .Include(x => x.IdCreditRiskNavigation)
                        .Include(x => x.IdCountryNavigation)
+                        .Include(x => x.CompanyPartners.Where(x => x.MainExecutive == true)).ThenInclude(x => x.IdPersonNavigation)
                        .Where(x => (idCountry == 0 || x.IdCountry == idCountry) &&
                                    (form == "C" ? x.Address.Contains(name) : form == "I" ? x.Address.StartsWith(name) : false))
                        .Take(100)
@@ -238,6 +242,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                         .Include(x => x.Traductions)
                         .Include(x => x.IdCreditRiskNavigation)
                         .Include(x => x.IdCountryNavigation)
+                        .Include(x => x.CompanyPartners.Where(x => x.MainExecutive == true)).ThenInclude(x => x.IdPersonNavigation)
                         .Where(x => (idCountry == 0 || x.IdCountry == idCountry) &&
                                     (form == "C" ? x.TaxTypeCode.Contains(name) : form == "I" ? x.TaxTypeCode.StartsWith(name) : false) &&
                                     x.HaveReport == true)
@@ -250,6 +255,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                        .Include(x => x.Traductions)
                        .Include(x => x.IdCreditRiskNavigation)
                        .Include(x => x.IdCountryNavigation)
+                        .Include(x => x.CompanyPartners.Where(x => x.MainExecutive == true)).ThenInclude(x => x.IdPersonNavigation)
                        .Where(x => (idCountry == 0 || x.IdCountry == idCountry) &&
                                    (form == "C" ? x.TaxTypeCode.Contains(name) : form == "I" ? x.TaxTypeCode.StartsWith(name) : false))
                        .Take(100)
@@ -264,6 +270,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                         .Include(x => x.Traductions)
                         .Include(x => x.IdCreditRiskNavigation)
                         .Include(x => x.IdCountryNavigation)
+                        .Include(x => x.CompanyPartners.Where(x => x.MainExecutive == true)).ThenInclude(x => x.IdPersonNavigation)
                         .Where(x => (idCountry == 0 || x.IdCountry == idCountry) &&
                                     (form == "C" ? x.Telephone.Contains(name) : form == "I" ? x.Telephone.StartsWith(name) : false) &&
                                     x.HaveReport == true)
@@ -276,6 +283,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                         .Include(x => x.Traductions)
                         .Include(x => x.IdCreditRiskNavigation)
                         .Include(x => x.IdCountryNavigation)
+                        .Include(x => x.CompanyPartners.Where(x => x.MainExecutive == true)).ThenInclude(x => x.IdPersonNavigation)
                         .Where(x => (idCountry == 0 || x.IdCountry == idCountry) &&
                                     (form == "C" ? x.Telephone.Contains(name) : form == "I" ? x.Telephone.StartsWith(name) : false))
                         .Take(100)

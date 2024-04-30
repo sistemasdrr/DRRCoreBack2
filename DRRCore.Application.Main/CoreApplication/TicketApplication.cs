@@ -2907,6 +2907,51 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             return response;
         }
+
+        public async Task<Response<List<GetTicketHistoryResponseDto>>> getCountAsignation()
+        {
+            var response = new Response<List<GetTicketHistoryResponseDto>>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var list = await context.TicketHistories.Include(x => x.IdTicketNavigation).Where(x => x.IdTicketNavigation.IdStatusTicket != 9 && x.Flag == false && x.AsignedTo != null).ToListAsync();
+                response.Data = _mapper.Map<List<GetTicketHistoryResponseDto>>(list);
+            }catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                response.Data = null;
+                response.IsSuccess = false;
+            }
+            return response;
+        }
+
+        public async Task<Response<bool>> TicketToDispatch(int idTicketHistory,int idTicket)
+        {
+            var response = new Response<bool>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var ticket = await context.Tickets.Where(x => x.Id == idTicket).FirstOrDefaultAsync();
+                if(ticket != null)
+                {
+                    ticket.IdStatusTicket = 18;
+                    var ticketHistory = await context.TicketHistories.Where(x => x.Id == idTicketHistory).FirstOrDefaultAsync();
+                    if(ticketHistory != null)
+                    {
+                        ticketHistory.Flag = true;
+                        context.TicketHistories.Update(ticketHistory);
+                    }
+                }
+                context.Tickets.Update(ticket);
+                await context.SaveChangesAsync();
+                response.Data = true;
+            }catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                response.IsSuccess = false;
+            }
+            return response;
+        }
     }
 
 }

@@ -2,8 +2,10 @@
 using DRRCore.Application.Interfaces.CoreApplication;
 using Microsoft.AspNetCore.Mvc;
 using Org.BouncyCastle.Asn1.Ocsp;
+using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace DRRCore.Services.ApiCore.Controllers
 {
@@ -11,48 +13,38 @@ namespace DRRCore.Services.ApiCore.Controllers
     [Route("api/[controller]")]
     public class AgentController : Controller
     {
-        private readonly HttpClient _httpClient; 
+       // private readonly HttpClient _httpClient; 
         public readonly IAgentApplication _agentApplication;
         public readonly IAgentPriceApplication _agentPriceApplication;
-        public AgentController(IAgentApplication agentApplication, IAgentPriceApplication agentPriceApplication, HttpClient httpClient, IHttpClientFactory httpClientFactory)
+        public AgentController(IAgentApplication agentApplication, IAgentPriceApplication agentPriceApplication)
         {
             _agentApplication = agentApplication;
             _agentPriceApplication = agentPriceApplication; 
-            _httpClient = httpClientFactory.CreateClient();
+           
         }
-        //[HttpPost()]
-        //[Route("chatGpt")]
-        //public async Task<ActionResult> ChatGpt(string consulta)
-        //{
-        //    string _apiKey = "sk-proj-puwalVcYI9DaEg9YjLaUT3BlbkFJp2epADiWPxlrxmiMBhQ7";
-        //    string endpoint = "https://api.openai.com/v1/completions";
-        //    var requestData = new
-        //    {
-        //        model = "gpt-3.5-turbo",
-        //        prompt = consulta,
-        //        max_tokens = 50
-        //    };
+       
+        [HttpPost]
+        [Route("copilot")]
+        public async Task<ActionResult> ChatGpt(string query)
+        {
+            var _httpClient = new HttpClient();
+            string apiKey = "458196fd1b2c4b91aed6fbb231cdcba7"; // Reemplaza con tu clave API
+            string endpoint = $"https://api.bing.microsoft.com/v7.0/search?q={Uri.EscapeDataString(query)}";
 
-        //    string requestDataJson = JsonSerializer.Serialize(requestData);
-        //    var content = new StringContent(requestDataJson, Encoding.UTF8, "application/json");
-        //    _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _apiKey);
+            _httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", apiKey);
 
-        //    HttpResponseMessage response = await _httpClient.PostAsync(endpoint, content);
-        //    if (response.IsSuccessStatusCode)
-        //    {
-        //        string responseDataJson = await response.Content.ReadAsStringAsync();
-        //        using (var doc = JsonDocument.Parse(responseDataJson))
-        //        {
-        //            var responseText = doc.RootElement.GetProperty("choices")[0].GetProperty("text").GetString();
-        //            return Ok(responseText);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        var errorContent = await response.Content.ReadAsStringAsync();
-        //        return StatusCode((int)response.StatusCode, errorContent);
-        //    }
-        //}
+            HttpResponseMessage response = await _httpClient.GetAsync(endpoint);
+            if (response.IsSuccessStatusCode)
+            {
+                string jsonResponse = await response.Content.ReadAsStringAsync();
+                return Ok(jsonResponse);
+            }
+            else
+            {
+                throw new Exception("Failed to fetch results from Bing Search API");
+            }
+        }
+
         [HttpPost()]
         [Route("addOrUpdate")]
         public async Task<ActionResult> AddOrUpdateAgent(AddOrUpdateAgentResponseDto request)

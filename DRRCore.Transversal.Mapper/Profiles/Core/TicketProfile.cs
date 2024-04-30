@@ -25,6 +25,11 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
 
                    .ReverseMap();
 
+            CreateMap<TicketHistory, GetTicketHistoryResponseDto>()
+                   .ForMember(dest => dest.IdStatusTicket, opt => opt?.MapFrom(src => src.IdStatusTicket != null ? src.IdStatusTicket : null))
+                   .ForMember(dest => dest.IdTicket, opt => opt?.MapFrom(src => src.IdTicket != null ? src.IdTicket : null))
+                .ReverseMap();
+
             CreateMap<Ticket, GetListSameSearchedReportResponseDto>()
                   .ForMember(dest => dest.TypeReport, opt => opt?.MapFrom(src => src.ReportType))
                   .ForMember(dest => dest.DispatchtDate, opt => opt?.MapFrom(src => src.DispatchtDate))

@@ -36,7 +36,7 @@ builder.Services.Configure<FormOptions>(options =>
     options.MultipartBodyLengthLimit = 104857600; // 100 MB
 });
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
-
+builder.Services.AddHttpClient();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
@@ -267,6 +267,7 @@ builder.Services.AddScoped<IFileManager, FileManager>();
 builder.Services.AddScoped<IMailFormatter, MailFormatter>();
 builder.Services.AddScoped<IReportingDownload, ReportingDownload>();
 builder.Services.AddScoped<IFunction, Functions>();
+builder.Services.AddScoped<HttpClient>();
 builder.Services.AddScoped<DRRCore.Transversal.Common.Interface.ILogger, LoggerManager>();
 
 /*

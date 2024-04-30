@@ -112,6 +112,12 @@ namespace DRRCore.Services.ApiCore.Controllers
         {
             return Ok(await _ticketApplication.GetTicketListToDispatchAsync());
         }
+        [HttpGet()]
+        [Route("TicketToDispatch")]
+        public async Task<ActionResult> TicketToDispatch(int idTicketHistory, int idTicket)
+        {
+            return Ok(await _ticketApplication.TicketToDispatch(idTicketHistory, idTicket));
+        }
         [HttpPost()]
         [Route("DispatchTicket")]
         public async Task<ActionResult> DispatchTicekt(int idTicket, int idUser)
@@ -194,7 +200,12 @@ namespace DRRCore.Services.ApiCore.Controllers
         {
             return Ok(await _ticketApplication.GetPersonalAssignation());
         }
-        
+        [HttpGet()]
+        [Route("getCountAsignation")]
+        public async Task<ActionResult> getCountAsignation()
+        {
+            return Ok(await _ticketApplication.getCountAsignation());
+        }
         [HttpGet()]
         [Route("getAgentAssignation")]
         public async Task<ActionResult> getAgentAssignation()
@@ -299,5 +310,6 @@ namespace DRRCore.Services.ApiCore.Controllers
         {
             return Ok(await _ticketApplication.GetOtherUserCode(idUser));
         }
+        
     }
 }
