@@ -181,4 +181,10 @@ namespace DRRCore.Domain.Entities.SqlCoreContext
         public string? Properties { get; set; }
         public string? BirthPlace { get; set; }
     }
+    public class TicketsInCurrentMonthSP
+    {
+        public string? ReportType { get; set; }
+        public int? Quantity { get; set; }
+        public string? ProcedureType { get; set; }
+    }
 }

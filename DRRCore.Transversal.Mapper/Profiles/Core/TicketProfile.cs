@@ -36,7 +36,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                   .ForMember(dest => dest.DispatchtDateString, opt => opt?.MapFrom(src => StaticFunctions.DateTimeToString(src.DispatchtDate)))
                   .ForMember(dest => dest.IsPending, opt => opt?.MapFrom(src => src.IdStatusTicket==(int?)TicketStatusEnum.Pendiente))
                   .ForMember(dest => dest.TicketNumber, opt => opt?.MapFrom(src =>"N-"+ src.Number.ToString("D6")))
-                  .ForMember(dest => dest.RequestedName, opt => opt?.MapFrom(src => src.RequestedName))
+                  .ForMember(dest => dest.RequestedName, opt => opt?.MapFrom(src => src.RequestedName.IsNullOrEmpty() == true ? src.BusineesName : src.RequestedName))
                   .ForMember(dest => dest.Dispatch, opt => opt?.MapFrom(src => src.DispatchedName))
                   .ForMember(dest => dest.Subscriber, opt => opt?.MapFrom(src => src.IdSubscriberNavigation.Code))
                   .ForMember(dest => dest.Procedure, opt => opt?.MapFrom(src => src.ProcedureType))

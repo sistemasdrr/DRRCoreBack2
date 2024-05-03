@@ -95,12 +95,12 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                 using var context = new SqlCoreContext();
                 if (enable.Equals("A"))
                 {
-                    return await context.Subscribers.Include(x => x.IdCountryNavigation).Where(x => x.Code.Contains(code) && x.Name.Contains(name) && x.Enable == true).ToListAsync();
+                    return await context.Subscribers.Include(x => x.IdCountryNavigation).Where(x => x.Code.Contains(code) && x.Name.Contains(name) && x.Enable == true).OrderBy(x => x.Code).ToListAsync();
 
                 }
                 else
                 {
-                    return await context.Subscribers.Include(x => x.IdCountryNavigation).Where(x => x.Code.Contains(code) && x.Name.Contains(name)).ToListAsync();
+                    return await context.Subscribers.Include(x => x.IdCountryNavigation).Where(x => x.Code.Contains(code) && x.Name.Contains(name)).OrderBy(x => x.Code).ToListAsync();
                 }
             }
             catch (Exception ex)

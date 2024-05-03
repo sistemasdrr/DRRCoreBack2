@@ -312,29 +312,5 @@ namespace DRRCore.Services.ApiCore.Controllers
             return Ok(await _ticketApplication.GetOtherUserCode(idUser));
         }
         
-        [HttpGet()]
-        [Route("PendingTask")]
-        public async Task<ActionResult> PendingTask(string userTo)
-        {
-            return Ok(await _ticketApplication.PendingTask(userTo));
-        }
-        [HttpGet()]
-        [Route("DailyProduction")]
-        public async Task<ActionResult> DailyProduction(string userTo)
-        {
-            return Ok(await _ticketApplication.DailyProduction(userTo));
-        }
-        [HttpGet()]
-        [Route("MonthlyProduction")]
-        public async Task<ActionResult> MonthlyProduction(string userTo)
-        {
-            return Ok(await _ticketApplication.DailyProduction(userTo));
-        }
-        [HttpGet()]
-        [Route("ObservedTickets")]
-        public async Task<ActionResult> ObservedTickets(int idEmployee)
-        {
-            return Ok(await _ticketApplication.ObservedTickets(idEmployee));
-        }
     }
 }

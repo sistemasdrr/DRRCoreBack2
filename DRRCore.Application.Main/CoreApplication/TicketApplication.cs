@@ -374,8 +374,8 @@ namespace DRRCore.Application.Main.CoreApplication
                             }
                         }
 
-                       
-                        getExist.LastSearchedDate = firstTicket.DispatchtDate.ToShortDateString();
+
+                        getExist.LastSearchedDate = StaticFunctions.DateTimeToString(company.LastSearched);
                     }
                     getExist.ListSameSearched = list.ToList();
                     response.Data = getExist;
@@ -2331,9 +2331,9 @@ namespace DRRCore.Application.Main.CoreApplication
 
                     emailDataDto.EmailKey = ticket.Language == "E" ? "DRR_WORKFLOW_ESP_0027" : "DRR_WORKFLOW_ENG_0027";
                     emailDataDto.BeAuthenticated = true;
-                    emailDataDto.From = userLogin.IdEmployeeNavigation.Email;
-                    emailDataDto.UserName = emailDataDto.From;
-                    emailDataDto.Password = userLogin.EmailPassword;
+                    emailDataDto.From = "diego.rodriguez@del-risco.com";// userLogin.IdEmployeeNavigation.Email;
+                    emailDataDto.UserName = "diego.rodriguez@del-risco.com";//emailDataDto.From;
+                    emailDataDto.Password = "w*@JHCr7mH";//userLogin.EmailPassword;
                     emailDataDto.To = new List<string>
                     {
                         "jfernandez@del-risco.com"//ticket.IdSubscriberNavigation.SendReportToEmail,
@@ -2429,6 +2429,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 var dictionary = new Dictionary<string, string>
                 {
                     { "idCompany", idCompany.ToString() },
+                    { "language", language },
                  };
 
                 response.Data = new GetFileResponseDto
@@ -2955,113 +2956,7 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<List<PendingTaskResponseDto>>> PendingTask(string userTo)
-        {
-            var response = new Response<List<PendingTaskResponseDto>>();
-            response.Data = new List<PendingTaskResponseDto>();
-
-            try
-            {
-                using var context = new SqlCoreContext();
-                var ticketHistory = await context.TicketHistories
-                    .Where(x => x.UserTo == userTo && x.Flag == false
-                        && x.IdStatusTicket != (int?)TicketStatusEnum.Despachado
-                        && x.IdStatusTicket != (int)TicketStatusEnum.Observado
-                        && x.IdStatusTicket != (int)TicketStatusEnum.Rechazado)
-                    .ToListAsync();
-
-                var groupedTickets = ticketHistory
-                    .GroupBy(x => x.AsignedTo)
-                    .Select(g => new PendingTaskResponseDto
-                    {
-                        AsignedTo = g.Key, 
-                        Count = g.Count() 
-                    })
-                    .ToList();
-
-                response.Data = groupedTickets;
-                response.IsSuccess = true;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                response.IsSuccess = false;
-                response.Message = ex.Message;  // Opcional: Agregar mensaje de error en la respuesta
-            }
-            return response;
-        }
-
-        public async Task<Response<int?>> DailyProduction(string userTo)
-        {
-            var response = new Response<int?>();
-            try
-            {
-                var today = DateTime.Today;
-                using var context = new SqlCoreContext();
-                var ticketHistory = await context.TicketHistories
-                    .Where(x => x.UserTo.Contains(userTo) && x.Flag == true && x.ShippingDate.HasValue && x.ShippingDate.Value.Date == today)
-                    .ToListAsync();
-                response.Data = ticketHistory?.Count();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                response.IsSuccess = false;
-            }
-            return response;
-        }
-
-        public async Task<Response<int?>> MonthlyProduction(string userTo)
-        {
-            var response = new Response<int?>();
-            try
-            {
-                var today = DateTime.Today;
-                using var context = new SqlCoreContext();
-                var ticketHistory = await context.TicketHistories
-                    .Where(x => x.UserTo.Contains(userTo) && x.Flag == true && x.ShippingDate.HasValue && x.ShippingDate.Value.Month == today.Month)
-                    .ToListAsync();
-                response.Data = ticketHistory?.Count();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                response.IsSuccess = false;
-            }
-            return response;
-        }
-
-        public async Task<Response<List<ObservedTickets?>>> ObservedTickets(int idEmployee)
-        {
-            var response = new Response<List<ObservedTickets?>>();
-            response.Data = new List<ObservedTickets?>();
-            try
-            {
-                using var context = new SqlCoreContext();
-                var personal = await context.Personals.Where(x => x.IdEmployee == idEmployee).ToListAsync();
-                foreach (var item in personal)
-                {
-                    var listTicketObservations = await context.DetailsTicketObservations.Include(x => x.IdTicketObservationsNavigation). Include(x => x.IdTicketObservationsNavigation.IdTicketNavigation)
-                        .Where(x => x.AssignedTo.Contains(item.Code) && x.IdTicketObservationsNavigation.IdStatusTicketObservations == 1).ToListAsync();
-                    foreach (var item1 in listTicketObservations)
-                    {
-                        response.Data.Add(new ObservedTickets
-                        {
-                            AsignedTo = item1.AssignedTo,
-                            IdTicket = item1.IdTicketObservationsNavigation.IdTicket,
-                            Ticket = item1.IdTicketObservationsNavigation.IdTicketNavigation.Number.ToString("D6")
-                        });
-                    }
-                    
-                }
-            }
-            catch(Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                response.IsSuccess = true;
-            }
-            return response;
-        }
+       
     }
 
 }
