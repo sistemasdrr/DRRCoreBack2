@@ -38,6 +38,7 @@
         public string? TaxType { get; set; }
         public string? TaxCode { get; set; }
         public string? InvestigatedContinent { get; set; }
+        public string? InvestigatedIsoCountry { get; set; }
         public string? InvestigatedCountry { get; set; }
         public string? InvestigatedFlag { get; set; }
         public string? City { get; set; }
@@ -112,6 +113,7 @@
         public string? TaxCode { get; set; }
         public string? InvestigatedContinent { get; set; }
         public string? InvestigatedCountry { get; set; }
+        public string? InvestigatedIsoCountry { get; set; }
         public string? InvestigatedFlag { get; set; }
         public string? City { get; set; }
         public string? Email { get; set; }

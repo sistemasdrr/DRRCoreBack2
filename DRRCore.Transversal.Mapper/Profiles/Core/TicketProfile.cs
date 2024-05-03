@@ -158,6 +158,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                  .ForMember(dest => dest.SubscriberIndications, opt => opt?.MapFrom(src => src.IdTicketNavigation.IdSubscriberNavigation.Indications))
 
                  .ForMember(dest => dest.InvestigatedContinent, opt => opt?.MapFrom(src => src.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation.IdContinentNavigation.Name))
+                 .ForMember(dest => dest.InvestigatedIsoCountry, opt => opt?.MapFrom(src => src.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation.Iso))
                  .ForMember(dest => dest.InvestigatedCountry, opt => opt?.MapFrom(src => src.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation.Name))
                  .ForMember(dest => dest.InvestigatedFlag, opt => opt?.MapFrom(src => src.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation.FlagIso))
 
@@ -227,6 +228,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                  .ForMember(dest => dest.SubscriberIndications, opt => opt?.MapFrom(src => src.IdTicketNavigation.IdSubscriberNavigation.Indications))
 
                  .ForMember(dest => dest.InvestigatedContinent, opt => opt?.MapFrom(src => src.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation.IdContinentNavigation.Name))
+                 .ForMember(dest => dest.InvestigatedIsoCountry, opt => opt?.MapFrom(src => src.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation.Iso))
                  .ForMember(dest => dest.InvestigatedCountry, opt => opt?.MapFrom(src => src.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation.Name))
                  .ForMember(dest => dest.InvestigatedFlag, opt => opt?.MapFrom(src => src.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation.FlagIso))
 

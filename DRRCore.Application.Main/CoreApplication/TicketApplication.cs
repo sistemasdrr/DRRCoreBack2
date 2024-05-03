@@ -17,7 +17,6 @@ using DRRCore.Transversal.Common.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 
 namespace DRRCore.Application.Main.CoreApplication
 {
@@ -339,12 +338,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     {
                         throw new Exception(Messages.MessageNoDataFound);
                     }
-                    var newBd = await _ticketDomain.GetTicketByCompany(company.Id);
-
-                    if (newBd != null && newBd.Any())
-                    {
-                        list.AddRange(_mapper.Map<List<GetListSameSearchedReportResponseDto>>(newBd));
-                    }
+                    
 
                     if (company.OldCode != null && company.OldCode.StartsWith("E"))
                     {
@@ -354,7 +348,12 @@ namespace DRRCore.Application.Main.CoreApplication
                             list.AddRange(_mapper.Map<List<GetListSameSearchedReportResponseDto>>(oldBd));
                         }
                     }
+                    var newBd = await _ticketDomain.GetTicketByCompany(company.Id);
 
+                    if (newBd != null && newBd.Any())
+                    {
+                        list.AddRange(_mapper.Map<List<GetListSameSearchedReportResponseDto>>(newBd));
+                    }
                     if (list.Any())
                     {
                         getExist.TypeReport = "RV";
@@ -1586,7 +1585,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                         item.Code.Contains("D") ? (int)TicketStatusEnum.Asig_Digitidor : item.Code.Contains("R") ? (int)TicketStatusEnum.Asig_Reportero : item.Code.Contains("T") ? (int)TicketStatusEnum.Asig_Traductor :
                                         item.Code.Contains("S") ? (int)TicketStatusEnum.Asig_Supervisor : null;
                                     newTicketHistory.AsignedTo = item.Code;
-                                    newTicketHistory.Flag = ticketHistory.Flag;
+                                    newTicketHistory.Flag = true;
                                     newTicketHistory.NumberAssign = ticketHistory.NumberAssign;
                                     newTicketHistory.Balance = ticketHistory.Balance;
                                     newTicketHistory.References = ticketHistory.References;
@@ -1625,8 +1624,8 @@ namespace DRRCore.Application.Main.CoreApplication
                                     }
                                     if (item.Type == "PA")
                                     {
-                                       string nameAssignedTo = "PRE_ASSIGN_" + item.AssignedToCode;
-                                        string descriptionAssignedTo = "Pre-Asignación " + item.AssignedToCode;
+                                       string nameAssignedTo = "PRE_ASSIGN_" + item.AssignedToCode.Trim();
+                                        string descriptionAssignedTo = "Pre-Asignación " + item.AssignedToCode.Trim();
                                         var numeration = await context.Numerations.Where(x => x.Name == nameAssignedTo).FirstOrDefaultAsync();
                                         int? number = 1;
                                         if (numeration == null)
@@ -1679,8 +1678,8 @@ namespace DRRCore.Application.Main.CoreApplication
                                     }
                                     if (item.Type == "RP")
                                     {
-                                        string nameAssignedTo = "REPORTERO_" + item.AssignedToCode;
-                                        string descriptionAssignedTo = "Reportero " + item.AssignedToCode;
+                                        string nameAssignedTo = "REPORTERO_" + item.AssignedToCode.Trim();
+                                        string descriptionAssignedTo = "Reportero " + item.AssignedToCode.Trim();
                                         var numeration = await context.Numerations.Where(x => x.Name == nameAssignedTo).FirstOrDefaultAsync();
                                         int? number = 1;
                                         if (numeration == null)
@@ -1794,8 +1793,8 @@ namespace DRRCore.Application.Main.CoreApplication
                                     }
                                     if (item.Type == "AG")
                                     {
-                                        string nameAssignedTo = "AGENTE_" + item.AssignedToCode;
-                                        string descriptionAssignedTo = "Agente " + item.AssignedToCode;
+                                        string nameAssignedTo = "AGENTE_" + item.AssignedToCode.Trim();
+                                        string descriptionAssignedTo = "Agente " + item.AssignedToCode.Trim();
                                         var numeration = await context.Numerations.Where(x => x.Name == nameAssignedTo).FirstOrDefaultAsync();
                                         int? number = 1;
                                         if (numeration == null)
@@ -1838,8 +1837,14 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 EndDate = DateTime.Parse(item.EndDate),
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
+                                                References = item.References
 
                                             };
+                                            ticket.UpdateDate = DateTime.Now;
+                                            history.Flag = true;
+                                            history.ShippingDate = DateTime.Today;
+                                            history.UpdateDate = DateTime.Now;
+
                                             await context.TicketHistories.AddAsync(newTicketHistory);
                                         }
                                         else
@@ -1858,7 +1863,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 EndDate = DateTime.Parse(item.EndDate),
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
-
+                                                References = item.References
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
                                         }
@@ -1897,10 +1902,15 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 EndDate = DateTime.Parse(item.EndDate),
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
-
+                                                References = item.References
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
                                         }
+                                        ticket.UpdateDate = DateTime.Now;
+                                        history.Flag = true;
+                                        history.ShippingDate = DateTime.Today;
+                                        history.UpdateDate = DateTime.Now;
+
                                         context.Tickets.Update(ticket);
                                         context.TicketHistories.Update(history);
 
@@ -1908,8 +1918,8 @@ namespace DRRCore.Application.Main.CoreApplication
                                     }
                                     if (item.Type == "RF")
                                     {
-                                        string nameAssignedTo = "REFERENCISTA_" + item.AssignedToCode;
-                                        string descriptionAssignedTo = "Referencia " + item.AssignedToCode;
+                                        string nameAssignedTo = "REFERENCISTA_" + item.AssignedToCode.Trim();
+                                        string descriptionAssignedTo = "Referencia " + item.AssignedToCode.Trim();
                                         var numeration = await context.Numerations.Where(x => x.Name == nameAssignedTo).FirstOrDefaultAsync();
                                         int? number = 1;
                                         if (numeration == null)
@@ -1963,7 +1973,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                     }
                                     if (item.Type == "DI")
                                     {
-                                        if (item.AssignedToCode=="D15")
+                                        if (item.AssignedToCode.Trim() == "D15")
                                         {
 
                                             string nameAssignedToRef = "PORDIGITAR_CR4";
@@ -2001,13 +2011,17 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Balance = item.Balance,
 
                                             };
+                                            ticket.UpdateDate = DateTime.Now;
+                                            history.Flag = true;
+                                            history.ShippingDate = DateTime.Today;
+                                            history.UpdateDate = DateTime.Now;
                                             await context.TicketHistories.AddAsync(newTicketHistory);
 
                                         }
                                         else
                                         {
-                                            string nameAssignedTo = "DIGITADOR" + item.AssignedToCode;
-                                            string descriptionAssignedTo = "Digitador " + item.AssignedToCode;
+                                            string nameAssignedTo = "DIGITADOR" + item.AssignedToCode.Trim();
+                                            string descriptionAssignedTo = "Digitador " + item.AssignedToCode.Trim();
                                             var numeration = await context.Numerations.Where(x => x.Name == nameAssignedTo).FirstOrDefaultAsync();
                                             int? number = 1;
                                             if (numeration == null)
@@ -2062,11 +2076,11 @@ namespace DRRCore.Application.Main.CoreApplication
                                     }
                                     if (item.Type == "TR")
                                     {
-                                        if (item.AssignedToCode == "T14")
+                                        if (item.AssignedToCode.Trim() == "T14")
                                         {
 
                                             string nameAssignedToRef = "PORTRADUCIR_CR5";
-                                            string descriptionAssignedToRef = "Por Digitar ";
+                                            string descriptionAssignedToRef = "Por Traducir ";
                                             var numerationRef = await context.Numerations.Where(x => x.Name == nameAssignedToRef).FirstOrDefaultAsync();
                                             int? numberRef = 1;
                                             if (numerationRef == null)
@@ -2100,6 +2114,10 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Balance = item.Balance,
 
                                             };
+                                            ticket.UpdateDate = DateTime.Now;
+                                            history.Flag = true;
+                                            history.ShippingDate = DateTime.Today;
+                                            history.UpdateDate = DateTime.Now;
                                             await context.TicketHistories.AddAsync(newTicketHistory);
 
                                         }
@@ -2126,13 +2144,6 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 context.Numerations.Update(numeration);
                                             }
 
-
-                                            ticket.UpdateDate = DateTime.Now;
-                                            history.Flag = true;
-                                            history.ShippingDate = DateTime.Today;
-                                            history.UpdateDate = DateTime.Now;
-
-
                                             ticket.IdStatusTicket = (int)TicketStatusEnum.Asig_Traductor;
                                             var newTicketHistory = new TicketHistory
                                             {
@@ -2152,6 +2163,11 @@ namespace DRRCore.Application.Main.CoreApplication
                                             await context.TicketHistories.AddAsync(newTicketHistory);
 
                                         }
+
+                                        ticket.UpdateDate = DateTime.Now;
+                                        history.Flag = true;
+                                        history.ShippingDate = DateTime.Today;
+                                        history.UpdateDate = DateTime.Now;
 
                                         context.Tickets.Update(ticket);
                                         context.TicketHistories.Update(history);
@@ -2183,6 +2199,9 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 numerationRef.UpdateDate = DateTime.Now;
                                                 context.Numerations.Update(numerationRef);
                                             }
+                                            //CONDICIONAL SI EL TICKET TIENE REFERENCIAS O NO
+
+
                                             var newTicketHistory = new TicketHistory
                                             {
                                                 IdTicket = ticket.Id,
@@ -2198,13 +2217,17 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Balance = item.Balance,
 
                                             };
+                                            ticket.UpdateDate = DateTime.Now;
+                                            history.Flag = true;
+                                            history.ShippingDate = DateTime.Today;
+                                            history.UpdateDate = DateTime.Now;
                                             await context.TicketHistories.AddAsync(newTicketHistory);
 
                                         }
                                         else
                                         {
-                                            string nameAssignedTo = "SUPERVISOR" + item.AssignedToCode;
-                                            string descriptionAssignedTo = "Supervisor " + item.AssignedToCode;
+                                            string nameAssignedTo = "SUPERVISOR" + item.AssignedToCode.Trim();
+                                            string descriptionAssignedTo = "Supervisor " + item.AssignedToCode.Trim();
                                             var numeration = await context.Numerations.Where(x => x.Name == nameAssignedTo).FirstOrDefaultAsync();
                                             int? number = 1;
                                             if (numeration == null)
@@ -2224,7 +2247,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 context.Numerations.Update(numeration);
                                             }
 
-
+                                            ticket.UpdateDate = DateTime.Now;
                                             history.Flag = true;
                                             history.ShippingDate = DateTime.Today;
                                             history.UpdateDate = DateTime.Now;
