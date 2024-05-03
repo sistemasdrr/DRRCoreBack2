@@ -11,7 +11,11 @@ namespace DRRCore.Transversal.Common
 
             if(DateTime.TryParse(date, out result))
             {
-                if(result>=DateTime.Parse("01/01/1753") && result<= DateTime.Parse("31/12/9999"))
+                //publicado
+                if (result >= DateTime.Parse("01/01/1753") && result <= DateTime.Parse("12/31/9999"))
+
+
+                //if (result>=DateTime.Parse("01/01/1753") && result<= DateTime.Parse("31/12/2150"))
                 {
                     return result;
                 }
@@ -30,8 +34,11 @@ namespace DRRCore.Transversal.Common
             if (string.IsNullOrEmpty(valueDate)) return null;
 
             if (DateTime.TryParse(valueDate, out result))
-            {
-                if (result >= DateTime.Parse("01/01/1753") && result <= DateTime.Parse("31/12/9999"))
+            { 
+                //publicado
+                if (result >= DateTime.Parse("01/01/1753") && result <= DateTime.Parse("12/31/9999"))
+
+                //if (result >= DateTime.Parse("01/01/1753") && result <= DateTime.Parse("31/12/9999"))
                 {
                     return result;
                 }

@@ -2354,18 +2354,20 @@ namespace DRRCore.Application.Main.CoreApplication
 
                     emailDataDto.EmailKey = ticket.Language == "E" ? "DRR_WORKFLOW_ESP_0027" : "DRR_WORKFLOW_ENG_0027";
                     emailDataDto.BeAuthenticated = true;
-                    emailDataDto.From = "diego.rodriguez@del-risco.com";// userLogin.IdEmployeeNavigation.Email;
+                    emailDataDto.From = "diego.rodriguez@del-risco.com";// ticket.RequestedName + "_" + ticket.ReportType + "_" + DateTime.Now.ToString("dd-MM-yyyy"); // userLogin.IdEmployeeNavigation.Email;
                     emailDataDto.UserName = "diego.rodriguez@del-risco.com";//emailDataDto.From;
                     emailDataDto.Password = "w*@JHCr7mH";//userLogin.EmailPassword;
                     emailDataDto.To = new List<string>
                     {
-                        "jfernandez@del-risco.com"//ticket.IdSubscriberNavigation.SendReportToEmail,
+                        "jfernandez@del-risco.com",
+                        "diego.rodriguez@del-risco.com"
+                 //ticket.IdSubscriberNavigation.SendReportToEmail,
                     };
-                    emailDataDto.CCO = new List<string>
+                    emailDataDto.CC = new List<string>
                     {
-                        "jfernandez@del-risco.com"//"crc@del-risco.com"
+                        //"crc@del-risco.com"
                     };
-                    emailDataDto.Subject = (ticket.About == "E" ? ticket.IdCompanyNavigation.Name : ticket.IdPersonNavigation.Fullname) + "_" + ticket.ReportType + "_" + DateTime.Now.ToString("dd-MM-yyyy");
+                    emailDataDto.Subject = ticket.RequestedName + "_" + ticket.ReportType + "_" + DateTime.Now.ToString("dd-MM-yyyy");
                     emailDataDto.IsBodyHTML = true;
                     emailDataDto.Parameters.Add(ticket.IdSubscriberNavigation.Name);
                     emailDataDto.Parameters.Add(userLogin.IdEmployeeNavigation.FirstName + " " + userLogin.IdEmployeeNavigation.LastName);
@@ -2397,6 +2399,8 @@ namespace DRRCore.Application.Main.CoreApplication
                     emailHistory.Success = result;
                     response.Data = await _emailHistoryDomain.AddAsync(emailHistory);
                     _logger.LogInformation(Messages.MailSuccessSend);
+
+                    ticket.IdCompanyNavigation.LastSearched = DateTime.Now;
 
                     ticket.IdStatusTicket = (int?)TicketStatusEnum.Despachado;
                     ticket.DispatchtDate = DateTime.Now;
