@@ -183,27 +183,13 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                     companySb.UpdateDate = DateTime.Now;
                     context.CompanySbs.Update(companySb);
 
-                    foreach (var item in traductions)
+                    var listTraductions = await context.Traductions.Where(x => x.IdCompany == companySb.IdCompany && x.Identifier.Contains("_F_")).ToListAsync();
+                    foreach (var item in listTraductions)
                     {
-                        var modifierTraduction = await context.Traductions.Where(x => x.IdCompany == companySb.IdCompany && x.Identifier == item.Identifier).FirstOrDefaultAsync();
-                        if (modifierTraduction != null)
-                        {
-                            modifierTraduction.ShortValue = item.ShortValue;
-                            modifierTraduction.LargeValue = item.LargeValue;
-                            modifierTraduction.LastUpdaterUser = item.LastUpdaterUser;
-                            context.Traductions.Update(modifierTraduction);
-                        }
-                        else
-                        {
-                            var newTraduction = new Traduction();
-                            newTraduction.Id = 0;
-                            newTraduction.IdCompany = companySb.IdCompany;
-                            newTraduction.Identifier = item.Identifier;
-                            newTraduction.ShortValue = item.ShortValue;
-                            newTraduction.LargeValue = item.LargeValue;
-                            newTraduction.LastUpdaterUser = item.LastUpdaterUser;
-                            await context.Traductions.AddAsync(newTraduction);
-                        }
+                        item.ShortValue = traductions.Where(x => x.Identifier == item.Identifier).FirstOrDefault().ShortValue;
+                        item.LargeValue = traductions.Where(x => x.Identifier == item.Identifier).FirstOrDefault().LargeValue;
+                        item.LastUpdaterUser = traductions.Where(x => x.Identifier == item.Identifier).FirstOrDefault().LastUpdaterUser;
+                        context.Traductions.Update(item);
                     }
                     await context.SaveChangesAsync();
                     return companySb.Id;

@@ -3570,5 +3570,33 @@ namespace DRRCore.Application.Main.MigrationApplication
             }
             return true;
         }
+
+        public async Task<bool> UpdatePersonJob()
+        {
+            using var context = new SqlCoreContext();
+
+            var companies = await context.PersonJobs.Where(x => x.OldCode != null && x.OldCode != "").ToListAsync();
+            foreach (var item in companies)
+            {
+                
+                try
+                {
+                    var company = await context.Companies.Where(x => x.OldCode ==  item.OldCode).FirstOrDefaultAsync();
+                    if(company != null)
+                    {
+                        item.IdCompany = company.Id;
+                        context.PersonJobs.Update(item);
+                        await context.SaveChangesAsync();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger?.LogError(ex.Message);
+                    continue;
+                }
+            }
+           
+            return true;
+        }
     }
 }

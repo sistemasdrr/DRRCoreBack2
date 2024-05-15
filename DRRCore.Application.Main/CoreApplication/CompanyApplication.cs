@@ -11,6 +11,8 @@ using DRRCore.Transversal.Common.Interface;
 using log4net.Config;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Org.BouncyCastle.Ocsp;
 using System.Security.Claims;
 
 namespace DRRCore.Application.Main.CoreApplication
@@ -2211,6 +2213,7 @@ namespace DRRCore.Application.Main.CoreApplication
             var status = new GetStatusCompanyResponseDto();
             try
             {
+                using var context = new SqlCoreContext();
                 var company = await _companyDomain.GetByIdAsync(idCompany);
                 if(company != null)
                 {
@@ -2229,11 +2232,11 @@ namespace DRRCore.Application.Main.CoreApplication
                     var comercial = await _comercialLatePaymentDomain.GetComercialLatePaymetByIdCompany(idCompany);
                     status.Sbs = sbs != null || provider.Count > 0 || bankDebt.Count > 0 || comercial.Count > 0 ? true : false;
                     var opinion = await _companyCreditOpinionDomain.GetByIdCompany(idCompany);
-                    status.Opinion = opinion != null ? true : false;
+                    status.Opinion = !opinion.ConsultedCredit.IsNullOrEmpty() || !opinion.SuggestedCredit.IsNullOrEmpty() || !opinion.CurrentCommentary.IsNullOrEmpty();
                     var infoGeneral = await _companyGeneralInformationDomain.GetByIdCompany(idCompany);
-                    status.InfoGeneral = infoGeneral != null ? true : false;
+                    status.InfoGeneral = !infoGeneral.GeneralInfo.IsNullOrEmpty();
                     var images = await _companyImagesDomain.GetImagesByIdCompany(idCompany);
-                    status.Images = images != null ? true : false;
+                    status.Images = images != null ? !images.Img1.IsNullOrEmpty() || !images.Img2.IsNullOrEmpty() || !images.Img3.IsNullOrEmpty() || !images.Img4.IsNullOrEmpty() : false;
                 }
                 else
                 {
@@ -2364,6 +2367,80 @@ namespace DRRCore.Application.Main.CoreApplication
             }catch(Exception ex)
             {
                 _logger.LogError(ex.Message, ex);
+                response.IsSuccess = false;
+            }
+            return response;
+        }
+
+        public async Task<Response<GetFileResponseDto>> DownloadSubReportCompany(int? idCompany, string section, string language)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+                var company = await _companyDomain.GetByIdAsync((int)idCompany);
+
+                string companyCode = company.OldCode ?? "N" + company.Id.ToString("D6");
+                string languageFileName = language == "I" ? "ENG" : "ESP";
+                string fileFormat = "{0}_{1}{2}";
+                string format = "pdf";
+                List<string> subReport = new List<string>(); ;
+
+                if(section == "IDENTIFICACION")
+                {
+                    subReport.Add(language == "I" ? "/admindrrreports-001/PDF/EMPRESA/ENG/F8-EMPRESAS-IDENTIFICACION" : "/admindrrreports-001/PDF/EMPRESA/ESP/F8-EMPRESAS-IDENTIFICACION");
+                }else if(section == "ANTECEDENTES")
+                {
+                    subReport.Add(language == "I" ? "/admindrrreports-001/PDF/EMPRESA/ENG/F8-EMPRESAS-RESU-EJEC" : "/admindrrreports-001/PDF/EMPRESA/ESP/F8-EMPRESAS-RESU-EJEC"); 
+                    subReport.Add(language == "I" ? "/admindrrreports-001/PDF/EMPRESA/ENG/F8-EMPRESAS-EST-LEGAL" : "/admindrrreports-001/PDF/EMPRESA/ESP/F8-EMPRESAS-EST-LEGAL");
+                    subReport.Add(language == "I" ? "/admindrrreports-001/PDF/EMPRESA/ENG/F8-EMPRESAS-HISTORIA" : "/admindrrreports-001/PDF/EMPRESA/ESP/F8-EMPRESAS-HISTORIA");
+                    subReport.Add(language == "I" ? "/admindrrreports-001/PDF/EMPRESA/ENG/F8-EMPRESAS-EMP-REL" : "/admindrrreports-001/PDF/EMPRESA/ESP/F8-EMPRESAS-EMP-REL");
+                }
+                else if (section == "RAMO")
+                {
+                    subReport.Add(language == "I" ? "/admindrrreports-001/PDF/EMPRESA/ENG/F8-EMPRESAS-RAMO" : "/admindrrreports-001/PDF/EMPRESA/ESP/F8-EMPRESAS-RAMO");
+                }
+                else if (section == "FINANZAS")
+                {
+                    subReport.Add(language == "I" ? "/admindrrreports-001/PDF/EMPRESA/ENG/F8-EMPRESAS-INFO-FINAN1" : "/admindrrreports-001/PDF/EMPRESA/ESP/F8-EMPRESAS-INFO-FINAN1");
+                }
+                else if (section == "BALANCES")
+                {
+                    subReport.Add(language == "I" ? "/admindrrreports-001/PDF/EMPRESA/ENG/F8-EMPRESAS-INFO-FINAN1" : "/admindrrreports-001/PDF/EMPRESA/ESP/F8-EMPRESAS-INFO-FINAN1");
+                }
+                else if (section == "SBS")
+                {
+                    subReport.Add(language == "I" ? "/admindrrreports-001/PDF/EMPRESA/ENG/F8-EMPRESAS-MOROSIDAD" : "/admindrrreports-001/PDF/EMPRESA/ESP/F8-EMPRESAS-MOROSIDAD");
+                }
+                else if (section == "OPINION-CREDITO")
+                {
+                    subReport.Add(language == "I" ? "/admindrrreports-001/PDF/EMPRESA/ENG/F8-EMPRESAS-OPI-CRED" : "/admindrrreports-001/PDF/EMPRESA/ESP/F8-EMPRESAS-OPI-CRED");
+                }
+                else if (section == "IMAGENES")
+                {
+                    subReport.Add(language == "I" ? "/admindrrreports-001/PDF/EMPRESA/ENG/F8-EMPRESAS-IMAGENES" : "/admindrrreports-001/PDF/EMPRESA/ESP/F8-EMPRESAS-IMAGENES");
+                }
+
+                var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                var extension = StaticFunctions.FileExtension(reportRenderType);
+                var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                var dictionary = new Dictionary<string, string>
+                {
+                    { "idCompany", idCompany.ToString() },
+                    { "language", language }
+                 };
+
+                response.Data = new GetFileResponseDto
+                {
+                    File = await _reportingDownload.GenerateCombinedReportAsync(subReport, reportRenderType, dictionary),
+                    ContentType = contentType,
+                    Name = string.Format(fileFormat, companyCode, languageFileName, extension)
+                };
+
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
                 response.IsSuccess = false;
             }
             return response;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Org.BouncyCastle.Asn1;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,23 @@ namespace DRRCore.Transversal.Common.JsonReader
         public DomainConfiguration? PrincipalDomain { get; set; }
         public List<DomainConfiguration>? OtherDomainsConfiguration { get; set; }
 
+    }
+
+    public class SpecialPriceAgent
+    {
+        public string? CodeAgent {get; set;}
+        public List<QualityAgent>? QualityAgent { get; set; }
+    }
+    public class QualityAgent
+    {
+        public string? Quality { get; set; }
+        public ProcedureTypePrice? Price { get; set; }
+    }
+    public class ProcedureTypePrice
+    {
+        public decimal? T1 { get; set; }
+        public decimal? T2 { get; set; }
+        public decimal? T3 { get; set; }
     }
     public class DomainConfiguration
     {

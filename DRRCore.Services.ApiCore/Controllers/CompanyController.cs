@@ -560,5 +560,14 @@ namespace DRRCore.Services.ApiCore.Controllers
 
             return File(result.Data.File, result.Data.ContentType, result.Data.Name);
         }
+        [HttpGet()]
+        [Route("DownloadSubReportCompany")]
+        public async Task<IActionResult> DownloadSubReportCompany(int? idCompany, string section, string language)
+        {
+            var result = await _companyApplication.DownloadSubReportCompany(idCompany, section, language);
+
+            return File(result.Data.File, result.Data.ContentType, result.Data.Name);
+        }
     }
+    
 }

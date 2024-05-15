@@ -41,6 +41,10 @@ public partial class TicketHistory
 
     public DateTime? ShippingDate { get; set; }
 
+    public bool? FlagInvoice { get; set; }
+
+    public virtual ICollection<AgentInvoiceDetail> AgentInvoiceDetails { get; set; } = new List<AgentInvoiceDetail>();
+
     public virtual StatusTicket? IdStatusTicketNavigation { get; set; }
 
     public virtual Ticket? IdTicketNavigation { get; set; }

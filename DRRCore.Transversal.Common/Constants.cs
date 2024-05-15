@@ -96,7 +96,7 @@
                                                                 "S_F_JOB","L_F_COMENT","L_F_PRINCACTIV","L_F_SELECTFIN","L_F_ANALISTCOM","L_F_TABCOMM",
                                                                 "L_S_COMENTARY", "L_S_BANCARIOS","L_S_AVALES","L_S_LITIG","L_S_CREDHIS",
                                                                 "S_O_QUERYCREDIT","S_O_SUGCREDIT","L_O_COMENTARY",
-                                                                 "L_I_GENERAL","S_IMG_1","S_IMG_2","S_IMG_3","S_IMG_4"};
+                                                                 "L_I_GENERAL"};
         public static readonly string[] TRADUCTIONS_FORMS_PERSON = { "S_P_NACIONALITY", "S_P_BIRTHPLACE" ,"S_P_MARRIEDTO", "S_P_PROFESSION", "L_P_NEWSCOMM", "L_P_REPUTATION",
                                                                      "S_D_VALUE", "L_D_RESIDENCE",
                                                                      "S_C_CURJOB", "S_C_STARTDT", "S_C_ENDDT", "S_C_INCOME", "L_C_DETAILS",
@@ -109,5 +109,10 @@
         public const int OS_Pendiente = 1;
         public const int OS_Resuelto= 2;
         public const int OS_Rechazado = 3;
+
+        public const int InvoiceStatus_PorFacturar = 1;
+        public const int InvoiceStatus_PorCobrar = 2;
+        public const int InvoiceStatus_Cobradas = 3;
+
     }
 }

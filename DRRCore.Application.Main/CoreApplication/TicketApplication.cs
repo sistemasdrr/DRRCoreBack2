@@ -2339,7 +2339,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     var ticketHistory = await context.TicketHistories.Where(x => x.IdTicket == idTicket).ToListAsync();
                     foreach (var item in ticketHistory)
                     {
-                        item.Flag = false;
+                        item.Flag = true;
                         context.TicketHistories.Update(item);
                     }
                     var history = new TicketHistory();

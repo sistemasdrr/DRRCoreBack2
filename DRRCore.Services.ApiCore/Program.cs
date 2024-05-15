@@ -36,6 +36,7 @@ builder.Services.Configure<FormOptions>(options =>
     options.MultipartBodyLengthLimit = 104857600; // 100 MB
 });
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.Configure<List<SpecialPriceAgent>>(builder.Configuration.GetSection("SpecialPricesAgent"));
 builder.Services.AddHttpClient();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -77,6 +78,7 @@ builder.Services.AddAutoMapper(typeof(CompanyProfile).Assembly);
 builder.Services.AddAutoMapper(typeof(PersonProfile).Assembly);
 builder.Services.AddAutoMapper(typeof(AnniversaryProfile).Assembly);
 builder.Services.AddAutoMapper(typeof(TicketProfile).Assembly);
+builder.Services.AddAutoMapper(typeof(InvoiceProfile).Assembly);
 builder.Services.AddHttpContextAccessor();
 
 
@@ -261,6 +263,7 @@ builder.Services.AddScoped<IUserApplication, UserApplication>();
 builder.Services.AddScoped<IXmlApplication, XmlApplication>();
 
 builder.Services.AddScoped<IEmailApplication, EmailApplication>();
+builder.Services.AddScoped<IInvoiceApplication, InvoiceApplication>();
 builder.Services.AddScoped<IDashboardApplication, DashboardApplication>();
 
 builder.Services.AddScoped<IMailSender, MailSender>();

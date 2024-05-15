@@ -81,5 +81,7 @@ namespace DRRCore.Application.Interfaces.CoreApplication
 
         Task<Response<bool>> NewComercialReferences(int idCompany, int? idTicket);
         Task<Response<List<GetProviderHistoryResponseDto>>> GetProviderHistory(string type, int id);
+
+        Task<Response<GetFileResponseDto>> DownloadSubReportCompany(int? idCompany, string section, string language);
     }
 }

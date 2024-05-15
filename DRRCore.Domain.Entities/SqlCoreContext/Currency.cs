@@ -23,6 +23,8 @@ public partial class Currency
 
     public bool? Enable { get; set; }
 
+    public virtual ICollection<AgentInvoice> AgentInvoices { get; set; } = new List<AgentInvoice>();
+
     public virtual ICollection<AgentPrice> AgentPrices { get; set; } = new List<AgentPrice>();
 
     public virtual ICollection<CompanyBackground> CompanyBackgroundCurrencyNavigations { get; set; } = new List<CompanyBackground>();

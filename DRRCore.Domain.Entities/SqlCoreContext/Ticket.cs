@@ -89,11 +89,15 @@ public partial class Ticket
 
     public bool? Wrong { get; set; }
 
+    public int? IdInvoiceState { get; set; }
+
     public virtual Company? IdCompanyNavigation { get; set; }
 
     public virtual Continent? IdContinentNavigation { get; set; }
 
     public virtual Country? IdCountryNavigation { get; set; }
+
+    public virtual InvoiceState? IdInvoiceStateNavigation { get; set; }
 
     public virtual Person? IdPersonNavigation { get; set; }
 

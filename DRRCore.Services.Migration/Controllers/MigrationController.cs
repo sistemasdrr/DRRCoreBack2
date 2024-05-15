@@ -134,5 +134,11 @@ namespace DRRCore.Services.Migration.Controllers
         {
             return Ok(await _migraUser.MigrateCompanyBankDebt(migra));
         }
+        [HttpPost()]
+        [Route("UpdatePersonJob")]
+        public async Task<ActionResult> UpdatePersonJob()
+        {
+            return Ok(await _migraUser.UpdatePersonJob());
+        }
     }
 }

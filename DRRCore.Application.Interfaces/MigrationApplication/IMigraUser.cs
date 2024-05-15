@@ -23,6 +23,7 @@
         Task<bool> MigrateCompanyPerson(int migra);
         Task<bool> MigrateCompanyShareholder();
         Task<bool> MigrateCompanyBankDebt(int migra);
+        Task<bool> UpdatePersonJob();
 
     }
 }

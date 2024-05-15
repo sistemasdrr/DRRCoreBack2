@@ -160,7 +160,8 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                 var company= await context.Companies.Where(x => x.Id == id).Include(x => x.IdCountryNavigation).Include(x => x.IdReputationNavigation)
                     .Include(x => x.IdLegalPersonTypeNavigation).Include(x => x.IdPaymentPolicyNavigation).Include(x => x.IdCreditRiskNavigation)
                    .FirstOrDefaultAsync() ?? throw new Exception("No existe la empresa solicitada");
-                traductions.AddRange(await context.Traductions.Where(x => x.IdCompany == id && x.Identifier.Contains("_E_")).ToListAsync());
+                traductions.AddRange(await context.Traductions.Where(x => x.IdCompany == id).Take(10).ToListAsync());
+                traductions = traductions.Where(x => x.Identifier.Contains("_E_")).ToList();
                 company.Traductions = traductions;
                 return company;
             }
@@ -392,27 +393,14 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                     obj.UpdateDate = DateTime.Now;
                     context.Companies.Update(obj);
 
-                    foreach (var item in existTraduction)
+                    var listTraductions = await context.Traductions.Where(x => x.IdCompany == obj.Id && x.Identifier.Contains("_E_")).ToListAsync();
+
+                    foreach (var item in listTraductions)
                     {
-                        var modifierTraduction = await context.Traductions.Where(x => x.IdCompany == obj.Id && x.Identifier == item.Identifier).Take(1).FirstOrDefaultAsync();
-                        if (modifierTraduction != null)
-                        {
-                            modifierTraduction.ShortValue=item.ShortValue;
-                            modifierTraduction.LargeValue=item.LargeValue;  
-                            modifierTraduction.LastUpdaterUser=item.LastUpdaterUser;
-                            context.Traductions.Update(modifierTraduction);
-                        }
-                        else
-                        {
-                            var newTraduction = new Traduction();
-                            newTraduction.Id = 0;
-                            newTraduction.IdCompany = obj.Id;
-                            newTraduction.Identifier = item.Identifier;
-                            newTraduction.ShortValue = item.ShortValue;
-                            newTraduction.LargeValue = item.LargeValue;
-                            newTraduction.LastUpdaterUser = item.LastUpdaterUser;
-                            await context.Traductions.AddAsync(newTraduction);
-                        }
+                        item.ShortValue = existTraduction.Where(x => x.Identifier == item.Identifier).FirstOrDefault().ShortValue;
+                        item.LargeValue = existTraduction.Where(x => x.Identifier == item.Identifier).FirstOrDefault().LargeValue;
+                        item.LastUpdaterUser = existTraduction.Where(x => x.Identifier == item.Identifier).FirstOrDefault().LastUpdaterUser;
+                        context.Traductions.Update(item);
                     }                    
                     await context.SaveChangesAsync();
                     return true;
