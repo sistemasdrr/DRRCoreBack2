@@ -105,6 +105,8 @@ public partial class Ticket
 
     public virtual Subscriber? IdSubscriberNavigation { get; set; }
 
+    public virtual ICollection<SubscriberInvoiceDetail> SubscriberInvoiceDetails { get; set; } = new List<SubscriberInvoiceDetail>();
+
     public virtual TicketAssignation? TicketAssignation { get; set; }
 
     public virtual ICollection<TicketFile> TicketFiles { get; set; } = new List<TicketFile>();

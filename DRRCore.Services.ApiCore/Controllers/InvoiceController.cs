@@ -15,12 +15,51 @@ namespace DRRCore.Services.ApiCore.Controllers
             _invoiceApplication = invoiceApplication; 
         }
         [HttpGet()]
-        [Route("GetInvoiceSubscriberList")]
-        public async Task<ActionResult> GetInvoiceSubscriberList(string startDate, string endDate, int month, int year, int idInvoiceStatus)
+        [Route("GetInvoiceSubscriberListByBill")] 
+        public async Task<ActionResult> GetInvoiceSubscriberListByBill(string startDate, string endDate)
         {
-            return Ok(await _invoiceApplication.GetInvoiceSubscriberList(startDate, endDate, month, year, idInvoiceStatus));
+            return Ok(await _invoiceApplication.GetInvoiceSubscriberListByBill(startDate, endDate));
         }
-        
+        [HttpGet()]
+        [Route("GetInvoiceSubscriberListToCollect")] 
+        public async Task<ActionResult> GetInvoiceSubscriberListToCollect(int month, int year)
+        {
+            return Ok(await _invoiceApplication.GetInvoiceSubscriberListToCollect(month, year));
+        }
+        [HttpGet()]
+        [Route("GetInvoiceSubscriberListPaids")]
+        public async Task<ActionResult> GetInvoiceSubscriberListPaids(int month, int year)
+        {
+            return Ok(await _invoiceApplication.GetInvoiceSubscriberListPaids(month, year));
+        }
+        [HttpPost()]
+        [Route("UpdateSubscriberTicket")]
+        public async Task<ActionResult> UpdateSubscriberTicket(int idTicket, string requestedName, string procedureType, string dispatchDate, decimal price)
+        {
+            return Ok(await _invoiceApplication.UpdateSubscriberTicket(idTicket, requestedName, procedureType, dispatchDate,price));
+        }
+        [HttpPost()]
+        [Route("SaveSubscriberInvoice")]
+        public async Task<ActionResult> SaveSubscriberInvoice(AddOrUpdateSubscriberInvoiceRequestDto obj)
+        {
+            return Ok(await _invoiceApplication.SaveSubscriberInvoice(obj));
+        }
+        [HttpPost()]
+        [Route("UpdateSubscriberInvoiceToCollect")]
+        public async Task<ActionResult> UpdateSubscriberInvoiceToCollect(int idSubscriberInvoice, int idSubscriberInvoiceDetails, string requestedName, string procedureType, string dispatchDate, decimal price)
+        {
+            return Ok(await _invoiceApplication.UpdateSubscriberInvoiceToCollect(idSubscriberInvoice, idSubscriberInvoiceDetails, requestedName, procedureType, dispatchDate, price));
+        }
+        [HttpPost()]
+        [Route("CancelSubscriberInvoiceToCollect")]
+        public async Task<ActionResult> CancelSubscriberInvoiceToCollect(int idSubscriberInvoice, string cancelDate)
+        {
+            return Ok(await _invoiceApplication.CancelSubscriberInvoiceToCollect(idSubscriberInvoice, cancelDate));
+        }
+
+
+
+
         [HttpGet()]
         [Route("GetByBillInvoiceAgentList")]
         public async Task<ActionResult> GetByBillInvoiceAgentList(string startDate, string endDate)
@@ -46,10 +85,10 @@ namespace DRRCore.Services.ApiCore.Controllers
             return Ok(await _invoiceApplication.UpdateAgentTicket(idTicketHistory, requestedName, procedureType, shippingDate));
         }
         [HttpPost()]
-        [Route("SaveInvoice")]
-        public async Task<ActionResult> SaveInvoice(AddOrUpdateAgentInvoiceRequestDto obj)
+        [Route("SaveAgentInvoice")]
+        public async Task<ActionResult> SaveAgentInvoice(AddOrUpdateAgentInvoiceRequestDto obj)
         {
-            return Ok(await _invoiceApplication.SaveInvoice(obj));
+            return Ok(await _invoiceApplication.SaveAgentInvoice(obj));
         }
         [HttpPost()]
         [Route("UpdateInvoiceToCollect")]
@@ -58,10 +97,11 @@ namespace DRRCore.Services.ApiCore.Controllers
             return Ok(await _invoiceApplication.UpdateInvoiceToCollect(idAgentInvoice, idAgentInvoiceDetails, requestedName, procedureType, shippingDate, price));
         }
         [HttpPost()]
-        [Route("CancelInvoiceToCollect")]
+        [Route("CancelAgentInvoiceToCollect")]
         public async Task<ActionResult> CancelInvoiceToCollect(int idAgentInvoice, string cancelDate)
         {
-            return Ok(await _invoiceApplication.CancelInvoiceToCollect(idAgentInvoice, cancelDate));
+            return Ok(await _invoiceApplication.CancelAgentInvoiceToCollect(idAgentInvoice, cancelDate));
         }
+        
     }
 }

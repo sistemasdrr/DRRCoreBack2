@@ -1432,12 +1432,17 @@ namespace DRRCore.Application.Main.CoreApplication
                                 item.AsignedTo == "PA4" ? "RAFAEL DEL RISCO" : item.AsignedTo == "PA5" ? "CECILIA RODRIGUEZ" : item.AsignedTo == "PA6" ? "JESSICA LIAU" :
                                 item.AsignedTo == "PA7" ? "CECILIA SAYAS" : "";
                         }
+                        else if (item.AsignedTo != null && item.AsignedTo.Contains("CR"))
+                        {
+                            assignedToName = "CECILIA RODRIGUEZ";
+                        }
                         else if (item.AsignedTo != null && item.AsignedTo.Contains("D") || item.AsignedTo != null && item.AsignedTo.Contains("T")
                             || item.AsignedTo != null && item.AsignedTo.Contains("R") || item.AsignedTo != null && item.AsignedTo.Contains("RC") || item.AsignedTo != null && item.AsignedTo.Contains("S"))
                         {
                             var employee = await _employeeDomain.FindByPersonalCode(item.AsignedTo);
                             assignedToName = employee != null ? employee.FirstName + " " + employee.LastName : string.Empty;
                         }
+                        
                         else if (item.AsignedTo == null)
                         {
                             using var context = new SqlCoreContext();
@@ -2267,31 +2272,25 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 EndDate = DateTime.Parse(item.EndDate),
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
-
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
 
                                         }
-
                                         context.Tickets.Update(ticket);
                                         context.TicketHistories.Update(history);
-
                                         await context.SaveChangesAsync();
                                     }
-
-
                                 }
                             }
-
                         }
                     }
                 }
-
-
             }
             catch (Exception ex)
             {
-
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
             }
             return new Response<bool?>();
         }

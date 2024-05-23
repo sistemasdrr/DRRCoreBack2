@@ -8,4 +8,10 @@
 
         public int? IdCompanyRelation { get; set; }
     }
+    public class AddListCompanyRelationRequestDto
+    {
+        public int? IdCompany { get; set; }
+
+        public List<int?> IdsCompanyRelation { get; set; }
+    }
 }

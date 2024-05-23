@@ -9,7 +9,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
     {
         public InvoiceProfile()
         {
-            CreateMap<Ticket, GetInvoiceSubscriberListResponseDto>()
+            CreateMap<Ticket, GetInvoiceSubscriberListByBillResponseDto>()
                 .ForMember(dest => dest.IdTicket, opt => opt?.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Number, opt => opt?.MapFrom(src => src.Number.ToString("D6")))
                 .ForMember(dest => dest.RequestedName, opt => opt?.MapFrom(src => src.RequestedName))
@@ -40,6 +40,10 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                 .ForMember(dest => dest.AgentName, opt => opt?.MapFrom(src => src.AsignedTo))
                 .ForMember(dest => dest.AgentCode, opt => opt?.MapFrom(src => src.AsignedTo))
              .ReverseMap();
+
+
+
+
         }
     }
 }

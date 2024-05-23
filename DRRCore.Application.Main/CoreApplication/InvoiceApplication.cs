@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Options;
 using DRRCore.Application.DTO.Core.Request;
 using Org.BouncyCastle.Crypto;
+using AutoMapper.Execution;
 
 namespace DRRCore.Application.Main.CoreApplication
 {
@@ -155,70 +156,7 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<List<GetInvoiceSubscriberListResponseDto>>> GetInvoiceSubscriberList(string startDate, string endDate, int month, int year, int idInvoiceStatus)
-        {
-            var response = new Response<List<GetInvoiceSubscriberListResponseDto>>();
-            try
-            {
-                using var context = new SqlCoreContext();
-                var tickets = new List<Ticket>();
-                if (idInvoiceStatus == Constants.InvoiceStatus_PorFacturar)
-                {
-                    var startDateTime = StaticFunctions.VerifyDate(startDate)?.Date.AddTicks(-1);
-                    var endDateTime = StaticFunctions.VerifyDate(endDate)?.Date.AddDays(1).AddTicks(-1);
-
-                    tickets = await context.Tickets
-                        .Include(x => x.IdSubscriberNavigation)
-                        .Include(x => x.IdCountryNavigation)
-                        .Where(x => x.DispatchtDate >= startDateTime && x.DispatchtDate <= endDateTime &&
-                                    x.IdInvoiceState == idInvoiceStatus &&
-                                    (x.IdStatusTicket == (int)TicketStatusEnum.Despachado ||
-                                     x.IdStatusTicket == (int)TicketStatusEnum.Despachado_con_Observacion))
-                        .ToListAsync();
-
-                }else if(idInvoiceStatus == Constants.InvoiceStatus_PorCobrar)
-                {
-                    tickets = await context.Tickets
-                    .Include(x => x.IdSubscriberNavigation)
-                    .Include(x => x.IdCountryNavigation)
-                    .Where(x => x.DispatchtDate.HasValue &&
-                                x.DispatchtDate.Value.Month == month &&
-                                x.DispatchtDate.Value.Year == year &&
-                                x.IdInvoiceState == idInvoiceStatus &&
-                                (x.IdStatusTicket == (int)TicketStatusEnum.Despachado ||
-                                 x.IdStatusTicket == (int)TicketStatusEnum.Despachado_con_Observacion))
-                                .ToListAsync();
-                }
-                else if(idInvoiceStatus == Constants.InvoiceStatus_Cobradas)
-                {
-                    tickets = await context.Tickets
-                    .Include(x => x.IdSubscriberNavigation)
-                    .Include(x => x.IdCountryNavigation)
-                    .Where(x => x.DispatchtDate.HasValue &&
-                                        x.DispatchtDate.Value.Month == month &&
-                                        x.DispatchtDate.Value.Year == year &&
-                                        x.IdInvoiceState == idInvoiceStatus &&
-                                        (x.IdStatusTicket == (int)TicketStatusEnum.Despachado ||
-                                         x.IdStatusTicket == (int)TicketStatusEnum.Despachado_con_Observacion))
-                        .ToListAsync();
-                }
-
-                if (tickets != null && tickets.Any())
-                {
-                    response.Data = _mapper.Map<List<GetInvoiceSubscriberListResponseDto>>(tickets);
-                }
-                else
-                {
-                    response.Message = "No se encontraron pedidos";
-                }
-            }
-            catch (Exception ex)
-            {
-                response.IsSuccess = false;
-                _logger.LogError(ex.Message);
-            }
-            return response;
-        }
+        
 
         public async Task<Response<bool>> UpdateAgentTicket(int idTicketHistory, string requestedName, string procedureType, string shippingDate)
         {
@@ -253,7 +191,7 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<bool>> SaveInvoice(AddOrUpdateAgentInvoiceRequestDto obj)
+        public async Task<Response<bool>> SaveAgentInvoice(AddOrUpdateAgentInvoiceRequestDto obj)
         {
             var response = new Response<bool>();
             try
@@ -455,7 +393,7 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<bool>> CancelInvoiceToCollect(int idAgentInvoice, string cancelDate)
+        public async Task<Response<bool>> CancelAgentInvoiceToCollect(int idAgentInvoice, string cancelDate)
         {
             var response = new Response<bool>();
             try
@@ -477,5 +415,295 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             return response;
         }
+
+        public async Task<Response<List<GetInvoiceSubscriberListByBillResponseDto>>> GetInvoiceSubscriberListByBill(string startDate, string endDate)
+        {
+            var response = new Response<List<GetInvoiceSubscriberListByBillResponseDto>>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var tickets = new List<Ticket>();
+                
+                    var startDateTime = StaticFunctions.VerifyDate(startDate)?.Date.AddTicks(-1);
+                    var endDateTime = StaticFunctions.VerifyDate(endDate)?.Date.AddDays(1).AddTicks(-1);
+
+                    tickets = await context.Tickets
+                        .Include(x => x.IdSubscriberNavigation)
+                        .Include(x => x.IdCountryNavigation)
+                        .Where(x => x.DispatchtDate >= startDateTime && x.DispatchtDate <= endDateTime && x.IdInvoiceState == 1 &&
+                                    (x.IdStatusTicket == (int)TicketStatusEnum.Despachado || x.IdStatusTicket == (int)TicketStatusEnum.Despachado_con_Observacion))
+                        .ToListAsync();
+                if (tickets != null && tickets.Any())
+                {
+                    response.Data = _mapper.Map<List<GetInvoiceSubscriberListByBillResponseDto>>(tickets);
+                }
+                else
+                {
+                    response.Message = "No se encontraron pedidos";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                _logger.LogError(ex.Message);
+            }
+            return response;
+        }
+
+        public async Task<Response<List<GetInvoiceSubscriberListToCollectResponseDto>>> GetInvoiceSubscriberListToCollect(int month, int year)
+        {
+            var response = new Response<List<GetInvoiceSubscriberListToCollectResponseDto>>();
+            response.Data = new List<GetInvoiceSubscriberListToCollectResponseDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var subscriberInvoices = await context.SubscriberInvoices
+                    .Where(x => x.InvoiceEmitDate.Value.Month == month && x.InvoiceEmitDate.Value.Year == year && x.IdInvoiceState == 2)
+                    .Include(x => x.SubscriberInvoiceDetails).ThenInclude(x => x.IdTicketNavigation).ThenInclude(x => x.IdSubscriberNavigation)
+                    .Include(x => x.SubscriberInvoiceDetails).ThenInclude(x => x.IdTicketNavigation).ThenInclude(x => x.IdCountryNavigation)
+                    .ToListAsync();
+                foreach (var item in subscriberInvoices)
+                {
+                    var details = new List<GetInvoiceDetailsSubscriberListResponseDto>();
+                    foreach (var item1 in item.SubscriberInvoiceDetails)
+                    {
+                        details.Add(new GetInvoiceDetailsSubscriberListResponseDto
+                        {
+                            IdSubscriberInvoiceDetails = item1.Id,
+                            IdSubscriberInvoice = item.Id,
+                            IdTicket = item1.IdTicket,
+                            Number = item1.IdTicketNavigation.Number.ToString("D6"),
+                            RequestedName = item1.IdTicketNavigation.RequestedName,
+                            OrderDate = StaticFunctions.DateTimeToString(item1.IdTicketNavigation.OrderDate),
+                            DispatchDate = StaticFunctions.DateTimeToString(item1.IdTicketNavigation.DispatchtDate),
+                            ReferenceNUmber = item1.IdTicketNavigation.ReferenceNumber,
+                            IdCountry = item1.IdTicketNavigation.IdCountry,
+                            Country = item1.IdTicketNavigation.IdCountryNavigation.Iso,
+                            FlagCountry = item1.IdTicketNavigation.IdCountryNavigation.FlagIso,
+                            ProcedureType = item1.IdTicketNavigation.ProcedureType,
+                            ReportType = item1.IdTicketNavigation.ReportType,
+                            Price = item1.Amount
+
+                        });
+                    }
+                    response.Data.Add(new GetInvoiceSubscriberListToCollectResponseDto
+                    {
+                        Id = item.Id,
+                        InvoiceCode = item.InvoiceCode,
+                        IdSubscriber = item.IdSubscriber,
+                        SubscriberName = item.IdSubscriberNavigation.Name,
+                        SubscriberCode = item.IdSubscriberNavigation.Code,
+                        IdCurrency = item.IdCurrency,
+                        InvoiceEmitDate = item.InvoiceEmitDate,
+                        Details = details
+                    });
+                }
+
+            }catch(Exception ex)
+            {
+                response.IsSuccess = false;
+                _logger.LogError(ex.Message);
+            }
+            return response;
+        }
+        public async Task<Response<List<GetInvoiceSubscriberListPaidsResponseDto>>> GetInvoiceSubscriberListPaids(int month, int year)
+        {
+            var response = new Response<List<GetInvoiceSubscriberListPaidsResponseDto>>();
+            response.Data = new List<GetInvoiceSubscriberListPaidsResponseDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var subscriberInvoices = await context.SubscriberInvoices
+                    .Where(x => x.InvoiceCancelDate.Value.Month == month && x.InvoiceCancelDate.Value.Year == year && x.IdInvoiceState == 3)
+                    .Include(x => x.SubscriberInvoiceDetails).ThenInclude(x => x.IdTicketNavigation).ThenInclude(x => x.IdSubscriberNavigation)
+                    .Include(x => x.SubscriberInvoiceDetails).ThenInclude(x => x.IdTicketNavigation).ThenInclude(x => x.IdCountryNavigation)
+                    .ToListAsync();
+                foreach (var item in subscriberInvoices)
+                {
+                    var details = new List<GetInvoiceDetailsSubscriberListResponseDto>();
+                    foreach (var item1 in item.SubscriberInvoiceDetails)
+                    {
+                        details.Add(new GetInvoiceDetailsSubscriberListResponseDto
+                        {
+                            IdTicket = item1.IdTicket,
+                            Number = item1.IdTicketNavigation.Number.ToString("D6"),
+                            RequestedName = item1.IdTicketNavigation.RequestedName,
+                            OrderDate = StaticFunctions.DateTimeToString(item1.IdTicketNavigation.OrderDate),
+                            DispatchDate = StaticFunctions.DateTimeToString(item1.IdTicketNavigation.DispatchtDate),
+                            ReferenceNUmber = item1.IdTicketNavigation.ReferenceNumber,
+                            IdCountry = item1.IdTicketNavigation.IdCountry,
+                            Country = item1.IdTicketNavigation.IdCountryNavigation.Iso,
+                            FlagCountry = item1.IdTicketNavigation.IdCountryNavigation.FlagIso,
+                            ProcedureType = item1.IdTicketNavigation.ProcedureType,
+                            ReportType = item1.IdTicketNavigation.ReportType,
+                            Price = item1.Amount
+
+                        });
+                    }
+                    response.Data.Add(new GetInvoiceSubscriberListPaidsResponseDto
+                    {
+                        Id = item.Id,
+                        InvoiceCode = item.InvoiceCode,
+                        IdSubscriber = item.IdSubscriber,
+                        SubscriberName = item.IdSubscriberNavigation.Name,
+                        SubscriberCode = item.IdSubscriberNavigation.Code,
+                        IdCurrency = item.IdCurrency,
+                        InvoiceEmitDate = item.InvoiceEmitDate,
+                        Details = details
+                    });
+                }
+
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                _logger.LogError(ex.Message);
+            }
+            return response;
+        }
+
+        public async Task<Response<bool>> SaveSubscriberInvoice(AddOrUpdateSubscriberInvoiceRequestDto obj)
+        {
+            var response = new Response<bool>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var invoiceSubscriberDetails = new List<SubscriberInvoiceDetail>();
+                decimal? totalAmount = 0;
+                foreach (var item in obj.InvoiceSubscriberList)
+                {
+                    totalAmount += item.Price;
+                    invoiceSubscriberDetails.Add(new SubscriberInvoiceDetail
+                    {
+                        Id = 0,
+                        IdTicket = item.IdTicket,
+                        Amount = item.Price,
+                    });
+                    var ticket = await context.Tickets.Where(x => x.Id == item.IdTicket).FirstOrDefaultAsync();
+                    if (ticket != null)
+                    {
+                        ticket.IdInvoiceState = 2;
+                        context.Tickets.Update(ticket);
+                    }
+                }
+                await context.SubscriberInvoices.AddAsync(new SubscriberInvoice
+                {
+                    IdInvoiceState = 2,
+                    InvoiceCode = obj.InvoiceCode,
+                    InvoiceEmitDate = obj.InvoiceDate,
+                    IdSubscriber= obj.IdSubscriber,
+                    IdCurrency = obj.IdCurrency,
+                    Quantity = obj.InvoiceSubscriberList.Count(),
+                    TotalAmount = totalAmount,
+                    SubscriberInvoiceDetails = invoiceSubscriberDetails
+                });
+                await context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                _logger.LogError(ex.Message);
+            }
+            return response;
+        }
+
+        public async Task<Response<bool>> UpdateSubscriberTicket(int idTicket, string requestedName, string procedureType, string dispatchDate,decimal price)
+        {
+            var response = new Response<bool>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var ticket = await context.Tickets
+                    .Where(x => x.Id == idTicket)
+                    .FirstOrDefaultAsync();
+                if (ticket != null)
+                {
+                    ticket.RequestedName = requestedName;
+                    ticket.ProcedureType = procedureType;
+                    ticket.Price = price;
+                    ticket.UpdateDate = DateTime.Now;
+                    ticket.DispatchtDate = StaticFunctions.VerifyDate(dispatchDate);
+                    ticket.UpdateDate = DateTime.Now;
+                    //precio
+                    context.Tickets.Update(ticket);
+                    await context.SaveChangesAsync();
+                }
+                else
+                {
+                    response.IsSuccess = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                _logger.LogError(ex.Message);
+            }
+            return response;
+        }
+
+        public async Task<Response<bool>> UpdateSubscriberInvoiceToCollect(int idSubscriberInvoice, int idSubscriberInvoiceDetails, string requestedName, string procedureType, string dispatchDate, decimal price)
+        {
+            var response = new Response<bool>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var subscriberInvoice = await context.SubscriberInvoices
+                    .Where(w => w.Id == idSubscriberInvoice)
+                    .Include(x => x.SubscriberInvoiceDetails).ThenInclude(y => y.IdTicketNavigation)
+                    .FirstOrDefaultAsync();
+                if (subscriberInvoice != null)
+                {
+                    decimal? newTotalPrice = 0;
+                    subscriberInvoice.SubscriberInvoiceDetails.Where(x => x.Id == idSubscriberInvoiceDetails).FirstOrDefault().Amount = price;
+                    subscriberInvoice.SubscriberInvoiceDetails.Where(x => x.Id == idSubscriberInvoiceDetails).FirstOrDefault().IdTicketNavigation.DispatchtDate = StaticFunctions.VerifyDate(dispatchDate);
+                    subscriberInvoice.SubscriberInvoiceDetails.Where(x => x.Id == idSubscriberInvoiceDetails).FirstOrDefault().IdTicketNavigation.RequestedName = requestedName;
+                    subscriberInvoice.SubscriberInvoiceDetails.Where(x => x.Id == idSubscriberInvoiceDetails).FirstOrDefault().IdTicketNavigation.ProcedureType = procedureType;
+                    foreach (var item in subscriberInvoice.SubscriberInvoiceDetails)
+                    {
+                        newTotalPrice += item.Amount;
+                    }
+                    subscriberInvoice.TotalAmount = newTotalPrice;
+                    subscriberInvoice.UpdateDate = DateTime.Now;
+                    //precio
+                    context.SubscriberInvoices.Update(subscriberInvoice);
+                    await context.SaveChangesAsync();
+                }
+                else
+                {
+                    response.IsSuccess = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                _logger.LogError(ex.Message);
+            }
+            return response;
+        }
+
+        public async Task<Response<bool>> CancelSubscriberInvoiceToCollect(int idSubscriberInvoice, string cancelDate)
+        {
+            var response = new Response<bool>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var subscriberInvoice = await context.SubscriberInvoices.Where(x => x.Id == idSubscriberInvoice).FirstOrDefaultAsync();
+                if (subscriberInvoice != null)
+                {
+                    subscriberInvoice.IdInvoiceState = 3;
+                    subscriberInvoice.InvoiceCancelDate = StaticFunctions.VerifyDate(cancelDate);
+                    subscriberInvoice.UpdateDate = DateTime.Now;
+                    context.SubscriberInvoices.Update(subscriberInvoice);
+                    await context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                response.IsSuccess = false;
+            }
+            return response;
+        }
+
     }
 }

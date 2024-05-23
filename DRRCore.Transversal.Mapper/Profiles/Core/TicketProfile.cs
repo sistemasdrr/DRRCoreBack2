@@ -320,6 +320,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
               .ReverseMap(); 
             CreateMap<Agent, GetPersonalAssignationResponseDto>()
                 .ForMember(dest => dest.IdEmployee, opt => opt?.MapFrom(src => src.Id == null ? 0 : src.Id))
+                .ForMember(dest => dest.IdUserLogin, opt => opt?.MapFrom(src => src.Id == null ? 0 : src.Id))
                 .ForMember(dest => dest.Fullname, opt => opt?.MapFrom(src => src.Name == null ? "" : src.Name.ToUpper()))
                 .ForMember(dest => dest.Type, opt => opt?.MapFrom(src => "AG"))
                 .ForMember(dest => dest.Code, opt => opt?.MapFrom(src => src.Code == null ? "" : src.Code))

@@ -12,5 +12,6 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<GetUserResponseDto>> getUserById(int id);
         Task<Response<GetUserProcessResponseDto>> getProcessByIdEmployee(int idEmployee);
         Task<Response<bool>> UpdateProcess(AddOrUpdateUserProcessRequestDto obj);
+        Task<Response<bool>> UpdateUserProcessAsync();
     }
 }

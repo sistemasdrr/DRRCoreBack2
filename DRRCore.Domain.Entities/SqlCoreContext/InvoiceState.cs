@@ -23,5 +23,7 @@ public partial class InvoiceState
 
     public virtual ICollection<AgentInvoice> AgentInvoices { get; set; } = new List<AgentInvoice>();
 
+    public virtual ICollection<SubscriberInvoice> SubscriberInvoices { get; set; } = new List<SubscriberInvoice>();
+
     public virtual ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
 }

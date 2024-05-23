@@ -103,6 +103,8 @@ public partial class Subscriber
 
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 
+    public virtual ICollection<SubscriberInvoice> SubscriberInvoices { get; set; } = new List<SubscriberInvoice>();
+
     public virtual ICollection<SubscriberPrice> SubscriberPrices { get; set; } = new List<SubscriberPrice>();
 
     public virtual ICollection<TicketObservation> TicketObservations { get; set; } = new List<TicketObservation>();

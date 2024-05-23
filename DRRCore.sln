@@ -30,6 +30,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.Services", "4.Services", "{AE5F0844-2074-453A-8027-EECC2D7C3CBA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5.Transversal", "5.Transversal", "{FF25FFFD-00BF-463B-BE1C-7074743C0041}"
+	ProjectSection(SolutionItems) = preProject
+		DRRCore.Transversal.Common\log4net.config = DRRCore.Transversal.Common\log4net.config
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DRRCore.Transversal.Common", "DRRCore.Transversal.Common\DRRCore.Transversal.Common.csproj", "{F7EB9451-E49A-4C43-99E5-5C058E169626}"
 EndProject

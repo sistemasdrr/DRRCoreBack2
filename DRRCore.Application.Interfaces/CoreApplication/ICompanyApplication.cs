@@ -72,6 +72,7 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<bool>> DeleteWorkerHistory(int id);
         Task<Response<List<GetListWorkersHistoryResponseDto>>> GetListWorkerHistoryByIdCompany(int idCompany);
         Task<Response<bool>> AddOrUpdateCompanyRelation(AddOrUpdateCompanyRelationRequestDto obj);
+        Task<Response<bool>> AddListCompanyRelation(AddListCompanyRelationRequestDto obj);
         Task<Response<GetCompanyRelationResponseDto>> GetCompanyRelationById(int id);
         Task<Response<bool>> DeleteCompanyRelation(int id);
         Task<Response<List<GetListCompanyRelationResponseDto>>> GetListCompanyRelationByIdCompany(int idCompany);

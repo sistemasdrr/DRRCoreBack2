@@ -20,6 +20,12 @@ namespace DRRCore.Services.ApiCore.Controllers
             return Ok(await _userApplication.GetProcessAsync());
         }
         [HttpGet()]
+        [Route("UpdateUserProcessAsync")]
+        public async Task<ActionResult> UpdateUserProcessAsync()
+        {
+            return Ok(await _userApplication.UpdateUserProcessAsync());
+        }
+        [HttpGet()]
         [Route("Login")]
         public async Task<ActionResult> LoginUser(string? username, string? password)
         {

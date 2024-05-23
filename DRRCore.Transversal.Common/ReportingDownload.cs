@@ -23,6 +23,7 @@ namespace DRRCore.Transversal.Common
                 {
                     ReportServer = "https://sql5090.site4now.net/ReportServer",
                     Credential = new NetworkCredential("admindrrreports-001", "drrti2023"),
+                    
 
                 }).Execute(new ReportRequest
                 {
@@ -31,8 +32,8 @@ namespace DRRCore.Transversal.Common
                     RenderType = render,
                     ExecuteType = ReportExecuteType.Export,
                     Reset = true,
-                    Parameters = parameters
-
+                    Parameters = parameters,
+                    
                 }).Data.Stream;
             }
             catch (Exception ex)

@@ -43,11 +43,11 @@ namespace DRRCore.Services.ApiCore.Controllers
         }
         [HttpPost()]
         [Route("getbyname")]
-        public async Task<ActionResult> GetCompanyByName(string? name,string? form,int idCountry,bool haveReport,string filterBy)
+        public async Task<ActionResult> GetCompanyByName(string? name, string? form, int idCountry, bool haveReport, string filterBy)
         {
             name ??= string.Empty;
             form ??= string.Empty;
-            return Ok(await _companyApplication.GetAllCompanys(name,form,idCountry,haveReport, filterBy));
+            return Ok(await _companyApplication.GetAllCompanys(name, form, idCountry, haveReport, filterBy));
         }
         [HttpGet()]
         [Route("getCompanySearch")]
@@ -55,19 +55,19 @@ namespace DRRCore.Services.ApiCore.Controllers
         {
             name ??= string.Empty;
             taxCode ??= string.Empty;
-            return Ok(await _companyApplication.GetCompanySearch(name,taxCode,idCountry));
+            return Ok(await _companyApplication.GetCompanySearch(name, taxCode, idCountry));
         }
         [HttpGet()]
         [Route("getBack")]
         public async Task<ActionResult> GetCompanyBackground(int idCompany)
         {
-             return Ok(await _companyApplication.GetCompanyBackgroundById(idCompany));
+            return Ok(await _companyApplication.GetCompanyBackgroundById(idCompany));
         }
         [HttpPost()]
         [Route("addBack")]
         public async Task<ActionResult> AddBackground(AddOrUpdateCompanyBackgroundRequestDto obj)
         {
-           return Ok(await _companyApplication.AddOrUpdateCompanyBackGroundAsync(obj));
+            return Ok(await _companyApplication.AddOrUpdateCompanyBackGroundAsync(obj));
         }
         [HttpGet()]
         [Route("getCompanyBranch")]
@@ -191,9 +191,9 @@ namespace DRRCore.Services.ApiCore.Controllers
         }
         [HttpPost()]
         [Route("addListProvider")]
-        public async Task<ActionResult> addListProvider(List<GetListProviderResponseDto> obj, int idCompany,string user)
+        public async Task<ActionResult> addListProvider(List<GetListProviderResponseDto> obj, int idCompany, string user)
         {
-            return Ok(await _companyApplication.AddOrUpdateProviderListAsync(obj, idCompany,user));
+            return Ok(await _companyApplication.AddOrUpdateProviderListAsync(obj, idCompany, user));
         }
         [HttpGet()]
         [Route("getProviderHistory")]
@@ -329,7 +329,7 @@ namespace DRRCore.Services.ApiCore.Controllers
         }
         [HttpPost()]
         [Route("uploadImage")]
-        public async Task<ActionResult> uploadImage( IFormFile request)
+        public async Task<ActionResult> uploadImage(IFormFile request)
         {
             return Ok(await _companyImagesApplication.UploadImage(request));
         }
@@ -340,7 +340,7 @@ namespace DRRCore.Services.ApiCore.Controllers
             description ??= "";
             descriptionEng ??= "";
             print ??= false;
-            return Ok(await _companyImagesApplication.UpdateImageCompany(idCompany, number, description, descriptionEng, print,file));
+            return Ok(await _companyImagesApplication.UpdateImageCompany(idCompany, number, description, descriptionEng, print, file));
         }
         [HttpGet()]
         [Route("getImageByPath")]
@@ -503,6 +503,12 @@ namespace DRRCore.Services.ApiCore.Controllers
         public async Task<ActionResult> addCompanyRelation(AddOrUpdateCompanyRelationRequestDto obj)
         {
             return Ok(await _companyApplication.AddOrUpdateCompanyRelation(obj));
+        }
+        [HttpPost()]
+        [Route("addListCompanyRelation")]
+        public async Task<ActionResult> addListCompanyRelation(AddListCompanyRelationRequestDto obj)
+        {
+            return Ok(await _companyApplication.AddListCompanyRelation(obj));
         }
         [HttpGet()]
         [Route("getCompanyRelation")]

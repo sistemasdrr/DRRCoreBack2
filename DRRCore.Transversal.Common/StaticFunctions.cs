@@ -1,4 +1,5 @@
 ﻿using AspNetCore.Reporting;
+using System.Globalization;
 
 namespace DRRCore.Transversal.Common
 {
@@ -6,29 +7,29 @@ namespace DRRCore.Transversal.Common
     {
         public static DateTime? VerifyDate(string date)
         {
+            var cultureInfo = new CultureInfo("es-ES");
             DateTime result;
+
             if (string.IsNullOrEmpty(date)) return null;
 
-            if(DateTime.TryParse(date, out result))
+            // Intentar parsear la fecha en diferentes formatos comunes
+            string[] formats = { "d/M/yyyy", "dd/MM/yyyy", "d/M/yy", "dd/MM/yy" };
+
+            if (DateTime.TryParseExact(date, formats, cultureInfo, DateTimeStyles.None, out result))
             {
-                //publicado
-                if (result >= DateTime.Parse("01/01/1753") && result <= DateTime.Parse("12/31/9999"))
-
-
-                //if (result>=DateTime.Parse("01/01/1753") && result<= DateTime.Parse("31/12/2150"))
+                // Verificar que la fecha está dentro del rango permitido
+                if (result >= DateTime.ParseExact("01/01/1753", "dd/MM/yyyy", cultureInfo) && result <= DateTime.ParseExact("31/12/9999", "dd/MM/yyyy", cultureInfo))
                 {
                     return result;
                 }
-                else
-                {
-                    return null;
-                }
             }
+
             return null;
-            
         }
+
         public static DateTime? VerifyDate(DateTime? date)
         {
+            var cultureInfo = new CultureInfo("es-ES");
             string valueDate= DateTimeToString(date);
             DateTime result;
             if (string.IsNullOrEmpty(valueDate)) return null;
@@ -36,9 +37,9 @@ namespace DRRCore.Transversal.Common
             if (DateTime.TryParse(valueDate, out result))
             {
                 ////publicado
-                if (result >= DateTime.Parse("01/01/1753") && result <= DateTime.Parse("12/31/9999"))
+                //if (result >= DateTime.Parse("01/01/1753") && result <= DateTime.Parse("12/31/9999"))
 
-                // if (result >= DateTime.Parse("01/01/1753") && result <= DateTime.Parse("31/12/9999"))
+                if (result >= DateTime.ParseExact("01/01/1753", "dd/MM/yyyy", cultureInfo) && result <= DateTime.ParseExact("01/01/9999", "dd/MM/yyyy", cultureInfo))
                 {
                     return result;
                 }

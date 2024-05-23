@@ -2056,7 +2056,42 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             return response;
         }
-
+        public async Task<Response<bool>> AddListCompanyRelation(AddListCompanyRelationRequestDto obj)
+        {
+            var response = new Response<bool>();
+            try
+            {
+                if (obj == null)
+                {
+                    response.IsSuccess = false;
+                    response.Message = Messages.WrongParameter;
+                    _logger.LogError(response.Message);
+                    return response;
+                }
+                using var context = new SqlCoreContext();
+                if(obj.IdsCompanyRelation != null)
+                {
+                    foreach (var item in obj.IdsCompanyRelation)
+                    {
+                        await context.CompanyRelations.AddAsync(new CompanyRelation
+                        {
+                            Id = 0,
+                            IdCompany = obj.IdCompany,
+                            IdCompanyRelation = item,
+                        });
+                    }
+                    await context.SaveChangesAsync();
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
         public async Task<Response<GetCompanyRelationResponseDto>> GetCompanyRelationById(int id)
         {
             var response = new Response<GetCompanyRelationResponseDto>();

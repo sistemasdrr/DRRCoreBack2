@@ -265,6 +265,7 @@ builder.Services.AddScoped<IXmlApplication, XmlApplication>();
 builder.Services.AddScoped<IEmailApplication, EmailApplication>();
 builder.Services.AddScoped<IInvoiceApplication, InvoiceApplication>();
 builder.Services.AddScoped<IDashboardApplication, DashboardApplication>();
+builder.Services.AddScoped<IQueryApplication, QueryApplication>();
 
 builder.Services.AddScoped<IMailSender, MailSender>();
 builder.Services.AddScoped<IFileManager, FileManager>();

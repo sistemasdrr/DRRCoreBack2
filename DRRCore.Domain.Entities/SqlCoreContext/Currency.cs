@@ -37,6 +37,8 @@ public partial class Currency
 
     public virtual ICollection<SalesHistory> SalesHistories { get; set; } = new List<SalesHistory>();
 
+    public virtual ICollection<SubscriberInvoice> SubscriberInvoices { get; set; } = new List<SubscriberInvoice>();
+
     public virtual ICollection<SubscriberPrice> SubscriberPrices { get; set; } = new List<SubscriberPrice>();
 
     public virtual ICollection<Subscriber> Subscribers { get; set; } = new List<Subscriber>();

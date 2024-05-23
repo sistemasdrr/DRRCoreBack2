@@ -6,6 +6,8 @@
         public List<UserProcessDto>? Produccion { get; set; }
         public List<UserProcessDto>? Administracion { get; set; }
         public List<UserProcessDto>? Facturacion { get; set; }
+        public List<UserProcessDto>? Consultas { get; set; }
+        public List<UserProcessDto>? Reportes { get; set; }
     }
     public class UserProcessDto
     {

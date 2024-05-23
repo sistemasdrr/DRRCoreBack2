@@ -173,6 +173,10 @@ public partial class DbA9ccf0EecoreContext : DbContext
 
     public virtual DbSet<SubscriberCategory> SubscriberCategories { get; set; }
 
+    public virtual DbSet<SubscriberInvoice> SubscriberInvoices { get; set; }
+
+    public virtual DbSet<SubscriberInvoiceDetail> SubscriberInvoiceDetails { get; set; }
+
     public virtual DbSet<SubscriberPrice> SubscriberPrices { get; set; }
 
     public virtual DbSet<Ticket> Tickets { get; set; }
@@ -205,7 +209,6 @@ public partial class DbA9ccf0EecoreContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-
         modelBuilder.Entity<CompanyXmlData>().ToSqlQuery("EXEC DataCompanyCredendo").HasNoKey();
         modelBuilder.Entity<CompanyBalanceData>().ToSqlQuery("EXEC BalanceCompanyCredendo").HasNoKey();
         modelBuilder.Entity<CompanyFunctionData>().ToSqlQuery("EXEC FunctionCompanyCredendo").HasNoKey();
@@ -4416,6 +4419,96 @@ public partial class DbA9ccf0EecoreContext : DbContext
             entity.Property(e => e.UpdateDate)
                 .HasColumnType("datetime")
                 .HasColumnName("updateDate");
+        });
+
+        modelBuilder.Entity<SubscriberInvoice>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Subscrib__3213E83FFC3759A6");
+
+            entity.ToTable("SubscriberInvoice");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.CreationDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("creationDate");
+            entity.Property(e => e.DeleteDate)
+                .HasColumnType("datetime")
+                .HasColumnName("deleteDate");
+            entity.Property(e => e.Enable)
+                .HasDefaultValueSql("((1))")
+                .HasColumnName("enable");
+            entity.Property(e => e.IdCurrency).HasColumnName("idCurrency");
+            entity.Property(e => e.IdInvoiceState).HasColumnName("idInvoiceState");
+            entity.Property(e => e.IdSubscriber).HasColumnName("idSubscriber");
+            entity.Property(e => e.InvoiceCancelDate)
+                .HasColumnType("datetime")
+                .HasColumnName("invoiceCancelDate");
+            entity.Property(e => e.InvoiceCode)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("invoiceCode");
+            entity.Property(e => e.InvoiceEmitDate)
+                .HasColumnType("datetime")
+                .HasColumnName("invoiceEmitDate");
+            entity.Property(e => e.LastUpdateUser).HasColumnName("lastUpdateUser");
+            entity.Property(e => e.Quantity).HasColumnName("quantity");
+            entity.Property(e => e.SubscriberCode)
+                .HasMaxLength(10)
+                .IsUnicode(false)
+                .HasColumnName("subscriberCode");
+            entity.Property(e => e.TotalAmount)
+                .HasColumnType("decimal(10, 2)")
+                .HasColumnName("totalAmount");
+            entity.Property(e => e.UpdateDate)
+                .HasColumnType("datetime")
+                .HasColumnName("updateDate");
+
+            entity.HasOne(d => d.IdCurrencyNavigation).WithMany(p => p.SubscriberInvoices)
+                .HasForeignKey(d => d.IdCurrency)
+                .HasConstraintName("FK__Subscribe__idCur__5911273F");
+
+            entity.HasOne(d => d.IdInvoiceStateNavigation).WithMany(p => p.SubscriberInvoices)
+                .HasForeignKey(d => d.IdInvoiceState)
+                .HasConstraintName("FK__Subscribe__idInv__5728DECD");
+
+            entity.HasOne(d => d.IdSubscriberNavigation).WithMany(p => p.SubscriberInvoices)
+                .HasForeignKey(d => d.IdSubscriber)
+                .HasConstraintName("FK__Subscribe__idSub__581D0306");
+        });
+
+        modelBuilder.Entity<SubscriberInvoiceDetail>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Subscrib__3213E83FFB923A13");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Amount)
+                .HasColumnType("decimal(8, 2)")
+                .HasColumnName("amount");
+            entity.Property(e => e.CreationDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("creationDate");
+            entity.Property(e => e.DeleteDate)
+                .HasColumnType("datetime")
+                .HasColumnName("deleteDate");
+            entity.Property(e => e.Enable)
+                .HasDefaultValueSql("((1))")
+                .HasColumnName("enable");
+            entity.Property(e => e.IdSubscriberInvoice).HasColumnName("idSubscriberInvoice");
+            entity.Property(e => e.IdTicket).HasColumnName("idTicket");
+            entity.Property(e => e.LastUpdateUser).HasColumnName("lastUpdateUser");
+            entity.Property(e => e.UpdateDate)
+                .HasColumnType("datetime")
+                .HasColumnName("updateDate");
+
+            entity.HasOne(d => d.IdSubscriberInvoiceNavigation).WithMany(p => p.SubscriberInvoiceDetails)
+                .HasForeignKey(d => d.IdSubscriberInvoice)
+                .HasConstraintName("FK__Subscribe__idSub__5DD5DC5C");
+
+            entity.HasOne(d => d.IdTicketNavigation).WithMany(p => p.SubscriberInvoiceDetails)
+                .HasForeignKey(d => d.IdTicket)
+                .HasConstraintName("FK__Subscribe__idTic__5ECA0095");
         });
 
         modelBuilder.Entity<SubscriberPrice>(entity =>

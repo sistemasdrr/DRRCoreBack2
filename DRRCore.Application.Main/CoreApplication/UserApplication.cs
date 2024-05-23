@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -70,7 +71,9 @@ namespace DRRCore.Application.Main.CoreApplication
             var listGerencia = new List<UserProcessDto>();
             var listProduccion = new List<UserProcessDto>();
             var listAdministracion = new List<UserProcessDto>();
-            var listFacturacion= new List<UserProcessDto>();
+            var listFacturacion = new List<UserProcessDto>();
+            var listConsultas = new List<UserProcessDto>();
+            var listReportes = new List<UserProcessDto>();
             try
             {
                 var idUser = await _userLoginDomain.GetIdUserByIdEmployee(idEmployee);
@@ -188,6 +191,56 @@ namespace DRRCore.Application.Main.CoreApplication
                                 }
                                 obj1.SubLevel = subLevel7;
                                 listFacturacion.Add(_mapper.Map<UserProcessDto>(obj1));
+                            }
+                            else if (item1.IdProcessNavigation.Menu == "Consultas")
+                            {
+                                var subLevel9 = new List<UserProcessDto>();
+                                var obj1 = _mapper.Map<UserProcessDto>(item1);
+                                foreach (var item2 in list2.Where(x => x.IdProcessNavigation.Menu == "Consultas"))
+                                {
+                                    if (item2.IdProcessNavigation.Father == item1.IdProcess)
+                                    {
+                                        var subLevel10 = new List<UserProcessDto>();
+                                        var obj2 = _mapper.Map<UserProcessDto>(item2);
+                                        foreach (var item3 in list3.Where(x => x.IdProcessNavigation.Menu == "Consultas"))
+                                        {
+                                            if (item3.IdProcessNavigation.Father == item2.IdProcess)
+                                            {
+                                                var obj3 = _mapper.Map<UserProcessDto>(item3);
+                                                subLevel10.Add(obj3);
+                                            }
+                                        }
+                                        obj2.SubLevel = subLevel10;
+                                        subLevel9.Add(obj2);
+                                    }
+                                }
+                                obj1.SubLevel = subLevel9;
+                                listConsultas.Add(_mapper.Map<UserProcessDto>(obj1));
+                            }
+                            else if (item1.IdProcessNavigation.Menu == "Reportes")
+                            {
+                                var subLevel11 = new List<UserProcessDto>();
+                                var obj1 = _mapper.Map<UserProcessDto>(item1);
+                                foreach (var item2 in list2.Where(x => x.IdProcessNavigation.Menu == "Reportes"))
+                                {
+                                    if (item2.IdProcessNavigation.Father == item1.IdProcess)
+                                    {
+                                        var subLevel12 = new List<UserProcessDto>();
+                                        var obj2 = _mapper.Map<UserProcessDto>(item2);
+                                        foreach (var item3 in list3.Where(x => x.IdProcessNavigation.Menu == "Reportes"))
+                                        {
+                                            if (item3.IdProcessNavigation.Father == item2.IdProcess)
+                                            {
+                                                var obj3 = _mapper.Map<UserProcessDto>(item3);
+                                                subLevel12.Add(obj3);
+                                            }
+                                        }
+                                        obj2.SubLevel = subLevel12;
+                                        subLevel11.Add(obj2);
+                                    }
+                                }
+                                obj1.SubLevel = subLevel11;
+                                listReportes.Add(_mapper.Map<UserProcessDto>(obj1));
                             }
                         }
                     }
@@ -310,6 +363,56 @@ namespace DRRCore.Application.Main.CoreApplication
                                         obj1.SubLevel = subLevel7;
                                         listFacturacion.Add(_mapper.Map<UserProcessDto>(obj1));
                                     }
+                                    else if (item1.IdProcessNavigation.Menu == "Consultas")
+                                    {
+                                        var subLevel9 = new List<UserProcessDto>();
+                                        var obj1 = _mapper.Map<UserProcessDto>(item1);
+                                        foreach (var item2 in list2.Where(x => x.IdProcessNavigation.Menu == "Consultas"))
+                                        {
+                                            if (item2.IdProcessNavigation.Father == item1.IdProcess)
+                                            {
+                                                var subLevel10 = new List<UserProcessDto>();
+                                                var obj2 = _mapper.Map<UserProcessDto>(item2);
+                                                foreach (var item3 in list3.Where(x => x.IdProcessNavigation.Menu == "Consultas"))
+                                                {
+                                                    if (item3.IdProcessNavigation.Father == item2.IdProcess)
+                                                    {
+                                                        var obj3 = _mapper.Map<UserProcessDto>(item3);
+                                                        subLevel10.Add(obj3);
+                                                    }
+                                                }
+                                                obj2.SubLevel = subLevel10;
+                                                subLevel9.Add(obj2);
+                                            }
+                                        }
+                                        obj1.SubLevel = subLevel9;
+                                        listConsultas.Add(_mapper.Map<UserProcessDto>(obj1));
+                                    }
+                                    else if (item1.IdProcessNavigation.Menu == "Consultas")
+                                    {
+                                        var subLevel11 = new List<UserProcessDto>();
+                                        var obj1 = _mapper.Map<UserProcessDto>(item1);
+                                        foreach (var item2 in list2.Where(x => x.IdProcessNavigation.Menu == "Consultas"))
+                                        {
+                                            if (item2.IdProcessNavigation.Father == item1.IdProcess)
+                                            {
+                                                var subLevel12 = new List<UserProcessDto>();
+                                                var obj2 = _mapper.Map<UserProcessDto>(item2);
+                                                foreach (var item3 in list3.Where(x => x.IdProcessNavigation.Menu == "Consultas"))
+                                                {
+                                                    if (item3.IdProcessNavigation.Father == item2.IdProcess)
+                                                    {
+                                                        var obj3 = _mapper.Map<UserProcessDto>(item3);
+                                                        subLevel12.Add(obj3);
+                                                    }
+                                                }
+                                                obj2.SubLevel = subLevel12;
+                                                subLevel11.Add(obj2);
+                                            }
+                                        }
+                                        obj1.SubLevel = subLevel11;
+                                        listReportes.Add(_mapper.Map<UserProcessDto>(obj1));
+                                    }
                                 }
                             }
                         }
@@ -318,6 +421,8 @@ namespace DRRCore.Application.Main.CoreApplication
                     data.Administracion = listAdministracion;
                     data.Produccion = listProduccion;
                     data.Facturacion = listFacturacion;
+                    data.Consultas = listConsultas;
+                    data.Reportes = listReportes;
                     response.Data = data;
                 }
             }
@@ -513,12 +618,116 @@ namespace DRRCore.Application.Main.CoreApplication
                         await _userProcessDomain.UpdateAsync(process);
                     }
                 }
+                foreach (var item in obj.Consultas)
+                {
+                    if (item.SubLevel.Count > 0)
+                    {
+                        foreach (var item1 in item.SubLevel)
+                        {
+                            if (item1.SubLevel.Count > 0)
+                            {
+                                foreach (var item2 in item1.SubLevel)
+                                {
+                                    var process2 = await _userProcessDomain.GetByIdAsync(item2.Id);
+                                    if (process2 != null)
+                                    {
+                                        process2 = _mapper.Map(item2, process2);
+                                        await _userProcessDomain.UpdateAsync(process2);
+                                    }
+                                }
+                            }
+                            var process1 = await _userProcessDomain.GetByIdAsync(item1.Id);
+                            if (process1 != null)
+                            {
+                                process1 = _mapper.Map(item1, process1);
+                                await _userProcessDomain.UpdateAsync(process1);
+                            }
+                        }
+                    }
+                    var process = await _userProcessDomain.GetByIdAsync(item.Id);
+                    if (process != null)
+                    {
+                        process = _mapper.Map(item, process);
+                        await _userProcessDomain.UpdateAsync(process);
+                    }
+                }
+                foreach (var item in obj.Reportes   )
+                {
+                    if (item.SubLevel.Count > 0)
+                    {
+                        foreach (var item1 in item.SubLevel)
+                        {
+                            if (item1.SubLevel.Count > 0)
+                            {
+                                foreach (var item2 in item1.SubLevel)
+                                {
+                                    var process2 = await _userProcessDomain.GetByIdAsync(item2.Id);
+                                    if (process2 != null)
+                                    {
+                                        process2 = _mapper.Map(item2, process2);
+                                        await _userProcessDomain.UpdateAsync(process2);
+                                    }
+                                }
+                            }
+                            var process1 = await _userProcessDomain.GetByIdAsync(item1.Id);
+                            if (process1 != null)
+                            {
+                                process1 = _mapper.Map(item1, process1);
+                                await _userProcessDomain.UpdateAsync(process1);
+                            }
+                        }
+                    }
+                    var process = await _userProcessDomain.GetByIdAsync(item.Id);
+                    if (process != null)
+                    {
+                        process = _mapper.Map(item, process);
+                        await _userProcessDomain.UpdateAsync(process);
+                    }
+                }
                 response.Data = true;
             }
             catch(Exception ex)
             {
                 _logger.LogError(ex.Message, ex);
                 response.Data = false;
+                response.IsSuccess = false;
+            }
+            return response;
+        }
+
+        public async Task<Response<bool>> UpdateUserProcessAsync()
+        {
+            var response = new Response<bool>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var process = await context.Processes.ToListAsync();
+                var userProcess = await context.UserProcesses.ToListAsync();
+                var idUsers = userProcess.DistinctBy(x => x.IdUser);
+                foreach (var item1 in idUsers)
+                {
+                    var up = userProcess.Where(x => x.IdUser == item1.IdUser).ToList();
+                    if (up.Count != process.Count)
+                    {
+                        foreach (var item in process)
+                        {
+                            var process2 = userProcess.Where(x => x.IdProcess == item.Id).FirstOrDefault();
+                            if(process2 == null)
+                            {
+                                await context.UserProcesses.AddAsync(new UserProcess 
+                                { 
+                                    IdProcess = item.Id,
+                                    IdUser = item1.IdUser
+                                });
+                            }
+                        }
+                    }
+                }
+               await context.SaveChangesAsync();
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError($"{ex.Message}", ex);
                 response.IsSuccess = false;
             }
             return response;
