@@ -188,13 +188,44 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             return response;
         }
+        public async Task<Response<List<GetQuery1_4SubscriberResponseDto>>> GetQuery1_4Subscribers()
+        {
+            var response = new Response<List<GetQuery1_4SubscriberResponseDto>>();
+            response.Data = new List<GetQuery1_4SubscriberResponseDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var subscriberInvoices = await context.SubscriberInvoices
+                    .Include(x => x.IdSubscriberNavigation).ThenInclude(x => x.IdCountryNavigation)
+                    .ToListAsync();
 
+                var idSubscribers = subscriberInvoices.DistinctBy(x => x.IdSubscriber).ToList();
+                foreach (var item in idSubscribers)
+                {
+                    response.Data.Add(new GetQuery1_4SubscriberResponseDto
+                    {
+                        IdSubscriber = item.IdSubscriber,
+                        Name = item.IdSubscriberNavigation.Name ?? "",
+                        Code = item.IdSubscriberNavigation.Code ?? "",
+                        IdCountry = item.IdSubscriberNavigation.IdCountry,
+                        Country = item.IdSubscriberNavigation.IdCountryNavigation.Iso ?? "",
+                        FlagCountry = item.IdSubscriberNavigation.IdCountryNavigation.FlagIso,
+                    });
+                }
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message, ex);
+                response.IsSuccess = false;
+            }
+            return response;
+        }
         public async Task<Response<GetQuery1_4ResponseDto>> GetQuery1_4(int idSubscriber, int year)
         {
             var response = new Response<GetQuery1_4ResponseDto>();
             var query4ByCountries = new List<GetQuery1_4ByCountryResponseDto>();
-            var query4ByProcedureType = new GetQuery1_4ByProcedureTypeResponseDto();
-            var query4ByReportType = new GetQuery1_4ByReportTypeResponseDto();
+            var query4ByProcedureType = new List<GetQuery1_4ByProcedureTypeResponseDto>();
+            var query4ByReportType = new List<GetQuery1_4ByReportTypeResponseDto>();
             try
             {
                 using var context = new SqlCoreContext();
@@ -241,7 +272,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 var procedureTypes = tickets.DistinctBy(x => x.ProcedureType);
                 foreach (var item in procedureTypes)
                 {
-                    query4ByProcedureType = new GetQuery1_4ByProcedureTypeResponseDto
+                    query4ByProcedureType.Add(new GetQuery1_4ByProcedureTypeResponseDto
                     {
                         ProcedureType = item.ProcedureType,
                         January = tickets.Where(x => x.ProcedureType == item.ProcedureType && x.OrderDate.Month == 1).ToList().Count,
@@ -256,15 +287,15 @@ namespace DRRCore.Application.Main.CoreApplication
                         October = tickets.Where(x => x.ProcedureType == item.ProcedureType && x.OrderDate.Month == 10).ToList().Count,
                         November = tickets.Where(x => x.ProcedureType == item.ProcedureType && x.OrderDate.Month == 11).ToList().Count,
                         December = tickets.Where(x => x.ProcedureType == item.ProcedureType && x.OrderDate.Month == 12).ToList().Count,
-                        Total = tickets.Where(x => x.OrderDate.Year == year).ToList().Count,
-                    };
+                        Total = tickets.Where(x => x.ProcedureType == item.ProcedureType && x.OrderDate.Year == year).ToList().Count,
+                    });
                 }
 
                 //3
                 var reportTypes = tickets.DistinctBy(x => x.ReportType);
                 foreach (var item in reportTypes)
                 {
-                    query4ByReportType = new GetQuery1_4ByReportTypeResponseDto
+                    query4ByReportType.Add(new GetQuery1_4ByReportTypeResponseDto
                     {
                         ReportType = item.ReportType,
                         January = tickets.Where(x => x.ReportType == item.ReportType && x.OrderDate.Month == 1).ToList().Count,
@@ -279,8 +310,8 @@ namespace DRRCore.Application.Main.CoreApplication
                         October = tickets.Where(x => x.ReportType == item.ReportType && x.OrderDate.Month == 10).ToList().Count,
                         November = tickets.Where(x => x.ReportType == item.ReportType && x.OrderDate.Month == 11).ToList().Count,
                         December = tickets.Where(x => x.ReportType == item.ReportType && x.OrderDate.Month == 12).ToList().Count,
-                        Total = tickets.Where(x => x.OrderDate.Year == year).ToList().Count,
-                    };
+                        Total = tickets.Where(x => x.ReportType == item.ReportType && x.OrderDate.Year == year).ToList().Count,
+                    });
                 }
 
                 response.Data = new GetQuery1_4ResponseDto

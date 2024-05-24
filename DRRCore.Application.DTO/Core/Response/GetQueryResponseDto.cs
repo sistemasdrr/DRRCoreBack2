@@ -75,11 +75,20 @@
         public int? December { get; set; }
         public int? Total { get; set; }
     }
+    public class GetQuery1_4SubscriberResponseDto
+    {
+        public int? IdSubscriber { get; set; }
+        public string? Name { get; set; }
+        public string? Code { get; set; }
+        public int? IdCountry{ get; set; }
+        public string? Country { get; set; }
+        public string? FlagCountry { get; set; }
+    }
     public class GetQuery1_4ResponseDto
     {
         public List<GetQuery1_4ByCountryResponseDto> Query1_4ByCountries { get; set; }
-        public GetQuery1_4ByProcedureTypeResponseDto Query1_4ByProcedureType { get; set; }
-        public GetQuery1_4ByReportTypeResponseDto Query1_4ByReportType { get; set; }
+        public List<GetQuery1_4ByProcedureTypeResponseDto> Query1_4ByProcedureType { get; set; }
+        public List<GetQuery1_4ByReportTypeResponseDto> Query1_4ByReportType { get; set; }
     }
     public class GetQuery1_4ByCountryResponseDto
     {

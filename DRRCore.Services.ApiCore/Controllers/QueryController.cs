@@ -38,7 +38,13 @@ namespace DRRCore.Services.ApiCore.Controllers
             return Ok(await _queryApplication.GetQuery1_3BySubscriber(idSubscriber,year));
         }
         [HttpGet]
-        [Route("GetQuery1_4")]
+        [Route("GetQuery1_4Subscribers")] 
+        public async Task<ActionResult> GetQuery1_4Subscribers()
+        {
+            return Ok(await _queryApplication.GetQuery1_4Subscribers());
+        }
+        [HttpGet]
+        [Route("GetQuery1_4")] 
         public async Task<ActionResult> GetQuery1_4(int idSubscriber, int year)
         {
             return Ok(await _queryApplication.GetQuery1_4(idSubscriber, year));

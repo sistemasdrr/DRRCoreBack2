@@ -23,7 +23,9 @@ namespace DRRCore.Application.DTO.Core.Request
         public bool Internal { get; set; }
         public bool Balance { get; set; }
         public string? StartDate { get; set; }
+        public DateTime? StartDateD { get; set; }
         public string? EndDate { get; set; }
+        public DateTime? EndDateD { get; set; }
         public int IdTicket { get; set; }
         public int? NumberAssign { get; set; }
     }

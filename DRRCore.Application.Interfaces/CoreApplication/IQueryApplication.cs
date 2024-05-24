@@ -12,6 +12,7 @@ namespace DRRCore.Application.Interfaces.CoreApplication
 
         Task<Response<List<GetQuery1_3BySubscriberResponseDto>>> GetQuery1_3BySubscriber(int idSubscriber, int year);
 
+        Task<Response<List<GetQuery1_4SubscriberResponseDto>>> GetQuery1_4Subscribers();
         Task<Response<GetQuery1_4ResponseDto>> GetQuery1_4(int idSubscriber, int year);
 
         Task<Response<List<GetQuery1_5ResponseDto>>> GetQuery1_5(string startDate, string endDate);
