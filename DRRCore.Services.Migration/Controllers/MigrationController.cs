@@ -140,5 +140,11 @@ namespace DRRCore.Services.Migration.Controllers
         {
             return Ok(await _migraUser.UpdatePersonJob());
         }
+        [HttpPost()]
+        [Route("UpdateSubscriber")]
+        public async Task<ActionResult> UpdateSubscriber()
+        {
+                return Ok(await _migraUser.UpdateSubscriber());
+        }
     }
 }

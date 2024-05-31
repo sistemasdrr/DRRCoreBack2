@@ -4270,6 +4270,7 @@ public partial class DbA9ccf0EecoreContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("fax");
+            entity.Property(e => e.IdAgent).HasColumnName("idAgent");
             entity.Property(e => e.IdContinent).HasColumnName("idContinent");
             entity.Property(e => e.IdCountry).HasColumnName("idCountry");
             entity.Property(e => e.IdCurrency).HasColumnName("idCurrency");
@@ -4360,6 +4361,10 @@ public partial class DbA9ccf0EecoreContext : DbContext
                 .HasMaxLength(150)
                 .IsUnicode(false)
                 .HasColumnName("webPage");
+
+            entity.HasOne(d => d.IdAgentNavigation).WithMany(p => p.Subscribers)
+                .HasForeignKey(d => d.IdAgent)
+                .HasConstraintName("FK_subscriber_idAgent");
 
             entity.HasOne(d => d.IdContinentNavigation).WithMany(p => p.Subscribers)
                 .HasForeignKey(d => d.IdContinent)

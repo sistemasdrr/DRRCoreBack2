@@ -3598,5 +3598,38 @@ namespace DRRCore.Application.Main.MigrationApplication
            
             return true;
         }
+
+        public async Task<bool> UpdateSubscriber()
+        {
+            using var context = new SqlCoreContext();
+            using var mysqlcontext = new MySqlContext();
+            try
+            {
+                var mAbonado = await mysqlcontext.MAbonados.ToListAsync();
+                var mAgentes = await mysqlcontext.MAgentes.ToListAsync();
+                foreach (var item in mAbonado)
+                {
+                    if (item.AboTipo.Contains("CA"))
+                    {
+                        var mAgent = mAgentes.Where(x => x.AgeNombre.ToLower().Trim() == item.AboNombre.ToLower().Trim()).FirstOrDefault();
+                        var subscriber = await context.Subscribers.Where(x => x.Code == item.AboCodigo).FirstOrDefaultAsync();
+                        if (subscriber != null && mAgent != null)
+                        {
+                            var agent = await context.Agents.Where(x => x.Code.Contains(mAgent.AgeCodigo.Trim())).FirstOrDefaultAsync();
+                            if (agent != null)
+                            {
+                                subscriber.IdAgent = agent.Id;
+                            }
+                        }
+                    }
+                }
+                await context.SaveChangesAsync();
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }

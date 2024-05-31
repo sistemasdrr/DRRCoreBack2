@@ -25,5 +25,7 @@
         Task<bool> MigrateCompanyBankDebt(int migra);
         Task<bool> UpdatePersonJob();
 
+        Task<bool> UpdateSubscriber();
+
     }
 }

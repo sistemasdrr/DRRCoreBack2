@@ -23,7 +23,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
             .ForMember(dest => dest.Name, opt => opt?.MapFrom(src => src.Name))
             .ForMember(dest => dest.Acronym, opt => opt?.MapFrom(src => src.Acronym))
             .ForMember(dest => dest.Address, opt => opt?.MapFrom(src => src.Address))
-            .ForMember(dest => dest.Country, opt => opt?.MapFrom(src => src.IdCountryNavigation != null ? src.IdCountryNavigation.Name : string.Empty))
+            .ForMember(dest => dest.Country, opt => opt?.MapFrom(src => src.IdCountryNavigation != null ? src.IdCountryNavigation.Iso : string.Empty))
             .ForMember(dest => dest.IsoCountry, opt => opt?.MapFrom(src => src.IdCountryNavigation != null ? src.IdCountryNavigation.Iso : string.Empty))
             .ForMember(dest => dest.FlagCountry, opt => opt?.MapFrom(src => src.IdCountryNavigation != null ? src.IdCountryNavigation.FlagIso : string.Empty))
             .ForMember(dest => dest.FacturationType, opt => opt?.MapFrom(src => src.FacturationType))

@@ -40,7 +40,6 @@ namespace DRRCore.Transversal.Common
         {
             bool response = false;
             if (!_emailSettings.IsDebugging) {
-
                 if (_emailSettings.IsMultipleDomain)
                 {
                     var client = smtpClient();
@@ -49,7 +48,6 @@ namespace DRRCore.Transversal.Common
                         await client.SendMailAsync(mailMessage(values));
                         _logger.LogInformation(Messages.MailSuccessSend);
                         response = true;
-
                     }catch
                     {
                         for (var i = 0; i < _emailSettings?.OtherDomainsConfiguration.Count; i++)
@@ -98,9 +96,7 @@ namespace DRRCore.Transversal.Common
                         _logger.LogInformation(string.Format(Messages.ErrorMailSend, ex.Message));
                         return false;
                     }
-                   
                 }
-               
             }
             return response;
         }

@@ -77,7 +77,10 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                 {
                     list = await context.Agents.Include(x => x.IdCountryNavigation).Where(x => x.Code.Contains(code) && x.Name.Contains(name)).ToListAsync();
                 }
-                list.Where(x => x.Code == "A60").FirstOrDefault().Id = 55;
+                if(list.Where(x => x.Code == "A60").FirstOrDefault() != null)
+                {
+                    list.Where(x => x.Code == "A60").FirstOrDefault().Id = 55;
+                }
                 return list;
             }
             catch (Exception ex)

@@ -91,7 +91,11 @@ public partial class Subscriber
 
     public string? Psw { get; set; }
 
+    public int? IdAgent { get; set; }
+
     public virtual ICollection<CouponBillingSubscriber> CouponBillingSubscribers { get; set; } = new List<CouponBillingSubscriber>();
+
+    public virtual Agent? IdAgentNavigation { get; set; }
 
     public virtual Continent? IdContinentNavigation { get; set; }
 

@@ -38,6 +38,8 @@ namespace DRRCore.Transversal.Common
                 case Constants.DRR_WORKFLOW_ESP_0038:
                 case Constants.DRR_WORKFLOW_ESP_0039:
                 case Constants.DRR_WORKFLOW_ESP_0039_ERROR:
+                case Constants.DRR_WORKFLOW_ESP_0041:
+                    return GetHtmlStringBodyWithTable_DRR_WORKFLOW_FOURCOLUMN(body, parameters, table);
                 case Constants.DRR_EECORE_ENG_QUERYTICKET:
                 case Constants.DRR_EECORE_ESP_QUERYTICKET:
                     return GetHtmlStringBody(body,parameters);
@@ -130,6 +132,32 @@ namespace DRRCore.Transversal.Common
                     "<td style='padding:5px;Margin:0;font-size:13px;text-align: center;'>{2}</td>" +
                     "<td style='padding:5px;Margin:0;font-size:13px;text-align: center;'>{3}</td>" +
                     "<td style='padding:5px;Margin:0;font-size:13px;text-align: center;'>{4}</td>" +                  
+                    "</tr>";
+                rowString = StringFormat(rowString, tableItem);
+                tableString += rowString;
+            }
+            return body.Replace(Constants.TABLEBODY, tableString);
+
+        }
+        private string GetHtmlStringBodyWithTable_DRR_WORKFLOW_FOURCOLUMN(string body, List<string> parameters, List<List<string>> table)
+        {
+            body = StringFormat(body, parameters);
+
+            string tableString = string.Empty;
+            int i = 0;
+            string rowStyle = "";
+            foreach (var tableItem in table)
+            {
+                if ((i % 2) == 0) rowStyle = "  ";
+                else rowStyle = " background-color: #FAF7F7; ";
+
+                i++;
+                var rowString = string.Empty;
+                rowString = "<tr style='" + rowStyle + "'>" +
+                    "<td style='padding:5px;Margin:0;font-size:13px;'> {0}</td>" +
+                    "<td style='padding:5px;Margin:0;font-size:13px;text-align: center;'>{1}</td>" +
+                    "<td style='padding:5px;Margin:0;font-size:13px;text-align: center;'>{2}</td>" +
+                    "<td style='padding:5px;Margin:0;font-size:13px;text-align: center;'>{3}</td>" +
                     "</tr>";
                 rowString = StringFormat(rowString, tableItem);
                 tableString += rowString;
