@@ -1866,6 +1866,7 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 _logger.LogError(ex.Message, ex);
                 throw new Exception(ex.Message);
+                response.Message = ex.Message;
             }
             return response;
         }

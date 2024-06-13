@@ -43,6 +43,8 @@ public partial class TicketHistory
 
     public bool? FlagInvoice { get; set; }
 
+    public string? AsignationType { get; set; }
+
     public virtual ICollection<AgentInvoiceDetail> AgentInvoiceDetails { get; set; } = new List<AgentInvoiceDetail>();
 
     public virtual StatusTicket? IdStatusTicketNavigation { get; set; }

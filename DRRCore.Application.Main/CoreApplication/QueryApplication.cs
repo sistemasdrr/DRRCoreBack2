@@ -10,6 +10,7 @@ using DRRCore.Domain.Interfaces.EmailDomain;
 using DRRCore.Transversal.Common;
 using DRRCore.Transversal.Common.Interface;
 using Microsoft.EntityFrameworkCore;
+using Mysqlx.Crud;
 using Newtonsoft.Json;
 using static iTextSharp.text.pdf.AcroFields;
 
@@ -70,6 +71,7 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 _logger.LogError(ex.Message, ex);
                 response.IsSuccess = false;
+                response.Message = ex.Message;
             }
             return response;
         }
@@ -113,6 +115,7 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 _logger.LogError(ex.Message, ex);
                 response.IsSuccess = false;
+                response.Message = ex.Message;
             }
             return response;
         }
@@ -156,6 +159,7 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 _logger.LogError(ex.Message, ex);
                 response.IsSuccess = false;
+                response.Message = ex.Message;
             }
             return response;
         }
@@ -199,6 +203,7 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 _logger.LogError(ex.Message, ex);
                 response.IsSuccess = false;
+                response.Message = ex.Message;
             }
             return response;
         }
@@ -231,6 +236,7 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 _logger.LogError(ex.Message, ex);
                 response.IsSuccess = false;
+                response.Message = ex.Message;
             }
             return response;
         }
@@ -339,6 +345,7 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 _logger.LogError(ex.Message, ex);
                 response.IsSuccess = false;
+                response.Message = ex.Message;
             }
             return response;
         }
@@ -386,6 +393,7 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 _logger.LogError(ex.Message, ex);
                 response.IsSuccess = false;
+                response.Message = ex.Message;
             }
             return response;
         }
@@ -421,6 +429,7 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 _logger.LogError(ex.Message, ex);
                 response.IsSuccess = false;
+                response.Message = ex.Message;
             }
             return response;
         }
@@ -466,6 +475,7 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 _logger.LogError(ex.Message, ex);
                 response.IsSuccess = false;
+                response.Message = ex.Message;
             }
             return response;
         }
@@ -502,6 +512,7 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 _logger.LogError(ex.Message, ex);
                 response.IsSuccess = false;
+                response.Message = ex.Message;
             }
             return response;
         }
@@ -537,6 +548,7 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 _logger.LogError(ex.Message, ex);
                 response.IsSuccess = false;
+                response.Message = ex.Message;
             }
             return response;
         }
@@ -578,6 +590,7 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 _logger.LogError(ex.Message, ex);
                 response.IsSuccess = false;
+                response.Message = ex.Message;
             }
             return response;
         }
@@ -611,6 +624,7 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 _logger.LogError(ex.Message, ex);
                 response.IsSuccess = false;
+                response.Message = ex.Message;
             }
             return response;
         }
@@ -652,6 +666,7 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 _logger.LogError(ex.Message, ex);
                 response.IsSuccess = false;
+                response.Message = ex.Message;
             }
             return response;
         }
@@ -696,6 +711,7 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 _logger.LogError(ex.Message, ex);
                 response.IsSuccess = false;
+                response.Message = ex.Message;
             }
             return response;
         }
@@ -733,6 +749,7 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 _logger.LogError(ex.Message, ex);
                 response.IsSuccess = false;
+                response.Message = ex.Message;
             }
             return response;
         }
@@ -781,6 +798,7 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 _logger.LogError(ex.Message, ex);
                 response.IsSuccess = false;
+                response.Message = ex.Message;
             }
             return response;
         }
@@ -811,6 +829,7 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 _logger.LogError(ex.Message, ex);
                 response.IsSuccess = false;
+                response.Message = ex.Message;
             }
             return response;
         }
@@ -851,6 +870,7 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 _logger.LogError(ex.Message, ex);
                 response.IsSuccess = false;
+                response.Message = ex.Message;
             }
             return response;
         }
@@ -946,6 +966,7 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 _logger.LogError(ex.Message, ex);
                 response.IsSuccess = false;
+                response.Message = ex.Message;
             }
             return response;
         }
@@ -995,6 +1016,7 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 _logger.LogError(ex.Message, ex);
                 response.IsSuccess = false;
+                response.Message = ex.Message;
             }
             return response;
         }
@@ -1035,17 +1057,18 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 _logger.LogError(ex.Message, ex);
                 response.IsSuccess = false;
+                response.Message = ex.Message;
             }
             return response;
         }
-        public async Task<Response<GetFileResponseDto>> DownloadQuery_Fact_ByBill(string format)
+        public async Task<Response<GetFileResponseDto>> DownloadQuery_Fact_4_1_1(string format)
         {
             var response = new Response<GetFileResponseDto>();
             try
             {
 
                 string fileFormat = "{0}_{1}{2}";
-                string report = "FACTURACION/ABONADOS/CONSULTA_FACT_PORCOBRAR_ABONADO";
+                string report = "FACTURACION/ABONADOS/CONSULTA_FACT_ABONADO_1";
                 var reportRenderType = StaticFunctions.GetReportRenderType(format);
                 var extension = StaticFunctions.FileExtension(reportRenderType);
                 var contentType = StaticFunctions.GetContentType(reportRenderType);
@@ -1058,9 +1081,8 @@ namespace DRRCore.Application.Main.CoreApplication
                 {
                     File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
                     ContentType = contentType,
-                    Name = string.Format(fileFormat, "CONSULTA_FACT_PORCOBRAR_ABONADO", ".", extension)
+                    Name = string.Format(fileFormat, "CONSULTA_FACTURAS_ABONADO_1", "", extension)
                 };
-
             }
             catch (Exception ex)
             {
@@ -1071,10 +1093,10 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<List<GetQuery4_1ResponseDto>>> GetQuery4_1()
+        public async Task<Response<List<GetQuery4_1_1ResponseDto>>> GetQuery4_1_1()
         {
-            var response = new Response<List<GetQuery4_1ResponseDto>>();
-            response.Data = new List<GetQuery4_1ResponseDto>();
+            var response = new Response<List<GetQuery4_1_1ResponseDto>>();
+            response.Data = new List<GetQuery4_1_1ResponseDto>();
             try
             {
                 using var context = new SqlCoreContext();
@@ -1082,7 +1104,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 var idSubscribers = subscriberInvoice.DistinctBy(x => x.IdSubscriber);
                 foreach (var item in idSubscribers)
                 {
-                    response.Data.Add(new GetQuery4_1ResponseDto
+                    response.Data.Add(new GetQuery4_1_1ResponseDto
                     {
                         IdSubscriber = item.IdSubscriber,
                         Name = item.IdSubscriberNavigation.Name ?? "",
@@ -1136,7 +1158,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         {
                             "jfernandez@del-risco.com",
                             "diego.rodriguez@del-risco.com",
-                             //item.IdSubscriberNavigation.SendReportToEmail,
+                            //item.IdSubscriberNavigation.SendInvoiceToEmail,
                         };
                             emailDataDto.Table = new List<List<string>>();
                             var tbl = new List<string>();
@@ -1271,5 +1293,370 @@ namespace DRRCore.Application.Main.CoreApplication
 
         }
 
+        public async Task<Response<List<GetQuery4_1_2ResponseDto>>> GetQuery4_1_2()
+        {
+            var response = new Response<List<GetQuery4_1_2ResponseDto>>();
+            response.Data = new List<GetQuery4_1_2ResponseDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var subscriberInvoices = await context.SubscriberInvoices.Where(x => x.IdInvoiceState == 2).ToListAsync();
+                var dates = subscriberInvoices.DistinctBy(x => StaticFunctions.DateTimeToString(x.InvoiceEmitDate));
+                foreach (var item in dates)
+                {
+                    response.Data.Add(new GetQuery4_1_2ResponseDto
+                    {
+                        Date = StaticFunctions.DateTimeToString(item.InvoiceEmitDate),
+                    });
+                }
+            }
+            catch(Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = string.Format(Messages.ExceptionMessage, ex.Message);
+                _logger.LogError(response.Message);
+            }
+            return response;
+        }
+        public async Task<Response<GetFileResponseDto>> DownloadQuery_Fact_4_1_2(string format)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+
+                string fileFormat = "{0}_{1}{2}";
+                string report = "FACTURACION/ABONADOS/CONSULTA_FACT_ABONADO_2";
+                var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                var extension = StaticFunctions.FileExtension(reportRenderType);
+                var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                var dictionary = new Dictionary<string, string>
+                {
+                };
+
+                response.Data = new GetFileResponseDto
+                {
+                    File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                    ContentType = contentType,
+                    Name = string.Format(fileFormat, "CONSULTA_FACTURAS_ABONADO_2", "", extension)
+                };
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
+        public async Task<Response<List<GetQuery4_1_3ResponseDto>>> GetQuery4_1_3(string startDate, string endDate)
+        {
+            var response = new Response<List<GetQuery4_1_3ResponseDto>>();
+            response.Data = new List<GetQuery4_1_3ResponseDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+
+                var startDateTime = StaticFunctions.VerifyDate(startDate)?.Date.AddTicks(-1);
+                var endDateTime = StaticFunctions.VerifyDate(endDate)?.Date.AddDays(1).AddTicks(-1);
+
+                var subscriberInvoice = await context.SubscriberInvoices
+                    .Where(x => x.IdInvoiceState == 2 && x.InvoiceEmitDate > startDateTime && x.InvoiceEmitDate < endDateTime)
+                    .Include(x => x.IdSubscriberNavigation).ThenInclude(x => x.IdCountryNavigation)
+                    .ToListAsync();
+                var idSubscribers = subscriberInvoice.DistinctBy(x => x.IdSubscriber);
+                foreach (var item in idSubscribers)
+                {
+                    response.Data.Add(new GetQuery4_1_3ResponseDto
+                    {
+                        IdSubscriber = item.IdSubscriber,
+                        Name = item.IdSubscriberNavigation.Name ?? "",
+                        Code = item.IdSubscriberNavigation.Code ?? "",
+                        IdCountry = item.IdSubscriberNavigation.IdCountry,
+                        Country = item.IdSubscriberNavigation.IdCountryNavigation.Iso ?? "",
+                        FlagCountry = item.IdSubscriberNavigation.IdCountryNavigation.FlagIso ?? "",
+
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
+        public async Task<Response<GetFileResponseDto>> DownloadQuery_Fact_4_1_3(string format, string startDate, string endDate)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+
+                string fileFormat = "{0}_{1}{2}";
+                string report = "FACTURACION/ABONADOS/CONSULTA_FACT_ABONADO_3";
+                var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                var extension = StaticFunctions.FileExtension(reportRenderType);
+                var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                var dictionary = new Dictionary<string, string>
+                {
+                    { "startDate", startDate },
+                    { "endDate", endDate },
+                };
+
+                response.Data = new GetFileResponseDto
+                {
+                    File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                    ContentType = contentType,
+                    Name = string.Format(fileFormat, "CONSULTA_FACTURAS_ABONADO_3", "", extension)
+                };
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
+        public async Task<Response<List<GetQuery4_1_4ResponseDto>>> GetQuery4_1_4(int month, int year)
+        {
+            var response = new Response<List<GetQuery4_1_4ResponseDto>>();
+            response.Data = new List<GetQuery4_1_4ResponseDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+
+                var subscriberInvoice = await context.SubscriberInvoices
+                    .Where(x => x.IdInvoiceState == 3 && x.InvoiceCancelDate.Value.Month == month && x.InvoiceCancelDate.Value.Year == year)
+                    .Include(x => x.IdSubscriberNavigation).ThenInclude(x => x.IdCountryNavigation)
+                    .ToListAsync();
+                var idSubscribers = subscriberInvoice.DistinctBy(x => x.IdSubscriber);
+                foreach (var item in idSubscribers)
+                {
+                    response.Data.Add(new GetQuery4_1_4ResponseDto
+                    {
+                        IdSubscriber = item.IdSubscriber,
+                        Name = item.IdSubscriberNavigation.Name ?? "",
+                        Code = item.IdSubscriberNavigation.Code ?? "",
+                        IdCountry = item.IdSubscriberNavigation.IdCountry,
+                        Country = item.IdSubscriberNavigation.IdCountryNavigation.Iso ?? "",
+                        FlagCountry = item.IdSubscriberNavigation.IdCountryNavigation.FlagIso ?? "",
+
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
+        public async Task<Response<GetFileResponseDto>> DownloadQuery_Fact_4_1_4(string format, int month, int year)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+
+                string fileFormat = "{0}_{1}{2}";
+                string report = "FACTURACION/ABONADOS/CONSULTA_FACT_ABONADO_4";
+                var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                var extension = StaticFunctions.FileExtension(reportRenderType);
+                var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                var dictionary = new Dictionary<string, string>
+                {
+                    { "month", month.ToString() },
+                    { "year", year.ToString() },
+                };
+
+                response.Data = new GetFileResponseDto
+                {
+                    File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                    ContentType = contentType,
+                    Name = string.Format(fileFormat, "CONSULTA_FACTURAS_ABONADOS_4", "", extension)
+                };
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
+
+        public async Task<Response<GetFileResponseDto>> DownloadQuery_Fact_4_1_5(string format, string orderBy, int month, int year)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+                string fileFormat = "{0}_{1}{2}";
+                string report = "FACTURACION/ABONADOS/CONSULTA_FACT_ABONADO_5";
+                var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                var extension = StaticFunctions.FileExtension(reportRenderType);
+                var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                var dictionary = new Dictionary<string, string>
+                {
+                    { "month", month.ToString() },
+                    { "year", year.ToString() },
+                    { "orderBy", orderBy },
+                };
+
+                response.Data = new GetFileResponseDto
+                {
+                    File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                    ContentType = contentType,
+                    Name = string.Format(fileFormat, "CONSULTA_FACTURA_ABONADOS_5", "", extension)
+                };
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+        public async Task<Response<List<GetQuery4_2_1ResponseDto>>> GetQuery4_2_1()
+        {
+            var response = new Response<List<GetQuery4_2_1ResponseDto>>();
+            response.Data = new List<GetQuery4_2_1ResponseDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var agentInvoice = await context.AgentInvoices
+                    .Where(x => x.IdInvoiceState == 2)
+                    .Include(x => x.IdAgentNavigation).ThenInclude(x => x.IdCountryNavigation)
+                    .ToListAsync();
+                var idsAgent = agentInvoice.DistinctBy(x => x.IdAgent);
+                foreach (var item in idsAgent)
+                {
+                    response.Data.Add(new GetQuery4_2_1ResponseDto
+                    {
+                        Name = item.IdAgentNavigation.Name ?? "",
+                        Code = item.IdAgentNavigation.Code ?? "",
+                        Country = item.IdAgentNavigation.IdCountryNavigation.Iso ?? "",
+                        FlagCountry = item.IdAgentNavigation.IdCountryNavigation.FlagIso ?? "",
+                    });
+                }
+            }
+            catch(Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+        public async Task<Response<GetFileResponseDto>> DownloadQuery_Fact_4_2_1(string format)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+
+                string fileFormat = "{0}_{1}{2}";
+                string report = "FACTURACION/AGENTES/CONSULTA_FACT_AGENTE_1";
+                var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                var extension = StaticFunctions.FileExtension(reportRenderType);
+                var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                var dictionary = new Dictionary<string, string>
+                {
+                };
+
+                response.Data = new GetFileResponseDto
+                {
+                    File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                    ContentType = contentType,
+                    Name = string.Format(fileFormat, "CONSULTA_FACTURA_AGENTE_1", "", extension)
+                };
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
+        public async Task<Response<List<GetQuery4_2_2ResponseDto>>> GetQuery4_2_2(string startDate, string endDate)
+        {
+            var response = new Response<List<GetQuery4_2_2ResponseDto>>();
+            response.Data = new List<GetQuery4_2_2ResponseDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var startDateTime = StaticFunctions.VerifyDate(startDate)?.Date.AddTicks(-1);
+                var endDateTime = StaticFunctions.VerifyDate(endDate)?.Date.AddDays(1).AddTicks(-1);
+
+                var agentInvoice = await context.AgentInvoices
+                    .Where(x => x.IdInvoiceState == 2 && x.InvoiceEmitDate > startDateTime && x.InvoiceEmitDate < endDateTime)
+                    .Include(x => x.IdAgentNavigation).ThenInclude(x => x.IdCountryNavigation)
+                    .ToListAsync();
+                var idsAgent = agentInvoice.DistinctBy(x => x.IdAgent);
+                foreach (var item in idsAgent)
+                {
+                    response.Data.Add(new GetQuery4_2_2ResponseDto
+                    {
+                        Name = item.IdAgentNavigation.Name ?? "",
+                        Code = item.IdAgentNavigation.Code ?? "",
+                        Country = item.IdAgentNavigation.IdCountryNavigation.Iso ?? "",
+                        FlagCountry = item.IdAgentNavigation.IdCountryNavigation.FlagIso ?? "",
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
+        public async Task<Response<GetFileResponseDto>> DownloadQuery_Fact_4_2_2(string format, string startDate, string endDate)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+
+                string fileFormat = "{0}_{1}{2}";
+                string report = "FACTURACION/AGENTES/CONSULTA_FACT_AGENTE_2";
+                var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                var extension = StaticFunctions.FileExtension(reportRenderType);
+                var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                var dictionary = new Dictionary<string, string>
+                {
+                    { "startDate", startDate },
+                    { "endDate", endDate },
+                };
+
+                response.Data = new GetFileResponseDto
+                {
+                    File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                    ContentType = contentType,
+                    Name = string.Format(fileFormat, "CONSULTA_FACTURA_AGENTE_2", "", extension)
+                };
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
     }
 }

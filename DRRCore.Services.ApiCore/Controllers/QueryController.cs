@@ -148,10 +148,10 @@ namespace DRRCore.Services.ApiCore.Controllers
             return Ok(await _queryApplication.GetQuery3_1ByMonth(asignedTo, year, month));
         }
         [HttpGet]
-        [Route("GetQuery4_1")] 
-        public async Task<ActionResult> GetQuery4_1()
+        [Route("GetQuery4_1_1")] 
+        public async Task<ActionResult> GetQuery4_1_1()
         {
-            return Ok(await _queryApplication.GetQuery4_1());
+            return Ok(await _queryApplication.GetQuery4_1_1());
         }
         [HttpGet]
         [Route("SendMailQuery4_1_1_Fact_ByBill")]
@@ -160,10 +160,89 @@ namespace DRRCore.Services.ApiCore.Controllers
             return Ok(await _queryApplication.SendMailQuery4_1_1_Fact_ByBill(to, idSubscriber, idUser));
         }
         [HttpGet]
-        [Route("DownloadQuery_Fact_ByBill")]
-        public async Task<ActionResult> DownloadQuery_Fact_ByBill(string format)
+        [Route("DownloadQuery_Fact_4_1_1")]
+        public async Task<ActionResult> DownloadQuery_Fact_4_1_1(string format)
         {
-            var result = await _queryApplication.DownloadQuery_Fact_ByBill(format);
+            var result = await _queryApplication.DownloadQuery_Fact_4_1_1(format);
+
+            return File(result.Data.File, result.Data.ContentType, result.Data.Name);
+        }
+        [HttpGet]
+        [Route("GetQuery4_1_2")]
+        public async Task<ActionResult> GetQuery4_1_2()
+        {
+            return Ok(await _queryApplication.GetQuery4_1_2());
+        }
+        [HttpGet]
+        [Route("DownloadQuery_Fact_4_1_2")]
+        public async Task<ActionResult> DownloadQuery_Fact_4_1_2(string format)
+        {
+            var result = await _queryApplication.DownloadQuery_Fact_4_1_2(format);
+
+            return File(result.Data.File, result.Data.ContentType, result.Data.Name);
+        }
+
+        [HttpGet]
+        [Route("GetQuery4_1_3")]
+        public async Task<ActionResult> GetQuery4_1_3(string startDate, string endDate)
+        {
+            return Ok(await _queryApplication.GetQuery4_1_3(startDate, endDate));
+        }
+        [HttpGet]
+        [Route("DownloadQuery_Fact_4_1_3")]
+        public async Task<ActionResult> DownloadQuery_Fact_4_1_3(string format, string startDate, string endDate)
+        {
+            var result = await _queryApplication.DownloadQuery_Fact_4_1_3(format, startDate, endDate);
+
+            return File(result.Data.File, result.Data.ContentType, result.Data.Name);
+        }
+        [HttpGet]
+        [Route("GetQuery4_1_4")]
+        public async Task<ActionResult> GetQuery4_1_4(int month, int year)
+        {
+            return Ok(await _queryApplication.GetQuery4_1_4(month, year));
+        }
+        [HttpGet]
+        [Route("DownloadQuery_Fact_4_1_4")]
+        public async Task<ActionResult> DownloadQuery_Fact_4_1_4(string format, int month, int year)
+        {
+            var result = await _queryApplication.DownloadQuery_Fact_4_1_4(format, month, year);
+
+            return File(result.Data.File, result.Data.ContentType, result.Data.Name);
+        }
+        [HttpGet]
+        [Route("DownloadQuery_Fact_4_1_5")]
+        public async Task<ActionResult> DownloadQuery_Fact_4_1_5(string format, string orderBy,int month, int year)
+        {
+            var result = await _queryApplication.DownloadQuery_Fact_4_1_5(format, orderBy, month, year);
+
+            return File(result.Data.File, result.Data.ContentType, result.Data.Name);
+        }
+        [HttpGet]
+        [Route("GetQuery4_2_1")]
+        public async Task<ActionResult> GetQuery4_2_1()
+        {
+            return Ok(await _queryApplication.GetQuery4_2_1());
+        }
+        [HttpGet]
+        [Route("DownloadQuery_Fact_4_2_1")]
+        public async Task<ActionResult> DownloadQuery_Fact_4_2_1(string format)
+        {
+            var result = await _queryApplication.DownloadQuery_Fact_4_2_1(format);
+
+            return File(result.Data.File, result.Data.ContentType, result.Data.Name);
+        }
+        [HttpGet]
+        [Route("GetQuery4_2_2")]
+        public async Task<ActionResult> GetQuery4_2_2(string startDate, string endDate)
+        {
+            return Ok(await _queryApplication.GetQuery4_2_2(startDate,endDate));
+        }
+        [HttpGet]
+        [Route("DownloadQuery_Fact_4_2_2")]
+        public async Task<ActionResult> DownloadQuery_Fact_4_2_2(string format, string startDate, string endDate)
+        {
+            var result = await _queryApplication.DownloadQuery_Fact_4_2_2(format, startDate, endDate);
 
             return File(result.Data.File, result.Data.ContentType, result.Data.Name);
         }

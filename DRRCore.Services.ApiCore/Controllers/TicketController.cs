@@ -43,6 +43,12 @@ namespace DRRCore.Services.ApiCore.Controllers
             return Ok(await _ticketApplication.AddTicketAsync(request));
         }
         [HttpPost()]
+        [Route("downloadAndUploadF1")]
+        public async Task<ActionResult> DownloadAndUploadF1(int idTicket)
+        {
+            return Ok(await _ticketApplication.DownloadAndUploadF1(idTicket));
+        }
+        [HttpPost()]
         [Route("addByWeb")]
         public async Task<ActionResult> AddTicketByWeb(AddOrUpdateTicketRequestDto request)
         {

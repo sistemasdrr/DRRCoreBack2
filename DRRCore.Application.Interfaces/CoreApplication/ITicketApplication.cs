@@ -9,7 +9,8 @@ namespace DRRCore.Application.Interfaces.CoreApplication
     public interface ITicketApplication
     {
         Task<Response<List<GetTicketFileResponseDto>>> GetTicketFilesByIdTicket(int idTicket);
-        Task<Response<bool>> AddTicketAsync(AddOrUpdateTicketRequestDto request);
+        Task<Response<int?>> AddTicketAsync(AddOrUpdateTicketRequestDto request);
+        Task<Response<bool>> DownloadAndUploadF1(int idTicket);
         Task<Response<bool>> AddTicketByWeb(AddOrUpdateTicketRequestDto request);
         Task<Response<bool>> AddTicketOnline(AddOrUpdateTicketRequestDto request, string rubro, string sendTo);
         Task<Response<GetExistingTicketResponseDto>> GetReportType(int id, string type);

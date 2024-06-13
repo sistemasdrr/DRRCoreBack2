@@ -195,6 +195,10 @@ public partial class SqlCoreContext : DbContext
 
     public virtual DbSet<Traduction> Traductions { get; set; }
 
+    public virtual DbSet<TraductionCompany> TraductionCompanies { get; set; }
+
+    public virtual DbSet<TraductionPerson> TraductionPeople { get; set; }
+
     public virtual DbSet<UserLogin> UserLogins { get; set; }
 
     public virtual DbSet<UserProcess> UserProcesses { get; set; }
@@ -209,6 +213,7 @@ public partial class SqlCoreContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+
         modelBuilder.Entity<CompanyXmlData>().ToSqlQuery("EXEC DataCompanyCredendo").HasNoKey();
         modelBuilder.Entity<CompanyBalanceData>().ToSqlQuery("EXEC BalanceCompanyCredendo").HasNoKey();
         modelBuilder.Entity<CompanyFunctionData>().ToSqlQuery("EXEC FunctionCompanyCredendo").HasNoKey();
@@ -4829,6 +4834,10 @@ public partial class SqlCoreContext : DbContext
             entity.ToTable("TicketHistory");
 
             entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.AsignationType)
+                .HasMaxLength(2)
+                .IsUnicode(false)
+                .HasColumnName("asignationType");
             entity.Property(e => e.AsignedTo)
                 .HasMaxLength(5)
                 .IsUnicode(false)
@@ -5122,6 +5131,237 @@ public partial class SqlCoreContext : DbContext
             entity.HasOne(d => d.IdPersonNavigation).WithMany(p => p.Traductions)
                 .HasForeignKey(d => d.IdPerson)
                 .HasConstraintName("FK_Traduction_PersonFK");
+        });
+
+        modelBuilder.Entity<TraductionCompany>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Traducti__3213E83F182F2812");
+
+            entity.ToTable("TraductionCompany");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.CreationDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("creationDate");
+            entity.Property(e => e.DeleteDate)
+                .HasColumnType("datetime")
+                .HasColumnName("deleteDate");
+            entity.Property(e => e.Enable)
+                .HasDefaultValueSql("((1))")
+                .HasColumnName("enable");
+            entity.Property(e => e.IdCompany).HasColumnName("idCompany");
+            entity.Property(e => e.TBduration)
+                .IsUnicode(false)
+                .HasColumnName("tBDuration");
+            entity.Property(e => e.TBhistory)
+                .IsUnicode(false)
+                .HasColumnName("tBHistory");
+            entity.Property(e => e.TBincreaseDate)
+                .IsUnicode(false)
+                .HasColumnName("tBIncreaseDate");
+            entity.Property(e => e.TBlegalBack)
+                .IsUnicode(false)
+                .HasColumnName("tBLegalBack");
+            entity.Property(e => e.TBpaidCapital)
+                .IsUnicode(false)
+                .HasColumnName("tBPaidCapital");
+            entity.Property(e => e.TBpublicRegis)
+                .IsUnicode(false)
+                .HasColumnName("tBPublicRegis");
+            entity.Property(e => e.TBregisterIn)
+                .IsUnicode(false)
+                .HasColumnName("tBRegisterIn");
+            entity.Property(e => e.TBtacRate)
+                .IsUnicode(false)
+                .HasColumnName("tBTacRate");
+            entity.Property(e => e.TEcomide)
+                .IsUnicode(false)
+                .HasColumnName("tEComide");
+            entity.Property(e => e.TEduration)
+                .IsUnicode(false)
+                .HasColumnName("tEDuration");
+            entity.Property(e => e.TEnew)
+                .IsUnicode(false)
+                .HasColumnName("tENew");
+            entity.Property(e => e.TEreputation)
+                .IsUnicode(false)
+                .HasColumnName("tEReputation");
+            entity.Property(e => e.TFanalistCom)
+                .IsUnicode(false)
+                .HasColumnName("tFAnalistCom");
+            entity.Property(e => e.TFcomment)
+                .IsUnicode(false)
+                .HasColumnName("tFComment");
+            entity.Property(e => e.TFjob)
+                .IsUnicode(false)
+                .HasColumnName("tFJob");
+            entity.Property(e => e.TFprincActiv)
+                .IsUnicode(false)
+                .HasColumnName("tFPrincActiv");
+            entity.Property(e => e.TFselectFin)
+                .IsUnicode(false)
+                .HasColumnName("tFSelectFin");
+            entity.Property(e => e.TFtabComm)
+                .IsUnicode(false)
+                .HasColumnName("tFTabComm");
+            entity.Property(e => e.TIgeneral)
+                .IsUnicode(false)
+                .HasColumnName("tIGeneral");
+            entity.Property(e => e.TOcommentary)
+                .IsUnicode(false)
+                .HasColumnName("tOCommentary");
+            entity.Property(e => e.TOqueryCredit)
+                .IsUnicode(false)
+                .HasColumnName("tOQueryCredit");
+            entity.Property(e => e.TOsugCredit)
+                .IsUnicode(false)
+                .HasColumnName("tOSugCredit");
+            entity.Property(e => e.TRadiBus)
+                .IsUnicode(false)
+                .HasColumnName("tRAdiBus");
+            entity.Property(e => e.TRcreditPer)
+                .IsUnicode(false)
+                .HasColumnName("tRCreditPer");
+            entity.Property(e => e.TRextSales)
+                .IsUnicode(false)
+                .HasColumnName("tRExtSales");
+            entity.Property(e => e.TRinterBuy)
+                .IsUnicode(false)
+                .HasColumnName("tRInterBuy");
+            entity.Property(e => e.TRnatiBuy)
+                .IsUnicode(false)
+                .HasColumnName("tRNatiBuy");
+            entity.Property(e => e.TRotherLocals)
+                .IsUnicode(false)
+                .HasColumnName("tROtherLocals");
+            entity.Property(e => e.TRprincAct)
+                .IsUnicode(false)
+                .HasColumnName("tRPrincAct");
+            entity.Property(e => e.TRsalePer)
+                .IsUnicode(false)
+                .HasColumnName("tRSalePer");
+            entity.Property(e => e.TRterritory)
+                .IsUnicode(false)
+                .HasColumnName("tRTerritory");
+            entity.Property(e => e.TRtotalArea)
+                .IsUnicode(false)
+                .HasColumnName("tRTotalArea");
+            entity.Property(e => e.TSavales)
+                .IsUnicode(false)
+                .HasColumnName("tSAvales");
+            entity.Property(e => e.TSbancarios)
+                .IsUnicode(false)
+                .HasColumnName("tSBancarios");
+            entity.Property(e => e.TScommentary)
+                .IsUnicode(false)
+                .HasColumnName("tSCommentary");
+            entity.Property(e => e.TScredHis)
+                .IsUnicode(false)
+                .HasColumnName("tSCredHis");
+            entity.Property(e => e.TSlitig)
+                .IsUnicode(false)
+                .HasColumnName("tSLitig");
+            entity.Property(e => e.UploadDate)
+                .HasColumnType("datetime")
+                .HasColumnName("uploadDate");
+
+            entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.TraductionCompanies)
+                .HasForeignKey(d => d.IdCompany)
+                .HasConstraintName("FK__Traductio__idCom__68536ACF");
+        });
+
+        modelBuilder.Entity<TraductionPerson>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Traducti__3213E83F6C898614");
+
+            entity.ToTable("TraductionPerson");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.CreationDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("creationDate");
+            entity.Property(e => e.DeleteDate)
+                .HasColumnType("datetime")
+                .HasColumnName("deleteDate");
+            entity.Property(e => e.Enable)
+                .HasDefaultValueSql("((1))")
+                .HasColumnName("enable");
+            entity.Property(e => e.IdPerson).HasColumnName("idPerson");
+            entity.Property(e => e.TAotherAct)
+                .IsUnicode(false)
+                .HasColumnName("tAOtherAct");
+            entity.Property(e => e.TCcurjob)
+                .IsUnicode(false)
+                .HasColumnName("tCCurjob");
+            entity.Property(e => e.TCdetails)
+                .IsUnicode(false)
+                .HasColumnName("tCDetails");
+            entity.Property(e => e.TCenddt)
+                .IsUnicode(false)
+                .HasColumnName("tCEnddt");
+            entity.Property(e => e.TCincome)
+                .IsUnicode(false)
+                .HasColumnName("tCIncome");
+            entity.Property(e => e.TCstartDate)
+                .IsUnicode(false)
+                .HasColumnName("tCStartDate");
+            entity.Property(e => e.TDresidence)
+                .IsUnicode(false)
+                .HasColumnName("tDResidence");
+            entity.Property(e => e.TDvalue)
+                .IsUnicode(false)
+                .HasColumnName("tDValue");
+            entity.Property(e => e.THdetails)
+                .IsUnicode(false)
+                .HasColumnName("tHDetails");
+            entity.Property(e => e.TIgdetails)
+                .IsUnicode(false)
+                .HasColumnName("tIGDetails");
+            entity.Property(e => e.TPbirthPlace)
+                .IsUnicode(false)
+                .HasColumnName("tPBirthPlace");
+            entity.Property(e => e.TPmarriedTo)
+                .IsUnicode(false)
+                .HasColumnName("tPMarriedTo");
+            entity.Property(e => e.TPnacionality)
+                .IsUnicode(false)
+                .HasColumnName("tPNacionality");
+            entity.Property(e => e.TPnewcomm)
+                .IsUnicode(false)
+                .HasColumnName("tPNewcomm");
+            entity.Property(e => e.TPprofession)
+                .IsUnicode(false)
+                .HasColumnName("tPProfession");
+            entity.Property(e => e.TPrdetails)
+                .IsUnicode(false)
+                .HasColumnName("tPRDetails");
+            entity.Property(e => e.TPreputation)
+                .IsUnicode(false)
+                .HasColumnName("tPReputation");
+            entity.Property(e => e.TSbsantecedente)
+                .IsUnicode(false)
+                .HasColumnName("tSBSAntecedente");
+            entity.Property(e => e.TSbscommentBank)
+                .IsUnicode(false)
+                .HasColumnName("tSBSCommentBank");
+            entity.Property(e => e.TSbscommentSbs)
+                .IsUnicode(false)
+                .HasColumnName("tSBSCommentSBS");
+            entity.Property(e => e.TSbslitig)
+                .IsUnicode(false)
+                .HasColumnName("tSBSLitig");
+            entity.Property(e => e.TSbsrickCnt)
+                .IsUnicode(false)
+                .HasColumnName("tSBSRickCnt");
+            entity.Property(e => e.UploadDate)
+                .HasColumnType("datetime")
+                .HasColumnName("uploadDate");
+
+            entity.HasOne(d => d.IdPersonNavigation).WithMany(p => p.TraductionPeople)
+                .HasForeignKey(d => d.IdPerson)
+                .HasConstraintName("FK__Traductio__idPer__638EB5B2");
         });
 
         modelBuilder.Entity<UserLogin>(entity =>

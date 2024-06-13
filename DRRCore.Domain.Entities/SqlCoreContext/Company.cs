@@ -143,6 +143,8 @@ public partial class Company
 
     public virtual ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
 
+    public virtual ICollection<TraductionCompany> TraductionCompanies { get; set; } = new List<TraductionCompany>();
+
     public virtual ICollection<Traduction> Traductions { get; set; } = new List<Traduction>();
 
     public virtual ICollection<WorkersHistory> WorkersHistories { get; set; } = new List<WorkersHistory>();

@@ -452,6 +452,7 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 response.IsSuccess = false;
                 _logger.LogError(ex.Message, ex);
+                response.Message = ex.Message;
             }
             return response;
         }
@@ -691,6 +692,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 _logger.LogError(ex.Message, ex);
                 response.Data = false;
                 response.IsSuccess = false;
+                response.Message = ex.Message;
             }
             return response;
         }

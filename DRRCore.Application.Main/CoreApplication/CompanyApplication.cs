@@ -249,7 +249,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     var company = await _companyDomain.GetByNameAsync(name, form, idCountry, haveReport, filterBy);
                     if (company == null)
                     {
-                        response.IsSuccess = false;
+                        response.IsSuccess = true;
                         response.Message = Messages.MessageNoDataFound;
                         _logger.LogError(response.Message);
                     }
@@ -282,7 +282,7 @@ namespace DRRCore.Application.Main.CoreApplication
                             }
                         }
                     }    
-                    mapper =mapper.DistinctBy(x=>x.Name).DistinctBy(x => x.Code).ToList();
+                    mapper = mapper.DistinctBy(x=>x.Name).DistinctBy(x => x.Code).ToList();
                     response.Data = mapper;
                 }
             }
@@ -2403,6 +2403,7 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 _logger.LogError(ex.Message, ex);
                 response.IsSuccess = false;
+                response.Message = ex.Message;
             }
             return response;
         }

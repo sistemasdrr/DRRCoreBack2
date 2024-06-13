@@ -16,6 +16,7 @@ using System.Data.SqlTypes;
 using DRRCore.Domain.Entities.SqlContext;
 using Microsoft.Extensions.Logging.Abstractions;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using Azure;
 
 namespace DRRCore.Application.Main.MigrationApplication
 {
@@ -3618,6 +3619,7 @@ namespace DRRCore.Application.Main.MigrationApplication
                             var agent = await context.Agents.Where(x => x.Code.Contains(mAgent.AgeCodigo.Trim())).FirstOrDefaultAsync();
                             if (agent != null)
                             {
+                                agent.AgentSubscriber = true;
                                 subscriber.IdAgent = agent.Id;
                             }
                         }

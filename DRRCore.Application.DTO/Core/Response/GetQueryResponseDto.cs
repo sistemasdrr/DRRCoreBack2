@@ -420,10 +420,55 @@
         public decimal? Price { get; set; }
     }
 
-    public class GetQuery4_1ResponseDto
+    public class GetQuery4_1_1ResponseDto
     {
         public int? IdSubscriber { get; set; }
         public string? Name { get; set; }
         public string? Code{ get; set; }
+    }
+    public class GetQuery4_1_2ResponseDto
+    {
+        public string? Date { get; set; }
+    }
+    public class GetQuery4_1_3ResponseDto
+    {
+        public int? IdSubscriber { get; set; }
+        public string? Name { get; set; }
+        public string? Code { get; set; }
+        public int? IdCountry{ get; set; }
+        public string? Country { get; set; }
+        public string? FlagCountry { get; set; }
+    }
+    public class GetQuery4_1_4ResponseDto
+    {
+        public int? IdSubscriber { get; set; }
+        public string? Name { get; set; }
+        public string? Code { get; set; }
+        public int? IdCountry { get; set; }
+        public string? Country { get; set; }
+        public string? FlagCountry { get; set; }
+    }
+    public class GetQuery4_1_5ResponseDto
+    {
+        public int? IdSubscriber { get; set; }
+        public string? Name { get; set; }
+        public string? Code { get; set; }
+        public int? IdCountry { get; set; }
+        public string? Country { get; set; }
+        public string? FlagCountry { get; set; }
+    }
+    public class GetQuery4_2_1ResponseDto
+    {
+        public string? Name { get; set; }
+        public string? Code { get; set; }
+        public string? Country { get; set; }
+        public string? FlagCountry { get; set; }
+    }
+    public class GetQuery4_2_2ResponseDto
+    {
+        public string? Name { get; set; }
+        public string? Code { get; set; }
+        public string? Country { get; set; }
+        public string? FlagCountry { get; set; }
     }
 }
