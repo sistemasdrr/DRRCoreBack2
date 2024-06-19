@@ -45,6 +45,7 @@
         public string? Email { get; set; }
         public string? Address { get; set; }
         public string? Telephone { get; set; }
+        public string? WebPage { get; set; }
 
         //INFORME
         public string ReportType { get; set; } = null!;
@@ -146,6 +147,7 @@
         public string? StartDate { get; set; }
         public string? EndDate { get; set; }
         public int? References { get; set; }
+        public string? WebPage { get; set; }
 
     }
     public class UserCode

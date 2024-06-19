@@ -37,10 +37,16 @@ namespace DRRCore.Services.ApiCore.Controllers
         }
         
         [HttpPost()]
-        [Route("add")]
+        [Route("add")] 
         public async Task<ActionResult> AddTicket(AddOrUpdateTicketRequestDto request)
         {
             return Ok(await _ticketApplication.AddTicketAsync(request));
+        }
+        [HttpGet()]
+        [Route("SaveTicketAsignations")] 
+        public async Task<ActionResult> SaveTicketAsignations(int idTicket, string commentary)
+        {
+            return Ok(await _ticketApplication.SaveTicketAsignations(idTicket, commentary));
         }
         [HttpPost()]
         [Route("downloadAndUploadF1")]

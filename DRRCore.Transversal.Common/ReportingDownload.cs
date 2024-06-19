@@ -14,10 +14,6 @@ namespace DRRCore.Transversal.Common
             try
             {
 
-                ReportResponse result = null;
-
-                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-                Encoding.GetEncoding("windows-1252");
 
                 return new ServerReport(new ReportSettings()
                 {
@@ -47,13 +43,6 @@ namespace DRRCore.Transversal.Common
         {
             try
             {
-
-                ReportResponse result = null;
-
-                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-                Encoding.GetEncoding("windows-1252");
-
-               
                 return new ServerReport(new ReportSettings()
                 {
                     ReportServer = "https://sql5090.site4now.net/ReportServer",

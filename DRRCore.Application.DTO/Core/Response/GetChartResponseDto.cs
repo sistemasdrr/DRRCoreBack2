@@ -410,4 +410,19 @@ namespace DRRCore.Application.DTO.Core.Response
         public int? QualityC { get; set; }
         public int? Total { get; set; }
     }
+
+    public class GetQuery5_3_2ResponseDto
+    {
+        public int? Id { get; set; }
+        public string? OrderDate { get; set; }
+        public string? ExpireDate { get; set; }
+        public string? ShippingDate { get; set; }
+        public string? RequestedName { get; set; }
+        public string? Country { get; set; }
+        public string? FlagCountry { get; set; }
+        public string? ProcedureType { get; set; }
+        public string? ReportType { get; set; }
+        public string? Subscriber { get; set; }
+        public decimal? Price { get; set; }
+    }
 }

@@ -91,6 +91,8 @@ public partial class Ticket
 
     public int? IdInvoiceState { get; set; }
 
+    public string? WebPage { get; set; }
+
     public virtual Company? IdCompanyNavigation { get; set; }
 
     public virtual Continent? IdContinentNavigation { get; set; }

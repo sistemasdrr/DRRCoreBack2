@@ -183,7 +183,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                     companySb.UpdateDate = DateTime.Now;
                     context.CompanySbs.Update(companySb);
 
-                    var listTraductions = await context.Traductions.Where(x => x.IdCompany == companySb.IdCompany && x.Identifier.Contains("_F_")).ToListAsync();
+                    var listTraductions = await context.Traductions.Where(x => x.IdCompany == companySb.IdCompany && x.Identifier.Contains("_S_")).ToListAsync();
                     foreach (var item in listTraductions)
                     {
                         item.ShortValue = traductions.Where(x => x.Identifier == item.Identifier).FirstOrDefault().ShortValue;

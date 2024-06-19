@@ -65,6 +65,8 @@
         public string? RequestedName { get; set; }
 
         public decimal? Price { get; set; }
+        public string? Commentary { get; set; }
+        public string? WebPage { get; set; }
     }
     public class GetTicketPendingObservationsResponseDto
     {

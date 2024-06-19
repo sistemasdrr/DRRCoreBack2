@@ -2177,7 +2177,8 @@ namespace DRRCore.Application.Main.CoreApplication
                 string companyCode = company.OldCode ?? "N" + company.Id.ToString("D6");
                 string languageFileName = language == "I" ? "ENG" : "ESP";
                 string fileFormat ="{0}_{1}{2}" ;
-                string report = language == "I" ? "EIECORE-F1-EMPRESAS" : "EIECORE-F1-EMPRESAS_ES";
+                //string report = language == "I" ? "EIECORE-F1-EMPRESAS" : "EIECORE-F1-EMPRESAS_ES";
+                string report = "EIECORE-F1-EMPRESAS_ES";
                 var reportRenderType = StaticFunctions.GetReportRenderType(format);
                 var extension = StaticFunctions.FileExtension(reportRenderType);
                 var contentType= StaticFunctions.GetContentType(reportRenderType);
@@ -2267,9 +2268,9 @@ namespace DRRCore.Application.Main.CoreApplication
                     var comercial = await _comercialLatePaymentDomain.GetComercialLatePaymetByIdCompany(idCompany);
                     status.Sbs = sbs != null || provider.Count > 0 || bankDebt.Count > 0 || comercial.Count > 0 ? true : false;
                     var opinion = await _companyCreditOpinionDomain.GetByIdCompany(idCompany);
-                    status.Opinion = !opinion.ConsultedCredit.IsNullOrEmpty() || !opinion.SuggestedCredit.IsNullOrEmpty() || !opinion.CurrentCommentary.IsNullOrEmpty();
+                    status.Opinion = opinion != null ? !opinion.ConsultedCredit.IsNullOrEmpty() || !opinion.SuggestedCredit.IsNullOrEmpty() || !opinion.CurrentCommentary.IsNullOrEmpty() : false;
                     var infoGeneral = await _companyGeneralInformationDomain.GetByIdCompany(idCompany);
-                    status.InfoGeneral = !infoGeneral.GeneralInfo.IsNullOrEmpty();
+                    status.InfoGeneral = infoGeneral != null ? !infoGeneral.GeneralInfo.IsNullOrEmpty() : false;
                     var images = await _companyImagesDomain.GetImagesByIdCompany(idCompany);
                     status.Images = images != null ? !images.Img1.IsNullOrEmpty() || !images.Img2.IsNullOrEmpty() || !images.Img3.IsNullOrEmpty() || !images.Img4.IsNullOrEmpty() : false;
                 }

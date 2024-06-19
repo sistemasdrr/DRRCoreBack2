@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace DRRCore.Application.Main.CoreApplication
 {
@@ -205,7 +206,8 @@ namespace DRRCore.Application.Main.CoreApplication
                     newTicket.TicketAssignation = new TicketAssignation
                     {
                         //IdEmployee = idEmployee,
-                        IdUserLogin = userLogin.Id
+                        IdUserLogin = userLogin.Id,
+                        Commentary = request.Commentary
                     };
 
                     if (await _ticketDomain.AddAsync(newTicket))
@@ -217,6 +219,7 @@ namespace DRRCore.Application.Main.CoreApplication
                             var company = await _companyDomain.AddCompanyAsync(new Company
                             {
                                 Name = request.RequestedName ?? string.Empty,
+                                LastSearched = DateTime.Now,
                                 Language = request.Language,
                                 IdCountry = request.IdCountry ?? 0,
                                 Place = request.City,
@@ -274,7 +277,27 @@ namespace DRRCore.Application.Main.CoreApplication
                 _logger.LogError(response.Message, ex);
             }
             return response;
-
+        }
+        public async Task<Response<bool>> SaveTicketAsignations(int idTicket, string commentary)
+        {
+            var response = new Response<bool>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var asignation = await context.Tickets.Where(x => x.Id == idTicket).Include(x => x.TicketAssignation).FirstOrDefaultAsync();
+                if(asignation != null)
+                {
+                    asignation.TicketAssignation.Commentary = commentary;
+                }
+                context.Tickets.Update(asignation);
+                await context.SaveChangesAsync();
+            }catch(Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
         }
         public async Task<Response<bool>> DownloadAndUploadF1(int idTicket)
         {
@@ -298,6 +321,7 @@ namespace DRRCore.Application.Main.CoreApplication
                             Name = "RV_" + DateTime.Now.ToString("ddMMyy") + "_" + ticket.Number.ToString("D6"),
                             Extension = ".pdf"
                         });
+                        await context.SaveChangesAsync();
                     }
                 }
             }catch (Exception ex)
@@ -370,6 +394,13 @@ namespace DRRCore.Application.Main.CoreApplication
                     }
                     
 
+                    
+                    var newBd = await _ticketDomain.GetTicketByCompany(company.Id);
+
+                    if (newBd != null && newBd.Any())
+                    {
+                        list.AddRange(_mapper.Map<List<GetListSameSearchedReportResponseDto>>(newBd));
+                    }
                     if (company.OldCode != null && company.OldCode.StartsWith("E"))
                     {
                         var oldBd = await _ticketDomain.GetOldTicketByCompany(company.OldCode);
@@ -378,16 +409,10 @@ namespace DRRCore.Application.Main.CoreApplication
                             list.AddRange(_mapper.Map<List<GetListSameSearchedReportResponseDto>>(oldBd));
                         }
                     }
-                    var newBd = await _ticketDomain.GetTicketByCompany(company.Id);
-
-                    if (newBd != null && newBd.Any())
-                    {
-                        list.AddRange(_mapper.Map<List<GetListSameSearchedReportResponseDto>>(newBd));
-                    }
                     if (list.Any())
                     {
                         getExist.TypeReport = "RV";
-                        list = list.OrderByDescending(x => x.DispatchtDate).ToList();
+                        list = list.OrderBy(x => x.DispatchtDate).ToList();
 
                         var firstTicket = list.FirstOrDefault();
 
@@ -625,15 +650,12 @@ namespace DRRCore.Application.Main.CoreApplication
                 using (var ftpClient = new FtpClient(GetFtpClientConfiguration()))
                 {
                     await ftpClient.LoginAsync();
-
                     using (var ftpReadStream = await ftpClient.OpenFileReadStreamAsync("/plantillas/Planilla_Reportero.doc"))
                     {
-
                         using (var stream = new MemoryStream())
                         {
                             await ftpReadStream.CopyToAsync(stream);
                             stream.Position = 0;
-
                             using (var writeStream = await ftpClient.OpenFileWriteStreamAsync(path))
                             {
                                 await stream.CopyToAsync(writeStream);
@@ -1219,7 +1241,8 @@ namespace DRRCore.Application.Main.CoreApplication
                     IdEmployee = idEmployee,
                     IdUserLogin = userLogin.Id
                 };
-
+                var numeration = await context.Numerations.Where(x => x.Id == 1).FirstOrDefaultAsync();
+                numeration.Number++;
 
                 if (await _ticketDomain.AddAsync(newTicket))
                 {
@@ -1231,11 +1254,15 @@ namespace DRRCore.Application.Main.CoreApplication
                         var company = await _companyDomain.AddCompanyAsync(new Company
                         {
                             Name = request.RequestedName ?? string.Empty,
+                            LastSearched = DateTime.Now,
                             Language = request.Language,
+                            IdCountry = request.IdCountry ?? 0,
+                            Place = request.City,
+                            TaxTypeName = request.TaxType,
                             TaxTypeCode = request.TaxCode,
-                            IdCountry = request.IdCountry,
-                            Address = request.Address,
-                            Place = request.City
+                            Email = request.Email,
+                            Telephone = request.Telephone,
+                            Address = request.Address
                         });
                         var ticket = await _ticketDomain.GetByIdAsync(newTicket.Id);
                         ticket.IdCompany = company;
@@ -2421,7 +2448,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     emailDataDto.BodyHTML = emailDataDto.IsBodyHTML ? await GetBodyHtml(emailDataDto) : emailDataDto.BodyHTML;
                     _logger.LogInformation(JsonConvert.SerializeObject(emailDataDto));
 
-                    byte[] fileArray = DownloadF8((int)ticket.IdCompany, ticket.Language, "pdf").Result.Data.File;
+                    byte[] fileArray = DownloadF8((int)ticket.Id, ticket.Language, "pdf").Result.Data.File;
                     var attachment = new AttachmentDto();
                     attachment.FileName = emailDataDto.Subject+".pdf";
                     attachment.Content = Convert.ToBase64String(fileArray);
@@ -2484,33 +2511,70 @@ namespace DRRCore.Application.Main.CoreApplication
         {
             return await _fileManager.UploadFile(new MemoryStream(Convert.FromBase64String(attachmentDto.Content)), attachmentDto.FileName);
         }
-        public async Task<Response<GetFileResponseDto>> DownloadF8(int idCompany, string language, string format)
+        public async Task<Response<GetFileResponseDto>> DownloadF8(int idTicket, string language, string format)
         {
             var response = new Response<GetFileResponseDto>();
             try
             {
-                var company = await _companyDomain.GetByIdAsync(idCompany);
-
-                string companyCode = company.OldCode ?? "N" + company.Id.ToString("D6");
-                string languageFileName = language == "I" ? "ENG" : "ESP";
-                string fileFormat = "{0}_{1}{2}";
-                string report = language == "I" ? "F8-EMPRESAS-EN" : "F8-EMPRESAS-ES";
-                var reportRenderType = StaticFunctions.GetReportRenderType(format);
-                var extension = StaticFunctions.FileExtension(reportRenderType);
-                var contentType = StaticFunctions.GetContentType(reportRenderType);
-
-                var dictionary = new Dictionary<string, string>
+                using var context = new SqlCoreContext();
+                var ticket = await context.Tickets
+                    .Where(x => x.Id == idTicket)
+                    .Include(x => x.IdCompanyNavigation)
+                    .Include(x => x.IdPersonNavigation)
+                    .FirstOrDefaultAsync();
+                if (ticket != null)
                 {
-                    { "idCompany", idCompany.ToString() },
-                    { "language", language },
-                 };
+                    if(ticket.About == "E")
+                    {
+                        var company = await _companyDomain.GetByIdAsync((int)ticket.IdCompany);
 
-                response.Data = new GetFileResponseDto
-                {
-                    File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
-                    ContentType = contentType,
-                    Name = string.Format(fileFormat, companyCode, languageFileName, extension)
-                };
+                        string companyCode = company.OldCode ?? "N" + company.Id.ToString("D6");
+                        string languageFileName = language == "I" ? "ENG" : "ESP";
+                        string fileFormat = "{0}_{1}{2}";
+                        string report = language == "E" ? "F8-EMPRESAS-ES" : "F8-EMPRESAS-EN";
+                        var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                        var extension = StaticFunctions.FileExtension(reportRenderType);
+                        var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                        var dictionary = new Dictionary<string, string>
+                        {
+                            { "idCompany", ticket.IdCompany.ToString() },
+                            { "language", language },
+                         };
+
+                        response.Data = new GetFileResponseDto
+                        {
+                            File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                            ContentType = contentType,
+                            Name = string.Format(fileFormat, companyCode, languageFileName, extension)
+                        };
+                    }
+                    else
+                    {
+                        var person = await context.People.Where(x => x.Id == ticket.IdPerson).FirstOrDefaultAsync();
+                        string personCode = person.OldCode ?? "N" + person.Id.ToString("D6");
+                        string languageFileName = language == "I" ? "ENG" : "ESP";
+                        string fileFormat = "{0}_{1}{2}";
+                        string report = language == "E" ? "F8-PERSONAS-ES" : "F8-PERSONAS-EN";
+                        var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                        var extension = StaticFunctions.FileExtension(reportRenderType);
+                        var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                        var dictionary = new Dictionary<string, string>
+                        {
+                            { "idPerson", ticket.IdPerson.ToString() },
+                            { "language", language },
+                         };
+
+                        response.Data = new GetFileResponseDto
+                        {
+                            File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                            ContentType = contentType,
+                            Name = string.Format(fileFormat, personCode, languageFileName, extension)
+                        };
+                    }
+                }
+               
 
             }
             catch (Exception ex)

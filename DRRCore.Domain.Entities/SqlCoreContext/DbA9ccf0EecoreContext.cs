@@ -213,7 +213,6 @@ public partial class DbA9ccf0EecoreContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-
         modelBuilder.Entity<CompanyXmlData>().ToSqlQuery("EXEC DataCompanyCredendo").HasNoKey();
         modelBuilder.Entity<CompanyBalanceData>().ToSqlQuery("EXEC BalanceCompanyCredendo").HasNoKey();
         modelBuilder.Entity<CompanyFunctionData>().ToSqlQuery("EXEC FunctionCompanyCredendo").HasNoKey();
@@ -4719,6 +4718,10 @@ public partial class DbA9ccf0EecoreContext : DbContext
             entity.Property(e => e.Web)
                 .HasDefaultValueSql("((0))")
                 .HasColumnName("web");
+            entity.Property(e => e.WebPage)
+                .HasMaxLength(200)
+                .IsUnicode(false)
+                .HasColumnName("webPage");
             entity.Property(e => e.Wrong)
                 .HasDefaultValueSql("((0))")
                 .HasColumnName("wrong");

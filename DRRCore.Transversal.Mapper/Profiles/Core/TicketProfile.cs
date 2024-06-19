@@ -16,8 +16,10 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
             CreateMap<AddOrUpdateTicketRequestDto, Ticket>()
                    .ForMember(dest => dest.OrderDate, opt => opt?.MapFrom(src => src.OrderDate))
                    .ForMember(dest => dest.ExpireDate, opt => opt?.MapFrom(src => src.ExpireDate))
-                    .ForMember(dest => dest.RealExpireDate, opt => opt?.MapFrom(src => src.RealExpireDate))
-                   // .ForMember(dest => dest.SubscriberIndications, opt => opt?.MapFrom(src => src.SubscriberIndications))
+                   .ForMember(dest => dest.RealExpireDate, opt => opt?.MapFrom(src => src.RealExpireDate))
+                   .ForMember(dest => dest.WebPage, opt => opt?.MapFrom(src => src.WebPage))
+
+                    // .ForMember(dest => dest.SubscriberIndications, opt => opt?.MapFrom(src => src.SubscriberIndications))
                     .ForMember(dest => dest.IdPerson, opt => opt?.MapFrom(src => src.IdPerson==0?null:src.IdPerson))
                     .ForMember(dest => dest.IdCompany, opt => opt?.MapFrom(src => src.IdCompany == 0 ? null : src.IdCompany))
                     .ForMember(dest => dest.IdCountry, opt => opt?.MapFrom(src => src.IdCountry == 0 ? null : src.IdCountry))
@@ -70,6 +72,8 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                  .ForMember(dest => dest.IdCountry, opt => opt?.MapFrom(src => src.IdCountry == null ? 0 : src.IdCountry))
                  .ForMember(dest => dest.IdCompany, opt => opt?.MapFrom(src => src.IdCompany == null ? 0 : src.IdCompany))
                  .ForMember(dest => dest.IdPerson, opt => opt?.MapFrom(src => src.IdPerson == null ? 0 : src.IdPerson))
+                 .ForMember(dest => dest.Commentary, opt => opt?.MapFrom(src => src.TicketAssignation.Commentary))
+                 .ForMember(dest => dest.WebPage, opt => opt?.MapFrom(src => src.WebPage))
                  .ReverseMap();
             CreateMap<TicketHistory, GetEmployeeAssignated>()
                 .ForMember(dest => dest.Code, opt => opt?.MapFrom(src => src.AsignedTo))
@@ -82,7 +86,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                  .ForMember(dest => dest.IdCompany, opt => opt?.MapFrom(src => src.IdCompany == null ? 0 : src.IdCompany))
                  .ForMember(dest => dest.IdPerson, opt => opt?.MapFrom(src => src.IdPerson == null ? 0 : src.IdPerson))
                  .ForMember(dest => dest.BusineesName, opt => opt?.MapFrom(src => src.BusineesName.IsNullOrEmpty() == false ? src.BusineesName : src.RequestedName))
-                 .ForMember(dest => dest.Number, opt => opt?.MapFrom(src => src.Number.ToString("D6")))
+                 .ForMember(dest => dest.Number, opt => opt?.MapFrom(src => src.About + " - " + src.Number.ToString("D6")))
                  .ForMember(dest => dest.Status, opt => opt?.MapFrom(src => src.IdStatusTicketNavigation.Abrev))
                  .ForMember(dest => dest.StatusColor, opt => opt?.MapFrom(src => src.IdStatusTicketNavigation.Color))
                  .ForMember(dest => dest.StatusFinalOwner, opt => opt?.MapFrom(src => GetStatusFinalOwner(src.TicketHistories)))
@@ -113,8 +117,10 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                 .ForMember(dest => dest.Receptor, opt => opt?.MapFrom(src => src.TicketAssignation == null ? 0 : src.TicketAssignation.IdEmployeeNavigation.UserLogins.FirstOrDefault().Id))
                 .ForMember(dest => dest.Receptor2, opt => opt?.MapFrom(src => src.TicketAssignation == null ? 0 : src.TicketAssignation.IdUserLogin))
                 .ForMember(dest => dest.HasFiles, opt => opt?.MapFrom(src => src.TicketFiles.Count > 0))
+                .ForMember(dest => dest.WebPage, opt => opt?.MapFrom(src => src.IdCompanyNavigation.WebPage ?? ""))
                 .ForMember(dest => dest.Files, opt => opt?.MapFrom(src => src.TicketFiles))
                 .ForMember(dest => dest.Origen, opt => opt?.MapFrom(src => src.Web == false ? "E&E" : "WEB"))
+
 
                   .ReverseMap();
             CreateMap<TicketHistory, GetListTicketResponseDto>()
@@ -125,7 +131,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                  .ForMember(dest => dest.IdCountry, opt => opt?.MapFrom(src => src.IdTicketNavigation.IdCountry == null ? 0 : src.IdTicketNavigation.IdCountry))
                  .ForMember(dest => dest.IdCompany, opt => opt?.MapFrom(src => src.IdTicketNavigation.IdCompany == null ? 0 : src.IdTicketNavigation.IdCompany))
                  .ForMember(dest => dest.IdPerson, opt => opt?.MapFrom(src => src.IdTicketNavigation.IdPerson == null ? 0 : src.IdTicketNavigation.IdPerson))
-                 .ForMember(dest => dest.Number, opt => opt?.MapFrom(src => src.IdTicketNavigation.Number.ToString("D6")))
+                 .ForMember(dest => dest.Number, opt => opt?.MapFrom(src => src.IdTicketNavigation.About + " - " + src.IdTicketNavigation.Number.ToString("D6")))
                  .ForMember(dest => dest.Status, opt => opt?.MapFrom(src => src.IdStatusTicketNavigation.Abrev))
                  .ForMember(dest => dest.StatusColor, opt => opt?.MapFrom(src => src.IdStatusTicketNavigation.Color))
                  .ForMember(dest => dest.StatusFinalOwner, opt => opt?.MapFrom(src => GetStatusFinalOwner(src.IdTicketNavigation.TicketHistories)))
@@ -195,7 +201,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                  .ForMember(dest => dest.IdCountry, opt => opt?.MapFrom(src => src.IdTicketNavigation.IdCountry == null ? 0 : src.IdTicketNavigation.IdCountry))
                  .ForMember(dest => dest.IdCompany, opt => opt?.MapFrom(src => src.IdTicketNavigation.IdCompany == null ? 0 : src.IdTicketNavigation.IdCompany))
                  .ForMember(dest => dest.IdPerson, opt => opt?.MapFrom(src => src.IdTicketNavigation.IdPerson == null ? 0 : src.IdTicketNavigation.IdPerson))
-                 .ForMember(dest => dest.Number, opt => opt?.MapFrom(src => src.IdTicketNavigation.Number.ToString("D6")))
+                 .ForMember(dest => dest.Number, opt => opt?.MapFrom(src => src.IdTicketNavigation.About + " - " + src.IdTicketNavigation.Number.ToString("D6")))
                  .ForMember(dest => dest.Status, opt => opt?.MapFrom(src => src.IdStatusTicketNavigation.Abrev))
                  .ForMember(dest => dest.StatusColor, opt => opt?.MapFrom(src => src.IdStatusTicketNavigation.Color))
                  .ForMember(dest => dest.StatusFinalOwner, opt => opt?.MapFrom(src => GetStatusFinalOwner(src.IdTicketNavigation.TicketHistories)))
@@ -254,6 +260,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                 .ForMember(dest => dest.Observations, opt => opt?.MapFrom(src => src.Observations))
                 .ForMember(dest => dest.StartDate, opt => opt?.MapFrom(src => StaticFunctions.DateTimeToString(src.StartDate)))
                 .ForMember(dest => dest.EndDate, opt => opt?.MapFrom(src => StaticFunctions.DateTimeToString(src.EndDate)))
+                .ForMember(dest => dest.WebPage, opt => opt?.MapFrom(src => src.IdTicketNavigation.About == "E" ? src.IdTicketNavigation.IdCompanyNavigation.WebPage : ""))
                 .ForMember(dest => dest.References, opt => opt?.MapFrom(src => src.IdTicketNavigation.TicketHistories.Where(x => x.AsignedTo.Contains("RC")).FirstOrDefault() != null ? src.IdTicketNavigation.TicketHistories.Where(x => x.AsignedTo.Contains("RC")).FirstOrDefault().Flag == true ? 1 : 0 : -1))
                   .ReverseMap();
 

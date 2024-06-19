@@ -894,7 +894,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 var startDateTime = StaticFunctions.VerifyDate(startDate)?.Date.AddTicks(-1);
                 var endDateTime = StaticFunctions.VerifyDate(endDate)?.Date.AddDays(1).AddTicks(-1);
 
-                var asignations = await context.TicketHistories.Where(x => x.StartDate > startDateTime && x.StartDate < endDateTime && x.AsignedTo.Contains(reporter))
+                var asignations = await context.TicketHistories.Where(x => x.StartDate > startDateTime && x.StartDate < endDateTime && x.AsignedTo.Contains(reporter) && x.AsignationType == "RP")
                     .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCountryNavigation)
                     .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdSubscriberNavigation)
                     .ToListAsync();
@@ -933,7 +933,7 @@ namespace DRRCore.Application.Main.CoreApplication
             try
             {
                 using var context = new SqlCoreContext();
-                var asignations = await context.TicketHistories.Where(x => x.Flag == false && x.AsignedTo.Contains(reporter) && (x.IdStatusTicket == (int)TicketStatusEnum.Despachado || x.IdStatusTicket == (int?)TicketStatusEnum.Despachado_con_Observacion))
+                var asignations = await context.TicketHistories.Where(x => x.Flag == false && x.AsignedTo.Contains(reporter) && x.AsignationType == "RP" && (x.IdStatusTicket == (int)TicketStatusEnum.Despachado || x.IdStatusTicket == (int?)TicketStatusEnum.Despachado_con_Observacion))
                     .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdSubscriberNavigation)
                     .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCountryNavigation)
                     .ToListAsync();
@@ -969,7 +969,7 @@ namespace DRRCore.Application.Main.CoreApplication
             try
             {
                 using var context = new SqlCoreContext();
-                var asignations = await context.TicketHistories.Where(x => x.Flag == true && x.AsignedTo.Contains(reporter) && x.ShippingDate != null)
+                var asignations = await context.TicketHistories.Where(x => x.Flag == true && x.AsignedTo.Contains(reporter) && x.AsignationType == "RP" && x.ShippingDate != null)
                     .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdSubscriberNavigation)
                     .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCountryNavigation)
                     .ToListAsync();
@@ -1010,9 +1010,75 @@ namespace DRRCore.Application.Main.CoreApplication
                 var asignations = await context.TicketHistories
                     .Where(x => x.Flag == true && x.ShippingDate != null && x.ShippingDate.Value.Month == month &&
                     x.ShippingDate.Value.Year == year && x.AsignedTo.Contains("R") && x.AsignedTo.Contains("C") == false && x.AsignationType == "RP")
+                    .Include(x => x.IdTicketNavigation)
                     .ToListAsync();
+                foreach (var item in asignations)
+                {
+                    var personal = await context.Personals.Where(x => x.Code.Contains(item.AsignedTo))
+                        .Include(x => x.IdEmployeeNavigation)
+                        .FirstOrDefaultAsync();
+                    response.Data.Add(new GetQuery5_2_4ResponseDto
+                    {
+                        AsignedTo = item.AsignedTo,
+                        Name = personal != null ? personal.IdEmployeeNavigation.FirstName : "",
+                        T1 = asignations.Where(x => x.AsignedTo == item.AsignedTo && x.IdTicketNavigation.ProcedureType.Contains("T1")).Count(),
+                        T2 = asignations.Where(x => x.AsignedTo == item.AsignedTo && x.IdTicketNavigation.ProcedureType.Contains("T2")).Count(),
+                        T3 = asignations.Where(x => x.AsignedTo == item.AsignedTo && x.IdTicketNavigation.ProcedureType.Contains("T3")).Count(),
+                        OR = asignations.Where(x => x.AsignedTo == item.AsignedTo && x.IdTicketNavigation.ReportType.Contains("OR")).Count(),
+                        RV = asignations.Where(x => x.AsignedTo == item.AsignedTo && x.IdTicketNavigation.ReportType.Contains("RV")).Count(),
+                        EF = asignations.Where(x => x.AsignedTo == item.AsignedTo && x.IdTicketNavigation.ReportType.Contains("EF")).Count(),
+                        DF = asignations.Where(x => x.AsignedTo == item.AsignedTo && x.IdTicketNavigation.ReportType.Contains("DF")).Count(),
+                        QualityA = asignations.Where(x => x.AsignedTo == item.AsignedTo && x.IdTicketNavigation.Quality.Contains("A")).Count(),
+                        QualityB = asignations.Where(x => x.AsignedTo == item.AsignedTo && x.IdTicketNavigation.Quality.Contains("B")).Count(),
+                        QualityC = asignations.Where(x => x.AsignedTo == item.AsignedTo && x.IdTicketNavigation.Quality.Contains("C")).Count(),
+                        Total = asignations.Where(x => x.AsignedTo == item.AsignedTo).Count(),
+                    });
+                }
             }
             catch (Exception ex) 
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
+        public async Task<Response<List<GetQuery5_3_2ResponseDto>>> GetQuery5_3_2(string agent, string startDate, string endDate)
+        {
+            var response = new Response<List<GetQuery5_3_2ResponseDto>>();
+            response.Data = new List<GetQuery5_3_2ResponseDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+
+                var startDateTime = StaticFunctions.VerifyDate(startDate)?.Date.AddTicks(-1);
+                var endDateTime = StaticFunctions.VerifyDate(endDate)?.Date.AddDays(1).AddTicks(-1);
+
+                var ticketHistory = await context.TicketHistories
+                    .Where(x => x.AsignationType == "AG" && x.AsignedTo.Contains(agent) && x.StartDate > startDateTime && x.EndDate < endDateTime)
+                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCountryNavigation)
+                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdSubscriberNavigation)
+                    .ToListAsync();
+                foreach (var item in ticketHistory)
+                {
+                    response.Data.Add(new GetQuery5_3_2ResponseDto
+                    {
+                        Id = item.Id,
+                        OrderDate = StaticFunctions.DateTimeToString(item.StartDate),
+                        ExpireDate = StaticFunctions.DateTimeToString(item.EndDate),
+                        ShippingDate = StaticFunctions.DateTimeToString(item.ShippingDate),
+                        RequestedName = item.IdTicketNavigation.RequestedName ?? "",
+                        Country = item.IdTicketNavigation.IdCountryNavigation.Iso ?? "",
+                        FlagCountry = item.IdTicketNavigation.IdCountryNavigation.FlagIso ?? "",
+                        ProcedureType = item.IdTicketNavigation.ProcedureType ?? "",
+                        ReportType = item.IdTicketNavigation.ReportType ?? "",
+                        Subscriber = item.IdTicketNavigation.IdSubscriberNavigation.Code ?? "",
+                        Price = 0
+                    });
+                }
+            }
+            catch(Exception ex)
             {
                 response.IsSuccess = false;
                 response.Message = Messages.BadQuery;

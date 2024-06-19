@@ -204,7 +204,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                     .Include(x=>x.TicketAssignation)
                     .Include(X => X.TicketAssignation.IdEmployeeNavigation.UserLogins)
                     .Include(x => x.TicketFiles)
-                    .Where(x => x.IdStatusTicket == (int?)TicketStatusEnum.Pendiente && x.Enable == true).ToListAsync();
+                    .Where(x => x.IdStatusTicket == (int?)TicketStatusEnum.Pendiente && x.Enable == true).OrderByDescending(x => x.Number).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -219,6 +219,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
             {
                 using var context = new SqlCoreContext();
                 return await context.Tickets.Include(x => x.IdCountryNavigation)
+                    .Include(x => x.TicketAssignation)
                     .Include(x => x.IdCompanyNavigation)
                     .Include(x => x.IdSubscriberNavigation)
                     .Include(x => x.IdCompanyNavigation.IdCountryNavigation)

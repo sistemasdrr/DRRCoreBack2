@@ -25,6 +25,7 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<List<GetQuery5_2_1ResponseDto>>> GetQuery5_2_1(string startDate, string endDate, string reporter);
         Task<Response<List<GetQuery5_2_2ResponseDto>>> GetQuery5_2_2(string reporter);
         Task<Response<List<GetQuery5_2_3ResponseDto>>> GetQuery5_2_3(string startDate, string endDate, string reporter);
-        Task<Response<List<GetQuery5_2_4ResponseDto>>> GetQuery5_2_4(int month, int year);
+        Task<Response<List<GetQuery5_2_4ResponseDto>>> GetQuery5_2_4(int month, int year); 
+        Task<Response<List<GetQuery5_3_2ResponseDto>>> GetQuery5_3_2(string agent, string startDate, string endDate); 
     }
 }
