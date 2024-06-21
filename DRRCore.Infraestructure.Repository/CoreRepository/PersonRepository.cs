@@ -5,6 +5,7 @@ using DRRCore.Transversal.Common.Interface;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Reflection.Emit;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace DRRCore.Infraestructure.Repository.CoreRepository
 {
@@ -47,21 +48,31 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
             try
             {
                 using var context = new SqlCoreContext();
-                foreach (var item in Constants.TRADUCTIONS_FORMS_PERSON)
-                {
-                    var exist = obj.Traductions.Where(x => x.Identifier == item).FirstOrDefault();
-                    if (exist == null)
-                    {
-                        obj.Traductions.Add(new Traduction
-                        {
-                            IdCompany = null,
-                            IdPerson = obj.Id,
-                            Identifier = item,
-                            IdLanguage = 1,
-                            LastUpdaterUser = 1
-                        });
-                    }
-                }
+
+                var traduction = new TraductionPerson();
+                traduction.TPnacionality = obj.Traductions.Where(x => x.Identifier == "S_P_NACIONALITY").FirstOrDefault().ShortValue;
+                traduction.TPbirthPlace = obj.Traductions.Where(x => x.Identifier == "S_P_BIRTHPLACE").FirstOrDefault().ShortValue;
+                traduction.TPmarriedTo = obj.Traductions.Where(x => x.Identifier == "S_P_MARRIEDTO").FirstOrDefault().ShortValue;
+                traduction.TPprofession = obj.Traductions.Where(x => x.Identifier == "S_P_PROFESSION").FirstOrDefault().ShortValue;
+                traduction.TPnewcomm = obj.Traductions.Where(x => x.Identifier == "L_P_NEWSCOMM").FirstOrDefault().LargeValue;
+                traduction.TPreputation = obj.Traductions.Where(x => x.Identifier == "L_P_REPUTATION").FirstOrDefault().LargeValue;
+                obj.TraductionPeople.Add(traduction);
+
+                //foreach (var item in Constants.TRADUCTIONS_FORMS_PERSON)
+                //{
+                //    var exist = obj.Traductions.Where(x => x.Identifier == item).FirstOrDefault();
+                //    if (exist == null)
+                //    {
+                //        obj.Traductions.Add(new Traduction
+                //        {
+                //            IdCompany = null,
+                //            IdPerson = obj.Id,
+                //            Identifier = item,
+                //            IdLanguage = 1,
+                //            LastUpdaterUser = 1
+                //        });
+                //    }
+                //}
                 await context.People.AddAsync(obj);
                 await context.SaveChangesAsync();
                 return true;
@@ -239,7 +250,6 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                             companys = await context.Companies.Include(x => x.Traductions).Include(x => x.IdCreditRiskNavigation).
                                 Include(x => x.IdCountryNavigation).Where(x => x.IdCountry == idCountry && (x.Name.Contains(name) || x.SocialName.Contains(name)) && x.HaveReport == haveReport).Take(100).ToListAsync();
                         }
-
                     }
                     else
                     {
@@ -253,7 +263,6 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                             companys = await context.Companies.Include(x => x.Traductions).Include(x => x.IdCreditRiskNavigation).
                                 Include(x => x.IdCountryNavigation).Where(x => x.IdCountry == idCountry && (x.Name.StartsWith(name) || x.SocialName.StartsWith(name)) && x.HaveReport == haveReport).Take(100).ToListAsync();
                         }
-
                     }
                 }
                 else
@@ -270,7 +279,6 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                             companys = await context.Companies.Include(x => x.Traductions).Include(x => x.IdCreditRiskNavigation).
                                 Include(x => x.IdCountryNavigation).Where(x => x.IdCountry == idCountry && (x.Name.Contains(name) || x.SocialName.Contains(name))).Take(100).ToListAsync();
                         }
-
                     }
                     else
                     {
@@ -284,12 +292,8 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                             companys = await context.Companies.Include(x => x.Traductions).Include(x => x.IdCreditRiskNavigation).
                                 Include(x => x.IdCountryNavigation).Where(x => x.IdCountry == idCountry && (x.Name.StartsWith(name) || x.SocialName.StartsWith(name))).Take(100).ToListAsync();
                         }
-
                     }
-
                 }
-
-
                 return companys;
             }
             catch (Exception ex)
@@ -305,8 +309,78 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
             try
             {
                 using var context = new SqlCoreContext();
-                var person = await context.People.Where(x => x.Id == id).Include(x=>x.IdCountryNavigation).FirstOrDefaultAsync() ?? throw new Exception("No existe la persona solicitada");
-                traductions.AddRange(await context.Traductions.Where(x => x.IdPerson == id && x.Identifier.Contains("_P_")).ToListAsync());
+                var person = await context.People
+                    .Where(x => x.Id == id)
+                    .Include(x => x.TraductionPeople)
+                    .Include(x=>x.IdCountryNavigation)
+                    .FirstOrDefaultAsync() ?? throw new Exception("No existe la persona solicitada");
+                if (person.TraductionPeople.Any())
+                {
+                    traductions.Add(new Traduction
+                    {
+                        Identifier = "S_P_NACIONALITY",
+                        ShortValue = person.TraductionPeople.FirstOrDefault().TPnacionality ?? "",
+                    });
+                    traductions.Add(new Traduction
+                    {
+                        Identifier = "S_P_BIRTHPLACE",
+                        ShortValue = person.TraductionPeople.FirstOrDefault().TPbirthPlace ?? "",
+                    });
+                    traductions.Add(new Traduction
+                    {
+                        Identifier = "S_P_MARRIEDTO",
+                        ShortValue = person.TraductionPeople.FirstOrDefault().TPmarriedTo ?? "",
+                    });
+                    traductions.Add(new Traduction
+                    {
+                        Identifier = "S_P_PROFESSION",
+                        ShortValue = person.TraductionPeople.FirstOrDefault().TPprofession ?? "",
+                    });
+                    traductions.Add(new Traduction
+                    {
+                        Identifier = "L_P_NEWSCOMM",
+                        LargeValue = person.TraductionPeople.FirstOrDefault().TPnewcomm ?? "",
+                    });
+                    traductions.Add(new Traduction
+                    {
+                        Identifier = "L_P_REPUTATION",
+                        LargeValue = person.TraductionPeople.FirstOrDefault().TPreputation ?? "",
+                    });
+                }
+                else
+                {
+                    traductions.Add(new Traduction
+                    {
+                        Identifier = "S_P_NACIONALITY",
+                        ShortValue = "",
+                    });
+                    traductions.Add(new Traduction
+                    {
+                        Identifier = "S_P_BIRTHPLACE",
+                        ShortValue = "",
+                    });
+                    traductions.Add(new Traduction
+                    {
+                        Identifier = "S_P_MARRIEDTO",
+                        ShortValue = "",
+                    });
+                    traductions.Add(new Traduction
+                    {
+                        Identifier = "S_P_PROFESSION",
+                        ShortValue = "",
+                    });
+                    traductions.Add(new Traduction
+                    {
+                        Identifier = "L_P_NEWSCOMM",
+                        LargeValue = "",
+                    });
+                    traductions.Add(new Traduction
+                    {
+                        Identifier = "L_P_REPUTATION",
+                        LargeValue = "",
+                    });
+                }
+                //traductions.AddRange(await context.Traductions.Where(x => x.IdPerson == id && x.Identifier.Contains("_P_")).ToListAsync());
                 person.Traductions = traductions;
                 return person;
             }
@@ -328,33 +402,53 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
             {
                 using (var context = new SqlCoreContext())
                 {
-                    var existTraduction = obj.Traductions;
-                    obj.Traductions = new List<Traduction>();
                     obj.UpdateDate = DateTime.Now;
+
+                    if (obj.TraductionPeople.FirstOrDefault() != null)
+                    {
+                        obj.TraductionPeople.FirstOrDefault().TPnacionality= obj.Traductions.Where(x => x.Identifier == "S_P_NACIONALITY").FirstOrDefault().ShortValue;
+                        obj.TraductionPeople.FirstOrDefault().TPbirthPlace= obj.Traductions.Where(x => x.Identifier == "S_P_BIRTHPLACE").FirstOrDefault().ShortValue;
+                        obj.TraductionPeople.FirstOrDefault().TPmarriedTo = obj.Traductions.Where(x => x.Identifier == "S_P_MARRIEDTO").FirstOrDefault().ShortValue;
+                        obj.TraductionPeople.FirstOrDefault().TPprofession= obj.Traductions.Where(x => x.Identifier == "S_P_PROFESSION").FirstOrDefault().ShortValue;
+                        obj.TraductionPeople.FirstOrDefault().TPnewcomm = obj.Traductions.Where(x => x.Identifier == "L_P_NEWSCOMM").FirstOrDefault().LargeValue;
+                        obj.TraductionPeople.FirstOrDefault().TPreputation = obj.Traductions.Where(x => x.Identifier == "L_P_REPUTATION").FirstOrDefault().LargeValue;
+                    }
+                    else
+                    {
+                        var traduction = new TraductionPerson();
+                        traduction.TPnacionality = obj.Traductions.Where(x => x.Identifier == "S_P_NACIONALITY").FirstOrDefault().ShortValue;
+                        traduction.TPbirthPlace = obj.Traductions.Where(x => x.Identifier == "S_P_BIRTHPLACE").FirstOrDefault().ShortValue;
+                        traduction.TPmarriedTo = obj.Traductions.Where(x => x.Identifier == "S_P_MARRIEDTO").FirstOrDefault().ShortValue;
+                        traduction.TPprofession = obj.Traductions.Where(x => x.Identifier == "S_P_PROFESSION").FirstOrDefault().ShortValue;
+                        traduction.TPnewcomm = obj.Traductions.Where(x => x.Identifier == "L_P_NEWSCOMM").FirstOrDefault().LargeValue;
+                        traduction.TPreputation = obj.Traductions.Where(x => x.Identifier == "L_P_REPUTATION").FirstOrDefault().LargeValue;
+                        obj.TraductionPeople.Add(traduction);
+                    }
+
                     context.People.Update(obj);
 
-                    foreach (var item in existTraduction)
-                    {
-                        var modifierTraduction = await context.Traductions.Where(x => x.IdPerson == obj.Id && x.Identifier == item.Identifier).FirstOrDefaultAsync();
-                        if (modifierTraduction != null)
-                        {
-                            modifierTraduction.ShortValue = item.ShortValue;
-                            modifierTraduction.LargeValue = item.LargeValue;
-                            modifierTraduction.LastUpdaterUser = item.LastUpdaterUser;
-                            context.Traductions.Update(modifierTraduction);
-                        }
-                        else
-                        {
-                            var newTraduction = new Traduction();
-                            newTraduction.Id = 0;
-                            newTraduction.IdPerson = obj.Id;
-                            newTraduction.Identifier = item.Identifier;
-                            newTraduction.ShortValue = item.ShortValue;
-                            newTraduction.LargeValue = item.LargeValue;
-                            newTraduction.LastUpdaterUser = item.LastUpdaterUser;
-                            await context.Traductions.AddAsync(newTraduction);
-                        }
-                    }
+                    //foreach (var item in existTraduction)
+                    //{
+                    //    var modifierTraduction = await context.Traductions.Where(x => x.IdPerson == obj.Id && x.Identifier == item.Identifier).FirstOrDefaultAsync();
+                    //    if (modifierTraduction != null)
+                    //    {
+                    //        modifierTraduction.ShortValue = item.ShortValue;
+                    //        modifierTraduction.LargeValue = item.LargeValue;
+                    //        modifierTraduction.LastUpdaterUser = item.LastUpdaterUser;
+                    //        context.Traductions.Update(modifierTraduction);
+                    //    }
+                    //    else
+                    //    {
+                    //        var newTraduction = new Traduction();
+                    //        newTraduction.Id = 0;
+                    //        newTraduction.IdPerson = obj.Id;
+                    //        newTraduction.Identifier = item.Identifier;
+                    //        newTraduction.ShortValue = item.ShortValue;
+                    //        newTraduction.LargeValue = item.LargeValue;
+                    //        newTraduction.LastUpdaterUser = item.LastUpdaterUser;
+                    //        await context.Traductions.AddAsync(newTraduction);
+                    //    }
+                    //}
                     await context.SaveChangesAsync();
                     return true;
                 }

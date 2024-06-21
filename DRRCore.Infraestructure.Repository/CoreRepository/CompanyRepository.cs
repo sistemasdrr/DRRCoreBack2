@@ -3,6 +3,7 @@ using DRRCore.Infraestructure.Interfaces.CoreRepository;
 using DRRCore.Transversal.Common;
 using DRRCore.Transversal.Common.Interface;
 using Microsoft.EntityFrameworkCore;
+using static iTextSharp.text.pdf.AcroFields;
 
 namespace DRRCore.Infraestructure.Repository.CoreRepository
 {
@@ -75,24 +76,27 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
             {
                 using (var context = new SqlCoreContext())
                 {
-                    foreach (var item in Constants.TRADUCTIONS_FORMS)
-                    {
-                        var exist = obj.Traductions.Where(x => x.Identifier == item).FirstOrDefault();
-                        if (exist == null)
-                        {
-                            obj.Traductions.Add(new Traduction
-                            {
-                                IdPerson = null,
-                                Identifier = item,
-                                IdLanguage = 1,
-                                LastUpdaterUser = 1,
-                              
-                                
-                            });
-                        }
-                       
-                    
-                    }
+                    var traduction = new TraductionCompany();
+                    traduction.TEcomide = obj.Traductions.Where(x => x.Identifier == "L_E_COMIDE").FirstOrDefault().LargeValue;
+                    traduction.TEduration = obj.Traductions.Where(x => x.Identifier == "S_E_DURATION").FirstOrDefault().ShortValue;
+                    traduction.TEreputation = obj.Traductions.Where(x => x.Identifier == "L_E_REPUTATION").FirstOrDefault().LargeValue;
+                    traduction.TEnew = obj.Traductions.Where(x => x.Identifier == "L_E_NEW").FirstOrDefault().LargeValue;
+                    obj.TraductionCompanies.Add(traduction);
+
+                    //foreach (var item in Constants.TRADUCTIONS_FORMS)
+                    //{
+                    //var exist = obj.Traductions.Where(x => x.Identifier == item).FirstOrDefault();
+                    //if (exist == null)
+                    //    {
+                    //        obj.Traductions.Add(new Traduction
+                    //        {
+                    //            IdPerson = null,
+                    //            Identifier = item,
+                    //            IdLanguage = 1,
+                    //            LastUpdaterUser = 1,
+                    //        });
+                    //    }
+                    //}
                     await context.Companies.AddAsync(obj);
                     await context.SaveChangesAsync();
                     return obj.Id;
@@ -157,11 +161,63 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
             try
             {
                 using var context = new SqlCoreContext();
-                var company= await context.Companies.Where(x => x.Id == id).Include(x => x.IdCountryNavigation).Include(x => x.IdReputationNavigation)
-                    .Include(x => x.IdLegalPersonTypeNavigation).Include(x => x.IdPaymentPolicyNavigation).Include(x => x.IdCreditRiskNavigation)
+                var company= await context.Companies
+                    .Where(x => x.Id == id)
+                    .Include(x => x.IdCountryNavigation)
+                    .Include(x => x.IdReputationNavigation)
+                    .Include(x => x.IdLegalPersonTypeNavigation)
+                    .Include(x => x.IdPaymentPolicyNavigation)
+                    .Include(x => x.IdCreditRiskNavigation)
+                    .Include(x => x.TraductionCompanies)
                    .FirstOrDefaultAsync() ?? throw new Exception("No existe la empresa solicitada");
-                traductions.AddRange(await context.Traductions.Where(x => x.IdCompany == id).Take(10).ToListAsync());
-                traductions = traductions.Where(x => x.Identifier.Contains("_E_")).ToList();
+                if (company.TraductionCompanies.Any())
+                {
+                    traductions.Add(new Traduction
+                    {
+                        Identifier = "L_E_COMIDE",
+                        LargeValue = company.TraductionCompanies.FirstOrDefault().TEcomide,
+                    });
+                    traductions.Add(new Traduction
+                    {
+                        Identifier = "S_E_DURATION",
+                        ShortValue = company.TraductionCompanies.FirstOrDefault().TEduration,
+                    });
+                    traductions.Add(new Traduction
+                    {
+                        Identifier = "L_E_REPUTATION",
+                        LargeValue = company.TraductionCompanies.FirstOrDefault().TEreputation,
+                    });
+                    traductions.Add(new Traduction
+                    {
+                        Identifier = "L_E_NEW",
+                        LargeValue = company.TraductionCompanies.FirstOrDefault().TEnew,
+                    });
+                }
+                else
+                {
+                    traductions.Add(new Traduction
+                    {
+                        Identifier = "L_E_COMIDE",
+                        LargeValue = "",
+                    });
+                    traductions.Add(new Traduction
+                    {
+                        Identifier = "S_E_DURATION",
+                        ShortValue = "",
+                    });
+                    traductions.Add(new Traduction
+                    {
+                        Identifier = "L_E_REPUTATION",
+                        LargeValue = "",
+                    });
+                    traductions.Add(new Traduction
+                    {
+                        Identifier = "L_E_NEW",
+                        LargeValue = "",
+                    });
+                }
+                //traductions.AddRange(await context.Traductions.Where(x => x.IdCompany == id).Take(10).ToListAsync());
+                //traductions = traductions.Where(x => x.Identifier.Contains("_E_")).ToList();
                 company.Traductions = traductions;
                 return company;
             }
@@ -388,20 +444,38 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
             {
                 using (var context = new SqlCoreContext())
                 {
-                    var existTraduction = obj.Traductions;
-                    obj.Traductions=new List<Traduction>();
+                    //var existTraduction = obj.Traductions;
+                    //obj.Traductions=new List<Traduction>();
                     obj.UpdateDate = DateTime.Now;
+                    
+
+                    if(obj.TraductionCompanies.FirstOrDefault() != null)
+                    {
+                        obj.TraductionCompanies.FirstOrDefault().TEcomide = obj.Traductions.Where(x => x.Identifier == "L_E_COMIDE").FirstOrDefault().LargeValue;
+                        obj.TraductionCompanies.FirstOrDefault().TEduration = obj.Traductions.Where(x => x.Identifier == "S_E_DURATION").FirstOrDefault().ShortValue;
+                        obj.TraductionCompanies.FirstOrDefault().TEreputation = obj.Traductions.Where(x => x.Identifier == "L_E_REPUTATION").FirstOrDefault().LargeValue;
+                        obj.TraductionCompanies.FirstOrDefault().TEnew = obj.Traductions.Where(x => x.Identifier == "L_E_NEW").FirstOrDefault().LargeValue;
+                    }
+                    else
+                    {
+                        var traduction = new TraductionCompany();
+                        traduction.TEcomide = obj.Traductions.Where(x => x.Identifier == "L_E_COMIDE").FirstOrDefault().LargeValue;
+                        traduction.TEduration = obj.Traductions.Where(x => x.Identifier == "S_E_DURATION").FirstOrDefault().ShortValue;
+                        traduction.TEreputation = obj.Traductions.Where(x => x.Identifier == "L_E_REPUTATION").FirstOrDefault().LargeValue;
+                        traduction.TEnew = obj.Traductions.Where(x => x.Identifier == "L_E_NEW").FirstOrDefault().LargeValue;
+                        obj.TraductionCompanies.Add(traduction);
+                    }
                     context.Companies.Update(obj);
 
-                    var listTraductions = await context.Traductions.Where(x => x.IdCompany == obj.Id && x.Identifier.Contains("_E_")).ToListAsync();
-
-                    foreach (var item in listTraductions)
-                    {
-                        item.ShortValue = existTraduction.Where(x => x.Identifier == item.Identifier).FirstOrDefault().ShortValue;
-                        item.LargeValue = existTraduction.Where(x => x.Identifier == item.Identifier).FirstOrDefault().LargeValue;
-                        item.LastUpdaterUser = existTraduction.Where(x => x.Identifier == item.Identifier).FirstOrDefault().LastUpdaterUser;
-                        context.Traductions.Update(item);
-                    }                    
+                    //var listTraductions = await context.Traductions.Where(x => x.IdCompany == obj.Id && x.Identifier.Contains("_E_")).ToListAsync();
+                    //
+                    //foreach (var item in listTraductions)
+                    //{
+                    //    item.ShortValue = existTraduction.Where(x => x.Identifier == item.Identifier).FirstOrDefault().ShortValue;
+                    //    item.LargeValue = existTraduction.Where(x => x.Identifier == item.Identifier).FirstOrDefault().LargeValue;
+                    //    item.LastUpdaterUser = existTraduction.Where(x => x.Identifier == item.Identifier).FirstOrDefault().LastUpdaterUser;
+                    //    context.Traductions.Update(item);
+                    //}                    
                     await context.SaveChangesAsync();
                     return true;
                 }

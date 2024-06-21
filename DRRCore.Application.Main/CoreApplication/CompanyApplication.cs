@@ -1102,7 +1102,7 @@ namespace DRRCore.Application.Main.CoreApplication
             var response = new Response<GetCompanySbsResponseDto>();
             try
             {
-                var companySbs = await _companySBSDomain.GetByIdAsync(id);
+                var companySbs = await _companySBSDomain.GetByIdCompany(id);
                 if (companySbs == null)
                 {
                     response.IsSuccess = false;
