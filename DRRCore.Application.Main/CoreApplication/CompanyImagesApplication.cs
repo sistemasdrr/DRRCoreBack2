@@ -4,7 +4,7 @@ using CoreFtp;
 using DRRCore.Application.DTO.Core.Request;
 using DRRCore.Application.DTO.Core.Response;
 using DRRCore.Application.Interfaces.CoreApplication;
-using DRRCore.Domain.Entities.SQLContext;
+using DRRCore.Domain.Entities.SqlCoreContext;
 using DRRCore.Domain.Interfaces.CoreDomain;
 using DRRCore.Domain.Interfaces.EmailDomain;
 using DRRCore.Transversal.Common;

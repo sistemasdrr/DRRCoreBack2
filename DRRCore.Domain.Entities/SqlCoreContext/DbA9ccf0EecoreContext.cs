@@ -193,8 +193,6 @@ public partial class DbA9ccf0EecoreContext : DbContext
 
     public virtual DbSet<TicketReceptor> TicketReceptors { get; set; }
 
-    public virtual DbSet<Traduction> Traductions { get; set; }
-
     public virtual DbSet<TraductionCompany> TraductionCompanies { get; set; }
 
     public virtual DbSet<TraductionPerson> TraductionPeople { get; set; }
@@ -202,8 +200,6 @@ public partial class DbA9ccf0EecoreContext : DbContext
     public virtual DbSet<UserLogin> UserLogins { get; set; }
 
     public virtual DbSet<UserProcess> UserProcesses { get; set; }
-
-    public virtual DbSet<ViewTraduction> ViewTraductions { get; set; }
 
     public virtual DbSet<WorkersHistory> WorkersHistories { get; set; }
 
@@ -220,7 +216,6 @@ public partial class DbA9ccf0EecoreContext : DbContext
         modelBuilder.Entity<CompanyRelatedData>().ToSqlQuery("EXEC RelatedCompanyCredendo").HasNoKey();
         modelBuilder.Entity<WhoIsWhoSP>().ToSqlQuery("EXEC WhoIsWho");
         modelBuilder.Entity<TicketsInCurrentMonthSP>().ToSqlQuery("EXEC SP_TicketsInCurrentMonth").HasNoKey();
-
         modelBuilder.Entity<Agent>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Agent__3213E83FAB71BE05");
@@ -1384,7 +1379,7 @@ public partial class DbA9ccf0EecoreContext : DbContext
 
         modelBuilder.Entity<CompanyImage>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__CompanyI__3213E83F11FCC099");
+            entity.HasKey(e => e.Id).HasName("PK__CompanyI__3213E83F77176D37");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CreationDate)
@@ -1398,42 +1393,62 @@ public partial class DbA9ccf0EecoreContext : DbContext
                 .HasDefaultValueSql("((1))")
                 .HasColumnName("enable");
             entity.Property(e => e.IdCompany).HasColumnName("idCompany");
+            entity.Property(e => e.Img1)
+                .IsUnicode(false)
+                .HasColumnName("img1");
+            entity.Property(e => e.Img2)
+                .IsUnicode(false)
+                .HasColumnName("img2");
+            entity.Property(e => e.Img3)
+                .IsUnicode(false)
+                .HasColumnName("img3");
+            entity.Property(e => e.Img4)
+                .IsUnicode(false)
+                .HasColumnName("img4");
             entity.Property(e => e.ImgDesc1)
-                .HasMaxLength(150)
+                .HasMaxLength(300)
                 .IsUnicode(false)
                 .HasColumnName("imgDesc1");
             entity.Property(e => e.ImgDesc2)
-                .HasMaxLength(150)
+                .HasMaxLength(300)
                 .IsUnicode(false)
                 .HasColumnName("imgDesc2");
             entity.Property(e => e.ImgDesc3)
-                .HasMaxLength(150)
+                .HasMaxLength(300)
                 .IsUnicode(false)
                 .HasColumnName("imgDesc3");
             entity.Property(e => e.ImgDesc4)
-                .HasMaxLength(150)
+                .HasMaxLength(300)
                 .IsUnicode(false)
                 .HasColumnName("imgDesc4");
-            entity.Property(e => e.LastUpdateUser).HasColumnName("lastUpdateUser");
-            entity.Property(e => e.Path1)
+            entity.Property(e => e.ImgDescEng1)
+                .HasMaxLength(300)
                 .IsUnicode(false)
-                .HasColumnName("path1");
-            entity.Property(e => e.Path2)
+                .HasColumnName("imgDescEng1");
+            entity.Property(e => e.ImgDescEng2)
+                .HasMaxLength(300)
                 .IsUnicode(false)
-                .HasColumnName("path2");
-            entity.Property(e => e.Path3)
+                .HasColumnName("imgDescEng2");
+            entity.Property(e => e.ImgDescEng3)
+                .HasMaxLength(300)
                 .IsUnicode(false)
-                .HasColumnName("path3");
-            entity.Property(e => e.Path4)
+                .HasColumnName("imgDescEng3");
+            entity.Property(e => e.ImgDescEng4)
+                .HasMaxLength(300)
                 .IsUnicode(false)
-                .HasColumnName("path4");
+                .HasColumnName("imgDescEng4");
+            entity.Property(e => e.ImgPrint1).HasColumnName("imgPrint1");
+            entity.Property(e => e.ImgPrint2).HasColumnName("imgPrint2");
+            entity.Property(e => e.ImgPrint3).HasColumnName("imgPrint3");
+            entity.Property(e => e.ImgPrint4).HasColumnName("imgPrint4");
+            entity.Property(e => e.LastUserUpdate).HasColumnName("lastUserUpdate");
             entity.Property(e => e.UpdateDate)
                 .HasColumnType("datetime")
                 .HasColumnName("updateDate");
 
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.CompanyImages)
                 .HasForeignKey(d => d.IdCompany)
-                .HasConstraintName("FK__CompanyIm__idCom__5B988E2F");
+                .HasConstraintName("FK__CompanyIm__enabl__6F00685E");
         });
 
         modelBuilder.Entity<CompanyPartner>(entity =>
@@ -5074,68 +5089,6 @@ public partial class DbA9ccf0EecoreContext : DbContext
                 .HasConstraintName("FK__TicketRec__idEmp__764C846B");
         });
 
-        modelBuilder.Entity<Traduction>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__Traducti__3213E83FA3EECE86");
-
-            entity.ToTable("Traduction");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.CreationDate)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime")
-                .HasColumnName("creationDate");
-            entity.Property(e => e.DeleteDate)
-                .HasColumnType("datetime")
-                .HasColumnName("deleteDate");
-            entity.Property(e => e.Enable)
-                .HasDefaultValueSql("((1))")
-                .HasColumnName("enable");
-            entity.Property(e => e.Flag1)
-                .HasDefaultValueSql("((0))")
-                .HasColumnName("flag1");
-            entity.Property(e => e.Flag2)
-                .HasDefaultValueSql("((0))")
-                .HasColumnName("flag2");
-            entity.Property(e => e.Flag3)
-                .HasDefaultValueSql("((0))")
-                .HasColumnName("flag3");
-            entity.Property(e => e.IdCompany).HasColumnName("idCompany");
-            entity.Property(e => e.IdLanguage).HasColumnName("idLanguage");
-            entity.Property(e => e.IdPerson).HasColumnName("idPerson");
-            entity.Property(e => e.Identifier)
-                .HasMaxLength(20)
-                .IsUnicode(false)
-                .HasColumnName("identifier");
-            entity.Property(e => e.IntValue).HasColumnName("intValue");
-            entity.Property(e => e.LargeValue)
-                .IsUnicode(false)
-                .HasColumnName("largeValue");
-            entity.Property(e => e.LastUpdaterUser).HasColumnName("lastUpdaterUser");
-            entity.Property(e => e.NumberValue)
-                .HasColumnType("decimal(10, 2)")
-                .HasColumnName("numberValue");
-            entity.Property(e => e.ShortValue)
-                .HasMaxLength(150)
-                .IsUnicode(false)
-                .HasColumnName("shortValue");
-            entity.Property(e => e.UpdateDate)
-                .HasColumnType("datetime")
-                .HasColumnName("updateDate");
-
-            entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.Traductions)
-                .HasForeignKey(d => d.IdCompany)
-                .HasConstraintName("FK_CompanyTraductionNull");
-
-            entity.HasOne(d => d.IdLanguageNavigation).WithMany(p => p.Traductions)
-                .HasForeignKey(d => d.IdLanguage)
-                .HasConstraintName("FK__Traductio__idLan__68687968");
-
-            entity.HasOne(d => d.IdPersonNavigation).WithMany(p => p.Traductions)
-                .HasForeignKey(d => d.IdPerson)
-                .HasConstraintName("FK_Traduction_PersonFK");
-        });
-
         modelBuilder.Entity<TraductionCompany>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Traducti__3213E83F182F2812");
@@ -5436,125 +5389,6 @@ public partial class DbA9ccf0EecoreContext : DbContext
             entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.UserProcesses)
                 .HasForeignKey(d => d.IdUser)
                 .HasConstraintName("FK__UserProce__idUse__1940BAED");
-        });
-
-        modelBuilder.Entity<ViewTraduction>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToView("VIEW_TRADUCTION");
-
-            entity.Property(e => e.LBHistory)
-                .IsUnicode(false)
-                .HasColumnName("L_B_HISTORY");
-            entity.Property(e => e.LBLegalback)
-                .IsUnicode(false)
-                .HasColumnName("L_B_LEGALBACK");
-            entity.Property(e => e.LBPaidcapital)
-                .IsUnicode(false)
-                .HasColumnName("L_B_PAIDCAPITAL");
-            entity.Property(e => e.LEComide)
-                .IsUnicode(false)
-                .HasColumnName("L_E_COMIDE");
-            entity.Property(e => e.LENew)
-                .IsUnicode(false)
-                .HasColumnName("L_E_NEW");
-            entity.Property(e => e.LEReputation)
-                .IsUnicode(false)
-                .HasColumnName("L_E_REPUTATION");
-            entity.Property(e => e.LFAnalistcom)
-                .IsUnicode(false)
-                .HasColumnName("L_F_ANALISTCOM");
-            entity.Property(e => e.LFComent)
-                .IsUnicode(false)
-                .HasColumnName("L_F_COMENT");
-            entity.Property(e => e.LFPrincactiv)
-                .IsUnicode(false)
-                .HasColumnName("L_F_PRINCACTIV");
-            entity.Property(e => e.LFSelectfin)
-                .IsUnicode(false)
-                .HasColumnName("L_F_SELECTFIN");
-            entity.Property(e => e.LFTabcomm)
-                .IsUnicode(false)
-                .HasColumnName("L_F_TABCOMM");
-            entity.Property(e => e.LIGeneral)
-                .IsUnicode(false)
-                .HasColumnName("L_I_GENERAL");
-            entity.Property(e => e.LOComentary)
-                .IsUnicode(false)
-                .HasColumnName("L_O_COMENTARY");
-            entity.Property(e => e.LRAdibus)
-                .IsUnicode(false)
-                .HasColumnName("L_R_ADIBUS");
-            entity.Property(e => e.LROtrherlocals)
-                .IsUnicode(false)
-                .HasColumnName("L_R_OTRHERLOCALS");
-            entity.Property(e => e.LRPrincact)
-                .IsUnicode(false)
-                .HasColumnName("L_R_PRINCACT");
-            entity.Property(e => e.LSAvales)
-                .IsUnicode(false)
-                .HasColumnName("L_S_AVALES");
-            entity.Property(e => e.LSBancarios)
-                .IsUnicode(false)
-                .HasColumnName("L_S_BANCARIOS");
-            entity.Property(e => e.LSComentary)
-                .IsUnicode(false)
-                .HasColumnName("L_S_COMENTARY");
-            entity.Property(e => e.LSCredhis)
-                .IsUnicode(false)
-                .HasColumnName("L_S_CREDHIS");
-            entity.Property(e => e.LSLitig)
-                .IsUnicode(false)
-                .HasColumnName("L_S_LITIG");
-            entity.Property(e => e.SBDuration)
-                .IsUnicode(false)
-                .HasColumnName("S_B_DURATION");
-            entity.Property(e => e.SBIncreasedate)
-                .IsUnicode(false)
-                .HasColumnName("S_B_INCREASEDATE");
-            entity.Property(e => e.SBPublicregis)
-                .IsUnicode(false)
-                .HasColumnName("S_B_PUBLICREGIS");
-            entity.Property(e => e.SBRegisterin)
-                .IsUnicode(false)
-                .HasColumnName("S_B_REGISTERIN");
-            entity.Property(e => e.SBTaxrate)
-                .IsUnicode(false)
-                .HasColumnName("S_B_TAXRATE");
-            entity.Property(e => e.SEDuration)
-                .IsUnicode(false)
-                .HasColumnName("S_E_DURATION");
-            entity.Property(e => e.SFJob)
-                .IsUnicode(false)
-                .HasColumnName("S_F_JOB");
-            entity.Property(e => e.SOQuerycredit)
-                .IsUnicode(false)
-                .HasColumnName("S_O_QUERYCREDIT");
-            entity.Property(e => e.SOSugcredit)
-                .IsUnicode(false)
-                .HasColumnName("S_O_SUGCREDIT");
-            entity.Property(e => e.SRCreditper)
-                .IsUnicode(false)
-                .HasColumnName("S_R_CREDITPER");
-            entity.Property(e => e.SRExtsales)
-                .IsUnicode(false)
-                .HasColumnName("S_R_EXTSALES");
-            entity.Property(e => e.SRInterbuy)
-                .IsUnicode(false)
-                .HasColumnName("S_R_INTERBUY");
-            entity.Property(e => e.SRNatibuy)
-                .IsUnicode(false)
-                .HasColumnName("S_R_NATIBUY");
-            entity.Property(e => e.SRSaleper)
-                .IsUnicode(false)
-                .HasColumnName("S_R_SALEPER");
-            entity.Property(e => e.SRTerritory)
-                .IsUnicode(false)
-                .HasColumnName("S_R_TERRITORY");
-            entity.Property(e => e.SRTotalarea)
-                .IsUnicode(false)
-                .HasColumnName("S_R_TOTALAREA");
         });
 
         modelBuilder.Entity<WorkersHistory>(entity =>

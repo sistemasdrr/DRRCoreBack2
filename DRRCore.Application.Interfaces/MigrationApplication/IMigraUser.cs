@@ -10,7 +10,6 @@
         Task<bool> CorrecPersona(int migra);
         Task<bool> MigratePerson();
         Task<bool> MigratePersonByMigra(int migra);
-        Task<bool> MigratePersonCorreccion();
         Task<bool> MigratePersonByOldCode(string oldCode);
         Task<bool> MigrateSubscriber();
         Task<bool> MigrateOldTicket();

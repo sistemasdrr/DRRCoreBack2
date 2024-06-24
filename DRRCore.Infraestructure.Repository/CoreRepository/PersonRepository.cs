@@ -75,6 +75,9 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                 //}
                 await context.People.AddAsync(obj);
                 await context.SaveChangesAsync();
+                obj.OldCode = "N"+obj.Id.ToString("D6");
+                context.People.Update(obj);
+                await context.SaveChangesAsync();
                 return true;
             }
             catch(Exception ex)
@@ -84,30 +87,44 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
             }
         }
 
-        public async Task<int> AddPersonAsync(Person person)
+        public async Task<int> AddPersonAsync(Person obj)
         {
             List<Traduction> traductions = new List<Traduction>();
             try
             {
                 using var context = new SqlCoreContext();
-                await context.People.AddAsync(person);
-                foreach (var item in Constants.TRADUCTIONS_FORMS_PERSON)
-                {
-                    var exist = person.Traductions.Where(x => x.Identifier == item).FirstOrDefault();
-                    if (exist == null)
-                    {
-                        person.Traductions.Add(new Traduction
-                        {
-                            IdCompany = null,
-                            IdPerson = person.Id,
-                            Identifier = item,
-                            IdLanguage = 1,
-                            LastUpdaterUser = 1
-                        });
-                    }
-                }
+
+                var traduction = new TraductionPerson();
+                traduction.TPnacionality = obj.Traductions.Where(x => x.Identifier == "S_P_NACIONALITY").FirstOrDefault().ShortValue;
+                traduction.TPbirthPlace = obj.Traductions.Where(x => x.Identifier == "S_P_BIRTHPLACE").FirstOrDefault().ShortValue;
+                traduction.TPmarriedTo = obj.Traductions.Where(x => x.Identifier == "S_P_MARRIEDTO").FirstOrDefault().ShortValue;
+                traduction.TPprofession = obj.Traductions.Where(x => x.Identifier == "S_P_PROFESSION").FirstOrDefault().ShortValue;
+                traduction.TPnewcomm = obj.Traductions.Where(x => x.Identifier == "L_P_NEWSCOMM").FirstOrDefault().LargeValue;
+                traduction.TPreputation = obj.Traductions.Where(x => x.Identifier == "L_P_REPUTATION").FirstOrDefault().LargeValue;
+                obj.Traductions = null;
+                obj.TraductionPeople.Add(traduction);
+
+                //foreach (var item in Constants.TRADUCTIONS_FORMS_PERSON)
+                //{
+                //    var exist = obj.Traductions.Where(x => x.Identifier == item).FirstOrDefault();
+                //    if (exist == null)
+                //    {
+                //        obj.Traductions.Add(new Traduction
+                //        {
+                //            IdCompany = null,
+                //            IdPerson = obj.Id,
+                //            Identifier = item,
+                //            IdLanguage = 1,
+                //            LastUpdaterUser = 1
+                //        });
+                //    }
+                //}
+                await context.People.AddAsync(obj);
                 await context.SaveChangesAsync();
-                return person.Id;
+                obj.OldCode = "N" + obj.Id.ToString("D6");
+                context.People.Update(obj);
+                await context.SaveChangesAsync();
+                return obj.Id;
             }
             catch (Exception ex)
             {

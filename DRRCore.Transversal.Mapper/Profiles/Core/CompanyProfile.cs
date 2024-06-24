@@ -251,10 +251,10 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                  .ForMember(dest => dest.IdCompany, opt => opt?.MapFrom(src => src.IdCompany == 0 ? null : src.IdCompany))
                  .ForMember(dest => dest.Traductions, opt => opt?.MapFrom(src => src.IdCompanyNavigation.Traductions))
            .ReverseMap();
-            CreateMap<AddOrUpdateCompanyImagesRequestDto, DRRCore.Domain.Entities.SQLContext.CompanyImage>()
+            CreateMap<AddOrUpdateCompanyImagesRequestDto, DRRCore.Domain.Entities.SqlCoreContext.CompanyImage>()
                .ForMember(dest => dest.IdCompany, opt => opt?.MapFrom(src => src.IdCompany == 0 ? null : src.IdCompany))
          .ReverseMap();
-            CreateMap<DRRCore.Domain.Entities.SQLContext.CompanyImage, GetCompanyImageResponseDto>()
+            CreateMap<DRRCore.Domain.Entities.SqlCoreContext.CompanyImage, GetCompanyImageResponseDto>()
                  .ForMember(dest => dest.IdCompany, opt => opt?.MapFrom(src => src.IdCompany == 0 ? null : src.IdCompany))
            .ReverseMap();
 

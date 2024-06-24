@@ -3,6 +3,7 @@ using DRRCore.Infraestructure.Interfaces.CoreRepository;
 using DRRCore.Transversal.Common;
 using DRRCore.Transversal.Common.Interface;
 using Microsoft.EntityFrameworkCore;
+using Mysqlx.Crud;
 using static iTextSharp.text.pdf.AcroFields;
 
 namespace DRRCore.Infraestructure.Repository.CoreRepository
@@ -38,35 +39,8 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
 
         public async Task<bool> AddAsync(Company obj)
         {
-            List<Traduction> traductions = new List<Traduction>();
-            try
-            {
-                using (var context = new SqlCoreContext())
-                {
-                    foreach (var item in Constants.TRADUCTIONS_FORMS)
-                    {
-                        var exist = obj.Traductions.Where(x => x.Identifier == item).Take(1).FirstOrDefault();
-                        if (exist == null)
-                        {
-                            obj.Traductions.Add(new Traduction
-                            {
-                                IdPerson = null,
-                                Identifier = item,
-                                IdLanguage = 1,
-                                LastUpdaterUser=1
-                            });
-                        }
-                    }
-                    await context.Companies.AddAsync(obj);
-                    await context.SaveChangesAsync();
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return false;
-            }
+            throw new NotImplementedException();
+
         }
 
         public async Task<int> AddCompanyAsync(Company obj)
@@ -82,6 +56,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                     traduction.TEreputation = obj.Traductions.Where(x => x.Identifier == "L_E_REPUTATION").FirstOrDefault().LargeValue;
                     traduction.TEnew = obj.Traductions.Where(x => x.Identifier == "L_E_NEW").FirstOrDefault().LargeValue;
                     obj.TraductionCompanies.Add(traduction);
+                    obj.Traductions = null;
 
                     //foreach (var item in Constants.TRADUCTIONS_FORMS)
                     //{
@@ -98,6 +73,9 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                     //    }
                     //}
                     await context.Companies.AddAsync(obj);
+                    await context.SaveChangesAsync();
+                    obj.OldCode = "N"+obj.Id.ToString("D6");
+                    context.Companies.Update(obj);
                     await context.SaveChangesAsync();
                     return obj.Id;
                 }

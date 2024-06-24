@@ -1,4 +1,4 @@
-﻿using DRRCore.Domain.Entities.SQLContext;
+﻿using DRRCore.Domain.Entities.SqlCoreContext;
 using DRRCore.Infraestructure.Interfaces.CoreRepository;
 
 namespace DRRCore.Infraestructure.Interfaces.Repository

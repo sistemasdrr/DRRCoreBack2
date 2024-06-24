@@ -25,39 +25,37 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
         {
             try
             {
-                using (var context = new SqlCoreContext())
+                using var context = new SqlCoreContext();
+                var trad = await context.TraductionPeople.Where(x => x.IdPerson == obj.IdPerson).FirstOrDefaultAsync();
+                if (trad != null)
                 {
-                    context.PersonImages.Add(obj);
-
-                    foreach (var item in traductions)
-                    {
-                        var modifierTraduction = await context.Traductions.Where(x => x.IdPerson == obj.IdPerson && x.Identifier == item.Identifier).FirstOrDefaultAsync();
-                        if (modifierTraduction != null)
-                        {
-                            modifierTraduction.ShortValue = item.ShortValue;
-                            modifierTraduction.LargeValue = item.LargeValue;
-                            modifierTraduction.LastUpdaterUser = item.LastUpdaterUser;
-                            context.Traductions.Update(modifierTraduction);
-                        }
-                        else
-                        {
-                            var newTraduction = new Traduction();
-                            newTraduction.Id = 0;
-                            newTraduction.IdPerson = obj.IdPerson;
-                            newTraduction.Identifier = item.Identifier;
-                            newTraduction.ShortValue = item.ShortValue;
-                            newTraduction.LargeValue = item.LargeValue;
-                            newTraduction.LastUpdaterUser = item.LastUpdaterUser;
-                            await context.Traductions.AddAsync(newTraduction);
-                        }
-                    }
-                    await context.SaveChangesAsync();
-                    return obj.Id;
+                    trad.TCcurjob = traductions.Where(x => x.Identifier == "S_C_CURJOB").FirstOrDefault().ShortValue;
+                    trad.TCstartDate = traductions.Where(x => x.Identifier == "S_C_STARTDT").FirstOrDefault().ShortValue;
+                    trad.TCenddt = traductions.Where(x => x.Identifier == "S_C_ENDDT").FirstOrDefault().ShortValue;
+                    trad.TCincome = traductions.Where(x => x.Identifier == "S_C_INCOME").FirstOrDefault().ShortValue;
+                    trad.TCdetails = traductions.Where(x => x.Identifier == "L_C_DETAILS").FirstOrDefault().LargeValue;
+                    trad.UploadDate = DateTime.Now;
+                    context.TraductionPeople.Update(trad);
                 }
+                else
+                {
+                    trad = new TraductionPerson();
+                    trad.TCcurjob = traductions.Where(x => x.Identifier == "S_C_CURJOB").FirstOrDefault().ShortValue;
+                    trad.TCstartDate = traductions.Where(x => x.Identifier == "S_C_STARTDT").FirstOrDefault().ShortValue;
+                    trad.TCenddt = traductions.Where(x => x.Identifier == "S_C_ENDDT").FirstOrDefault().ShortValue;
+                    trad.TCincome = traductions.Where(x => x.Identifier == "S_C_INCOME").FirstOrDefault().ShortValue;
+                    trad.TCdetails = traductions.Where(x => x.Identifier == "L_C_DETAILS").FirstOrDefault().LargeValue;
+                    await context.TraductionPeople.AddAsync(trad);
+                }
+                context.PersonImages.Add(obj);
+
+                await context.SaveChangesAsync();
+                return obj.Id;
+
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
+                _logger.LogError(ex.Message, ex);
                 throw new Exception(ex.Message);
             }
         }
@@ -79,24 +77,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
 
         public async Task<PersonImage> GetByIdPerson(int idPerson)
         {
-            List<Traduction> traductions = new List<Traduction>();
-            try
-            {
-                using var context = new SqlCoreContext();
-                var images = await context.PersonImages.Include(x => x.IdPersonNavigation).Where(x => x.IdPerson== idPerson).FirstOrDefaultAsync() ?? throw new Exception("No existe la empresa solicitada");
-                traductions.AddRange(await context.Traductions.Where(x => x.IdPerson== idPerson && x.Identifier.Contains("_IP_")).ToListAsync());
-
-                if (images.IdPersonNavigation == null)
-                    throw new Exception("No existe la empresa");
-
-                images.IdPersonNavigation.Traductions = traductions;
-                return images;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return null;
-            }
+            throw new NotImplementedException();
         }
 
         public Task<List<PersonImage>> GetByNameAsync(string name)
@@ -111,44 +92,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
 
         public async Task<int?> UpdatePersonImage(PersonImage obj, List<Traduction> traductions)
         {
-            try
-            {
-                using (var context = new SqlCoreContext())
-                {
-                    obj.UpdateDate = DateTime.Now;
-                    context.PersonImages.Update(obj);
-
-                    foreach (var item in traductions)
-                    {
-                        var modifierTraduction = await context.Traductions.Where(x => x.IdPerson == obj.IdPerson && x.Identifier == item.Identifier).FirstOrDefaultAsync();
-                        if (modifierTraduction != null)
-                        {
-                            modifierTraduction.ShortValue = item.ShortValue;
-                            modifierTraduction.LargeValue = item.LargeValue;
-                            modifierTraduction.LastUpdaterUser = item.LastUpdaterUser;
-                            context.Traductions.Update(modifierTraduction);
-                        }
-                        else
-                        {
-                            var newTraduction = new Traduction();
-                            newTraduction.Id = 0;
-                            newTraduction.IdPerson = obj.IdPerson;
-                            newTraduction.Identifier = item.Identifier;
-                            newTraduction.ShortValue = item.ShortValue;
-                            newTraduction.LargeValue = item.LargeValue;
-                            newTraduction.LastUpdaterUser = item.LastUpdaterUser;
-                            await context.Traductions.AddAsync(newTraduction);
-                        }
-                    }
-                    await context.SaveChangesAsync();
-                    return obj.Id;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                throw new Exception(ex.Message);
-            }
+            throw new NotImplementedException();
         }
     }
 }

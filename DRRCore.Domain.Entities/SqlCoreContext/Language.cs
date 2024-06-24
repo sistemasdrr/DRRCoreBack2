@@ -18,6 +18,4 @@ public partial class Language
     public DateTime? DeleteDate { get; set; }
 
     public bool? Enable { get; set; }
-
-    public virtual ICollection<Traduction> Traductions { get; set; } = new List<Traduction>();
 }

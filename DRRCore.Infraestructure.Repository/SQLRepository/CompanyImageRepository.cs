@@ -1,5 +1,5 @@
-﻿using DRRCore.Domain.Entities.SqlContext;
-using DRRCore.Domain.Entities.SQLContext;
+﻿
+using DRRCore.Domain.Entities.SqlCoreContext;
 using DRRCore.Infraestructure.Interfaces.Repository;
 using DRRCore.Transversal.Common.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +18,7 @@ namespace DRRCore.Infraestructure.Repository.SQLRepository
         {
             try
             {
-                using var context = new SqlContext();
+                using var context = new SqlCoreContext();
                 await context.CompanyImages.AddAsync(obj);
                 await context.SaveChangesAsync();
                 return true;
@@ -33,7 +33,7 @@ namespace DRRCore.Infraestructure.Repository.SQLRepository
         {
             try
             {
-                using var context = new SqlContext();
+                using var context = new SqlCoreContext();
                 await context.CompanyImages.AddAsync(obj);
                 await context.SaveChangesAsync();
                 return obj.Id;
@@ -68,7 +68,7 @@ namespace DRRCore.Infraestructure.Repository.SQLRepository
         {
             try
             {
-                using var context = new SqlContext();
+                using var context = new SqlCoreContext();
                 var images = await context.CompanyImages.Where(x => x.IdCompany == idCompany).FirstOrDefaultAsync();
                 return images != null ? images : null;
             }
@@ -88,7 +88,7 @@ namespace DRRCore.Infraestructure.Repository.SQLRepository
         {
             try
             {
-                using var context = new SqlContext();
+                using var context = new SqlCoreContext();
                 var images = await context.CompanyImages.Where(x => x.IdCompany == idCompany).FirstOrDefaultAsync();
                 if (images != null)
                 {

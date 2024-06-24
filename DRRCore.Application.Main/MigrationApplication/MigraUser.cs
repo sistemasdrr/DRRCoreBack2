@@ -17,6 +17,7 @@ using DRRCore.Domain.Entities.SqlContext;
 using Microsoft.Extensions.Logging.Abstractions;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using Azure;
+using DRRCore.Domain.Entities.SQLContext;
 
 namespace DRRCore.Application.Main.MigrationApplication
 {
@@ -166,7 +167,7 @@ namespace DRRCore.Application.Main.MigrationApplication
                                 ComercialLatePayments = await GetComercialLatePayments(empresa.EmCodigo),
                                 BankDebts = await GetBankDebts(empresa.EmCodigo),
                                 WorkersHistories = await GetWorkersHistories(empresa),
-                                Traductions = await GetAllTraductions(empresa)
+                                TraductionCompanies = await GetAllTraductions(empresa)
 
                         };
 
@@ -253,7 +254,7 @@ namespace DRRCore.Application.Main.MigrationApplication
                             ComercialLatePayments = await GetComercialLatePayments(empresa.EmCodigo),
                             BankDebts = await GetBankDebts(empresa.EmCodigo),
                             WorkersHistories = await GetWorkersHistories(empresa),
-                            Traductions = await GetAllTraductions(empresa)
+                            TraductionCompanies = await GetAllTraductions(empresa)
                         };
                         idCompany = await _companyDomain.AddCompanyAsync(company);
                         await _mempresaDomain.MigrateEmpresa(empresa.EmCodigo);
@@ -300,240 +301,273 @@ namespace DRRCore.Application.Main.MigrationApplication
             return new List<WorkersHistory>();
         }
 
-        private async Task<List<Traduction>> GetAllTraductions(MEmpresa empresa)
+        private async Task<List<TraductionCompany>> GetAllTraductions(MEmpresa empresa)
         {
             List<Traduction> traductions = new List<Traduction>();
+            var trad = new List<TraductionCompany>();
             using var context = new SqlCoreContext();
 
-
-            foreach (var item in Constants.TRADUCTIONS_FORMS)
+            trad.Add(new TraductionCompany
             {
-                string? shortValue = null;
-                string? largeValue = null;
-                if (item == "L_E_COMIDE")
-                {
-                    if (empresa.EmComideIng != null)
-                    {
-                        largeValue = empresa.EmComideIng;
-                    }
-                }
-                else if (item == "L_E_REPUTATION")
-                {
-                    if (empresa.EmComrepIng != null)
-                    {
-                        largeValue = empresa.EmComrepIng;
-                    }
-                }
-                else if (item == "L_E_NEW")
-                {
-                    if (empresa.EmPrensaIng != null || empresa.EmPrensaselIng != null)
-                    {
-                        largeValue = string.IsNullOrEmpty(empresa.EmPrensaIng) ? empresa.EmPrensaselIng : empresa.EmPrensaIng;
-                    }
-                }
-                if (antecedentes != null)
-                {
-                    if (item == "S_B_DURATION")
-                    {
-                        if (antecedentes.EmDuraciIng != null)
-                        {
-                            shortValue = antecedentes.EmDuraciIng;
-                        }
-                    }
-                    else if (item == "S_B_REGISTERIN")
-                    {
-                        if (antecedentes.EmRegenIng != null)
-                        {
-                            shortValue = antecedentes.EmRegenIng;
-                        }
-                    }
-                    else if (item == "S_B_PUBLICREGIS")
-                    {
-                        if (antecedentes.EmRegistIng != null)
-                        {
-                            shortValue = antecedentes.EmRegistIng;
-                        }
-                    }
-                    else if (item == "L_B_PAIDCAPITAL")
-                    {
-                        if (antecedentes.EmDuraciIng != null)
-                        {
-                            largeValue = "";
-                        }
-                    }
-                    else if (item == "S_B_INCREASEDATE")
-                    {
-                        if (antecedentes.EmFecaumIng != null)
-                        {
-                            shortValue = antecedentes.EmFecaumIng;
-                        }
-                    }
-                    else if (item == "S_B_TAXRATE")
-                    {
-                        if (antecedentes.EmTipcamIng != null)
-                        {
-                            shortValue = antecedentes.EmTipcamIng;
-                        }
-                    }
-                    else if (item == "L_B_LEGALBACK")
-                    {
-                        if (antecedentes.EmComentIng != null)
-                        {
-                            largeValue = antecedentes.EmComentIng;
-                        }
-                    }
-                    else if (item == "L_B_HISTORY")
-                    {
-                        if (antecedentes.EmAnteceIng != null)
-                        {
-                            largeValue = antecedentes.EmAnteceIng;
-                        }
-                    }
-                }
-                if (ramo != null)
-                {
-                    if (item == "S_R_TOTALAREA")
-                    {
-                        if (ramo.EmAreaIng != null)
-                        {
-                            shortValue = ramo.EmAreaIng;
-                        }
-                    }
-                    else if (item == "L_R_OTRHERLOCALS")
-                    {
-                        if (ramo.EmObservIng != null)
-                        {
-                            largeValue = ramo.EmObservIng;
-                        }
-                    }
-                    else if (item == "L_R_PRINCACT")
-                    {
-                        if (ramo.EmActiviIng != null)
-                        {
-                            largeValue = ramo.EmActiviIng;
-                        }
-                    }
-                    else if (item == "L_R_ADIBUS")
-                    {
-                        if (ramo.EmComenIng != null)
-                        {
-                            largeValue = ramo.EmComenIng;
-                        }
-                    }
-                }
-                if (finanzas != null)
-                {
-                    if (item == "S_F_JOB")
-                    {
-                        if (finanzas.EmCargosIng != null)
-                        {
-                            shortValue = finanzas.EmCargosIng;
-                        }
-                    }
-                    else if (item == "L_F_COMENT")
-                    {
-                        if (finanzas.EmConinfIng != null)
-                        {
-                            largeValue = finanzas.EmConinfIng;
-                        }
-                    }
-                    else if (item == "L_F_PRINCACTIV")
-                    {
-                        if (finanzas.EmPropieIng != null)
-                        {
-                            largeValue = finanzas.EmPropieIng;
-                        }
-                    }
-                    else if (item == "L_F_SELECTFIN")
-                    {
-                        if (finanzas.EmSitfinIng != null)
-                        {
-                            largeValue = finanzas.EmSitfinIng;
-                        }
-                    }
-                    else if (item == "L_F_ANALISTCOM")
-                    {
-                        if (finanzas.EmAnalistaIng != null)
-                        {
-                            largeValue = finanzas.EmAnalistaIng;
-                        }
-                    }
-                }
-                if (item == "L_S_COMENTARY")
-                {
-                    if (empresa.EmCenrieIng != null)
-                    {
-                        largeValue = empresa.EmCenrieIng;
-                    }
-                }
-                else if (item == "L_S_BANCARIOS")
-                {
-                    if (empresa.EmSupbanIng != null)
-                    {
-                        largeValue = empresa.EmSupbanIng;
-                    }
-                }
-                else if (item == "L_S_AVALES")
-                {
-                    if (aval != null)
-                    {
-                        largeValue = aval.AvObservacionIng;
-                    }
-                }
-                else if (item == "L_S_LITIG")
-                {
-                    if (empresa.EmComlitIng != null)
-                    {
-                        largeValue = empresa.EmComlitIng;
-                    }
-                }
-                else if (item == "L_S_CREDHIS")
-                {
-                    if (empresa.EmAntcreIng != null)
-                    {
-                        largeValue = empresa.EmAntcreIng;
-                    }
-                }
-                else if (item == "S_O_QUERYCREDIT")
-                {
-                    if (empresa.EmMtopcrIng != null)
-                    {
-                        shortValue = empresa.EmMtopcrIng;
-                    }
-                }
-                else if (item == "S_O_SUGCREDIT")
-                {
-                    if (empresa.EmCrerecIng != null)
-                    {
-                        largeValue = empresa.EmCrerecIng;
-                    }
-                }
-                else if (item == "L_O_COMENTARY")
-                {
-                    if (empresa.EmOcDescriIng != null)
-                    {
-                        largeValue = empresa.EmOcDescriIng;
-                    }
-                }
-                else if (item == "L_I_GENERAL")
-                {
-                    if (empresa.EmInfgenIng != null)
-                    {
-                        largeValue = empresa.EmInfgenIng;
-                    }
-                }
-                traductions.Add(new Traduction
-                {
-                    IdPerson = null,
-                    Identifier = item,
-                    IdLanguage = 1,
-                    LastUpdaterUser = 1,
-                    ShortValue = shortValue,
-                    LargeValue = largeValue
-                });
-            }
-            return traductions;
+                TEcomide = empresa.EmComideIng ?? "",
+                TEreputation = empresa.EmComrepIng ?? "",
+                TEnew = string.IsNullOrEmpty(empresa.EmPrensaIng) ? empresa.EmPrensaselIng : empresa.EmPrensaIng,
+                TBduration = antecedentes?.EmDuraciIng ?? "",
+                TBregisterIn = antecedentes?.EmRegenIng ?? "",
+                TBpublicRegis = antecedentes?.EmRegistIng ?? "",
+                TBpaidCapital = antecedentes?.EmDuraciIng ?? "",
+                TBincreaseDate = antecedentes?.EmFecaumIng ?? "",
+                TBtacRate = antecedentes?.EmTipcamIng ?? "",
+                TBlegalBack = antecedentes?.EmComentIng ?? "",
+                TBhistory = antecedentes?.EmAnteceIng ?? "",
+                TRtotalArea = ramo?.EmAreaIng ?? "",
+                TRotherLocals= ramo?.EmObservIng ?? "",
+                TRprincAct = ramo?.EmActiviIng ?? "",
+                TRadiBus = ramo?.EmComenIng ?? "",
+                TFjob = finanzas?.EmCargosIng ?? "",
+                TFcomment = finanzas?.EmConinfIng ?? "",
+                TFprincActiv = finanzas?.EmPropieIng ?? "",
+                TFselectFin = finanzas?.EmSitfinIng ?? "",
+                TFanalistCom = finanzas?.EmAnalistaIng ?? "",
+                TScommentary = empresa.EmCenrieIng ?? "",
+                TSbancarios = empresa.EmSupbanIng ?? "",
+                TSavales = aval?.AvObservacionIng ?? "",
+                TSlitig = empresa.EmComlitIng ?? "",
+                TScredHis = empresa.EmAntcreIng ?? "",
+                TOqueryCredit = empresa.EmMtopcrIng ?? "",
+                TOsugCredit = empresa.EmCrerecIng ?? "",
+                TOcommentary = empresa.EmOcDescriIng ?? "",
+                TIgeneral = empresa.EmInfgenIng ?? ""
+            });
 
+            //foreach (var item in Constants.TRADUCTIONS_FORMS)
+            //{
+            //    string? shortValue = null;
+            //    string? largeValue = null;
+            //    if (item == "L_E_COMIDE")
+            //    {
+            //        if (empresa.EmComideIng != null)
+            //        {
+            //            largeValue = empresa.EmComideIng;
+            //        }
+            //    }
+            //    else if (item == "L_E_REPUTATION")
+            //    {
+            //        if (empresa.EmComrepIng != null)
+            //        {
+            //            largeValue = empresa.EmComrepIng;
+            //        }
+            //    }
+            //    else if (item == "L_E_NEW")
+            //    {
+            //        if (empresa.EmPrensaIng != null || empresa.EmPrensaselIng != null)
+            //        {
+            //            largeValue = string.IsNullOrEmpty(empresa.EmPrensaIng) ? empresa.EmPrensaselIng : empresa.EmPrensaIng;
+            //        }
+            //    }
+            //    if (antecedentes != null)
+            //    {
+            //        if (item == "S_B_DURATION")
+            //        {
+            //            if (antecedentes.EmDuraciIng != null)
+            //            {
+            //                shortValue = antecedentes.EmDuraciIng;
+            //            }
+            //        }
+            //        else if (item == "S_B_REGISTERIN")
+            //        {
+            //            if (antecedentes.EmRegenIng != null)
+            //            {
+            //                shortValue = antecedentes.EmRegenIng;
+            //            }
+            //        }
+            //        else if (item == "S_B_PUBLICREGIS")
+            //        {
+            //            if (antecedentes.EmRegistIng != null)
+            //            {
+            //                shortValue = antecedentes.EmRegistIng;
+            //            }
+            //        }
+            //        else if (item == "L_B_PAIDCAPITAL")
+            //        {
+            //            if (antecedentes.EmDuraciIng != null)
+            //            {
+            //                largeValue = "";
+            //            }
+            //        }
+            //        else if (item == "S_B_INCREASEDATE")
+            //        {
+            //            if (antecedentes.EmFecaumIng != null)
+            //            {
+            //                shortValue = antecedentes.EmFecaumIng;
+            //            }
+            //        }
+            //        else if (item == "S_B_TAXRATE")
+            //        {
+            //            if (antecedentes.EmTipcamIng != null)
+            //            {
+            //                shortValue = antecedentes.EmTipcamIng;
+            //            }
+            //        }
+            //        else if (item == "L_B_LEGALBACK")
+            //        {
+            //            if (antecedentes.EmComentIng != null)
+            //            {
+            //                largeValue = antecedentes.EmComentIng;
+            //            }
+            //        }
+            //        else if (item == "L_B_HISTORY")
+            //        {
+            //            if (antecedentes.EmAnteceIng != null)
+            //            {
+            //                largeValue = antecedentes.EmAnteceIng;
+            //            }
+            //        }
+            //    }
+            //    if (ramo != null)
+            //    {
+            //        if (item == "S_R_TOTALAREA")
+            //        {
+            //            if (ramo.EmAreaIng != null)
+            //            {
+            //                shortValue = ramo.EmAreaIng;
+            //            }
+            //        }
+            //        else if (item == "L_R_OTRHERLOCALS")
+            //        {
+            //            if (ramo.EmObservIng != null)
+            //            {
+            //                largeValue = ramo.EmObservIng;
+            //            }
+            //        }
+            //        else if (item == "L_R_PRINCACT")
+            //        {
+            //            if (ramo.EmActiviIng != null)
+            //            {
+            //                largeValue = ramo.EmActiviIng;
+            //            }
+            //        }
+            //        else if (item == "L_R_ADIBUS")
+            //        {
+            //            if (ramo.EmComenIng != null)
+            //            {
+            //                largeValue = ramo.EmComenIng;
+            //            }
+            //        }
+            //    }
+            //    if (finanzas != null)
+            //    {
+            //        if (item == "S_F_JOB")
+            //        {
+            //            if (finanzas.EmCargosIng != null)
+            //            {
+            //                shortValue = finanzas.EmCargosIng;
+            //            }
+            //        }
+            //        else if (item == "L_F_COMENT")
+            //        {
+            //            if (finanzas.EmConinfIng != null)
+            //            {
+            //                largeValue = finanzas.EmConinfIng;
+            //            }
+            //        }
+            //        else if (item == "L_F_PRINCACTIV")
+            //        {
+            //            if (finanzas.EmPropieIng != null)
+            //            {
+            //                largeValue = finanzas.EmPropieIng;
+            //            }
+            //        }
+            //        else if (item == "L_F_SELECTFIN")
+            //        {
+            //            if (finanzas.EmSitfinIng != null)
+            //            {
+            //                largeValue = finanzas.EmSitfinIng;
+            //            }
+            //        }
+            //        else if (item == "L_F_ANALISTCOM")
+            //        {
+            //            if (finanzas.EmAnalistaIng != null)
+            //            {
+            //                largeValue = finanzas.EmAnalistaIng;
+            //            }
+            //        }
+            //    }
+            //    if (item == "L_S_COMENTARY")
+            //    {
+            //        if (empresa.EmCenrieIng != null)
+            //        {
+            //            largeValue = empresa.EmCenrieIng;
+            //        }
+            //    }
+            //    else if (item == "L_S_BANCARIOS")
+            //    {
+            //        if (empresa.EmSupbanIng != null)
+            //        {
+            //            largeValue = empresa.EmSupbanIng;
+            //        }
+            //    }
+            //    else if (item == "L_S_AVALES")
+            //    {
+            //        if (aval != null)
+            //        {
+            //            largeValue = aval.AvObservacionIng;
+            //        }
+            //    }
+            //    else if (item == "L_S_LITIG")
+            //    {
+            //        if (empresa.EmComlitIng != null)
+            //        {
+            //            largeValue = empresa.EmComlitIng;
+            //        }
+            //    }
+            //    else if (item == "L_S_CREDHIS")
+            //    {
+            //        if (empresa.EmAntcreIng != null)
+            //        {
+            //            largeValue = empresa.EmAntcreIng;
+            //        }
+            //    }
+            //    else if (item == "S_O_QUERYCREDIT")
+            //    {
+            //        if (empresa.EmMtopcrIng != null)
+            //        {
+            //            shortValue = empresa.EmMtopcrIng;
+            //        }
+            //    }
+            //    else if (item == "S_O_SUGCREDIT")
+            //    {
+            //        if (empresa.EmCrerecIng != null)
+            //        {
+            //            largeValue = empresa.EmCrerecIng;
+            //        }
+            //    }
+            //    else if (item == "L_O_COMENTARY")
+            //    {
+            //        if (empresa.EmOcDescriIng != null)
+            //        {
+            //            largeValue = empresa.EmOcDescriIng;
+            //        }
+            //    }
+            //    else if (item == "L_I_GENERAL")
+            //    {
+            //        if (empresa.EmInfgenIng != null)
+            //        {
+            //            largeValue = empresa.EmInfgenIng;
+            //        }
+            //    }
+            //    traductions.Add(new Traduction
+            //    {
+            //        IdPerson = null,
+            //        Identifier = item,
+            //        IdLanguage = 1,
+            //        LastUpdaterUser = 1,
+            //        ShortValue = shortValue,
+            //        LargeValue = largeValue
+            //    });
+            //}
+            //return traductions;
+            return trad;
 
         }
         private async Task<List<BankDebt>> GetBankDebts(string emCodigo)
@@ -1899,7 +1933,7 @@ namespace DRRCore.Application.Main.MigrationApplication
                                 if (pers != null)
                                 {
 
-                                    pers.Traductions = await GetPersonTraductions(persona);
+                                    pers.TraductionPeople = await GetPersonTraductions(persona);
                                     await _personDomain.UpdateAsync(pers);
                                     success = true;
                                 }
@@ -2016,7 +2050,7 @@ namespace DRRCore.Application.Main.MigrationApplication
                             BankDebts = await GetPersonBankDebt(persona),
                             ComercialLatePayments = await GetPersonCommercialLate(persona),
                             Providers = await GetPersonProviders(persona),
-                            Traductions = await GetPersonTraductions(persona)
+                            TraductionPeople = await GetPersonTraductions(persona)
                         };
                         await contextSql.People.AddAsync(newPerson);
                         await contextSql.SaveChangesAsync();
@@ -2377,127 +2411,154 @@ namespace DRRCore.Application.Main.MigrationApplication
             }
         }
 
-        private async Task<List<Traduction>> GetPersonTraductions(MPersona persona)
+        private async Task<List<TraductionPerson>> GetPersonTraductions(MPersona persona)
         {
-            List<Traduction> traductions = new List<Traduction>();
+            List<TraductionPerson> traductions = new List<TraductionPerson>();
             using var context = new SqlCoreContext();
             using var mysqlcontext = new MySqlContext();
 
-            foreach (var item in Constants.TRADUCTIONS_FORMS_PERSON)
+            var trabajo = await mysqlcontext.RPerVsTrabs.Where(x => x.PeCodigo == persona.PeCodigo).FirstOrDefaultAsync();
+            traductions.Add(new TraductionPerson
             {
-                string? shortValue = null;
-                string? largeValue = null;
-                //Person
-                if (item == "S_P_NACIONALITY")
-                {
-                    shortValue = persona.PeNacionIng == null ? "" : persona.PeNacionIng;
-                }
-                else if (item == "S_P_BIRTHDATE")
-                {
-                    shortValue = persona.PeFecnacIng == null ? "" : persona.PeFecnacIng;
-                }
-                else if (item == "S_P_MARRIEDTO")
-                {
-                    shortValue = persona.PeRelcivIng == null ? "" : persona.PeRelcivIng;
-                }
-                else if (item == "S_P_PROFESSION")
-                {
-                    shortValue = persona.PfNombreIng == null ? "" : persona.PfNombreIng;
-                }
-                else if (item == "L_P_NEWSCOMM")
-                {
-                    largeValue = persona.PePrensaselIng == null ? "" : persona.PePrensaselIng;
-                }
-                else if (item == "L_P_REPUTATION")
-                {
-                    largeValue = persona.PeComRepIng == null ? "" : persona.PeComRepIng;
-                }
-                //Person Activities
-                else if (item == "L_A_OTHERACT")
-                {
-                    largeValue = persona.PeOtrRecIng == null ? "" : persona.PeOtrRecIng;
-                }
-                //Person General Information
-                else if (item == "L_IG_DETAILS")
-                {
-                    largeValue = persona.PeObservIng == null ? "" : persona.PeObservIng;
-                }
-                //Person History
-                else if (item == "L_H_DETAILS")
-                {
-                    largeValue = persona.PeAnteceIng == null ? "" : persona.PeAnteceIng;
-                }
-                //Person Home
-                else if (item == "S_D_VALUE")
-                {
-                    shortValue = persona.PeValdomIng == null ? "" : persona.PeValdomIng;
-                }
-                else if (item == "L_D_RESIDENCE")
-                {
-                    largeValue = persona.PeCondocIng == null ? "" : persona.PeCondocIng;
-                }
-                //Person Properties
-                else if (item == "L_PR_DETAILS")
-                {
-                    largeValue = persona.PeCombieIng == null ? "" : persona.PeCombieIng;
-                }
-                //Person Sbs
-                else if (item == "L_SBS_ANTEC")
-                {
-                    largeValue = persona.PeAntcredIng == null ? "" : persona.PeAntcredIng;
-                }
-                else if (item == "L_SBS_RISKCNT")
-                {
-                    largeValue = persona.PeCenRieIng == null ? "" : persona.PeCenRieIng;
-                }
-                else if (item == "L_SBS_COMMENTSBS")
-                {
-                    largeValue = persona.PeSupbanIng == null ? "" : persona.PeSupbanIng;
-                }
-                else if (item == "L_SBS_COMMENTBANK")
-                {
-                    largeValue = persona.PeSubacuIng == null ? "" : persona.PeSubacuIng;
-                }
-                else if (item == "L_SBS_LITIG")
-                {
-                    largeValue = persona.PeComlitIng == null ? "" : persona.PeComlitIng;
-                }
-                //Person Job
-                var trabajo = await mysqlcontext.RPerVsTrabs.Where(x => x.PeCodigo == persona.PeCodigo).FirstOrDefaultAsync();
-                if (trabajo != null)
-                {
-                    if (item == "S_C_CURJOB")
-                    {
-                        shortValue = trabajo.CaNombreIng == null ? "" : trabajo.CaNombreIng;
-                    }
-                    else if (item == "S_C_STARTDT")
-                    {
-                        shortValue = trabajo.PtFecingIng == null ? "" : trabajo.PtFecingIng;
-                    }
-                    else if (item == "S_C_ENDDT")
-                    {
-                        shortValue = trabajo.PtFeccesIng == null ? "" : trabajo.PtFeccesIng;
-                    }
-                    else if (item == "S_C_INCOME")
-                    {
-                        shortValue = trabajo.PtInganuIng == null ? "" : trabajo.PtInganuIng;
-                    }
-                    else if (item == "L_C_DETAILS")
-                    {
-                        largeValue = trabajo.PtDetallIng == null ? "" : trabajo.PtDetallIng;
-                    }
-                }
-                traductions.Add(new Traduction
-                {
-                    IdPerson = null,
-                    Identifier = item,
-                    IdLanguage = 1,
-                    LastUpdaterUser = 1,
-                    ShortValue = shortValue,
-                    LargeValue = largeValue,
-                    CreationDate = DateTime.Now
-                });
-            }
+                TPnacionality = persona.PeNacionIng ?? "",
+                TPbirthPlace = persona.PeFecnacIng ?? "",
+                TPmarriedTo = persona.PeRelcivIng ?? "",
+                TPprofession = persona.PfNombreIng ?? "",
+                TPnewcomm = persona.PePrensaselIng ?? "",
+                TPreputation = persona.PeComRepIng ?? "",
+                TAotherAct = persona.PeOtrRecIng ?? "",
+                TIgdetails = persona.PeObservIng ?? "",
+                THdetails = persona.PeAnteceIng ?? "",
+                TDvalue = persona.PeValdomIng ?? "",
+                TDresidence = persona.PeCondocIng ?? "",
+                TPrdetails = persona.PeCombieIng ?? "",
+                TSbsantecedente = persona.PeAntcredIng ?? "",
+                TSbsrickCnt = persona.PeCenRieIng ?? "",
+                TSbscommentBank = persona.PeSubacuIng ?? "",
+                TSbscommentSbs = persona.PeSupbanIng ?? "",
+                TSbslitig = persona.PeComlitIng ?? "",
+                TCcurjob = trabajo?.CaNombreIng ?? "",
+                TCstartDate = trabajo?.PtFecingIng ?? "",
+                TCenddt = trabajo?.PtFeccesIng ?? "",
+                TCincome = trabajo?.PtInganuIng ?? "",
+                TCdetails = trabajo?.PtDetallIng ?? "",
+            });
+
+            //foreach (var item in Constants.TRADUCTIONS_FORMS_PERSON)
+            //{
+            //    string? shortValue = null;
+            //    string? largeValue = null;
+            //    //Person
+            //    if (item == "S_P_NACIONALITY")
+            //    {
+            //        shortValue = persona.PeNacionIng == null ? "" : persona.PeNacionIng;
+            //    }
+            //    else if (item == "S_P_BIRTHDATE")
+            //    {
+            //        shortValue = persona.PeFecnacIng == null ? "" : persona.PeFecnacIng;
+            //    }
+            //    else if (item == "S_P_MARRIEDTO")
+            //    {
+            //        shortValue = persona.PeRelcivIng == null ? "" : persona.PeRelcivIng;
+            //    }
+            //    else if (item == "S_P_PROFESSION")
+            //    {
+            //        shortValue = persona.PfNombreIng == null ? "" : persona.PfNombreIng;
+            //    }
+            //    else if (item == "L_P_NEWSCOMM")
+            //    {
+            //        largeValue = persona.PePrensaselIng == null ? "" : persona.PePrensaselIng;
+            //    }
+            //    else if (item == "L_P_REPUTATION")
+            //    {
+            //        largeValue = persona.PeComRepIng == null ? "" : persona.PeComRepIng;
+            //    }
+            //    //Person Activities
+            //    else if (item == "L_A_OTHERACT")
+            //    {
+            //        largeValue = persona.PeOtrRecIng == null ? "" : persona.PeOtrRecIng;
+            //    }
+            //    //Person General Information
+            //    else if (item == "L_IG_DETAILS")
+            //    {
+            //        largeValue = persona.PeObservIng == null ? "" : persona.PeObservIng;
+            //    }
+            //    //Person History
+            //    else if (item == "L_H_DETAILS")
+            //    {
+            //        largeValue = persona.PeAnteceIng == null ? "" : persona.PeAnteceIng;
+            //    }
+            //    //Person Home
+            //    else if (item == "S_D_VALUE")
+            //    {
+            //        shortValue = persona.PeValdomIng == null ? "" : persona.PeValdomIng;
+            //    }
+            //    else if (item == "L_D_RESIDENCE")
+            //    {
+            //        largeValue = persona.PeCondocIng == null ? "" : persona.PeCondocIng;
+            //    }
+            //    //Person Properties
+            //    else if (item == "L_PR_DETAILS")
+            //    {
+            //        largeValue = persona.PeCombieIng == null ? "" : persona.PeCombieIng;
+            //    }
+            //    //Person Sbs
+            //    else if (item == "L_SBS_ANTEC")
+            //    {
+            //        largeValue = persona.PeAntcredIng == null ? "" : persona.PeAntcredIng;
+            //    }
+            //    else if (item == "L_SBS_RISKCNT")
+            //    {
+            //        largeValue = persona.PeCenRieIng == null ? "" : persona.PeCenRieIng;
+            //    }
+            //    else if (item == "L_SBS_COMMENTSBS")
+            //    {
+            //        largeValue = persona.PeSupbanIng == null ? "" : persona.PeSupbanIng;
+            //    }
+            //    else if (item == "L_SBS_COMMENTBANK")
+            //    {
+            //        largeValue = persona.PeSubacuIng == null ? "" : persona.PeSubacuIng;
+            //    }
+            //    else if (item == "L_SBS_LITIG")
+            //    {
+            //        largeValue = persona.PeComlitIng == null ? "" : persona.PeComlitIng;
+            //    }
+            //    //Person Job
+            //    var trabajo = await mysqlcontext.RPerVsTrabs.Where(x => x.PeCodigo == persona.PeCodigo).FirstOrDefaultAsync();
+            //    if (trabajo != null)
+            //    {
+            //        if (item == "S_C_CURJOB")
+            //        {
+            //            shortValue = trabajo.CaNombreIng == null ? "" : trabajo.CaNombreIng;
+            //        }
+            //        else if (item == "S_C_STARTDT")
+            //        {
+            //            shortValue = trabajo.PtFecingIng == null ? "" : trabajo.PtFecingIng;
+            //        }
+            //        else if (item == "S_C_ENDDT")
+            //        {
+            //            shortValue = trabajo.PtFeccesIng == null ? "" : trabajo.PtFeccesIng;
+            //        }
+            //        else if (item == "S_C_INCOME")
+            //        {
+            //            shortValue = trabajo.PtInganuIng == null ? "" : trabajo.PtInganuIng;
+            //        }
+            //        else if (item == "L_C_DETAILS")
+            //        {
+            //            largeValue = trabajo.PtDetallIng == null ? "" : trabajo.PtDetallIng;
+            //        }
+            //    }
+            //    traductions.Add(new Traduction
+            //    {
+            //        IdPerson = null,
+            //        Identifier = item,
+            //        IdLanguage = 1,
+            //        LastUpdaterUser = 1,
+            //        ShortValue = shortValue,
+            //        LargeValue = largeValue,
+            //        CreationDate = DateTime.Now
+            //    });
+            //}
             return traductions;
         }
         public async Task<bool> MigrateSubscriber()
@@ -2822,7 +2883,7 @@ namespace DRRCore.Application.Main.MigrationApplication
                         PersonSbs = await GetPersonSBS(persona),
                         PersonJobs = await GetPersonJob(persona),
                         PhotoPeople = await GetPersonPhoto(persona),
-                        Traductions = await GetPersonTraductions(persona),
+                        TraductionPeople = await GetPersonTraductions(persona),
                         BankDebts = await GetPersonBankDebt(persona),
                         ComercialLatePayments = await GetPersonCommercialLate(persona),
                         Providers = await GetPersonProviders(persona),
@@ -2986,7 +3047,7 @@ namespace DRRCore.Application.Main.MigrationApplication
                             if (pers != null)
                             {
 
-                                pers.Traductions = await GetPersonTraductions(persona);
+                                pers.TraductionPeople = await GetPersonTraductions(persona);
                                 await _personDomain.UpdateAsync(pers);
                                 success = true;
                             }
@@ -3011,39 +3072,6 @@ namespace DRRCore.Application.Main.MigrationApplication
                 }
             }
 
-            return true;
-        }
-
-        public async Task<bool> MigratePersonCorreccion()
-        {
-            for (int i = 0; i < 50; i++)
-            {
-                int j = 0;
-                using var contextSql = new SqlCoreContext();
-                using var contextMysql = new MySqlContext();
-                using var contextPhoto = new FotoContext();
-                var personas = await contextMysql.MPersonas.Where(x => x.Migra == 1 && x.PeActivo == 1).Take(1000).ToListAsync();
-                foreach (var persona in personas)
-                {
-                    try
-                    {
-                        var pers = await contextSql.People.Where(x => x.OldCode == persona.PeCodigo).FirstOrDefaultAsync();
-                        var traduction = await contextSql.Traductions.Where(x => x.IdPerson == pers.Id && x.Identifier == "L_A_OTHERACT").FirstOrDefaultAsync();
-                        if (traduction != null)
-                        {
-                            traduction.LargeValue = persona.PeOtrRecIng == null ? "" : persona.PeOtrRecIng;
-                            contextSql.Traductions.Update(traduction);
-                            await contextSql.SaveChangesAsync();
-                            j++;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError(ex.Message, ex);
-                        continue;
-                    }
-                }
-            }
             return true;
         }
 

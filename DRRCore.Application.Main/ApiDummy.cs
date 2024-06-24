@@ -1,5 +1,6 @@
 ﻿using DRRCore.Application.DTO.API;
 using DRRCore.Domain.Entities.SqlCoreContext;
+using DRRCore.Domain.Interfaces.CoreDomain;
 using DRRCore.Transversal.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -9,6 +10,15 @@ namespace DRRCore.Application.DTO
 {
     public class ApiDummy
     {
+
+        public static ICompanyDomain _companyDomain;
+        public static ICompanyBackgroundDomain _companyBackgroundDomain;
+        public ApiDummy(ICompanyDomain companyDomain, ICompanyBackgroundDomain companyBackgroundDomain)
+        {
+
+            _companyDomain = companyDomain;
+            _companyBackgroundDomain = companyBackgroundDomain;
+        }
         public static async Task<ReportDto> Report(int idTicket)
         {
             try
@@ -19,6 +29,9 @@ namespace DRRCore.Application.DTO
                     .Include(x => x.IdCompanyNavigation)
                     .Include(x => x.IdCompanyNavigation).ThenInclude(c => c.Traductions)
                     .FirstOrDefaultAsync();
+
+                var company = await _companyDomain.GetByIdAsync((int)ticket.IdCompany);
+                var companyBackground = await _companyBackgroundDomain.GetByIdAsync((int)ticket.IdCompany);
                 /*
                     .Include(x => x.IdCompanyNavigation).ThenInclude(c => c.IdLegalRegisterSituationNavigation)
                     .Include(x => x.IdCompanyNavigation).ThenInclude(c => c.IdCountryNavigation)
@@ -54,13 +67,13 @@ namespace DRRCore.Application.DTO
                     Executives = await ExecutiveShareholders(ticket.IdCompany),
                     WhoIsWho = await WhoIsWhos(ticket.IdCompany),
                     Placeholders = await Placeholders(ticket.IdCompany),
-                    BussinessHistory = ticket.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_B_HISTORY").FirstOrDefault().LargeValue,//"Alicorp S.A.A. was incorporated in 1956 as Anderson Clayton & Company......",
+                    BussinessHistory = companyBackground.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_B_HISTORY").FirstOrDefault().LargeValue,//"Alicorp S.A.A. was incorporated in 1956 as Anderson Clayton & Company......",
                     RelatedCompanies = await RelatedCompanies(ticket.IdCompany),
                     Business = await Business(ticket.IdCompany),
                     PaymentRecords = await PaymentRecords(ticket.IdCompany),
                     BankingInformation = await BankingInformation(ticket.IdCompany),
                     FinancialInformation = await FinancialInformation(ticket.IdCompany),
-                    News = ticket.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_E_NEW").FirstOrDefault().LargeValue//"Alicorp: ventas en negocio de consumo masivo crecieron 4,7% en primer trimestre de 2023\r\n\r\nas ventas consolidadas de la empresa alcanzaron los S/3.326 millones, que, comparado al mismo periodo del 2022, decrece ligeramente en un 0,6%.\r\n\r\nAlicorp presentó sus resultados financieros del primer trimestre del año, periodo en el que la inflación se mantuvo a niveles elevados. En este escenario, la compañía informó que mantiene resiliencia gracias al soporte que le brindan ventajas competitivas como el valor marca, innovación y diversificación de sus negocios.\r\n\r\nAl cierre del primer trimestre, se observó un menor volumen de ventas, explicado por una reducción del consumo privado debido a los conflictos internos del país y al desempeño del negocio de Molienda, que vio afectada su abastecimiento de insumos por el bloqueo en la frontera con Bolivia, originado por los conflictos en el sur. Así las ventas consolidadas de Alicorp alcanzaron los S/3.326 millones, que, comparado al mismo periodo del 2022, decrece ligeramente en un 0,6%."
+                    News = company.Traductions.Where(x => x.Identifier == "L_E_NEW").FirstOrDefault().LargeValue//"Alicorp: ventas en negocio de consumo masivo crecieron 4,7% en primer trimestre de 2023\r\n\r\nas ventas consolidadas de la empresa alcanzaron los S/3.326 millones, que, comparado al mismo periodo del 2022, decrece ligeramente en un 0,6%.\r\n\r\nAlicorp presentó sus resultados financieros del primer trimestre del año, periodo en el que la inflación se mantuvo a niveles elevados. En este escenario, la compañía informó que mantiene resiliencia gracias al soporte que le brindan ventajas competitivas como el valor marca, innovación y diversificación de sus negocios.\r\n\r\nAl cierre del primer trimestre, se observó un menor volumen de ventas, explicado por una reducción del consumo privado debido a los conflictos internos del país y al desempeño del negocio de Molienda, que vio afectada su abastecimiento de insumos por el bloqueo en la frontera con Bolivia, originado por los conflictos en el sur. Así las ventas consolidadas de Alicorp alcanzaron los S/3.326 millones, que, comparado al mismo periodo del 2022, decrece ligeramente en un 0,6%."
 
                 };
             }
@@ -103,8 +116,9 @@ namespace DRRCore.Application.DTO
                     .Include(x => x.IdCountryNavigation)
                     .Include(x => x.IdLegalPersonTypeNavigation)
                     .Include(x => x.IdPaymentPolicyNavigation)
-                    .Include(x => x.Traductions)
+                    .Include(x => x.TraductionCompanies)
                     .FirstOrDefaultAsync();
+                
                 var information = new InformationDto()
                 {
                     CorrectCompanyName = company.Name == null ? "" : company.Name,
@@ -132,7 +146,7 @@ namespace DRRCore.Application.DTO
                     Phone = company.Cellphone ?? string.Empty,// "+511  3150800 - 2154130-11054",
                     Email = company.Email ?? string.Empty,//"******@alicorp.com.pe ; ******@alicorp.com.pe",
                     WebUrl = company.WebPage ?? string.Empty,//"www.alicorp.com.pe",
-                    Comment = company.Traductions.Where(x => x.Identifier == "L_E_COMIDE").FirstOrDefault().LargeValue == null ? "" : company.Traductions.Where(x => x.Identifier == "L_E_COMIDE").FirstOrDefault().LargeValue//"Email: s*****@gromero.com.pe\r\n\r\nIt should be mentioned the currently investigated Company is NOT INCLUDED IN THE OFAC Sanctions List (List of companies and individuals linked with money from terrorism and narcotics trafficking published by the Office of Foreign Assets Control of the United States Department of the Treasury)."
+                    Comment = company.TraductionCompanies.FirstOrDefault().TEcomide ?? ""//"Email: s*****@gromero.com.pe\r\n\r\nIt should be mentioned the currently investigated Company is NOT INCLUDED IN THE OFAC Sanctions List (List of companies and individuals linked with money from terrorism and narcotics trafficking published by the Office of Foreign Assets Control of the United States Department of the Treasury)."
                 };
                 return information;
             }
@@ -152,7 +166,7 @@ namespace DRRCore.Application.DTO
                     .Include(x => x.IdCountryNavigation)
                     .Include(x => x.IdLegalPersonTypeNavigation)
                     .Include(x => x.IdPaymentPolicyNavigation)
-                    .Include(x => x.Traductions)
+                    .Include(x => x.TraductionCompanies)
                     .Include(x => x.CompanyBranches).ThenInclude(x => x.IdBranchSectorNavigation)
                     .Include(x => x.CompanyBranches).ThenInclude(x => x.IdBusinessBranchNavigation)
                     .Include(x => x.CompanyBackgrounds).ThenInclude(x => x.CurrentPaidCapitalCurrencyNavigation)
@@ -177,7 +191,7 @@ namespace DRRCore.Application.DTO
                     {
                         IsoCurrency = company.CompanyBackgrounds.FirstOrDefault()?.CurrentPaidCapitalCurrencyNavigation?.Abreviation == null ? "" : company.CompanyBackgrounds.FirstOrDefault()?.CurrentPaidCapitalCurrencyNavigation?.Abreviation,//"PEN",
                         Amount = company.CompanyBackgrounds.FirstOrDefault()?.CurrentPaidCapital == null ? 0 : (double)company.CompanyBackgrounds.FirstOrDefault()?.CurrentPaidCapital,//555666664,
-                        Comment = company.Traductions.Where(x => x.Identifier == "L_B_PAIDCAPITAL").FirstOrDefault()?.LargeValue == null ? "" : company.Traductions.Where(x => x.Identifier == "L_B_PAIDCAPITAL").FirstOrDefault()?.LargeValue//"Soles"
+                        Comment = company.TraductionCompanies.FirstOrDefault().TBpaidCapital ?? ""//"Soles"
                     },
                     ShareholdersEquity = new CurrencyAmountWithDateDto
                     {
@@ -260,7 +274,7 @@ namespace DRRCore.Application.DTO
                 using var context = new SqlCoreContext();
                 var company = await context.Companies.Where(x => x.Id == idCompany)
                     .Include(x => x.IdLegalPersonTypeNavigation)
-                    .Include(x => x.Traductions)
+                    .Include(x => x.TraductionCompanies)
                     .Include(x => x.CompanyBackgrounds).ThenInclude(x => x.CurrentPaidCapitalCurrencyNavigation)
                     .Include(x => x.FinancialBalances).ThenInclude(x => x.IdCurrencyNavigation)
                     .FirstOrDefaultAsync();
@@ -269,15 +283,15 @@ namespace DRRCore.Application.DTO
                     LegalStatus = company.IdLegalPersonTypeNavigation.EnglishName == null ? "" : company.IdLegalPersonTypeNavigation.EnglishName,//"Publicly Held Corporation",
                     IncorporationDate = company.CompanyBackgrounds.FirstOrDefault().ConstitutionDate == null ? "" : StaticFunctions.DateTimeToString(company.CompanyBackgrounds.FirstOrDefault().ConstitutionDate),
                     OperationStartDate = company.CompanyBackgrounds.FirstOrDefault().StartFunctionYear == null ? "" : company.CompanyBackgrounds.FirstOrDefault().StartFunctionYear,
-                    RegisterPlace = company.Traductions.Where(x => x.Identifier == "S_B_REGISTERIN").FirstOrDefault().ShortValue == null ? "" : company.Traductions.Where(x => x.Identifier == "S_B_REGISTERIN").FirstOrDefault().ShortValue,//"Lima",
+                    RegisterPlace = company.TraductionCompanies.FirstOrDefault().TBregisterIn ?? "",//"Lima",
                     NotaryOffice = company.CompanyBackgrounds.FirstOrDefault().NotaryRegister == null ? "" : company.CompanyBackgrounds.FirstOrDefault().NotaryRegister,//"Julio César*****",
-                    DurationTime = company.Traductions.Where(x => x.Identifier == "S_B_DURATION").FirstOrDefault().ShortValue == null ? "" : company.Traductions.Where(x => x.Identifier == "S_B_DURATION").FirstOrDefault().ShortValue,//"Indefinite",
-                    RegistrationFolio = company.Traductions.Where(x => x.Identifier == "S_B_PUBLICREGIS").FirstOrDefault().ShortValue == null ? "" : company.Traductions.Where(x => x.Identifier == "S_B_PUBLICREGIS").FirstOrDefault().ShortValue,//"Entry 1, Page 351, *****",
+                    DurationTime = company.TraductionCompanies.FirstOrDefault().TBduration ?? "",//"Indefinite",
+                    RegistrationFolio = company.TraductionCompanies.FirstOrDefault().TBpublicRegis ?? "",//"Entry 1, Page 351, *****",
                     PaidInCapital = new CurrencyAmountDto
                     {
                         IsoCurrency = company.CompanyBackgrounds.FirstOrDefault().CurrentPaidCapitalCurrencyNavigation == null || company.CompanyBackgrounds.FirstOrDefault().CurrentPaidCapitalCurrencyNavigation.Abreviation == null ? "" : company.CompanyBackgrounds.FirstOrDefault().CurrentPaidCapitalCurrencyNavigation.Abreviation,//"PEN",
                         Amount = company.CompanyBackgrounds.FirstOrDefault().CurrentPaidCapital == null ? 0 : (double)company.CompanyBackgrounds.FirstOrDefault().CurrentPaidCapital,//555666664,
-                        Comment = company.Traductions.Where(x => x.Identifier == "L_B_PAIDCAPITAL").FirstOrDefault().LargeValue == null ? "" : company.Traductions.Where(x => x.Identifier == "L_B_PAIDCAPITAL").FirstOrDefault().LargeValue//"Soles"
+                        Comment = company.TraductionCompanies.FirstOrDefault().TBpaidCapital ?? ""//"Soles"
                     },
                     LastCapitalIncreaseDate = company.CompanyBackgrounds.FirstOrDefault().LastQueryRrpp == null ? "" : StaticFunctions.DateTimeToString(company.CompanyBackgrounds.FirstOrDefault().LastQueryRrpp),
                     ShareholdersEquity = new CurrencyAmountWithDateDto
@@ -290,7 +304,7 @@ namespace DRRCore.Application.DTO
                     StockExchangeListed = company.CompanyBackgrounds.FirstOrDefault().Traded == "Si" ? true : false,
                     CurrentExchangeRate = GetExchangeRate(company.CompanyBackgrounds.FirstOrDefault().CurrentExchangeRate),
                     Membership = "",//"Lima Chamber of Commerce",
-                    Comments = company.Traductions.Where(x => x.Identifier == "L_B_LEGALBACK").FirstOrDefault().LargeValue == null ? "" : company.Traductions.Where(x => x.Identifier == "L_B_LEGALBACK").FirstOrDefault().LargeValue,//"The Subject is listed in the Stock Exchange of\tima under the  tickers ALICORC1 and ALICORI1....."
+                    Comments = company.TraductionCompanies.FirstOrDefault().TBlegalBack ?? "",//"The Subject is listed in the Stock Exchange of\tima under the  tickers ALICORC1 and ALICORI1....."
 
                 };
                 return background;
@@ -342,7 +356,7 @@ namespace DRRCore.Application.DTO
             {
                 using var context = new SqlCoreContext();
                 var company = await context.Companies.Where(x => x.Id == idCompany)
-                    .Include(x => x.CompanyPartners).ThenInclude(x => x.IdPersonNavigation).ThenInclude(x => x.Traductions)
+                    .Include(x => x.CompanyPartners).ThenInclude(x => x.IdPersonNavigation).ThenInclude(x => x.TraductionPeople)
                     .Include(x => x.CompanyPartners).ThenInclude(x => x.IdPersonNavigation).ThenInclude(x => x.IdDocumentTypeNavigation)
                     .Include(x => x.CompanyPartners).ThenInclude(x => x.IdPersonNavigation).ThenInclude(x => x.IdCivilStatusNavigation)
                     .Include(x => x.CompanyPartners).ThenInclude(x => x.IdPersonNavigation).ThenInclude(x => x.IdPaymentPolicyNavigation)
@@ -366,8 +380,8 @@ namespace DRRCore.Application.DTO
                     listWhoIsWho.Add(new WhoIsWhoDto
                     {
                         Name = item.IdPersonNavigation.Fullname == null ? "" : item.IdPersonNavigation.Fullname,
-                        Title = item.IdPersonNavigation.Traductions.Where(x => x.Identifier == "S_P_PROFESSION").FirstOrDefault().ShortValue == null ? "" : item.IdPersonNavigation.Traductions.Where(x => x.Identifier == "S_P_PROFESSION").FirstOrDefault().ShortValue,
-                        Nacionality = item.IdPersonNavigation.Traductions.Where(x => x.Identifier == "S_P_NACIONALITY").FirstOrDefault().ShortValue == null ? "" : item.IdPersonNavigation.Traductions.Where(x => x.Identifier == "S_P_NACIONALITY").FirstOrDefault().ShortValue,
+                        Title = item.IdPersonNavigation.TraductionPeople.FirstOrDefault().TPprofession ?? "",
+                        Nacionality = item.IdPersonNavigation.TraductionPeople.FirstOrDefault().TPnacionality ?? "",
                         Birthday = item.IdPersonNavigation.BirthDate == null ? "" : item.IdPersonNavigation.BirthDate,
                         Document = new DocumentTypeDto
                         {
@@ -376,7 +390,7 @@ namespace DRRCore.Application.DTO
                         },
                         CivilStatus = item.IdPersonNavigation.IdCivilStatusNavigation == null || item.IdPersonNavigation.IdCivilStatusNavigation.EnglishName == null ? "" : item.IdPersonNavigation.IdCivilStatusNavigation.EnglishName,
                         Adreess = item.IdPersonNavigation.Address == null ? "" : item.IdPersonNavigation.Address,
-                        Profession = item.IdPersonNavigation.Traductions.Where(x => x.Identifier == "S_P_PROFESSION").FirstOrDefault().ShortValue == null ? "" : item.IdPersonNavigation.Traductions.Where(x => x.Identifier == "S_P_PROFESSION").FirstOrDefault().ShortValue,
+                        Profession = item.IdPersonNavigation.TraductionPeople.FirstOrDefault().TPprofession ?? "",
                         PaymentPolitic = new ValueDetailDto
                         {
                             Code = item.IdPersonNavigation.IdPaymentPolicyNavigation == null || item.IdPersonNavigation.IdPaymentPolicyNavigation.ApiCode == null ? "" : item.IdPersonNavigation.IdPaymentPolicyNavigation.ApiCode,
@@ -384,7 +398,7 @@ namespace DRRCore.Application.DTO
                         },
                         FatherName = item.IdPersonNavigation.FatherName == null ? "" : item.IdPersonNavigation.FatherName,
                         ChiefExecutive = item.MainExecutive == null || item.MainExecutive == false ? false : true,
-                        BackgroundInformation = item.IdPersonNavigation.Traductions.Where(x => x.Identifier == "L_H_DETAILS").FirstOrDefault().LargeValue == null ? "" : item.IdPersonNavigation.Traductions.Where(x => x.Identifier == "L_H_DETAILS").FirstOrDefault().LargeValue,
+                        BackgroundInformation = item.IdPersonNavigation.TraductionPeople.FirstOrDefault().THdetails ?? "",
                         AssociatedCompanies = listCompanyAssociated,
 
                     });
@@ -393,25 +407,6 @@ namespace DRRCore.Application.DTO
                 {
                     new WhoIsWhoDto
                     {
-
-                        BackgroundInformation= "Son of Dionisio Romero Seminario, one of the main fo....",
-                        AssociatedCompanies=new List<Associated>
-                        {
-                            new Associated
-                            {
-                                Name= "BANCO DE CREDITO DE BOLIVIA S.A.",
-                                Title= "President",
-                                IsoCountry= "BOL",
-                                RegistrationNumber="1020435022"
-                            },
-                            new Associated
-                            {
-                                 Name= "INDUSTRIAS DEL ESPINO S.A.",
-                                Title= "President",
-                                IsoCountry= "PER",
-                                RegistrationNumber="20163901197"
-                            }
-                        },
                         ParticipateCompanies=new List<Participate>
                         {
                             new Participate
@@ -428,63 +423,8 @@ namespace DRRCore.Application.DTO
                             }
                         }
                     },
-                     new WhoIsWhoDto
-                    {
-                        Name = "PEREZ GUBBINS, ALFRED****",
-                        Title = "Chairman of BoD",
-                        Nacionality="Peruvian",
-                        Birthday="19OCT1954",
-                        Document=new DocumentTypeDto
-                        {
-                            TypeDocument="DNI",
-                            NumberDocument="12345678"
-                        },
-                        CivilStatus="Married to Joelyn ****",
-                        Adreess="Lima",
-                        Profession="MBA - Economist",
-                        PaymentPolitic=new ValueDetailDto
-                        {
-                            Code="PP3",
-                            Description="PROMPT (Payments always on time. Several years)"
-                        },
-                        FatherName="Dionisio Romero ****",
-                        ChiefExecutive=true,
-                        BackgroundInformation="Son of Dionisio Romero Seminario, one of the main fo....",
-                        AssociatedCompanies=new List<Associated>
-                        {
-                            new Associated
-                            {
-                                Name= "BANCO DE CREDITO DE BOLIVIA S.A.",
-                                Title= "President",
-                                IsoCountry= "BOL",
-                                RegistrationNumber="1020435022"
-                            },
-                            new Associated
-                            {
-                                 Name= "INDUSTRIAS DEL ESPINO S.A.",
-                                Title= "President",
-                                IsoCountry= "PER",
-                                RegistrationNumber="20163901197"
-                            }
-                        },
-                        ParticipateCompanies=new List<Participate>
-                        {
-                            new Participate
-                            {
-                                Name= "CEMENTOS PACASMAYO S.A.A.",
-                                SinceDate= "03/22/2005",
-                                IsoCountry= "PER"
-                            },
-                             new Participate
-                            {
-                                Name= "PALMAS DEL ORIENTE S.A.",
-                                SinceDate= "",
-                                IsoCountry= "PER"
-                            }
-                        }
-                    }
                 };
-                return whoIsWho;
+                return listWhoIsWho;
             }
             catch (Exception ex)
             {
@@ -562,6 +502,7 @@ namespace DRRCore.Application.DTO
                     .Include(x => x.ImportsAndExports)
                     .Include(x => x.CompanyBranches).ThenInclude(x => x.IdBranchSectorNavigation)
                     .Include(x => x.CompanyBranches).ThenInclude(x => x.IdBusinessBranchNavigation)
+                    .Include(x => x.TraductionCompanies)
                     .FirstOrDefaultAsync();
                 var listImportsAndExports = company.ImportsAndExports.Where(x => x.Enable == true).ToList();
 
@@ -588,7 +529,7 @@ namespace DRRCore.Application.DTO
                 }
                 var bussiness = new BusinessDto
                 {
-                    MainActivity = company.Traductions.Where(x => x.Identifier == "L_R_PRINCACT").FirstOrDefault().LargeValue,//"Subject is engaged in manufacturing and sale of fatty-type food....",
+                    MainActivity = company.TraductionCompanies.FirstOrDefault().TRprincAct ?? "",//"Subject is engaged in manufacturing and sale of fatty-type food....",
                     Sector = new ValueDetailDto
                     {
                         Code = company.CompanyBranches.FirstOrDefault().IdBranchSectorNavigation == null || company.CompanyBranches.FirstOrDefault().IdBranchSectorNavigation.ApiCode == null ? "" : company.CompanyBranches.FirstOrDefault().IdBranchSectorNavigation.ApiCode,//"SC2",
@@ -667,6 +608,7 @@ namespace DRRCore.Application.DTO
                     .Include(x => x.ImportsAndExports)
                     .Include(x => x.CompanyBranches).ThenInclude(x => x.IdBranchSectorNavigation)
                     .Include(x => x.CompanyBranches).ThenInclude(x => x.IdBusinessBranchNavigation)
+                    .Include(x => x.TraductionCompanies)
                     .FirstOrDefaultAsync();
                 var balancesGen = company.FinancialBalances.Where(x => x.BalanceType == "GENERAL").OrderByDescending(x => x.Date).ToList();
                 var balancesSit = company.FinancialBalances.Where(x => x.BalanceType == "SITUACIONAL").OrderByDescending(x => x.Date).FirstOrDefault();
@@ -765,7 +707,7 @@ namespace DRRCore.Application.DTO
                         Code = company.CompanyFinancialInformations.FirstOrDefault().IdCollaborationDegreeNavigation.ApiCode,//"DI13",
                         Description = company.CompanyFinancialInformations.FirstOrDefault().IdCollaborationDegreeNavigation.EnglishName//"Report prepared exclusively from outside sources."
                     },
-                    InformationProvided = company.Traductions.Where(x => x.Identifier == "L_F_COMENT").FirstOrDefault().LargeValue,//"Directly personnel did not allow the coordination of an interview....",
+                    InformationProvided = company.TraductionCompanies.FirstOrDefault().TFcomment ?? "",//"Directly personnel did not allow the coordination of an interview....",
                     InterimBalanceSheets = listBalSit,
                     RatioSituation = ratio,
                     SituationalFinancial = new ValueDetailDto
@@ -773,8 +715,8 @@ namespace DRRCore.Application.DTO
                         Code = company.CompanyFinancialInformations.FirstOrDefault().IdFinancialSituacionNavigation.ApiCode,//"SF3",
                         Description = company.CompanyFinancialInformations.FirstOrDefault().IdFinancialSituacionNavigation.EnglishName//"ACCEPTABLE Financial Situation"
                     },
-                    Comments = company.Traductions.Where(x => x.Identifier == "L_F_PRINCACTIV").FirstOrDefault().LargeValue,//"Land\r\nBuildings, plants and other constructions\r\nMachinery and equipment...",
-                    AnalystComments = company.Traductions.Where(x => x.Identifier == "L_F_ANALISTCOM").FirstOrDefault().LargeValue,//"Alicorp S.A.A. was incorporated in Peru on July 16, 1956....",
+                    Comments = company.TraductionCompanies.FirstOrDefault().TFprincActiv?? "",//"Land\r\nBuildings, plants and other constructions\r\nMachinery and equipment...",
+                    AnalystComments = company.TraductionCompanies.FirstOrDefault().TFanalistCom ?? "",//"Alicorp S.A.A. was incorporated in Peru on July 16, 1956....",
                     Insurances = new List<InsuranceCompaniesDto>(),
                     BalanceSheets = listBalGen
                 };
@@ -795,7 +737,7 @@ namespace DRRCore.Application.DTO
                 var company = await context.Companies.Where(x => x.Id == idCompany)
                     .Include(x => x.BankDebts)
                     .Include(x => x.CompanySbs)
-                    .Include(x => x.Traductions)
+                    .Include(x => x.TraductionCompanies)
                     .FirstOrDefaultAsync();
 
                 var listBankDebt = company.BankDebts.Where(x => x.Enable == true).ToList();
@@ -822,7 +764,7 @@ namespace DRRCore.Application.DTO
                     MNTotal = company.CompanySbs.FirstOrDefault().GuaranteesOfferedNc == null ? 0 : (double)company.CompanySbs.FirstOrDefault().GuaranteesOfferedNc,//852364459,
                     MNGuaranteesOffered = 209663451,
 
-                    SbsComment = company.Traductions.Where(x => x.Identifier == "").FirstOrDefault().LargeValue == null ? "" : company.Traductions.Where(x => x.Identifier == "").FirstOrDefault().LargeValue,// "Maintains unused lines of credit in banks:\r\nSCOTIABANK for S/.43.543.802.44 for loans.\r\nCITIBANK DEL PERU for S/.1,263,675 for c..."
+                    SbsComment = company.TraductionCompanies.FirstOrDefault().TScommentary ?? "",// "Maintains unused lines of credit in banks:\r\nSCOTIABANK for S/.43.543.802.44 for loans.\r\nCITIBANK DEL PERU for S/.1,263,675 for c..."
                 };
                 return bankDebt;
             }

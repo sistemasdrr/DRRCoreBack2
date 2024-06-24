@@ -44,12 +44,6 @@ namespace DRRCore.Services.Migration.Controllers
             return Ok(await _migraUser.MigratePersonByOldCode(oldCode));
         }
         [HttpPost()]
-        [Route("personaCorreccion")]
-        public async Task<ActionResult> personaCorreccion()
-        {
-            return Ok(await _migraUser.MigratePersonCorreccion());
-        }
-        [HttpPost()]
         [Route("abonados")]
         public async Task<ActionResult> MigrarAbonados()
         {
