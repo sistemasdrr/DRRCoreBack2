@@ -5,6 +5,7 @@
         Task MigrateUser();
         Task<bool> MigrateCompany();
         Task<bool> MigrateCompanyOthers(int migra);
+        Task<bool> MigrateCompanyByOldCode(string oldCode);
         Task<bool> MigrateCompanyImageOthers(int migra);
         Task<bool> MigrateCompanyImageByOldCode(string oldCode);
         Task<bool> CorrecPersona(int migra);

@@ -44,5 +44,15 @@ namespace DRRCore.Application.DTO.Core.Response
         public int RemainingCoupons { get; set; } = 0;
         public Boolean NormalPrice { get; set; } = new Boolean();
         public Boolean Enable { get; set; } = new Boolean();
+
+        public bool? ReportInPdf { get; set; }
+
+        public bool? ReportInWord { get; set; }
+
+        public bool? ReportInExcel { get; set; }
+
+        public bool? ReportInXml { get; set; }
+
+        public bool? ReportInXmlCredendo { get; set; }
     }
 }

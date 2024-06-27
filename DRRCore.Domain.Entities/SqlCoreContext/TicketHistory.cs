@@ -45,6 +45,8 @@ public partial class TicketHistory
 
     public string? AsignationType { get; set; }
 
+    public string? ReturnMessage { get; set; }
+
     public virtual ICollection<AgentInvoiceDetail> AgentInvoiceDetails { get; set; } = new List<AgentInvoiceDetail>();
 
     public virtual StatusTicket? IdStatusTicketNavigation { get; set; }

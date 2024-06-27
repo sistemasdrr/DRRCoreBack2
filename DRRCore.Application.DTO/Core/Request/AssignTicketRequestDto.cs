@@ -18,8 +18,10 @@ namespace DRRCore.Application.DTO.Core.Request
         public bool References { get; set; }
         public string? Observations { get; set; }
         public string? Type { get; set; }
-       // public string? Commentary { get; set; }
+        // public string? Commentary { get; set; }
         public string? Quality { get; set; }
+        public string? QualityTypist { get; set; }
+        public string? QualityTranslator { get; set; }
         public bool Internal { get; set; }
         public bool Balance { get; set; }
         public string? StartDate { get; set; }

@@ -218,7 +218,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                     if (haveReport)
                     {
                         companys = await context.Companies
-                        //.Include(x => x.Traductions)
+                        .Include(x => x.TraductionCompanies)
                         .Include(x => x.IdCreditRiskNavigation)
                         .Include(x => x.IdCountryNavigation)
                         .Include(x => x.CompanyPartners.Where(x => x.MainExecutive == true)).ThenInclude(x => x.IdPersonNavigation)
@@ -231,7 +231,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                     else
                     {
                         companys = await context.Companies
-                        //.Include(x => x.Traductions)
+                        .Include(x => x.TraductionCompanies)
                        .Include(x => x.IdCreditRiskNavigation)
                        .Include(x => x.IdCountryNavigation)
                        .Include(x => x.CompanyPartners.Where(x => x.MainExecutive == true)).ThenInclude(x => x.IdPersonNavigation)
@@ -246,7 +246,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                     if (haveReport)
                     {
                         companys = await context.Companies
-                        .Include(x => x.Traductions)
+                        .Include(x => x.TraductionCompanies)
                         .Include(x => x.IdCreditRiskNavigation)
                         .Include(x => x.IdCountryNavigation)
                         .Include(x => x.CompanyPartners.Where(x => x.MainExecutive == true).FirstOrDefault()).ThenInclude(x => x.IdPersonNavigation)
@@ -259,7 +259,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                     else
                     {
                         companys = await context.Companies
-                        .Include(x => x.Traductions)
+                        .Include(x => x.TraductionCompanies)
                        .Include(x => x.IdCreditRiskNavigation)
                        .Include(x => x.IdCountryNavigation)
                         .Include(x => x.CompanyPartners.Where(x => x.MainExecutive == true).FirstOrDefault()).ThenInclude(x => x.IdPersonNavigation)
@@ -274,7 +274,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                     if (haveReport)
                     {
                         companys = await context.Companies
-                        .Include(x => x.Traductions)
+                        .Include(x => x.TraductionCompanies)
                         .Include(x => x.IdCreditRiskNavigation)
                         .Include(x => x.IdCountryNavigation)
                         .Include(x => x.CompanyPartners.Where(x => x.MainExecutive == true).FirstOrDefault()).ThenInclude(x => x.IdPersonNavigation)
@@ -287,7 +287,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                     else
                     {
                         companys = await context.Companies
-                       .Include(x => x.Traductions)
+                        .Include(x => x.TraductionCompanies)
                        .Include(x => x.IdCreditRiskNavigation)
                        .Include(x => x.IdCountryNavigation)
                         .Include(x => x.CompanyPartners.Where(x => x.MainExecutive == true).FirstOrDefault()).ThenInclude(x => x.IdPersonNavigation)
@@ -302,7 +302,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                     if (haveReport)
                     {
                         companys = await context.Companies
-                        .Include(x => x.Traductions)
+                        .Include(x => x.TraductionCompanies)
                         .Include(x => x.IdCreditRiskNavigation)
                         .Include(x => x.IdCountryNavigation)
                         .Include(x => x.CompanyPartners.Where(x => x.MainExecutive == true).FirstOrDefault()).ThenInclude(x => x.IdPersonNavigation)
@@ -315,7 +315,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                     else
                     {
                         companys = await context.Companies
-                        .Include(x => x.Traductions)
+                        .Include(x => x.TraductionCompanies)
                         .Include(x => x.IdCreditRiskNavigation)
                         .Include(x => x.IdCountryNavigation)
                         .Include(x => x.CompanyPartners.Where(x => x.MainExecutive == true).FirstOrDefault()).ThenInclude(x => x.IdPersonNavigation)
@@ -443,6 +443,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                         traduction.TEnew = obj.Traductions.Where(x => x.Identifier == "L_E_NEW").FirstOrDefault().LargeValue;
                         obj.TraductionCompanies.Add(traduction);
                     }
+                    obj.Traductions = null;
                     context.Companies.Update(obj);
 
                     //var listTraductions = await context.Traductions.Where(x => x.IdCompany == obj.Id && x.Identifier.Contains("_E_")).ToListAsync();

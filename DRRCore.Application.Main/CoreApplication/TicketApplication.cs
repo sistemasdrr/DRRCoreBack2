@@ -16,8 +16,11 @@ using DRRCore.Transversal.Common;
 using DRRCore.Transversal.Common.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+
+
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace DRRCore.Application.Main.CoreApplication
@@ -205,7 +208,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         .Include(x => x.IdEmployeeNavigation).Where(x => x.IdEmployeeNavigation.Id == idEmployee).FirstOrDefaultAsync();
                     newTicket.TicketAssignation = new TicketAssignation
                     {
-                        //IdEmployee = idEmployee,
+                        IdEmployee = idEmployee,
                         IdUserLogin = userLogin.Id,
                         Commentary = request.Commentary
                     };
@@ -306,7 +309,7 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 using var context = new SqlCoreContext();
                 var ticket = await  context.Tickets.Where(x => x.Id == idTicket).FirstOrDefaultAsync();
-                if(ticket != null)
+                if(ticket != null && ticket.ReportType != "OR")
                 {
                     var doc = await _companyApplication.DownloadF1(ticket.IdCompany ?? 0, "ESP", "pdf");
                     if (doc != null && doc.Data != null)
@@ -318,7 +321,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         {
                             IdTicket = ticket.Id,
                             Path = path,
-                            Name = "RV_" + DateTime.Now.ToString("ddMMyy") + "_" + ticket.Number.ToString("D6"),
+                            Name = ticket.ReportType + "_" + ticket.RequestedName + ".pdf",
                             Extension = ".pdf"
                         });
                         await context.SaveChangesAsync();
@@ -593,7 +596,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 ticket.RequestedName = ticket.RequestedName.Trim();
                 ticket.RequestedName = ticket.RequestedName.Replace("?", "");
                 ticket.RequestedName = ticket.RequestedName.Replace("¿", "");
-                var path = "/cupones/" + ticket.Number.ToString("D6") + "/RV_" + ticket.RequestedName + ".pdf";
+                var path = "/cupones/" + ticket.Number.ToString("D6") + "/"+ticket.ReportType+"_" + ticket.RequestedName + ".pdf";
                 using (var ftpClient = new FtpClient(GetFtpClientConfiguration()))
                 {
                     await ftpClient.LoginAsync();
@@ -984,6 +987,7 @@ namespace DRRCore.Application.Main.CoreApplication
         public async Task<Response<List<GetListTicketResponseDto2>>> GetTicketsToUser(string userTo)
         {
             var response = new Response<List<GetListTicketResponseDto2>>();
+            response.Data = new List<GetListTicketResponseDto2>();
             try
             {
                 using var context = new SqlCoreContext();
@@ -991,9 +995,26 @@ namespace DRRCore.Application.Main.CoreApplication
                     .Include(x => x.IdEmployeeNavigation)
                     .Include(x => x.IdEmployeeNavigation.Personals)
                     .Where(x => x.Id == int.Parse(userTo)).FirstOrDefaultAsync();
-                var list = await _ticketHistoryDomain.GetTicketsPreAssignedToUser(userTo);
+
+                var list = await context.TicketHistories
+                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdSubscriberNavigation).ThenInclude(x => x.IdCountryNavigation)
+                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdContinentNavigation)
+                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCompanyNavigation)
+                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCompanyNavigation).ThenInclude(x => x.IdCountryNavigation).ThenInclude(x => x.IdContinentNavigation)
+                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdPersonNavigation).ThenInclude(x => x.IdCountryNavigation).ThenInclude(x => x.IdContinentNavigation)
+                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.TicketAssignation).ThenInclude(x => x.IdEmployeeNavigation).ThenInclude(x => x.UserLogins)
+                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCountryNavigation)
+                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdStatusTicketNavigation)
+                    .Include(x => x.IdStatusTicketNavigation)
+                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.TicketQuery)
+                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.TicketFiles)
+                    .Include(x => x.IdTicketNavigation.TicketHistories.OrderByDescending(x => x.Id)).Where(x => x.Enable == true)
+                    .OrderByDescending(x => x.IdTicketNavigation.OrderDate)
+                    .Where(x => x.UserTo == userTo && x.Flag == false && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Despachado && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Observado && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Rechazado)
+                        .ToListAsync();
                 if (list != null)
                 {
+                   
                     response.Data = _mapper.Map<List<GetListTicketResponseDto2>>(list);
                     foreach (var item in response.Data)
                     {
@@ -1072,10 +1093,12 @@ namespace DRRCore.Application.Main.CoreApplication
             var response = new Response<bool>();
             try
             {
+                using var context = new SqlCoreContext();
+                var ticket = await context.Tickets.Where(x => x.Id == idTicket).FirstOrDefaultAsync();
                 using (var ftpClient = new FtpClient(GetFtpClientConfiguration()))
                 {
                     await ftpClient.LoginAsync();
-                    string filePath = "/cupones/" + numCupon + "/" + file.FileName;
+                    string filePath = "/cupones/" + ticket.Number.ToString("D6") + "/" + file.FileName;
                     using (var writeStream = await ftpClient.OpenFileWriteStreamAsync(filePath))
                     {
                         file.CopyTo(writeStream);
@@ -1682,6 +1705,8 @@ namespace DRRCore.Application.Main.CoreApplication
                                         if (item3.Code.Contains("S") && item3.Active == true)
                                         {
                                             ticket.Quality = item.Quality;
+                                            ticket.QualityTypist = item.QualityTypist;
+                                            ticket.QualityTranslator = item.QualityTranslator;
                                             ticket.UpdateDate = DateTime.Now;
                                         }
                                     }
@@ -1719,7 +1744,6 @@ namespace DRRCore.Application.Main.CoreApplication
                                         history.Flag = true;
                                         history.ShippingDate = DateTime.Today;
                                         history.UpdateDate = DateTime.Now;
-                                        history.AsignationType = item.Type;
 
                                         context.Tickets.Update(ticket);
                                         context.TicketHistories.Update(history);
@@ -1737,7 +1761,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                             EndDate = StaticFunctions.VerifyDate(item.EndDate),
                                             Observations=item.Observations,
                                             Balance=item.Balance,
-                                            
+                                            AsignationType = item.Type,
 
                                         };
                                         await context.TicketHistories.AddAsync(newTicketHistory);
@@ -1772,7 +1796,6 @@ namespace DRRCore.Application.Main.CoreApplication
                                         ticket.UpdateDate = DateTime.Now;
                                         ticket.IdStatusTicket = (int)TicketStatusEnum.Asig_Reportero;
                                         history.Flag = true;
-                                        history.AsignationType = item.Type;
                                         history.ShippingDate = DateTime.Today;
                                         history.UpdateDate = DateTime.Now;
 
@@ -1794,7 +1817,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
-
+                                                AsignationType = item.Type,
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
                                         }
@@ -1814,6 +1837,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
+                                                AsignationType = item.Type,
 
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
@@ -1853,6 +1877,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
+                                                AsignationType = item.Type,
 
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
@@ -1889,7 +1914,6 @@ namespace DRRCore.Application.Main.CoreApplication
                                         history.Flag = true;
                                         history.ShippingDate = DateTime.Today;
                                         history.UpdateDate = DateTime.Now;
-                                        history.AsignationType = item.Type;
 
 
                                         if (item.Internal)
@@ -1916,7 +1940,6 @@ namespace DRRCore.Application.Main.CoreApplication
                                             history.Flag = true;
                                             history.ShippingDate = DateTime.Today;
                                             history.UpdateDate = DateTime.Now;
-                                            history.AsignationType = item.Type;
 
                                             await context.TicketHistories.AddAsync(newTicketHistory);
                                         }
@@ -1936,7 +1959,8 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
-                                                References = item.References
+                                                References = item.References,
+                                                AsignationType = item.Type,
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
                                         }
@@ -1975,7 +1999,8 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
-                                                References = item.References
+                                                References = item.References,
+                                                AsignationType = item.Type,
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
                                         }
@@ -2017,7 +2042,6 @@ namespace DRRCore.Application.Main.CoreApplication
                                         history.Flag = true;
                                         history.ShippingDate = DateTime.Today;
                                         history.UpdateDate = DateTime.Now;
-                                        history.AsignationType = item.Type;
 
 
                                         ticket.IdStatusTicket = (int)TicketStatusEnum.Asig_Referencista;
@@ -2034,7 +2058,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
-
+                                                AsignationType = item.Type,
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
                                         
@@ -2083,13 +2107,12 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
-
+                                                AsignationType = item.Type,
                                             };
                                             ticket.UpdateDate = DateTime.Now;
                                             history.Flag = true;
                                             history.ShippingDate = DateTime.Today;
                                             history.UpdateDate = DateTime.Now;
-                                            history.AsignationType = item.Type;
                                             await context.TicketHistories.AddAsync(newTicketHistory);
 
                                         }
@@ -2137,7 +2160,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
-
+                                                AsignationType = item.Type,
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
 
@@ -2193,7 +2216,6 @@ namespace DRRCore.Application.Main.CoreApplication
                                             history.Flag = true;
                                             history.ShippingDate = DateTime.Today;
                                             history.UpdateDate = DateTime.Now;
-                                            history.AsignationType = item.Type;
                                             await context.TicketHistories.AddAsync(newTicketHistory);
 
                                         }
@@ -2244,7 +2266,6 @@ namespace DRRCore.Application.Main.CoreApplication
                                         history.Flag = true;
                                         history.ShippingDate = DateTime.Today;
                                         history.UpdateDate = DateTime.Now;
-                                        history.AsignationType = item.Type;
 
                                         context.Tickets.Update(ticket);
                                         context.TicketHistories.Update(history);
@@ -2292,13 +2313,12 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
-
+                                                AsignationType = item.Type,
                                             };
                                             ticket.UpdateDate = DateTime.Now;
                                             history.Flag = true;
                                             history.ShippingDate = DateTime.Today;
                                             history.UpdateDate = DateTime.Now;
-                                            history.AsignationType = item.Type;
                                             await context.TicketHistories.AddAsync(newTicketHistory);
 
                                         }
@@ -2328,9 +2348,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                             ticket.UpdateDate = DateTime.Now;
                                             history.Flag = true;
                                             history.ShippingDate = DateTime.Today;
-                                            history.UpdateDate = DateTime.Now;
-                                            history.AsignationType = item.Type;
-
+                                            history.UpdateDate = DateTime.Now;  
 
                                             ticket.IdStatusTicket = (int)TicketStatusEnum.Asig_Supervisor;
                                             var newTicketHistory = new TicketHistory
@@ -2586,7 +2604,7 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<bool>> DeleteTicketHistory(int idTicket, string? assignedTo, int? numberAssign)
+        public async Task<Response<bool>> DeleteTicketHistory(int idTicket, string? assignedTo, int? numberAssign, string? returnMessage)
         {
             var response = new Response<bool>();
             try
@@ -2595,7 +2613,8 @@ namespace DRRCore.Application.Main.CoreApplication
                 var ticketHistory = await context.TicketHistories.Where(x => x.IdTicket == idTicket && x.AsignedTo == assignedTo && x.NumberAssign == numberAssign).FirstOrDefaultAsync();
                 if(ticketHistory != null)
                 {
-                    if (assignedTo.Contains("RC") == false && assignedTo.Contains("CR") == false)
+                   
+                    if (assignedTo.Contains("RC") == true || assignedTo.Contains("CR") == true)
                     {
                         context.TicketHistories.Remove(ticketHistory);
                         await context.SaveChangesAsync();
@@ -2604,13 +2623,15 @@ namespace DRRCore.Application.Main.CoreApplication
                     else
                     {
                         context.TicketHistories.Remove(ticketHistory);
-                        var lastTicketHistory = await context.TicketHistories.Where(x => x.IdTicket == idTicket).OrderByDescending(x => x.CreationDate).FirstOrDefaultAsync();
+                        var lastTicketHistory = await context.TicketHistories.Where(x => x.IdTicket == idTicket).OrderBy(x => x.CreationDate).ToListAsync();
                         var ticket = await context.Tickets.Where(x => x.Id == idTicket).FirstOrDefaultAsync();
                         if (lastTicketHistory != null && ticket != null)
                         {
-                            lastTicketHistory.Flag = false;
-                            context.TicketHistories.Update(lastTicketHistory);
-                            ticket.IdStatusTicket = lastTicketHistory.IdStatusTicket;
+                            lastTicketHistory.ElementAt(lastTicketHistory.Count - 2).Flag = false;
+                            lastTicketHistory.ElementAt(lastTicketHistory.Count - 2).ReturnMessage = returnMessage;
+                            lastTicketHistory.ElementAt(lastTicketHistory.Count - 2).ShippingDate = null;
+                            context.TicketHistories.Update(lastTicketHistory.ElementAt(lastTicketHistory.Count - 2));
+                            ticket.IdStatusTicket = lastTicketHistory.ElementAt(lastTicketHistory.Count - 2).IdStatusTicket;
                             context.Tickets.Update(ticket);
                             await context.SaveChangesAsync();
                             response.Data = true;
@@ -2621,7 +2642,6 @@ namespace DRRCore.Application.Main.CoreApplication
                             response.IsSuccess = false;
                         }
                     }
-                    
                 }
                 else
                 {

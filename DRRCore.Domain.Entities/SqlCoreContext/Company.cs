@@ -83,6 +83,7 @@ public partial class Company
 
     public int? Migra { get; set; }
 
+    public virtual ICollection<Traduction> Traductions { get; set; } = new List<Traduction>();
     public virtual ICollection<BankDebt> BankDebts { get; set; } = new List<BankDebt>();
 
     public virtual ICollection<ComercialLatePayment> ComercialLatePayments { get; set; } = new List<ComercialLatePayment>();
@@ -146,5 +147,4 @@ public partial class Company
     public virtual ICollection<TraductionCompany> TraductionCompanies { get; set; } = new List<TraductionCompany>();
 
     public virtual ICollection<WorkersHistory> WorkersHistories { get; set; } = new List<WorkersHistory>();
-    public virtual ICollection<Traduction> Traductions { get; set; } = new List<Traduction>();
 }

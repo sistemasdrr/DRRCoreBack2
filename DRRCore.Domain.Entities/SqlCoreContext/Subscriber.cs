@@ -93,6 +93,16 @@ public partial class Subscriber
 
     public int? IdAgent { get; set; }
 
+    public bool? ReportInPdf { get; set; }
+
+    public bool? ReportInWord { get; set; }
+
+    public bool? ReportInExcel { get; set; }
+
+    public bool? ReportInXml { get; set; }
+
+    public bool? ReportInXmlCredendo { get; set; }
+
     public virtual ICollection<CouponBillingSubscriber> CouponBillingSubscribers { get; set; } = new List<CouponBillingSubscriber>();
 
     public virtual Agent? IdAgentNavigation { get; set; }

@@ -4328,6 +4328,21 @@ public partial class DbA9ccf0EecoreContext : DbContext
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("psw");
+            entity.Property(e => e.ReportInExcel)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("reportInExcel");
+            entity.Property(e => e.ReportInPdf)
+                .HasDefaultValueSql("((1))")
+                .HasColumnName("reportInPDF");
+            entity.Property(e => e.ReportInWord)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("reportInWord");
+            entity.Property(e => e.ReportInXml)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("reportInXml");
+            entity.Property(e => e.ReportInXmlCredendo)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("reportInXmlCredendo");
             entity.Property(e => e.RevealName).HasColumnName("revealName");
             entity.Property(e => e.SendInvoiceToEmail)
                 .HasMaxLength(100)
@@ -4682,10 +4697,18 @@ public partial class DbA9ccf0EecoreContext : DbContext
                 .IsFixedLength()
                 .HasColumnName("procedureType");
             entity.Property(e => e.Quality)
-                .HasMaxLength(2)
+                .HasMaxLength(1)
                 .IsUnicode(false)
                 .IsFixedLength()
                 .HasColumnName("quality");
+            entity.Property(e => e.QualityTranslator)
+                .HasMaxLength(1)
+                .IsUnicode(false)
+                .IsFixedLength();
+            entity.Property(e => e.QualityTypist)
+                .HasMaxLength(1)
+                .IsUnicode(false)
+                .IsFixedLength();
             entity.Property(e => e.QueryCredit)
                 .HasMaxLength(50)
                 .IsUnicode(false)
@@ -4887,6 +4910,9 @@ public partial class DbA9ccf0EecoreContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("observations");
             entity.Property(e => e.References).HasColumnName("references");
+            entity.Property(e => e.ReturnMessage)
+                .IsUnicode(false)
+                .HasColumnName("returnMessage");
             entity.Property(e => e.ShippingDate)
                 .HasColumnType("datetime")
                 .HasColumnName("shippingDate");

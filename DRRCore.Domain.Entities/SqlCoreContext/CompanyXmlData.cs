@@ -156,7 +156,7 @@ namespace DRRCore.Domain.Entities.SqlCoreContext
     }
     public class WhoIsWhoSP
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public string? Fullname { get; set; }
         public string? Nacionality { get; set; }
         public string? birthDate { get; set; }

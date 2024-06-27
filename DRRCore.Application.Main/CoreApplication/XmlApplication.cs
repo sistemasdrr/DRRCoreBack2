@@ -573,7 +573,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                          .FromSqlRaw("EXECUTE ShareholderCompany @idTicket", idParameter)
                                          .AsEnumerable()
                                          .ToList();
-                    var resultWhoIsWho = context.Set<WhoIsWhoSP>()
+                    var resultWhoIsWho = context.Set<WhoIsWhoSP?>()
                                          .FromSqlRaw("EXECUTE WhoIsWho @idTicket", idParameter)
                                          .AsEnumerable()
                                          .ToList();
@@ -653,17 +653,17 @@ namespace DRRCore.Application.Main.CoreApplication
                     {
                         AddCDataElement(xmlDoc, identificationElement, "Web", company.WebPage);
                     }
-                    if (!company.Traductions.Where(x => x.Identifier == "L_E_COMIDE").FirstOrDefault().LargeValue.IsNullOrEmpty())
+                    if (!company.TraductionCompanies.FirstOrDefault().TEcomide.IsNullOrEmpty())
                     {
-                        AddCDataElement(xmlDoc, identificationElement, "Comment", company.Traductions.Where(x => x.Identifier == "L_E_COMIDE").FirstOrDefault().LargeValue);
+                        AddCDataElement(xmlDoc, identificationElement, "Comment", company.TraductionCompanies.FirstOrDefault().TEcomide);
                     }
 
                     //Summary
                     XmlElement summaryElement = xmlDoc.CreateElement("Summary");
                     rootElement.AppendChild(summaryElement);
-                    if (!companyInfoGeneral.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_I_GENERAL").FirstOrDefault().LargeValue.IsNullOrEmpty())
+                    if (!company.TraductionCompanies.FirstOrDefault().TIgeneral.IsNullOrEmpty())
                     {
-                        AddCDataElement(xmlDoc, summaryElement, "Ver_Resumen", companyInfoGeneral.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_I_GENERAL").FirstOrDefault().LargeValue);
+                        AddCDataElement(xmlDoc, summaryElement, "Ver_Resumen", company.TraductionCompanies.FirstOrDefault().TIgeneral);
                     }
                     if (companyBackground.ConstitutionDate != null)
                     {
@@ -672,8 +672,8 @@ namespace DRRCore.Application.Main.CoreApplication
                     }
                     if (companyBackground.CurrentPaidCapital > 0)
                     {
-                        AddCDataElement(xmlDoc, summaryElement, "Capital_Stock", companyBackground.CurrentPaidCapitalCurrencyNavigation.Abreviation + companyBackground.CurrentPaidCapital.ToString() +
-                            companyBackground.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_B_PAIDCAPITAL").FirstOrDefault().LargeValue == null ? "" : companyBackground.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_B_PAIDCAPITAL").FirstOrDefault().LargeValue);
+                       AddCDataElement(xmlDoc, summaryElement, "Capital_Stock", companyBackground.CurrentPaidCapitalCurrencyNavigation.Abreviation + companyBackground.CurrentPaidCapital.ToString() +
+                               companyBackground.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TBpaidCapital);
                     }
                     if (balanceG.Count > 0)
                     {
@@ -720,21 +720,23 @@ namespace DRRCore.Application.Main.CoreApplication
                     }
 
                     //Credit_Opinion
-                    if(companyCreditOpinion != null)
+                    if (companyCreditOpinion != null)
                     {
+
                         XmlElement creditOpinionElement = xmlDoc.CreateElement("Credit_Opinion");
                         summaryElement.AppendChild(creditOpinionElement);
-                        if (!companyCreditOpinion.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "S_O_QUERYCREDIT").FirstOrDefault().ShortValue.IsNullOrEmpty())
+
+                        if (!companyCreditOpinion.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TOqueryCredit.IsNullOrEmpty())
                         {
-                            AddCDataElement(xmlDoc, creditOpinionElement, "Requested_Credit", companyCreditOpinion.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "S_O_QUERYCREDIT").FirstOrDefault().ShortValue);
+                            AddCDataElement(xmlDoc, creditOpinionElement, "Requested_Credit", companyCreditOpinion.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TOqueryCredit);
                         }
-                        if (!companyCreditOpinion.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "S_O_SUGCREDIT").FirstOrDefault().ShortValue.IsNullOrEmpty())
+                        if (!companyCreditOpinion.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TOsugCredit.IsNullOrEmpty())
                         {
-                            AddCDataElement(xmlDoc, creditOpinionElement, "Suggested_Credit", companyCreditOpinion.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "S_O_SUGCREDIT").FirstOrDefault().ShortValue);
+                            AddCDataElement(xmlDoc, creditOpinionElement, "Suggested_Credit", companyCreditOpinion.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TOsugCredit);
                         }
-                        if (!companyCreditOpinion.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_O_COMENTARY").FirstOrDefault().LargeValue.IsNullOrEmpty())
+                        if (!companyCreditOpinion.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TOcommentary.IsNullOrEmpty())
                         {
-                            AddCDataElement(xmlDoc, creditOpinionElement, "Comment", companyCreditOpinion.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_O_COMENTARY").FirstOrDefault().LargeValue);
+                            AddCDataElement(xmlDoc, creditOpinionElement, "Comment", companyCreditOpinion.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TOcommentary);
                         }
                     }
 
@@ -754,26 +756,26 @@ namespace DRRCore.Application.Main.CoreApplication
                     {
                         AddCDataElement(xmlDoc, legalBackgElement, "Starting_Date", companyBackground.StartFunctionYear);
                     }
-                    if (!companyBackground.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "S_B_REGISTERIN").FirstOrDefault().ShortValue.IsNullOrEmpty())
+                    if (!companyBackground.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TBregisterIn.IsNullOrEmpty())
                     {
-                        AddCDataElement(xmlDoc, legalBackgElement, "Place_Of_Registry", companyBackground.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "S_B_REGISTERIN").FirstOrDefault().ShortValue);
+                        AddCDataElement(xmlDoc, legalBackgElement, "Place_Of_Registry", companyBackground.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TBregisterIn);
                     }
                     if (!companyBackground.NotaryRegister.IsNullOrEmpty())
                     {
                         AddCDataElement(xmlDoc, legalBackgElement, "Notary_Office", companyBackground.NotaryRegister);
                     }
-                    if (!companyBackground.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "S_B_DURATION").FirstOrDefault().ShortValue.IsNullOrEmpty())
+                    if (!companyBackground.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TBduration.IsNullOrEmpty())
                     {
-                        AddCDataElement(xmlDoc, legalBackgElement, "Duration", companyBackground.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "S_B_DURATION").FirstOrDefault().ShortValue);
+                        AddCDataElement(xmlDoc, legalBackgElement, "Duration", companyBackground.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TBduration);
                     }
-                    if (!companyBackground.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "S_B_PUBLICREGIS").FirstOrDefault().ShortValue.IsNullOrEmpty())
+                    if (!companyBackground.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TBpublicRegis.IsNullOrEmpty())
                     {
-                        AddCDataElement(xmlDoc, legalBackgElement, "Registration", companyBackground.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "S_B_PUBLICREGIS").FirstOrDefault().ShortValue);
+                        AddCDataElement(xmlDoc, legalBackgElement, "Registration", companyBackground.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TBpublicRegis);
                     }
                     if (companyBackground.CurrentPaidCapital > 0)
                     {
                         AddCDataElement(xmlDoc, summaryElement, "Capital_Stock", companyBackground.CurrentPaidCapitalCurrencyNavigation.Abreviation + companyBackground.CurrentPaidCapital.ToString() +
-                            companyBackground.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_B_PAIDCAPITAL").FirstOrDefault().LargeValue == null ? "" : companyBackground.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_B_PAIDCAPITAL").FirstOrDefault().LargeValue);
+                            companyBackground.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TBpaidCapital == null ? "" : companyBackground.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TBpaidCapital);
                     }
                     if (companyBackground.IncreaceDateCapital != null)
                     {
@@ -792,13 +794,13 @@ namespace DRRCore.Application.Main.CoreApplication
                     {
                         AddCDataElement(xmlDoc, legalBackgElement, "Current_Exchange_Rate", companyBackground.CurrentExchangeRate);
                     }
-                    if (!companyBackground.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_B_LEGALBACK").FirstOrDefault().LargeValue.IsNullOrEmpty())
+                    if (!companyBackground.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TBlegalBack.IsNullOrEmpty())
                     {
-                        AddCDataElement(xmlDoc, legalBackgElement, "Comments", companyBackground.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_B_LEGALBACK").FirstOrDefault().LargeValue);
+                        AddCDataElement(xmlDoc, legalBackgElement, "Comments", companyBackground.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TBlegalBack);
                     }
 
                     //Directors_Executives_Shareholders
-                    if(resultCompanyShareholder.Count > 0)
+                    if (resultCompanyShareholder.Count > 0)
                     {
                         XmlElement shareholdersElement = xmlDoc.CreateElement("Directors_Executives_Shareholders");
                         rootElement.AppendChild(shareholdersElement);
@@ -831,7 +833,6 @@ namespace DRRCore.Application.Main.CoreApplication
                             }
                         }
                     }
-
                     //Who_Is_Who
                     if(resultWhoIsWho.Count > 0)
                     {
@@ -918,52 +919,53 @@ namespace DRRCore.Application.Main.CoreApplication
                             {
                                 AddCDataElement(xmlDoc, itemElement, "Properties", item.Properties);
                             }
-                            var personPartner = await _companyPartnersDomain.GetPartnersByIdPerson(item.Id);
-                            if(personPartner.Count > 0)
+                            if(item.Id != null)
                             {
-                                XmlElement subitemElement = xmlDoc.CreateElement("Associated");
-                                itemElement.AppendChild(subitemElement);
-                                int l = 0;
-                                foreach (var item1 in personPartner)
+                                var personPartner = await _companyPartnersDomain.GetPartnersByIdPerson((int)item.Id);
+                                if (personPartner?.Count > 0)
                                 {
-                                    if(item1.IdCompany != ticket.IdCompany)
+                                    XmlElement subitemElement = xmlDoc.CreateElement("Associated");
+                                    itemElement.AppendChild(subitemElement);
+                                    int l = 0;
+                                    foreach (var item1 in personPartner)
                                     {
-                                        l++;
-                                        XmlElement subitem1Element = xmlDoc.CreateElement("Company");
-                                        subitem1Element.SetAttribute("Item", l.ToString());
-                                        subitemElement.AppendChild(subitem1Element);
-                                        AddCDataElement(xmlDoc, subitem1Element, "ApeNom", item1.IdCompanyNavigation.Name);
-                                        if (!item1.Profession.IsNullOrEmpty())
+                                        if (item1.IdCompany != ticket.IdCompany)
                                         {
-                                            AddCDataElement(xmlDoc, subitem1Element, "Title", item1.Profession);
-                                        }
-                                        if (!item1.IdCompanyNavigation.TaxTypeCode.IsNullOrEmpty())
-                                        {
-                                            AddCDataElement(xmlDoc, subitem1Element, "Tax_Id", item1.IdCompanyNavigation.TaxTypeCode);
-                                        }
-                                        if (item1.IdCompanyNavigation.IdLegalRegisterSituation != null)
-                                        {
-                                            AddCDataElement(xmlDoc, subitem1Element, "SIT", item1.IdCompanyNavigation.IdLegalRegisterSituationNavigation.Abreviation);
-                                        }
-                                        if (item1.IdCompanyNavigation.IdCountry != null)
-                                        {
-                                            AddCDataElement(xmlDoc, subitem1Element, "Country", item1.IdCompanyNavigation.IdCountryNavigation.Name);
+                                            l++;
+                                            XmlElement subitem1Element = xmlDoc.CreateElement("Company");
+                                            subitem1Element.SetAttribute("Item", l.ToString());
+                                            subitemElement.AppendChild(subitem1Element);
+                                            AddCDataElement(xmlDoc, subitem1Element, "ApeNom", item1.IdCompanyNavigation.Name);
+                                            if (!item1.Profession.IsNullOrEmpty())
+                                            {
+                                                AddCDataElement(xmlDoc, subitem1Element, "Title", item1.Profession);
+                                            }
+                                            if (!item1.IdCompanyNavigation.TaxTypeCode.IsNullOrEmpty())
+                                            {
+                                                AddCDataElement(xmlDoc, subitem1Element, "Tax_Id", item1.IdCompanyNavigation.TaxTypeCode);
+                                            }
+                                            if (item1.IdCompanyNavigation.IdLegalRegisterSituation != null)
+                                            {
+                                                AddCDataElement(xmlDoc, subitem1Element, "SIT", item1.IdCompanyNavigation.IdLegalRegisterSituationNavigation.Abreviation);
+                                            }
+                                            if (item1.IdCompanyNavigation.IdCountry != null)
+                                            {
+                                                AddCDataElement(xmlDoc, subitem1Element, "Country", item1.IdCompanyNavigation.IdCountryNavigation.Name);
+                                            }
                                         }
                                     }
                                 }
                             }
-
-
                         }
                     }
 
                     //Business_History
                     if(companyBackground != null)
                     {
-                        if (!companyBackground.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_B_HISTORY").FirstOrDefault().LargeValue.IsNullOrEmpty())
+                        if (!companyBackground.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TBhistory.IsNullOrEmpty())
                         {
                             var st = companyBackground.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_B_HISTORY").FirstOrDefault().LargeValue;
-                            AddCDataElement(xmlDoc, rootElement, "Business_History", companyBackground.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_B_HISTORY").FirstOrDefault().LargeValue);
+                            AddCDataElement(xmlDoc, rootElement, "Business_History", companyBackground.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TBhistory);
                         }
                     }
 
@@ -1120,9 +1122,9 @@ namespace DRRCore.Application.Main.CoreApplication
                             {
                                 AddCDataElement(xmlDoc, cashSaleElement, "Value", companyBranch.CashSalePercentage.ToString());
                             }
-                            if (!companyBranch.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "S_R_SALEPER").FirstOrDefault().ShortValue.IsNullOrEmpty())
+                            if (!companyBranch.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TRsalePer.IsNullOrEmpty())
                             {
-                                AddCDataElement(xmlDoc, cashSaleElement, "Comment", companyBranch.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "S_R_SALEPER").FirstOrDefault().ShortValue);
+                                AddCDataElement(xmlDoc, cashSaleElement, "Comment", companyBranch.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TRsalePer);
                             }
                         }
                         //Credit_Sales
@@ -1134,9 +1136,9 @@ namespace DRRCore.Application.Main.CoreApplication
                             {
                                 AddCDataElement(xmlDoc, creditSaleElement, "Value", companyBranch.CreditSalePercentage.ToString());
                             }
-                            if (!companyBranch.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "S_R_CREDITPER").FirstOrDefault().ShortValue.IsNullOrEmpty())
+                            if (!companyBranch.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TRcreditPer.IsNullOrEmpty())
                             {
-                                AddCDataElement(xmlDoc, creditSaleElement, "Comment", companyBranch.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "S_R_CREDITPER").FirstOrDefault().ShortValue);
+                                AddCDataElement(xmlDoc, creditSaleElement, "Comment", companyBranch.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TRcreditPer);
                             }
                         }
                         //Foreign_Sales
@@ -1148,9 +1150,9 @@ namespace DRRCore.Application.Main.CoreApplication
                             {
                                 AddCDataElement(xmlDoc, foreignSaleElement, "Value", companyBranch.AbroadSalePercentage.ToString());
                             }
-                            if (!companyBranch.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "S_R_EXTSALES").FirstOrDefault().ShortValue.IsNullOrEmpty())
+                            if (!companyBranch.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TRextSales.IsNullOrEmpty())
                             {
-                                AddCDataElement(xmlDoc, foreignSaleElement, "Comment", companyBranch.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "S_R_EXTSALES").FirstOrDefault().ShortValue);
+                                AddCDataElement(xmlDoc, foreignSaleElement, "Comment", companyBranch.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TRextSales);
                             }
                         }
                         //Domestic_Purchases
@@ -1162,9 +1164,9 @@ namespace DRRCore.Application.Main.CoreApplication
                             {
                                 AddCDataElement(xmlDoc, territorySaleElement, "Value", companyBranch.TerritorySalePercentage.ToString());
                             }
-                            if (!companyBranch.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "S_R_TERRITORY").FirstOrDefault().ShortValue.IsNullOrEmpty())
+                            if (!companyBranch.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TRterritory.IsNullOrEmpty())
                             {
-                                AddCDataElement(xmlDoc, territorySaleElement, "Comment", companyBranch.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "S_R_TERRITORY").FirstOrDefault().ShortValue);
+                                AddCDataElement(xmlDoc, territorySaleElement, "Comment", companyBranch.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TRterritory);
                             }
                         }
                         //National
@@ -1176,9 +1178,9 @@ namespace DRRCore.Application.Main.CoreApplication
                             {
                                 AddCDataElement(xmlDoc, nationalElement, "Value", companyBranch.NationalPurchasesPercentage.ToString());
                             }
-                            if (!companyBranch.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "S_R_NATIBUY").FirstOrDefault().ShortValue.IsNullOrEmpty())
+                            if (!companyBranch.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TRnatiBuy.IsNullOrEmpty())
                             {
-                                AddCDataElement(xmlDoc, nationalElement, "Comment", companyBranch.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "S_R_NATIBUY").FirstOrDefault().ShortValue);
+                                AddCDataElement(xmlDoc, nationalElement, "Comment", companyBranch.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TRnatiBuy);
                             }
                         }
                         //International
@@ -1190,9 +1192,9 @@ namespace DRRCore.Application.Main.CoreApplication
                             {
                                 AddCDataElement(xmlDoc, internationalElement, "Value", companyBranch.InternationalPurchasesPercentage.ToString());
                             }
-                            if (!companyBranch.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "S_R_INTERBUY").FirstOrDefault().ShortValue.IsNullOrEmpty())
+                            if (!companyBranch.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TRinterBuy.IsNullOrEmpty())
                             {
-                                AddCDataElement(xmlDoc, internationalElement, "Comment", companyBranch.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "S_R_INTERBUY").FirstOrDefault().ShortValue);
+                                AddCDataElement(xmlDoc, internationalElement, "Comment", companyBranch.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TRinterBuy);
                             }
                         }
                         if(companyBranch.WorkerNumber != null)
@@ -1202,29 +1204,29 @@ namespace DRRCore.Application.Main.CoreApplication
 
                         //Location
                         if (companyBranch.IdLandOwnership != null || 
-                            !companyBranch.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "S_R_TOTALAREA").FirstOrDefault().ShortValue.IsNullOrEmpty() 
-                            || !companyBranch.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_R_OTRHERLOCALS").FirstOrDefault().LargeValue.IsNullOrEmpty() 
-                            || !companyBranch.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_R_ADIBUS").FirstOrDefault().LargeValue.IsNullOrEmpty() 
+                            !companyBranch.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TRtotalArea.IsNullOrEmpty() 
+                            || !companyBranch.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TRotherLocals.IsNullOrEmpty() 
+                            || !companyBranch.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TRadiBus.IsNullOrEmpty() 
                             || !companyBranch.TabCommentary.IsNullOrEmpty() 
                             || !companyBranch.PreviousAddress.IsNullOrEmpty())
-                        {
+                            {
                             XmlElement locationElement = xmlDoc.CreateElement("Location");
                             branchElement.AppendChild(locationElement);
                             if(companyBranch.IdLandOwnership != null)
                             {
                                 AddCDataElement(xmlDoc, locationElement, "Premises", companyBranch.IdLandOwnershipNavigation.EnglishName.ToString());
                             }
-                            if(!companyBranch.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "S_R_TOTALAREA").FirstOrDefault().ShortValue.IsNullOrEmpty())
+                            if (!companyBranch.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TRtotalArea.IsNullOrEmpty())
                             {
-                                AddCDataElement(xmlDoc, locationElement, "Area", companyBranch.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "S_R_TOTALAREA").FirstOrDefault().ShortValue);
+                                AddCDataElement(xmlDoc, locationElement, "Area", companyBranch.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TRtotalArea);
                             }
-                            if (!companyBranch.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_R_OTRHERLOCALS").FirstOrDefault().LargeValue.IsNullOrEmpty())
+                            if (!companyBranch.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TRotherLocals.IsNullOrEmpty())
                             {
-                                AddCDataElement(xmlDoc, locationElement, "Other_Premises", companyBranch.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_R_OTRHERLOCALS").FirstOrDefault().LargeValue);
+                                AddCDataElement(xmlDoc, locationElement, "Other_Premises", companyBranch.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TRotherLocals);
                             }
-                            if (!companyBranch.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_R_ADIBUS").FirstOrDefault().LargeValue.IsNullOrEmpty())
+                            if (!companyBranch.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TRadiBus.IsNullOrEmpty())
                             {
-                                AddCDataElement(xmlDoc, locationElement, "Comments", companyBranch.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_R_ADIBUS").FirstOrDefault().LargeValue);
+                                AddCDataElement(xmlDoc, locationElement, "Comments", companyBranch.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TRadiBus);
                             }
                             if (!companyBranch.TabCommentary.IsNullOrEmpty())
                             {
@@ -1244,23 +1246,23 @@ namespace DRRCore.Application.Main.CoreApplication
                         {
                             AddCDataElement(xmlDoc, financialElement, "Interviewee", companyFinancial.Interviewed);
                         }
-                        if (!companyFinancial.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "S_F_JOB").FirstOrDefault().ShortValue.IsNullOrEmpty())
+                        if (!companyFinancial.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TFjob.IsNullOrEmpty())
                         {
-                            AddCDataElement(xmlDoc, financialElement, "Position", companyFinancial.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "S_F_JOB").FirstOrDefault().ShortValue);
+                            AddCDataElement(xmlDoc, financialElement, "Position", companyFinancial.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TFjob);
                         }
                         if (companyFinancial.IdCollaborationDegree != null)
                         {
                             AddCDataElement(xmlDoc, financialElement, "Disposition", companyFinancial.IdCollaborationDegreeNavigation.EnglishName);
                         }
-                        if (!companyFinancial.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_F_COMENT").FirstOrDefault().LargeValue.IsNullOrEmpty())
+                        if (!companyFinancial.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TFcomment.IsNullOrEmpty())
                         {
-                            AddCDataElement(xmlDoc, financialElement, "Information_Provided", companyFinancial.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_F_COMENT").FirstOrDefault().LargeValue);
+                            AddCDataElement(xmlDoc, financialElement, "Information_Provided", companyFinancial.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TFcomment);
                         }
-                        if (!companyFinancial.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_F_TABCOMM").FirstOrDefault().LargeValue.IsNullOrEmpty())
+                        if (!companyFinancial.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TFtabComm.IsNullOrEmpty())
                         {
-                            AddCDataElement(xmlDoc, financialElement, "Comment_Tab", companyFinancial.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_F_TABCOMM").FirstOrDefault().LargeValue);
+                            AddCDataElement(xmlDoc, financialElement, "Comment_Tab", companyFinancial.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TFtabComm);
                         }
-                        if(balanceS.Count > 0)
+                        if (balanceS.Count > 0)
                         {
                             XmlElement balanceSitElement = xmlDoc.CreateElement("Interim_Balance_Sheet");
                             financialElement.AppendChild(balanceSitElement);
@@ -1616,13 +1618,13 @@ namespace DRRCore.Application.Main.CoreApplication
                                     }
                                 }
                             }
-                            if (!companyFinancial.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_F_PRINCACTIV").FirstOrDefault().LargeValue.IsNullOrEmpty())
+                            if (!companyFinancial.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TFprincActiv.IsNullOrEmpty())
                             {
-                                AddCDataElement(xmlDoc, financialElement, "Comment_Property", companyFinancial.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_F_PRINCACTIV").FirstOrDefault().LargeValue);
+                                AddCDataElement(xmlDoc, financialElement, "Comment_Property", companyFinancial.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TFprincActiv);
                             }
-                            if (!companyFinancial.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_F_ANALISTCOM").FirstOrDefault().LargeValue.IsNullOrEmpty())
+                            if (!companyFinancial.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TFanalistCom.IsNullOrEmpty())
                             {
-                                AddCDataElement(xmlDoc, financialElement, "Comment_Analyst", companyFinancial.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_F_ANALISTCOM").FirstOrDefault().LargeValue);
+                                AddCDataElement(xmlDoc, financialElement, "Comment_Analyst", companyFinancial.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TFanalistCom);
                             }
                         }
                     }
@@ -1744,9 +1746,9 @@ namespace DRRCore.Application.Main.CoreApplication
                         {
                             AddCDataElement(xmlDoc, bankingElement, "EM_TCSBS", companySbs.ExchangeRate.ToString());
                         }
-                        if (!companySbs.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_S_COMENTARY").FirstOrDefault().LargeValue.IsNullOrEmpty())
+                        if (!companySbs.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TScommentary.IsNullOrEmpty())
                         {
-                            AddCDataElement(xmlDoc, bankingElement, "EM_CENRIE", companySbs.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_S_COMENTARY").FirstOrDefault().LargeValue);
+                            AddCDataElement(xmlDoc, bankingElement, "EM_CENRIE", companySbs.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TScommentary);
                         }
                         if (companySbs.DebtRecordedDate != null)
                         {
@@ -1798,47 +1800,44 @@ namespace DRRCore.Application.Main.CoreApplication
                             AddCDataElement(xmlDoc, bankDebtElement, "Comment_SBS", companySbs.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_S_BANCARIOS").FirstOrDefault().LargeValue);
                         }
                         //Lawsuits
-                        if (!companySbs.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_S_LITIG").FirstOrDefault().LargeValue.IsNullOrEmpty())
+                        if (!companySbs.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TSlitig.IsNullOrEmpty())
                         {
-                            AddCDataElement(xmlDoc, bankDebtElement, "Coment_Lawsuits", companySbs.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_S_LITIG").FirstOrDefault().LargeValue);
+                            AddCDataElement(xmlDoc, bankDebtElement, "Coment_Lawsuits", companySbs.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TSlitig);
                         }
                         //Credit_History
-                        if (!companySbs.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_S_CREDHIS").FirstOrDefault().LargeValue.IsNullOrEmpty())
+                        if (!companySbs.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TScredHis.IsNullOrEmpty())
                         {
-                            AddCDataElement(xmlDoc, bankDebtElement, "Credit_History", companySbs.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_S_CREDHIS").FirstOrDefault().LargeValue);
+                            AddCDataElement(xmlDoc, bankDebtElement, "Credit_History", companySbs.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TScredHis);
                         }
                     }
 
                     //General_Information
-                    if (companyInfoGeneral != null && 
-                        !companyInfoGeneral.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_I_GENERAL").FirstOrDefault().LargeValue.IsNullOrEmpty() ||
+                    if (companyInfoGeneral != null &&
+                        !companyInfoGeneral.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TIgeneral.IsNullOrEmpty() ||
                         company.IdReputation != null ||
-                        !company.Traductions.Where(x => x.Identifier == "L_E_REPUTATION").FirstOrDefault().LargeValue.IsNullOrEmpty())
-                    {
+                        !company.TraductionCompanies.FirstOrDefault().TEreputation.IsNullOrEmpty())
+                        {
                         XmlElement generalInfoElement = xmlDoc.CreateElement("General_Information");
                         rootElement.AppendChild(generalInfoElement);
-                        if (!companyInfoGeneral.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_I_GENERAL").FirstOrDefault().LargeValue.IsNullOrEmpty())
+                        if (!companyInfoGeneral.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TIgeneral.IsNullOrEmpty())
                         {
-                            AddCDataElement(xmlDoc, generalInfoElement, "Comment", companyInfoGeneral.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_I_GENERAL").FirstOrDefault().LargeValue);
+                            AddCDataElement(xmlDoc, generalInfoElement, "Comment", companyInfoGeneral.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TIgeneral);
                         }
                         if (company.IdReputation != null)
                         {
                             AddCDataElement(xmlDoc, generalInfoElement, "Name_Rep", company.IdReputationNavigation.EnglishName);
                         }
-                        if (!company.Traductions.Where(x => x.Identifier == "L_E_REPUTATION").FirstOrDefault().LargeValue.IsNullOrEmpty())
+                        if (!company.TraductionCompanies.FirstOrDefault().TEreputation.IsNullOrEmpty())
                         {
-                            AddCDataElement(xmlDoc, generalInfoElement, "Comment_Rep", company.Traductions.Where(x => x.Identifier == "L_E_REPUTATION").FirstOrDefault().LargeValue);
+                            AddCDataElement(xmlDoc, generalInfoElement, "Comment_Rep", company.TraductionCompanies.FirstOrDefault().TEreputation);
                         }
                     }
 
                     //Comment_News
-                    if (company != null && company.Print == true && !company.Traductions.Where(x => x.Identifier == "L_E_NEW").FirstOrDefault().LargeValue.IsNullOrEmpty())
+                    if (company != null && company.Print == true && !company.TraductionCompanies.FirstOrDefault().TEnew.IsNullOrEmpty())
                     {
-                        AddCDataElement(xmlDoc, rootElement, "Comment_News", company.Traductions.Where(x => x.Identifier == "L_E_NEW").FirstOrDefault().LargeValue);
+                        AddCDataElement(xmlDoc, rootElement, "Comment_News", company.TraductionCompanies.FirstOrDefault().TEnew);
                     }
-
-
-
 
                     // Guardar el XML con formato
                     string xmlString = null;

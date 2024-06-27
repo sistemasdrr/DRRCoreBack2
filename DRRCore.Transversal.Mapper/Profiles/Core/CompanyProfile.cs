@@ -84,7 +84,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                 .ForMember(dest => dest.FlagCountry, opt => opt?.MapFrom(src => src.IdCountryNavigation != null ? src.IdCountryNavigation.FlagIso : string.Empty))
                 .ForMember(dest => dest.Quality, opt => opt?.MapFrom(src => src.Quality))
                 //Falta implementar
-                .ForMember(dest => dest.TraductionPercentage, opt => opt?.MapFrom(src =>GetTraductionPercentage(src.Traductions)))
+                .ForMember(dest => dest.TraductionPercentage, opt => opt?.MapFrom(src => GetTraductionCompanyPercentage(src.TraductionCompanies.FirstOrDefault())))
                 .ForMember(dest => dest.Manager, opt => opt?.MapFrom(src => src.CompanyPartners.FirstOrDefault().IdPersonNavigation.Fullname))
                 .ReverseMap();
 
@@ -350,17 +350,49 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
           .ReverseMap();
         }
 
-        private int GetTraductionPercentage(ICollection<Traduction> traductions)
+        private int GetTraductionCompanyPercentage(TraductionCompany traductions)
         {
-            int total = traductions.Count;
+            int total = 36;
             int existTraduction = 0;
-            foreach (var item in traductions)
+            if (traductions != null)
             {
-               if(!string.IsNullOrEmpty(item.ShortValue) || !string.IsNullOrEmpty(item.LargeValue))
-                {
-                    existTraduction++;
-                }
-            }
+                if (traductions.TEcomide.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TEnew.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TEreputation.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TBduration.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TBhistory.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TBincreaseDate.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TBlegalBack.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TBpaidCapital.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TBpublicRegis.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TBregisterIn.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TBtacRate.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TRadiBus.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TRcreditPer.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TRextSales.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TRinterBuy.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TRnatiBuy.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TRotherLocals.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TRprincAct.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TRsalePer.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TRterritory.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TRtotalArea.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TFanalistCom.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TFcomment.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TFjob.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TFprincActiv.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TFselectFin.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TFtabComm.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TSavales.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TSbancarios.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TScommentary.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TScredHis.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TSlitig.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TOcommentary.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TOqueryCredit.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TOsugCredit.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TIgeneral.IsNullOrEmpty() == false) existTraduction++;
+            }       
             if (total == 0) return 0;
 
             return existTraduction*100 / total;

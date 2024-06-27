@@ -78,7 +78,7 @@
     {
         public int Id { get; set; }
         public int? IdTicket { get; set; }
-        public string Number { get; set; }
+        public string? Number { get; set; }
         public int? IdSubscriber { get; set; }
         public string? Language { get; set; }
         public string About { get; set; } = null!;
@@ -89,6 +89,8 @@
         public int? Creditrisk { get; set; }
         public bool? Enable { get; set; }
         public string? Quality { get; set; }
+        public string? QualityTypist { get; set; }
+        public string? QualityTranslator { get; set; }
         public string? Status { get; set; }
         public string? StatusColor { get; set; }
         public string? StatusFinalOwner { get; set; }
@@ -123,7 +125,7 @@
 
         //INFORME
         public string ReportType { get; set; } = null!;
-        public string ProcedureType { get; set; } = null!;
+        public string? ProcedureType { get; set; } = null!;
         public decimal? Price { get; set; }
         public string? OrderDate { get; set; }
         public string? ExpireDate { get; set; }
@@ -132,14 +134,14 @@
 
         //Consulta
         public string AsignedTo { get; set; }
-        public List<UserCode> OtherUserCode { get; set; }
-        public bool HasQuery { get; set; }
-        public int StatusQuery { get; set; }
-        public int Receptor { get; set; }
-        public int Receptor2 { get; set; }
-        public string Commentary { get; set; } = string.Empty;
-        public bool HasFiles { get; set; }
-        public List<TicketFileResponseDto> Files { get; set; } = new List<TicketFileResponseDto>();
+        public List<UserCode>? OtherUserCode { get; set; }
+        public bool? HasQuery { get; set; }
+        public int? StatusQuery { get; set; }
+        public int? Receptor { get; set; }
+        public int? Receptor2 { get; set; }
+        public string? Commentary { get; set; } = string.Empty;
+        public bool? HasFiles { get; set; }
+        public List<TicketFileResponseDto>? Files { get; set; } = new List<TicketFileResponseDto>();
         public string Origen { get; set; }
         public int? NumberAssign { get; set; }
         public string? AssinedTo { get; set; }

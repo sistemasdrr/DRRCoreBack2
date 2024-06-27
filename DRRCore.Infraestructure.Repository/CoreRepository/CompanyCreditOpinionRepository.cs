@@ -116,7 +116,9 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
             try
             {
                 using var context = new SqlCoreContext();
-                var creditOpinion = await context.CompanyCreditOpinions.Include(x => x.IdCompanyNavigation).Where(x => x.IdCompany == idCompany).FirstOrDefaultAsync() ?? throw new Exception("No existe la empresa solicitada");
+                var creditOpinion = await context.CompanyCreditOpinions
+                    .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.TraductionCompanies)
+                    .Where(x => x.IdCompany == idCompany).FirstOrDefaultAsync() ?? throw new Exception("No existe la empresa solicitada");
 
                 //traductions.AddRange(await context.Traductions.Where(x => x.IdCompany == idCompany && x.Identifier.Contains("_O_")).ToListAsync());
                 if (creditOpinion.IdCompanyNavigation.TraductionCompanies.Any())

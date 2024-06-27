@@ -202,9 +202,9 @@ namespace DRRCore.Services.ApiCore.Controllers
         }
         [HttpGet()]
         [Route("deleteTicketHistory")]
-        public async Task<ActionResult> deleteTicketHistory(int idTicket, string? assignedTo, int? numberAssign)
+        public async Task<ActionResult> deleteTicketHistory(int idTicket, string? assignedTo, int? numberAssign, string? returnMessage)
         {
-            return Ok(await _ticketApplication.DeleteTicketHistory(idTicket,assignedTo,numberAssign));
+            return Ok(await _ticketApplication.DeleteTicketHistory(idTicket,assignedTo,numberAssign, returnMessage));
         }
         [HttpGet()]
         [Route("getPersonalAssignation")]
