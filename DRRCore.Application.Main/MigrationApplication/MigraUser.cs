@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using DRRCore.Domain.Entities.MySqlContextFotos;
 using Microsoft.IdentityModel.Tokens;
 using DRRCore.Domain.Entities.SqlContext;
+using System.Reflection.Emit;
 
 namespace DRRCore.Application.Main.MigrationApplication
 {
@@ -160,7 +161,7 @@ namespace DRRCore.Application.Main.MigrationApplication
                                 BankDebts = await GetBankDebts(empresa.EmCodigo),
                                 WorkersHistories = await GetWorkersHistories(empresa),
                                 TraductionCompanies = await GetAllTraductions(empresa)
-
+                                
                         };
 
                         idCompany = await _companyDomain.AddCompanyAsync(company);
@@ -190,6 +191,8 @@ namespace DRRCore.Application.Main.MigrationApplication
                     int idCompany = 0;
                     using var context = new SqlCoreContext();
                     using var contextsql = new SqlContext();
+
+                    using var imageMysqlContext = new FotoContext();
                     try
                     {
                         var reputacion = await _mempresaDomain.GetmEmpresaReputacionByCodigoAsync(empresa.EmCodigo);
@@ -197,6 +200,31 @@ namespace DRRCore.Application.Main.MigrationApplication
                         if (reputacion != null)
                         {
                             idReputacion = ObtenerReputacion(reputacion.RcCodigo);
+                        }
+                        var images = await imageMysqlContext.REmpVsFotos.Where(x => x.EmCodigo == empresa.EmCodigo).FirstOrDefaultAsync();
+                        var image = new List<CompanyImage>();
+                        if (images != null)
+                        {
+                            image.Add(new CompanyImage
+                            {
+                                Img1 = images.EfLocal.IsNullOrEmpty() == false ? Convert.ToBase64String(images.EfLocal) : "",
+                                ImgDesc1 = images.EfLocaltxt.IsNullOrEmpty() == false ? images.EfLocaltxt : "",
+                                ImgDescEng1 = images.EfLocaltxtIng.IsNullOrEmpty() == false ? images.EfLocaltxtIng : "",
+                                ImgPrint1 = images.EfLocal.IsNullOrEmpty() == false ? true : false,
+                                Img2 = images.EfLocal2.IsNullOrEmpty() == false ? Convert.ToBase64String(images.EfLocal2) : "",
+                                ImgDesc2 = images.EfLocal2txt.IsNullOrEmpty() == false ? images.EfLocal2txt : "",
+                                ImgDescEng2 = images.EfLocal2txtIng.IsNullOrEmpty() == false ? images.EfLocal2txtIng : "",
+                                ImgPrint2 = images.EfLocal2.IsNullOrEmpty() == false ? true : false,
+                                Img3 = images.EfLocal3.IsNullOrEmpty() == false ? Convert.ToBase64String(images.EfLocal3) : "",
+                                ImgDesc3 = images.EfLocal3txt.IsNullOrEmpty() == false ? images.EfLocal3txt : "",
+                                ImgDescEng3 = images.EfLocal3txtIng.IsNullOrEmpty() == false ? images.EfLocal3txtIng : "",
+                                ImgPrint3 = images.EfLocal3.IsNullOrEmpty() == false ? true : false,
+                                Img4 = images.EfLocal4.IsNullOrEmpty() == false ? Convert.ToBase64String(images.EfLocal4) : "",
+                                ImgDesc4 = images.EfLocal4txt.IsNullOrEmpty() == false ? images.EfLocal4txt : "",
+                                ImgDescEng4 = images.EfLocal4txtIng.IsNullOrEmpty() == false ? images.EfLocal4txtIng : "",
+                                ImgPrint4 = images.EfLocal4.IsNullOrEmpty() == false ? true : false,
+                            });
+
                         }
 
                         var company = new Company
@@ -246,7 +274,9 @@ namespace DRRCore.Application.Main.MigrationApplication
                             ComercialLatePayments = await GetComercialLatePayments(empresa.EmCodigo),
                             BankDebts = await GetBankDebts(empresa.EmCodigo),
                             WorkersHistories = await GetWorkersHistories(empresa),
-                            TraductionCompanies = await GetAllTraductions(empresa)
+                            CompanyImages = image,
+                            TraductionCompanies = await GetAllTraductions(empresa),
+                            
                         };
                         idCompany = await _companyDomain.AddCompanyAsync(company);
                         await _mempresaDomain.MigrateEmpresa(empresa.EmCodigo);
@@ -582,9 +612,8 @@ namespace DRRCore.Application.Main.MigrationApplication
                         MemoEng = item.SbdMemoIng,
                     };
                     lista.Add(objeto);
-                    return lista;
-
                 }
+                return lista;
             }
             catch (Exception ex)
             {
@@ -617,9 +646,9 @@ namespace DRRCore.Application.Main.MigrationApplication
                         DaysLate = item.PaDiaatr,
                     };
                     lista.Add(objeto);
-                    return lista;
-
                 }
+
+                return lista;
             }
             catch (Exception ex)
             {
@@ -641,81 +670,7 @@ namespace DRRCore.Application.Main.MigrationApplication
 
                     var objeto = new Provider
                     {
-                        IdCountry = item.PaiCodigo == "001" ? 11 : item.PaiCodigo == "002" ? 29 : item.PaiCodigo == "003" ? 34 :
-                       item.PaiCodigo == "004" ? 54 : item.PaiCodigo == "005" ? 57 : item.PaiCodigo == "006" ? 49 :
-                       item.PaiCodigo == "007" ? 70 : item.PaiCodigo == "008" ? 72 : item.PaiCodigo == "009" ? 100 :
-                       item.PaiCodigo == "010" ? 108 : item.PaiCodigo == "012" ? 168 : item.PaiCodigo == "013" ? 179 :
-                       item.PaiCodigo == "014" ? 181 : item.PaiCodigo == "015" ? 182 : item.PaiCodigo == "016" ? 187 :
-                       item.PaiCodigo == "017" ? 69 : item.PaiCodigo == "018" ? 237 : item.PaiCodigo == "019" ? 250 :
-                       item.PaiCodigo == "020" ? 249 : item.PaiCodigo == "021" ? 253 : item.PaiCodigo == "022" ? 105 :
-                       item.PaiCodigo == "023" ? 147 : item.PaiCodigo == "024" ? 98 : item.PaiCodigo == "025" ? 104 :
-                       item.PaiCodigo == "026" ? 46 : item.PaiCodigo == "027" ? 60 : item.PaiCodigo == "029" ? 256 :
-                       item.PaiCodigo == "030" ? 255 : item.PaiCodigo == "031" ? 43 : item.PaiCodigo == "032" ? 25 :
-                       item.PaiCodigo == "033" ? 18 : item.PaiCodigo == "034" ? 120 : item.PaiCodigo == "035" ? 183 :
-                       item.PaiCodigo == "036" ? 92 : item.PaiCodigo == "037" ? 15 : item.PaiCodigo == "038" ? 21 :
-                       item.PaiCodigo == "039" ? 151 : item.PaiCodigo == "040" ? 59 : item.PaiCodigo == "041" ? 220 :
-                       item.PaiCodigo == "042" ? 186 : item.PaiCodigo == "043" ? 13 : item.PaiCodigo == "044" ? 16 :
-                       item.PaiCodigo == "045" ? 24 : item.PaiCodigo == "046" ? 27 : item.PaiCodigo == "047" ? 68 :
-                       item.PaiCodigo == "048" ? 84 : item.PaiCodigo == "049" ? 97 : item.PaiCodigo == "064" ? 123 :
-                       item.PaiCodigo == "051" ? 109 : item.PaiCodigo == "052" ? 119 : item.PaiCodigo == "053" ? 121 :
-                       item.PaiCodigo == "054" ? 218 : item.PaiCodigo == "055" ? 196 : item.PaiCodigo == "056" ? 197 :
-                       item.PaiCodigo == "057" ? 198 : item.PaiCodigo == "058" ? 224 : item.PaiCodigo == "059" ? 8 :
-                       item.PaiCodigo == "060" ? 149 : item.PaiCodigo == "061" ? 50 : item.PaiCodigo == "062" ? 229 :
-                       item.PaiCodigo == "063" ? 10 : item.PaiCodigo == "065" ? 65 : item.PaiCodigo == "066" ? 239 :
-                       item.PaiCodigo == "067" ? 205 : item.PaiCodigo == "068" ? 83 : item.PaiCodigo == "069" ? 175 :
-                       item.PaiCodigo == "070" ? 62 : item.PaiCodigo == "071" ? 191 : item.PaiCodigo == "072" ? 245 :
-                       item.PaiCodigo == "073" ? 247 : item.PaiCodigo == "074" ? 200 : item.PaiCodigo == "076" ? 156 :
-                       item.PaiCodigo == "078" ? 194 : item.PaiCodigo == "080" ? 241 : item.PaiCodigo == "081" ? 265 :
-                       item.PaiCodigo == "079" ? 264 : item.PaiCodigo == "083" ? 227 : item.PaiCodigo == "084" ? 226 :
-                       item.PaiCodigo == "085" ? 131 : item.PaiCodigo == "086" ? 112 : item.PaiCodigo == "087" ? 118 :
-                       item.PaiCodigo == "088" ? 185 : item.PaiCodigo == "089" ? 137 : item.PaiCodigo == "090" ? 165 :
-                       item.PaiCodigo == "091" ? 94 : item.PaiCodigo == "092" ? 142 : item.PaiCodigo == "093" ? 243 :
-                       item.PaiCodigo == "095" ? 246 : item.PaiCodigo == "096" ? 124 : item.PaiCodigo == "097" ? 4 :
-                       item.PaiCodigo == "099" ? 91 : item.PaiCodigo == "100" ? 95 : item.PaiCodigo == "101" ? 266 :
-                       item.PaiCodigo == "102" ? 210 : item.PaiCodigo == "103" ? 136 : item.PaiCodigo == "104" ? 177 :
-                       item.PaiCodigo == "105" ? 7 : item.PaiCodigo == "106" ? 26 : item.PaiCodigo == "107" ? 32 :
-                       item.PaiCodigo == "108" ? 38 : item.PaiCodigo == "109" ? 39 : item.PaiCodigo == "110" ? 42 :
-                       item.PaiCodigo == "111" ? 47 : item.PaiCodigo == "113" ? 48 : item.PaiCodigo == "114" ? 55 :
-                       item.PaiCodigo == "115" ? 267 : item.PaiCodigo == "116" ? 71 : item.PaiCodigo == "117" ? 102 :
-                       item.PaiCodigo == "118" ? 75 : item.PaiCodigo == "119" ? 78 : item.PaiCodigo == "120" ? 88 :
-                       item.PaiCodigo == "121" ? 90 : item.PaiCodigo == "122" ? 93 : item.PaiCodigo == "123" ? 103 :
-                       item.PaiCodigo == "124" ? 125 : item.PaiCodigo == "125" ? 134 : item.PaiCodigo == "126" ? 135 :
-                       item.PaiCodigo == "127" ? 140 : item.PaiCodigo == "128" ? 141 : item.PaiCodigo == "129" ? 144 :
-                       item.PaiCodigo == "130" ? 148 : item.PaiCodigo == "132" ? 157 : item.PaiCodigo == "133" ? 158 :
-                       item.PaiCodigo == "134" ? 160 : item.PaiCodigo == "135" ? 168 : item.PaiCodigo == "136" ? 192 :
-                       item.PaiCodigo == "137" ? 259 : item.PaiCodigo == "139" ? 206 : item.PaiCodigo == "140" ? 209 :
-                       item.PaiCodigo == "141" ? 215 : item.PaiCodigo == "142" ? 223 : item.PaiCodigo == "143" ? 77 :
-                       item.PaiCodigo == "145" ? 234 : item.PaiCodigo == "147" ? 244 : item.PaiCodigo == "148" ? 268 :
-                       item.PaiCodigo == "149" ? 261 : item.PaiCodigo == "150" ? 262 : item.PaiCodigo == "152" ? 1 :
-                       item.PaiCodigo == "153" ? 12 : item.PaiCodigo == "154" ? 17 : item.PaiCodigo == "155" ? 19 :
-                       item.PaiCodigo == "156" ? 20 : item.PaiCodigo == "157" ? 28 : item.PaiCodigo == "158" ? 36 :
-                       item.PaiCodigo == "159" ? 281 : item.PaiCodigo == "160" ? 41 : item.PaiCodigo == "161" ? 61 :
-                       item.PaiCodigo == "162" ? 113 : item.PaiCodigo == "163" ? 114 : item.PaiCodigo == "164" ? 115 :
-                       item.PaiCodigo == "166" ? 129 : item.PaiCodigo == "167" ? 128 : item.PaiCodigo == "168" ? 130 :
-                       item.PaiCodigo == "169" ? 154 : item.PaiCodigo == "170" ? 162 : item.PaiCodigo == "171" ? 176 :
-                       item.PaiCodigo == "172" ? 222 : item.PaiCodigo == "173" ? 188 : item.PaiCodigo == "174" ? 204 :
-                       item.PaiCodigo == "175" ? 221 : item.PaiCodigo == "176" ? 228 : item.PaiCodigo == "177" ? 230 :
-                       item.PaiCodigo == "178" ? 232 : item.PaiCodigo == "179" ? 240 : item.PaiCodigo == "181" ? 251 :
-                       item.PaiCodigo == "182" ? 254 : item.PaiCodigo == "183" ? 260 : item.PaiCodigo == "185" ? 3 :
-                       item.PaiCodigo == "186" ? 6 : item.PaiCodigo == "187" ? 31 : item.PaiCodigo == "188" ? 37 :
-                       item.PaiCodigo == "189" ? 23 : item.PaiCodigo == "190" ? 58 : item.PaiCodigo == "191" ? 76 :
-                       item.PaiCodigo == "192" ? 80 : item.PaiCodigo == "193" ? 110 : item.PaiCodigo == "194" ? 111 :
-                       item.PaiCodigo == "195" ? 116 : item.PaiCodigo == "197" ? 138 : item.PaiCodigo == "198" ? 172 :
-                       item.PaiCodigo == "199" ? 145 : item.PaiCodigo == "200" ? 152 : item.PaiCodigo == "201" ? 153 :
-                       item.PaiCodigo == "202" ? 190 : item.PaiCodigo == "203" ? 202 : item.PaiCodigo == "204" ? 155 :
-                       item.PaiCodigo == "205" ? 212 : item.PaiCodigo == "206" ? 213 : item.PaiCodigo == "208" ? 214 :
-                       item.PaiCodigo == "209" ? 252 : item.PaiCodigo == "210" ? 82 : item.PaiCodigo == "211" ? 161 :
-                       item.PaiCodigo == "212" ? 146 : item.PaiCodigo == "213" ? 99 : item.PaiCodigo == "214" ? 201 :
-                       item.PaiCodigo == "215" ? 178 : item.PaiCodigo == "216" ? 236 : item.PaiCodigo == "217" ? 86 :
-                       item.PaiCodigo == "221" ? 171 : item.PaiCodigo == "222" ? 282 : item.PaiCodigo == "219" ? 85 :
-                       item.PaiCodigo == "224" ? 117 : item.PaiCodigo == "220" ? 143 : item.PaiCodigo == "225" ? 139 :
-                       item.PaiCodigo == "011" ? 169 : item.PaiCodigo == "028" ? 164 : item.PaiCodigo == "207" ? 283 :
-                       item.PaiCodigo == "218" ? 284 : item.PaiCodigo == "223" ? 285 : item.PaiCodigo == "226" ? 63 :
-                       item.PaiCodigo == "227" ? 180 : item.PaiCodigo == "228" ? 286 : item.PaiCodigo == "229" ? 143 :
-                       item.PaiCodigo == "230" ? 208 : item.PaiCodigo == "231" ? 64 : item.PaiCodigo == "232" ? 263 :
-                       item.PaiCodigo == "233" ? 60 : item.PaiCodigo == "234" ? 30 : item.PaiCodigo == "235" ? 217 :
-                       item.PaiCodigo == "236" ? 231 : item.PaiCodigo == "237" ? 30 : item.PaiCodigo == "238" ? 30 :
-                       item.PaiCodigo == "239" ? 18 : item.PaiCodigo == "240" ? 207 : item.PaiCodigo == "241" ? 155 : null,
+                        IdCountry = ObtenerCodigoPais(item.PaiCodigo),
                         Name = item.ProvNombre,
                         Qualification = item.CumCodigo == "02" ? "Puntual" : item.CumCodigo == "03" ? "Lento Eventual" :
                      item.CumCodigo == "04" ? "Lento Siempre" : item.CumCodigo == "05" ? "Moroso" :
@@ -814,35 +769,35 @@ namespace DRRCore.Application.Main.MigrationApplication
                         {
                             Date = StaticFunctions.VerifyDate(item.VeFecha),
                             IdCurrency = item.PaiMone == "USD020" ? 1 : item.PaiMone == "PEN015" ? 31 : item.PaiMone == "USD007" ? 1 :
-                        item.PaiMone == "USD008" ? 1 : item.PaiMone == "PEN015" ? 31 :
-                        item.PaiMone == "USD207" ? 1 : item.PaiMone == "USD016" ? 1 :
-                        item.PaiMone == "USD213" ? 1 : item.PaiMone == "USD207" ? 1 :
-                        item.PaiMone == "UYU019" ? 154 : item.PaiMone == "MXN039" ? 15 :
-                        item.PaiMone == "PAB013" ? 120 : item.PaiMone == "DOP017" ? 126 :
-                        item.PaiMone == "GTQ009" ? 80 : item.PaiMone == "COP004" ? 63 :
-                        item.PaiMone == "BOB002" ? 51 : item.PaiMone == "ARS001" ? 38 :
-                        item.PaiMone == "CRC005" ? 66 : item.PaiMone == "PYG014" ? 122 :
-                        item.PaiMone == "CLP006" ? 29 : item.PaiMone == "BRL003" ? 20 :
-                        item.PaiMone == "HNL010" ? 84 : item.PaiMone == "NIO012" ? 115 :
-                        item.PaiMone == "JMD034" ? 93 : item.PaiMone == "MYR" ? 105 :
-                        item.PaiMone == "EUR197" ? 2 : item.PaiMone == "COP004" ? 63 :
-                        item.PaiMone == "EUR024" ? 2 : item.PaiMone == "COL" ? 63 :
-                        item.PaiMone == "EUR041" ? 2 : item.PaiMone == "EUR048" ? 2 :
-                        item.PaiMone == "EUR023" ? 2 : item.PaiMone == "EUR052" ? 2 :
-                        item.PaiMone == "EUR025" ? 2 : item.PaiMone == "EUR219" ? 2 :
-                        item.PaiMone == "EUR036" ? 2 : item.PaiMone == "EUR045" ? 2 :
-                        item.PaiMone == "EUR068" ? 2 : item.PaiMone == "EUR068" ? 2 :
-                        item.PaiMone == "EUR068" ? 2 : item.PaiMone == "EUR068" ? 2 :
-                        item.PaiMone == "GYD025" ? 82 : item.PaiMone == "BBD038" ? 44 :
-                        item.PaiMone == "TTD018" ? 148 : item.PaiMone == "KYD026" ? 88 :
-                        item.PaiMone == "INR086" ? 16 : item.PaiMone == "BSD033" ? 42 :
-                        item.PaiMone == "SRD058" ? 146 : item.PaiMone == "TRY093" ? 19 :
-                        item.PaiMone == "CNY061" ? 8 : item.PaiMone == "XCD056" ? 36 :
-                        item.PaiMone == "XCD049" ? 36 : item.PaiMone == "XCD047" ? 36 :
-                        item.PaiMone == "XCD218" ? 36 : item.PaiMone == "XCD063" ? 36 :
-                        item.PaiMone == "HUF" ? 26 : item.PaiMone == "AWG043" ? 40 :
-                        item.PaiMone == "CHF083" ? 7 : item.PaiMone == "ANG027" ? 69 :
-                        item.PaiMone == "ANG057" ? 69 : item.PaiMone == "ANG081" ? 69 : null,
+                            item.PaiMone == "USD008" ? 1 : item.PaiMone == "PEN015" ? 31 :
+                            item.PaiMone == "USD207" ? 1 : item.PaiMone == "USD016" ? 1 :
+                            item.PaiMone == "USD213" ? 1 : item.PaiMone == "USD207" ? 1 :
+                            item.PaiMone == "UYU019" ? 154 : item.PaiMone == "MXN039" ? 15 :
+                            item.PaiMone == "PAB013" ? 120 : item.PaiMone == "DOP017" ? 126 :
+                            item.PaiMone == "GTQ009" ? 80 : item.PaiMone == "COP004" ? 63 :
+                            item.PaiMone == "BOB002" ? 51 : item.PaiMone == "ARS001" ? 38 :
+                            item.PaiMone == "CRC005" ? 66 : item.PaiMone == "PYG014" ? 122 :
+                            item.PaiMone == "CLP006" ? 29 : item.PaiMone == "BRL003" ? 20 :
+                            item.PaiMone == "HNL010" ? 84 : item.PaiMone == "NIO012" ? 115 :
+                            item.PaiMone == "JMD034" ? 93 : item.PaiMone == "MYR" ? 105 :
+                            item.PaiMone == "EUR197" ? 2 : item.PaiMone == "COP004" ? 63 :
+                            item.PaiMone == "EUR024" ? 2 : item.PaiMone == "COL" ? 63 :
+                            item.PaiMone == "EUR041" ? 2 : item.PaiMone == "EUR048" ? 2 :
+                            item.PaiMone == "EUR023" ? 2 : item.PaiMone == "EUR052" ? 2 :
+                            item.PaiMone == "EUR025" ? 2 : item.PaiMone == "EUR219" ? 2 :
+                            item.PaiMone == "EUR036" ? 2 : item.PaiMone == "EUR045" ? 2 :
+                            item.PaiMone == "EUR068" ? 2 : item.PaiMone == "EUR068" ? 2 :
+                            item.PaiMone == "EUR068" ? 2 : item.PaiMone == "EUR068" ? 2 :
+                            item.PaiMone == "GYD025" ? 82 : item.PaiMone == "BBD038" ? 44 :
+                            item.PaiMone == "TTD018" ? 148 : item.PaiMone == "KYD026" ? 88 :
+                            item.PaiMone == "INR086" ? 16 : item.PaiMone == "BSD033" ? 42 :
+                            item.PaiMone == "SRD058" ? 146 : item.PaiMone == "TRY093" ? 19 :
+                            item.PaiMone == "CNY061" ? 8 : item.PaiMone == "XCD056" ? 36 :
+                            item.PaiMone == "XCD049" ? 36 : item.PaiMone == "XCD047" ? 36 :
+                            item.PaiMone == "XCD218" ? 36 : item.PaiMone == "XCD063" ? 36 :
+                            item.PaiMone == "HUF" ? 26 : item.PaiMone == "AWG043" ? 40 :
+                            item.PaiMone == "CHF083" ? 7 : item.PaiMone == "ANG027" ? 69 :
+                            item.PaiMone == "ANG057" ? 69 : item.PaiMone == "ANG081" ? 69 : null,
                             Amount = (decimal)item.VeVentas,
                             ExchangeRate = (decimal)item.VeTipcam,
                             EquivalentToDollars = (decimal)item.VeTipcam == 0 ? 0 : (decimal)item.VeVentas / (decimal)item.VeTipcam,
