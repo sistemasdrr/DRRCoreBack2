@@ -21,8 +21,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
-
-
+using Org.BouncyCastle.Utilities;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace DRRCore.Application.Main.CoreApplication
@@ -1980,6 +1979,98 @@ namespace DRRCore.Application.Main.CoreApplication
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
                                         }
+
+                                        //ENVIAR CORREO
+                                        var emailDataDto = new EmailDataDTO();
+                                        if (item.Internal)
+                                        {
+                                            var user = await context.UserLogins.Include(x => x.IdEmployeeNavigation).Where(x => x.Id == int.Parse(item.UserTo)).FirstOrDefaultAsync();
+                                            if(user != null)
+                                            {
+                                                emailDataDto.EmailKey = ticket.Language == "E" ? "DRR_WORKFLOW_ESP_0023" : "DRR_WORKFLOW_ENG_0023";
+                                                emailDataDto.BeAuthenticated = true;
+                                                emailDataDto.From = "diego.rodriguez@del-risco.com";// ticket.RequestedName + "_" + ticket.ReportType + "_" + DateTime.Now.ToString("dd-MM-yyyy"); // userLogin.IdEmployeeNavigation.Email;
+                                                emailDataDto.UserName = "diego.rodriguez@del-risco.com";//emailDataDto.From;
+                                                emailDataDto.Password = "w*@JHCr7mH";//userLogin.EmailPassword;
+                                                emailDataDto.To = new List<string>
+                                                {
+                                                    "jfernandez@del-risco.com",
+                                                    "diego.rodriguez@del-risco.com"
+                                             //ticket.IdSubscriberNavigation.SendReportToEmail,
+                                                };
+                                                emailDataDto.CC = new List<string>
+                                                {
+                                                    //"crc@del-risco.com"
+                                                };
+                                                emailDataDto.Subject = ticket.RequestedName + "_" + ticket.ReportType + "_" + DateTime.Now.ToString("dd-MM-yyyy");
+                                                emailDataDto.IsBodyHTML = true;
+                                                emailDataDto.Parameters.Add("Cecilia Sayas");
+                                                emailDataDto.Parameters.Add("crc@del-risco.com");
+                                                emailDataDto.BodyHTML = emailDataDto.IsBodyHTML ? await GetBodyHtml(emailDataDto) : emailDataDto.BodyHTML;
+                                                _logger.LogInformation(JsonConvert.SerializeObject(emailDataDto));
+
+                                                var file = DownloadAssignAgent((int)ticket.Id, item.AssignedToCode).Result.Data;
+                                                var attachment = new AttachmentDto();
+                                                attachment.FileName = file.Name + ".pdf";
+                                                attachment.Content = Convert.ToBase64String(file.File);
+                                                attachment.Path = await UploadFile(attachment);
+                                                emailDataDto.Attachments.Add(attachment);
+
+
+                                                var result = await _mailSender.SendMailAsync(_mapper.Map<EmailValues>(emailDataDto));
+
+                                                var emailHistory = _mapper.Map<EmailHistory>(emailDataDto);
+                                                emailHistory.Success = result;
+                                                response.Data = await _emailHistoryDomain.AddAsync(emailHistory);
+                                                _logger.LogInformation(Messages.MailSuccessSend);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            var agent = await context.Agents.Where(x => x.Code == item.AssignedToCode).FirstOrDefaultAsync();
+                                            if (agent != null)
+                                            {
+                                                emailDataDto.EmailKey = ticket.Language == "E" ? "DRR_WORKFLOW_ESP_0023" : "DRR_WORKFLOW_ENG_0023";
+                                                emailDataDto.BeAuthenticated = true;
+                                                emailDataDto.From = "diego.rodriguez@del-risco.com";// ticket.RequestedName + "_" + ticket.ReportType + "_" + DateTime.Now.ToString("dd-MM-yyyy"); // userLogin.IdEmployeeNavigation.Email;
+                                                emailDataDto.UserName = "diego.rodriguez@del-risco.com";//emailDataDto.From;
+                                                emailDataDto.Password = "w*@JHCr7mH";//userLogin.EmailPassword;
+                                                emailDataDto.To = new List<string>
+                                                {
+                                                    "jfernandez@del-risco.com",
+                                                    "diego.rodriguez@del-risco.com"
+                                             //ticket.IdSubscriberNavigation.SendReportToEmail,
+                                                };
+                                                emailDataDto.CC = new List<string>
+                                                {
+                                                    //"crc@del-risco.com"
+                                                };
+                                                emailDataDto.Subject = ticket.RequestedName + "_" + ticket.ReportType + "_" + DateTime.Now.ToString("dd-MM-yyyy");
+                                                emailDataDto.IsBodyHTML = true;
+                                                emailDataDto.Parameters.Add("Cecilia Sayas");
+                                                emailDataDto.Parameters.Add("crc@del-risco.com");
+                                                emailDataDto.BodyHTML = emailDataDto.IsBodyHTML ? await GetBodyHtml(emailDataDto) : emailDataDto.BodyHTML;
+                                                _logger.LogInformation(JsonConvert.SerializeObject(emailDataDto));
+
+                                                var file = DownloadAssignAgent((int)ticket.Id, item.AssignedToCode).Result.Data;
+                                                var attachment = new AttachmentDto();
+                                                attachment.FileName = file.Name + ".pdf";
+                                                attachment.Content = Convert.ToBase64String(file.File);
+                                                attachment.Path = await UploadFile(attachment);
+                                                emailDataDto.Attachments.Add(attachment);
+
+
+                                                var result = await _mailSender.SendMailAsync(_mapper.Map<EmailValues>(emailDataDto));
+
+                                                var emailHistory = _mapper.Map<EmailHistory>(emailDataDto);
+                                                emailHistory.Success = result;
+                                                response.Data = await _emailHistoryDomain.AddAsync(emailHistory);
+                                                _logger.LogInformation(Messages.MailSuccessSend);
+                                            }
+                                        }
+
+
+
                                         if (item.References)
                                         {
                                             string nameAssignedToRef = "REFERENCIA_CR2";
@@ -2544,6 +2635,45 @@ namespace DRRCore.Application.Main.CoreApplication
         private async Task<string> UploadFile(AttachmentDto attachmentDto)
         {
             return await _fileManager.UploadFile(new MemoryStream(Convert.FromBase64String(attachmentDto.Content)), attachmentDto.FileName);
+        }
+
+
+
+        public async Task<Response<GetFileResponseDto>> DownloadAssignAgent(int idTicket, string assignedTo)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var ticket = await context.Tickets.Where(x => x.Id == idTicket).FirstOrDefaultAsync();
+                var numeration = await context.Numerations.Where(x => x.Name.Contains("AGENTE_" + assignedTo.Trim())).FirstOrDefaultAsync();
+                
+                if (ticket != null && numeration != null)
+                {
+                    string fileFormat = "{0}_{1}{2}";
+                    string report = "SOLICITUD_INFORME_AGENTE";
+                    var reportRenderType = StaticFunctions.GetReportRenderType("pdf");
+                    var extension = StaticFunctions.FileExtension(reportRenderType);
+                    var contentType = StaticFunctions.GetContentType(reportRenderType);
+                    var dictionary = new Dictionary<string, string>
+                        {
+                            { "idTicket", ticket.Id.ToString() },
+                            { "codeAgent", assignedTo },
+                         };
+                    response.Data = new GetFileResponseDto
+                    {
+                        File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                        ContentType = contentType,
+                        Name = "PED_AGE_" + numeration.Number
+                    };
+                }
+            }catch(Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
         }
         public async Task<Response<GetFileResponseDto>> DownloadF8(int idTicket, string language, string format)
         {

@@ -2178,7 +2178,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 string languageFileName = language == "I" ? "ENG" : "ESP";
                 string fileFormat ="{0}_{1}{2}" ;
                 //string report = language == "I" ? "EIECORE-F1-EMPRESAS" : "EIECORE-F1-EMPRESAS_ES";
-                string report = "EIECORE-F1-EMPRESAS_ES";
+                string report = "EMPRESAS/F1-EMPRESAS_ES";
                 var reportRenderType = StaticFunctions.GetReportRenderType(format);
                 var extension = StaticFunctions.FileExtension(reportRenderType);
                 var contentType= StaticFunctions.GetContentType(reportRenderType);
@@ -2215,7 +2215,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 string companyCode = company.OldCode ?? "N" + company.Id.ToString("D6");
                 string languageFileName = language == "I" ? "ENG" : "ESP";
                 string fileFormat = "{0}_{1}{2}";
-                string report = language == "I" ? "F8-EMPRESAS-EN" : "F8-EMPRESAS-ES";
+                string report = language == "I" ? "EMPRESAS/F8-EMPRESAS-EN" : "EMPRESAS/F8-EMPRESAS-ES";
                 var reportRenderType = StaticFunctions.GetReportRenderType(format);
                 var extension = StaticFunctions.FileExtension(reportRenderType);
                 var contentType = StaticFunctions.GetContentType(reportRenderType);
@@ -2226,9 +2226,10 @@ namespace DRRCore.Application.Main.CoreApplication
                     { "language", language }
                  };
 
+                var file = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary);
                 response.Data = new GetFileResponseDto
                 {
-                    File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                    File = file,
                     ContentType = contentType,
                     Name = string.Format(fileFormat, companyCode, languageFileName, extension)
                 };
@@ -2256,7 +2257,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     status.Company = true;
                     var background = await _companyBackgroundDomain.GetByIdAsync(idCompany);
                     status.Background = background != null ? true : false;
-                    var branch = await _companyBranchDomain.GetByIdAsync(idCompany);
+                    var branch = await _companyBranchDomain.GetCompanyBranchByIdCompany(idCompany);
                     status.Branch = branch != null ? true : false;
                     var financial = await _companyFinancialInformationDomain.GetByIdCompany(idCompany);
                     status.Financial = financial != null ? true : false;
@@ -2424,37 +2425,37 @@ namespace DRRCore.Application.Main.CoreApplication
 
                 if(section == "IDENTIFICACION")
                 {
-                    subReport.Add(language == "I" ? "/admindrrreports-001/PDF/EMPRESA/ENG/F8-EMPRESAS-IDENTIFICACION" : "/admindrrreports-001/PDF/EMPRESA/ESP/F8-EMPRESAS-IDENTIFICACION");
+                    subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/IDENTIFICACION" : "EMPRESAS/PDF/ESP/IDENTIFICACION");
                 }else if(section == "ANTECEDENTES")
                 {
-                    subReport.Add(language == "I" ? "/admindrrreports-001/PDF/EMPRESA/ENG/F8-EMPRESAS-RESU-EJEC" : "/admindrrreports-001/PDF/EMPRESA/ESP/F8-EMPRESAS-RESU-EJEC"); 
-                    subReport.Add(language == "I" ? "/admindrrreports-001/PDF/EMPRESA/ENG/F8-EMPRESAS-EST-LEGAL" : "/admindrrreports-001/PDF/EMPRESA/ESP/F8-EMPRESAS-EST-LEGAL");
-                    subReport.Add(language == "I" ? "/admindrrreports-001/PDF/EMPRESA/ENG/F8-EMPRESAS-HISTORIA" : "/admindrrreports-001/PDF/EMPRESA/ESP/F8-EMPRESAS-HISTORIA");
-                    subReport.Add(language == "I" ? "/admindrrreports-001/PDF/EMPRESA/ENG/F8-EMPRESAS-EMP-REL" : "/admindrrreports-001/PDF/EMPRESA/ESP/F8-EMPRESAS-EMP-REL");
+                    subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/RESU-EJEC" : "EMPRESAS/PDF/ESP/RESU-EJEC");
+                    subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/EST-LEGAL" : "EMPRESAS/PDF/ESP/EST-LEGAL");
+                    subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/HISTORIA" : "EMPRESAS/PDF/ESP/HISTORIA");
+                    subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/EMP-REL" : "EMPRESAS/PDF/ESP/EMP-REL");
                 }
                 else if (section == "RAMO")
                 {
-                    subReport.Add(language == "I" ? "/admindrrreports-001/PDF/EMPRESA/ENG/F8-EMPRESAS-RAMO" : "/admindrrreports-001/PDF/EMPRESA/ESP/F8-EMPRESAS-RAMO");
+                    subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/RAMO" : "EMPRESAS/PDF/ESP/RAMO");
                 }
                 else if (section == "FINANZAS")
                 {
-                    subReport.Add(language == "I" ? "/admindrrreports-001/PDF/EMPRESA/ENG/F8-EMPRESAS-INFO-FINAN1" : "/admindrrreports-001/PDF/EMPRESA/ESP/F8-EMPRESAS-INFO-FINAN1");
+                    subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/INFO-FINAN" : "EMPRESAS/PDF/ESP/INFO-FINAN");
                 }
                 else if (section == "BALANCES")
                 {
-                    subReport.Add(language == "I" ? "/admindrrreports-001/PDF/EMPRESA/ENG/F8-EMPRESAS-INFO-FINAN1" : "/admindrrreports-001/PDF/EMPRESA/ESP/F8-EMPRESAS-INFO-FINAN1");
+                    subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/INFO-FINAN" : "EMPRESAS/PDF/ESP/INFO-FINAN");
                 }
                 else if (section == "SBS")
                 {
-                    subReport.Add(language == "I" ? "/admindrrreports-001/PDF/EMPRESA/ENG/F8-EMPRESAS-MOROSIDAD" : "/admindrrreports-001/PDF/EMPRESA/ESP/F8-EMPRESAS-MOROSIDAD");
+                    subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/MOROSIDAD" : "EMPRESAS/PDF/ESP/MOROSIDAD");
                 }
                 else if (section == "OPINION-CREDITO")
                 {
-                    subReport.Add(language == "I" ? "/admindrrreports-001/PDF/EMPRESA/ENG/F8-EMPRESAS-OPI-CRED" : "/admindrrreports-001/PDF/EMPRESA/ESP/F8-EMPRESAS-OPI-CRED");
+                    subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/OPI-CRED" : "EMPRESAS/PDF/ESP/OPI-CRED");
                 }
                 else if (section == "IMAGENES")
                 {
-                    subReport.Add(language == "I" ? "/admindrrreports-001/PDF/EMPRESA/ENG/F8-EMPRESAS-IMAGENES" : "/admindrrreports-001/PDF/EMPRESA/ESP/F8-EMPRESAS-IMAGENES");
+                    subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/IMAGENES" : "EMPRESAS/PDF/ESP/IMAGENES");
                 }
 
                 var reportRenderType = StaticFunctions.GetReportRenderType(format);
