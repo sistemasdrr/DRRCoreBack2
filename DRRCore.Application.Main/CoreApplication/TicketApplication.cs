@@ -14,9 +14,11 @@ using DRRCore.Domain.Interfaces.EmailDomain;
 using DRRCore.Domain.Interfaces.MysqlDomain;
 using DRRCore.Transversal.Common;
 using DRRCore.Transversal.Common.Interface;
+using DRRCore.Transversal.Common.JsonReader;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 
@@ -53,14 +55,15 @@ namespace DRRCore.Application.Main.CoreApplication
         private IEmailHistoryDomain _emailHistoryDomain;
         private IMapper _mapper;
         private ILogger _logger;
-
+        private readonly LocalPath _path;
         public TicketApplication(INumerationDomain numerationDomain, ITicketAssignationDomain ticketAssignationDomain, IEmployeeDomain employeeDomain,
             ITCuponDomain tCuponDomain, ITicketDomain ticketDomain, IPersonalDomain personalDomain, IAgentDomain agentDomain,
             ITicketReceptorDomain ticketReceptorDomain, ITicketHistoryDomain ticketHistoryDomain, ICountryDomain countryDomain,
             ICompanyDomain companyDomain, IMapper mapper, ILogger logger, IReportingDownload reportingDownload, IMailFormatter mailFormatter, IEmailConfigurationDomain emailConfigurationDomain,
             IEmailApplication emailApplication, IUserLoginDomain userLoginDomain, IPersonDomain personDomain, ISubscriberDomain subscriberDomain, ICompanyApplication companyApplication,
-            IMailSender mailSender, IFileManager fileManager, IEmailHistoryDomain emailHistoryDomain)
+            IMailSender mailSender, IFileManager fileManager, IEmailHistoryDomain emailHistoryDomain  ,IOptions<LocalPath> path)
         {
+            _path = path.Value;
             _numerationDomain = numerationDomain;
             _companyApplication = companyApplication;
             _ticketDomain = ticketDomain;
@@ -596,22 +599,35 @@ namespace DRRCore.Application.Main.CoreApplication
                 ticket.RequestedName = ticket.RequestedName.Trim();
                 ticket.RequestedName = ticket.RequestedName.Replace("?", "");
                 ticket.RequestedName = ticket.RequestedName.Replace("¿", "");
-                var path = "/cupones/" + ticket.Number.ToString("D6") + "/"+ticket.ReportType+"_" + ticket.RequestedName + ".pdf";
-                using (var ftpClient = new FtpClient(GetFtpClientConfiguration()))
+                var ticketPath = _path.TicketPath;
+                var directoryPath = Path.Combine(ticketPath, "cupones", ticket.Number.ToString("D6"));
+                var filePath = Path.Combine(directoryPath, $"{ticket.ReportType}_{ticket.RequestedName}.pdf");
+
+                // Crear el directorio si no existe
+                if (!Directory.Exists(directoryPath))
                 {
-                    await ftpClient.LoginAsync();
-
-                    MemoryStream memoryStream = new MemoryStream(byteArray);
-                    memoryStream.Position = 0;
-
-                    using (var writeStream = await ftpClient.OpenFileWriteStreamAsync(path))
-                    {
-                        await memoryStream.CopyToAsync(writeStream);
-                    }
-
-
+                    Directory.CreateDirectory(directoryPath);
                 }
-                return path;
+
+                // Guardar el archivo localmente
+                await File.WriteAllBytesAsync(filePath, byteArray);
+
+                return filePath;
+                //using (var ftpClient = new FtpClient(GetFtpClientConfiguration()))
+                //{
+                //    await ftpClient.LoginAsync();
+
+                //    MemoryStream memoryStream = new MemoryStream(byteArray);
+                //    memoryStream.Position = 0;
+
+                //    using (var writeStream = await ftpClient.OpenFileWriteStreamAsync(path))
+                //    {
+                //        await memoryStream.CopyToAsync(writeStream);
+                //    }
+
+
+                //}
+                //return path;
             }
             catch (Exception ex)
             {
@@ -2628,7 +2644,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         if (lastTicketHistory != null && ticket != null)
                         {
                             lastTicketHistory.ElementAt(lastTicketHistory.Count - 2).Flag = false;
-                            lastTicketHistory.ElementAt(lastTicketHistory.Count - 2).ReturnMessage = returnMessage;
+                            //lastTicketHistory.ElementAt(lastTicketHistory.Count - 2).ReturnMessage = returnMessage;
                             lastTicketHistory.ElementAt(lastTicketHistory.Count - 2).ShippingDate = null;
                             context.TicketHistories.Update(lastTicketHistory.ElementAt(lastTicketHistory.Count - 2));
                             ticket.IdStatusTicket = lastTicketHistory.ElementAt(lastTicketHistory.Count - 2).IdStatusTicket;

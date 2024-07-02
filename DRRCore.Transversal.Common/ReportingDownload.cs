@@ -17,8 +17,9 @@ namespace DRRCore.Transversal.Common
 
                 return new ServerReport(new ReportSettings()
                 {
-                    ReportServer = "https://sql5090.site4now.net/ReportServer",
-                    Credential = new NetworkCredential("admindrrreports-001", "drrti2023"),
+                    //ReportServer = "https://sql5090.site4now.net/ReportServer",
+                    ReportServer = "http://200.58.123.184/Reports/browse/",
+                    Credential = new NetworkCredential("dattaguest", "x6KoVHN7iguw#"),
                     
 
                 }).Execute(new ReportRequest

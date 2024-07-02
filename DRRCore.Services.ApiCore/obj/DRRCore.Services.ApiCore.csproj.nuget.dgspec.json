@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Services.ApiCore\\DRRCore.Services.ApiCore.csproj": {}
+    "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Services.ApiCore\\DRRCore.Services.ApiCore.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Application.DTO\\DRRCore.Application.DTO.csproj": {
+    "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.DTO\\DRRCore.Application.DTO.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Application.DTO\\DRRCore.Application.DTO.csproj",
+        "projectUniqueName": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.DTO\\DRRCore.Application.DTO.csproj",
         "projectName": "DRRCore.Application.DTO",
-        "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Application.DTO\\DRRCore.Application.DTO.csproj",
-        "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Application.DTO\\obj\\",
+        "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.DTO\\DRRCore.Application.DTO.csproj",
+        "packagesPath": "C:\\Users\\Programador1\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.DTO\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\Programador1\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -26,15 +22,14 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj"
+              "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj": {
+                "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj"
               }
             }
           }
@@ -70,25 +65,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Application.Interfaces\\DRRCore.Application.Interfaces.csproj": {
+    "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Interfaces\\DRRCore.Application.Interfaces.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Application.Interfaces\\DRRCore.Application.Interfaces.csproj",
+        "projectUniqueName": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Interfaces\\DRRCore.Application.Interfaces.csproj",
         "projectName": "DRRCore.Application.Interfaces",
-        "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Application.Interfaces\\DRRCore.Application.Interfaces.csproj",
-        "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Application.Interfaces\\obj\\",
+        "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Interfaces\\DRRCore.Application.Interfaces.csproj",
+        "packagesPath": "C:\\Users\\Programador1\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Interfaces\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\Programador1\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -96,21 +87,20 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Application.DTO\\DRRCore.Application.DTO.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Application.DTO\\DRRCore.Application.DTO.csproj"
+              "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.DTO\\DRRCore.Application.DTO.csproj": {
+                "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.DTO\\DRRCore.Application.DTO.csproj"
               },
-              "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj"
+              "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj": {
+                "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj"
               },
-              "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj"
+              "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj": {
+                "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj"
               }
             }
           }
@@ -146,25 +136,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Application.Main\\DRRCore.Application.Main.csproj": {
+    "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Main\\DRRCore.Application.Main.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Application.Main\\DRRCore.Application.Main.csproj",
+        "projectUniqueName": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Main\\DRRCore.Application.Main.csproj",
         "projectName": "DRRCore.Application.Main",
-        "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Application.Main\\DRRCore.Application.Main.csproj",
-        "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Application.Main\\obj\\",
+        "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Main\\DRRCore.Application.Main.csproj",
+        "packagesPath": "C:\\Users\\Programador1\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Main\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\Programador1\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -172,27 +158,26 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Application.DTO\\DRRCore.Application.DTO.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Application.DTO\\DRRCore.Application.DTO.csproj"
+              "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.DTO\\DRRCore.Application.DTO.csproj": {
+                "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.DTO\\DRRCore.Application.DTO.csproj"
               },
-              "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Application.Interfaces\\DRRCore.Application.Interfaces.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Application.Interfaces\\DRRCore.Application.Interfaces.csproj"
+              "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Interfaces\\DRRCore.Application.Interfaces.csproj": {
+                "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Interfaces\\DRRCore.Application.Interfaces.csproj"
               },
-              "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Domain.Interfaces\\DRRCore.Domain.Interfaces.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Domain.Interfaces\\DRRCore.Domain.Interfaces.csproj"
+              "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Interfaces\\DRRCore.Domain.Interfaces.csproj": {
+                "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Interfaces\\DRRCore.Domain.Interfaces.csproj"
               },
-              "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Infraestructure.Configuration\\DRRCore.Infraestructure.Configuration.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Infraestructure.Configuration\\DRRCore.Infraestructure.Configuration.csproj"
+              "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Configuration\\DRRCore.Infraestructure.Configuration.csproj": {
+                "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Configuration\\DRRCore.Infraestructure.Configuration.csproj"
               },
-              "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Transversal.Mapper\\DRRCore.Transversal.Mapper.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Transversal.Mapper\\DRRCore.Transversal.Mapper.csproj"
+              "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Mapper\\DRRCore.Transversal.Mapper.csproj": {
+                "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Mapper\\DRRCore.Transversal.Mapper.csproj"
               }
             }
           }
@@ -236,25 +221,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj": {
+    "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj",
+        "projectUniqueName": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj",
         "projectName": "DRRCore.Domain.Entities",
-        "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj",
-        "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Domain.Entities\\obj\\",
+        "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj",
+        "packagesPath": "C:\\Users\\Programador1\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Entities\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\Programador1\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -262,7 +243,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -334,25 +314,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Domain.Interfaces\\DRRCore.Domain.Interfaces.csproj": {
+    "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Interfaces\\DRRCore.Domain.Interfaces.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Domain.Interfaces\\DRRCore.Domain.Interfaces.csproj",
+        "projectUniqueName": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Interfaces\\DRRCore.Domain.Interfaces.csproj",
         "projectName": "DRRCore.Domain.Interfaces",
-        "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Domain.Interfaces\\DRRCore.Domain.Interfaces.csproj",
-        "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Domain.Interfaces\\obj\\",
+        "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Interfaces\\DRRCore.Domain.Interfaces.csproj",
+        "packagesPath": "C:\\Users\\Programador1\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Interfaces\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\Programador1\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -360,21 +336,20 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Application.DTO\\DRRCore.Application.DTO.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Application.DTO\\DRRCore.Application.DTO.csproj"
+              "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.DTO\\DRRCore.Application.DTO.csproj": {
+                "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.DTO\\DRRCore.Application.DTO.csproj"
               },
-              "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj"
+              "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj": {
+                "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj"
               },
-              "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj"
+              "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj": {
+                "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj"
               }
             }
           }
@@ -404,25 +379,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Domain.Main\\DRRCore.Domain.Main.csproj": {
+    "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Main\\DRRCore.Domain.Main.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Domain.Main\\DRRCore.Domain.Main.csproj",
+        "projectUniqueName": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Main\\DRRCore.Domain.Main.csproj",
         "projectName": "DRRCore.Domain.Main",
-        "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Domain.Main\\DRRCore.Domain.Main.csproj",
-        "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Domain.Main\\obj\\",
+        "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Main\\DRRCore.Domain.Main.csproj",
+        "packagesPath": "C:\\Users\\Programador1\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Main\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\Programador1\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -430,21 +401,20 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Domain.Interfaces\\DRRCore.Domain.Interfaces.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Domain.Interfaces\\DRRCore.Domain.Interfaces.csproj"
+              "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Interfaces\\DRRCore.Domain.Interfaces.csproj": {
+                "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Interfaces\\DRRCore.Domain.Interfaces.csproj"
               },
-              "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Infraestructure.Interfaces\\DRRCore.Infraestructure.Interfaces.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Infraestructure.Interfaces\\DRRCore.Infraestructure.Interfaces.csproj"
+              "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Interfaces\\DRRCore.Infraestructure.Interfaces.csproj": {
+                "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Interfaces\\DRRCore.Infraestructure.Interfaces.csproj"
               },
-              "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Infraestructure.Repository\\DRRCore.Infraestructure.Repository.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Infraestructure.Repository\\DRRCore.Infraestructure.Repository.csproj"
+              "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Repository\\DRRCore.Infraestructure.Repository.csproj": {
+                "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Repository\\DRRCore.Infraestructure.Repository.csproj"
               }
             }
           }
@@ -484,25 +454,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Infraestructure.Configuration\\DRRCore.Infraestructure.Configuration.csproj": {
+    "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Configuration\\DRRCore.Infraestructure.Configuration.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Infraestructure.Configuration\\DRRCore.Infraestructure.Configuration.csproj",
+        "projectUniqueName": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Configuration\\DRRCore.Infraestructure.Configuration.csproj",
         "projectName": "DRRCore.Infraestructure.Configuration",
-        "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Infraestructure.Configuration\\DRRCore.Infraestructure.Configuration.csproj",
-        "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Infraestructure.Configuration\\obj\\",
+        "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Configuration\\DRRCore.Infraestructure.Configuration.csproj",
+        "packagesPath": "C:\\Users\\Programador1\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Configuration\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\Programador1\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -510,21 +476,20 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj"
+              "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj": {
+                "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj"
               },
-              "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Infraestructure.Interfaces\\DRRCore.Infraestructure.Interfaces.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Infraestructure.Interfaces\\DRRCore.Infraestructure.Interfaces.csproj"
+              "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Interfaces\\DRRCore.Infraestructure.Interfaces.csproj": {
+                "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Interfaces\\DRRCore.Infraestructure.Interfaces.csproj"
               },
-              "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj"
+              "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj": {
+                "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj"
               }
             }
           }
@@ -580,25 +545,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Infraestructure.Interfaces\\DRRCore.Infraestructure.Interfaces.csproj": {
+    "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Interfaces\\DRRCore.Infraestructure.Interfaces.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Infraestructure.Interfaces\\DRRCore.Infraestructure.Interfaces.csproj",
+        "projectUniqueName": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Interfaces\\DRRCore.Infraestructure.Interfaces.csproj",
         "projectName": "DRRCore.Infraestructure.Interfaces",
-        "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Infraestructure.Interfaces\\DRRCore.Infraestructure.Interfaces.csproj",
-        "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Infraestructure.Interfaces\\obj\\",
+        "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Interfaces\\DRRCore.Infraestructure.Interfaces.csproj",
+        "packagesPath": "C:\\Users\\Programador1\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Interfaces\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\Programador1\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -606,21 +567,20 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Application.DTO\\DRRCore.Application.DTO.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Application.DTO\\DRRCore.Application.DTO.csproj"
+              "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.DTO\\DRRCore.Application.DTO.csproj": {
+                "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.DTO\\DRRCore.Application.DTO.csproj"
               },
-              "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj"
+              "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj": {
+                "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj"
               },
-              "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj"
+              "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj": {
+                "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj"
               }
             }
           }
@@ -650,25 +610,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Infraestructure.Repository\\DRRCore.Infraestructure.Repository.csproj": {
+    "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Repository\\DRRCore.Infraestructure.Repository.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Infraestructure.Repository\\DRRCore.Infraestructure.Repository.csproj",
+        "projectUniqueName": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Repository\\DRRCore.Infraestructure.Repository.csproj",
         "projectName": "DRRCore.Infraestructure.Repository",
-        "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Infraestructure.Repository\\DRRCore.Infraestructure.Repository.csproj",
-        "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Infraestructure.Repository\\obj\\",
+        "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Repository\\DRRCore.Infraestructure.Repository.csproj",
+        "packagesPath": "C:\\Users\\Programador1\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Repository\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\Programador1\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -676,18 +632,17 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Infraestructure.Configuration\\DRRCore.Infraestructure.Configuration.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Infraestructure.Configuration\\DRRCore.Infraestructure.Configuration.csproj"
+              "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Configuration\\DRRCore.Infraestructure.Configuration.csproj": {
+                "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Configuration\\DRRCore.Infraestructure.Configuration.csproj"
               },
-              "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Infraestructure.Interfaces\\DRRCore.Infraestructure.Interfaces.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Infraestructure.Interfaces\\DRRCore.Infraestructure.Interfaces.csproj"
+              "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Interfaces\\DRRCore.Infraestructure.Interfaces.csproj": {
+                "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Interfaces\\DRRCore.Infraestructure.Interfaces.csproj"
               }
             }
           }
@@ -731,25 +686,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Services.ApiCore\\DRRCore.Services.ApiCore.csproj": {
+    "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Services.ApiCore\\DRRCore.Services.ApiCore.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Services.ApiCore\\DRRCore.Services.ApiCore.csproj",
+        "projectUniqueName": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Services.ApiCore\\DRRCore.Services.ApiCore.csproj",
         "projectName": "DRRCore.Services.ApiCore",
-        "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Services.ApiCore\\DRRCore.Services.ApiCore.csproj",
-        "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Services.ApiCore\\obj\\",
+        "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Services.ApiCore\\DRRCore.Services.ApiCore.csproj",
+        "packagesPath": "C:\\Users\\Programador1\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Services.ApiCore\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\Programador1\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -757,40 +708,39 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
-          "C:\\Program Files\\dotnet\\sdk\\7.0.302\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
+          "C:\\Program Files\\dotnet\\sdk\\7.0.306\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Application.DTO\\DRRCore.Application.DTO.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Application.DTO\\DRRCore.Application.DTO.csproj"
+              "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.DTO\\DRRCore.Application.DTO.csproj": {
+                "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.DTO\\DRRCore.Application.DTO.csproj"
               },
-              "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Application.Interfaces\\DRRCore.Application.Interfaces.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Application.Interfaces\\DRRCore.Application.Interfaces.csproj"
+              "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Interfaces\\DRRCore.Application.Interfaces.csproj": {
+                "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Interfaces\\DRRCore.Application.Interfaces.csproj"
               },
-              "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Application.Main\\DRRCore.Application.Main.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Application.Main\\DRRCore.Application.Main.csproj"
+              "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Main\\DRRCore.Application.Main.csproj": {
+                "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Main\\DRRCore.Application.Main.csproj"
               },
-              "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj"
+              "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj": {
+                "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj"
               },
-              "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Domain.Interfaces\\DRRCore.Domain.Interfaces.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Domain.Interfaces\\DRRCore.Domain.Interfaces.csproj"
+              "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Interfaces\\DRRCore.Domain.Interfaces.csproj": {
+                "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Interfaces\\DRRCore.Domain.Interfaces.csproj"
               },
-              "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Domain.Main\\DRRCore.Domain.Main.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Domain.Main\\DRRCore.Domain.Main.csproj"
+              "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Main\\DRRCore.Domain.Main.csproj": {
+                "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Main\\DRRCore.Domain.Main.csproj"
               },
-              "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Infraestructure.Interfaces\\DRRCore.Infraestructure.Interfaces.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Infraestructure.Interfaces\\DRRCore.Infraestructure.Interfaces.csproj"
+              "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Interfaces\\DRRCore.Infraestructure.Interfaces.csproj": {
+                "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Interfaces\\DRRCore.Infraestructure.Interfaces.csproj"
               },
-              "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Infraestructure.Repository\\DRRCore.Infraestructure.Repository.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Infraestructure.Repository\\DRRCore.Infraestructure.Repository.csproj"
+              "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Repository\\DRRCore.Infraestructure.Repository.csproj": {
+                "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Repository\\DRRCore.Infraestructure.Repository.csproj"
               },
-              "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Transversal.Mapper\\DRRCore.Transversal.Mapper.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Transversal.Mapper\\DRRCore.Transversal.Mapper.csproj"
+              "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Mapper\\DRRCore.Transversal.Mapper.csproj": {
+                "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Mapper\\DRRCore.Transversal.Mapper.csproj"
               }
             }
           }
@@ -833,25 +783,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj": {
+    "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj",
+        "projectUniqueName": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj",
         "projectName": "DRRCore.Transversal.Common",
-        "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj",
-        "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Transversal.Common\\obj\\",
+        "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj",
+        "packagesPath": "C:\\Users\\Programador1\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Common\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\Programador1\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -859,7 +805,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -935,25 +880,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Transversal.Mapper\\DRRCore.Transversal.Mapper.csproj": {
+    "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Mapper\\DRRCore.Transversal.Mapper.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Transversal.Mapper\\DRRCore.Transversal.Mapper.csproj",
+        "projectUniqueName": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Mapper\\DRRCore.Transversal.Mapper.csproj",
         "projectName": "DRRCore.Transversal.Mapper",
-        "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Transversal.Mapper\\DRRCore.Transversal.Mapper.csproj",
-        "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Transversal.Mapper\\obj\\",
+        "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Mapper\\DRRCore.Transversal.Mapper.csproj",
+        "packagesPath": "C:\\Users\\Programador1\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Mapper\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\Programador1\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -961,18 +902,17 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Application.DTO\\DRRCore.Application.DTO.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Application.DTO\\DRRCore.Application.DTO.csproj"
+              "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.DTO\\DRRCore.Application.DTO.csproj": {
+                "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.DTO\\DRRCore.Application.DTO.csproj"
               },
-              "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\Source\\Repos\\DRRCoreBack2024\\DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj"
+              "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj": {
+                "projectPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj"
               }
             }
           }
@@ -1012,7 +952,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
         }
       }
     }

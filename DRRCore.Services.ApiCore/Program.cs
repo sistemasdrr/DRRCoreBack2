@@ -37,6 +37,7 @@ builder.Services.Configure<FormOptions>(options =>
 });
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.Configure<List<SpecialPriceAgent>>(builder.Configuration.GetSection("SpecialPricesAgent"));
+builder.Services.Configure<LocalPath>(builder.Configuration.GetSection("TicketPath"));
 builder.Services.AddHttpClient();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

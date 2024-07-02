@@ -4701,14 +4701,6 @@ public partial class DbA9ccf0EecoreContext : DbContext
                 .IsUnicode(false)
                 .IsFixedLength()
                 .HasColumnName("quality");
-            entity.Property(e => e.QualityTranslator)
-                .HasMaxLength(1)
-                .IsUnicode(false)
-                .IsFixedLength();
-            entity.Property(e => e.QualityTypist)
-                .HasMaxLength(1)
-                .IsUnicode(false)
-                .IsFixedLength();
             entity.Property(e => e.QueryCredit)
                 .HasMaxLength(50)
                 .IsUnicode(false)
