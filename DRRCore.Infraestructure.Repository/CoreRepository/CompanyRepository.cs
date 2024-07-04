@@ -1,10 +1,7 @@
 ﻿using DRRCore.Domain.Entities.SqlCoreContext;
 using DRRCore.Infraestructure.Interfaces.CoreRepository;
-using DRRCore.Transversal.Common;
 using DRRCore.Transversal.Common.Interface;
 using Microsoft.EntityFrameworkCore;
-using Mysqlx.Crud;
-using static iTextSharp.text.pdf.AcroFields;
 
 namespace DRRCore.Infraestructure.Repository.CoreRepository
 {
@@ -444,17 +441,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                         obj.TraductionCompanies.Add(traduction);
                     }
                     obj.Traductions = null;
-                    context.Companies.Update(obj);
-
-                    //var listTraductions = await context.Traductions.Where(x => x.IdCompany == obj.Id && x.Identifier.Contains("_E_")).ToListAsync();
-                    //
-                    //foreach (var item in listTraductions)
-                    //{
-                    //    item.ShortValue = existTraduction.Where(x => x.Identifier == item.Identifier).FirstOrDefault().ShortValue;
-                    //    item.LargeValue = existTraduction.Where(x => x.Identifier == item.Identifier).FirstOrDefault().LargeValue;
-                    //    item.LastUpdaterUser = existTraduction.Where(x => x.Identifier == item.Identifier).FirstOrDefault().LastUpdaterUser;
-                    //    context.Traductions.Update(item);
-                    //}                    
+                    context.Companies.Update(obj);    
                     await context.SaveChangesAsync();
                     return true;
                 }

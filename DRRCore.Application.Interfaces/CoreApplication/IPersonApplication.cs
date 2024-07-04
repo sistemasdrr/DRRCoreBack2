@@ -13,7 +13,7 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<bool>> DeletePerson(int id);
         Task<Response<bool>> ActivateWebPerson(int id);
         Task<Response<bool>> DesactivateWebPerson(int id);
-
+        Task<Response<GetFileResponseDto>> DownloadF1(int idPerson, string language, string format);
         Task<Response<int?>> AddOrUpdatePersonHomeAsync(AddOrUpdatePersonHomeRequestDto obj);
         Task<Response<GetPersonHomeResponseDto>> GetPersonHomeByIdPerson(int idPerson);
         Task<Response<int?>> AddOrUpdatePersonJobAsync(AddOrUpdatePersonJobRequestDto obj);

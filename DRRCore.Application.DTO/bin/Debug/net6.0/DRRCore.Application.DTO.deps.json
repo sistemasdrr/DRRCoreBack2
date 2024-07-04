@@ -9,7 +9,8 @@
       "DRRCore.Application.DTO/1.0.0": {
         "dependencies": {
           "DRRCore.Transversal.Common": "1.0.0",
-          "Newtonsoft.Json": "13.0.3"
+          "Newtonsoft.Json": "13.0.3",
+          "DRRCore.Infraestructure.Configuration": "1.0.0.0"
         },
         "runtime": {
           "DRRCore.Application.DTO.dll": {}
@@ -1218,6 +1219,14 @@
         "runtime": {
           "DRRCore.Transversal.Common.dll": {}
         }
+      },
+      "DRRCore.Infraestructure.Configuration/1.0.0.0": {
+        "runtime": {
+          "DRRCore.Infraestructure.Configuration.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
       }
     }
   },
@@ -2055,6 +2064,11 @@
     },
     "DRRCore.Transversal.Common/1.0.0": {
       "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "DRRCore.Infraestructure.Configuration/1.0.0.0": {
+      "type": "reference",
       "serviceable": false,
       "sha512": ""
     }

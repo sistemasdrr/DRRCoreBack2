@@ -57,9 +57,9 @@ namespace DRRCore.Transversal.Common.JsonReader
         public List<QualityAgent>? QualityAgent { get; set; }
     }
 
-    public class LocalPath
+    public class TicketPath
     {
-       public string TicketPath { get; set; }
+       public string Path { get; set; }
     }
     public class QualityAgent
     {

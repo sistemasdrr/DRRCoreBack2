@@ -10,6 +10,8 @@ using DRRCore.Domain.Interfaces.EmailDomain;
 using DRRCore.Transversal.Common;
 using DRRCore.Transversal.Common.Interface;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Storage;
 using Mysqlx.Crud;
 using Newtonsoft.Json;
 using static iTextSharp.text.pdf.AcroFields;
@@ -1658,5 +1660,120 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             return response;
         }
+
+        public async Task<Response<List<GetQuery5_1_1ResponseDto>>> GetQuery5_1_1()
+        {
+            var response = new Response<List<GetQuery5_1_1ResponseDto>>();
+            response.Data = new List<GetQuery5_1_1ResponseDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var subscribers = await context.Subscribers.Include(x => x.IdCountryNavigation).OrderBy(x => x.Code).ToListAsync();
+                var pendingTickets = await context.Tickets
+                    .Where(x => x.IdStatusTicket != (int?)TicketStatusEnum.Despachado && x.IdStatusTicket != (int?)TicketStatusEnum.Despachado_con_Observacion)
+                    .Include(x => x.IdStatusTicketNavigation)
+                    .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.IdCountryNavigation)
+                    .Include(x => x.IdPersonNavigation).ThenInclude(x => x.IdCountryNavigation)
+                    .ToListAsync();
+                foreach (var subscriber in subscribers)
+                {
+                    var tickets = pendingTickets.Where(x => x.IdSubscriber == subscriber.Id).ToList();
+                    if (tickets.Count > 0)
+                    {
+                        var subscriberTickets = new List<GetQueryTicket5_1_1ResponseDto>();
+                        foreach (var item in tickets)
+                        {
+                            subscriberTickets.Add(new GetQueryTicket5_1_1ResponseDto
+                            {
+                                Id = item.Id,
+                                Number = item.Number.ToString("D6"),
+                                Language = item.Language,
+                                About = item.About,
+                                Status = item.IdStatusTicketNavigation.Abrev,
+                                StatusColor = item.IdStatusTicketNavigation.Color,
+                                Country = item.IdCountryNavigation.Iso,
+                                FlagCountry = item.IdCountryNavigation.FlagIso,
+                                SubscriberCode = subscriber.Code,
+                                SubscriberName = subscriber.Name,
+                                SubscriberCountry = subscriber.IdCountryNavigation.Name,
+                                SubscriberFlag = subscriber.IdCountryNavigation.FlagIso,
+                                SubscriberIndications = subscriber.Indications,
+                                QueryCredit = item.QueryCredit,
+                                TimeLimit = item.TimeLimit,
+                                ReferenceNumber = item.ReferenceNumber,
+                                RevealName = subscriber.RevealName,
+                                NameRevealed = subscriber.RevealName == true ? subscriber.Name : "",
+                                AditionalData = item.AditionalData,
+                                BusineesName = item.About == "E" ? item.IdCompanyNavigation.Name : item.IdPersonNavigation.Fullname,
+                                RequestedName = item.RequestedName,
+                                TaxType = item.About == "E" ? item.IdCompanyNavigation.TaxTypeName : item.IdPersonNavigation.TaxTypeName,
+                                TaxCode = item.About == "E" ? item.IdCompanyNavigation.TaxTypeCode : item.IdPersonNavigation.TaxTypeCode,
+                                InvestigatedIsoCountry = item.About == "E" ? item.IdCompanyNavigation.IdCountryNavigation.FlagIso : item.IdPersonNavigation.IdCountryNavigation.FlagIso,
+                                InvestigatedCountry = item.About == "E" ? item.IdCompanyNavigation.IdCountryNavigation.Name : item.IdPersonNavigation.IdCountryNavigation.Name,
+                                InvestigatedFlag = item.About == "E" ? item.IdCompanyNavigation.IdCountryNavigation.FlagIso : item.IdPersonNavigation.IdCountryNavigation.FlagIso,
+                                City = item.About == "E" ? item.IdCompanyNavigation.Place : item.IdPersonNavigation.City,
+                                Email = item.About == "E" ? item.IdCompanyNavigation.Email : item.IdPersonNavigation.Email,
+                                Address = item.About == "E" ? item.IdCompanyNavigation.Address : item.IdPersonNavigation.Address,
+                                Telephone = item.About == "E" ? item.IdCompanyNavigation.Telephone : item.IdPersonNavigation.Cellphone,
+                                WebPage = item.About == "E" ? item.IdCompanyNavigation.WebPage : "",
+
+
+                                OrderDate = StaticFunctions.DateTimeToString(item.OrderDate),
+                                ExpireDate = StaticFunctions.DateTimeToString(item.ExpireDate),
+                                RealExpireDate = StaticFunctions.DateTimeToString(item.RealExpireDate),
+                                ProcedureType = item.ProcedureType,
+                                ReportType = item.ReportType,
+                                Flag = GetFlagDate(item.ExpireDate)
+                            });
+                        }
+                        response.Data.Add(new GetQuery5_1_1ResponseDto
+                        {
+                            Id = subscriber.Id,
+                            Name = subscriber.Name,
+                            Code = subscriber.Code,
+                            Country = subscriber.IdCountryNavigation.Iso ?? "",
+                            FlagCountry = subscriber.IdCountryNavigation.FlagIso ?? "",
+                            Flag = true,
+                            Quantity = subscriberTickets.Count,
+                            Tickets = subscriberTickets
+                        });
+                    }
+                    
+                }
+            }catch(Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
+        private int GetFlagDate(DateTime? orderDate)
+        {
+            if (!orderDate.HasValue)
+            {
+                throw new ArgumentNullException(nameof(orderDate), "orderDate es null");
+            }
+
+            DateTime currentDate = DateTime.Now.Date;
+            DateTime targetDate = orderDate.Value.Date;
+
+            int difference = (targetDate - currentDate).Days;
+
+            if (difference > 2)
+            {
+                return 0; 
+            }
+            else if (difference >= 0)
+            {
+                return 1;
+            }
+            else
+            {
+                return 2; 
+            }
+        }
+
     }
 }

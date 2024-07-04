@@ -13,6 +13,7 @@ namespace DRRCore.Application.Main.CoreApplication
 {
     public class PersonApplication : IPersonApplication
     {
+        private readonly IReportingDownload _reportingDownload;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
         private readonly IPersonDomain _personDomain;
@@ -36,10 +37,11 @@ namespace DRRCore.Application.Main.CoreApplication
             IComercialLatePaymentDomain comercialLatePaymentDomain, IBankDebtDomain bankDebtDomain, ICompanyPartnersDomain companyPartnersDomain,
             IPersonActivitiesDomain personActivitiesDomain, IPersonPropertyDomain personPropertyDomain, 
             IPersonHistoryDomain personHistoryDomain, IPersonGeneralInfoDomain personGeneralInfoDomain, IPersonImagesDomain personImagesDomain,
-            IPersonPhotoDomain personPhotoDomain, ITicketDomain ticketDomain)
+            IPersonPhotoDomain personPhotoDomain, ITicketDomain ticketDomain, IReportingDownload reportingDownload)
         {
             _mapper = mapper;
             _logger = logger;
+            _reportingDownload = reportingDownload;
             _personDomain = personDomain;
             _personHomeDomain = personHomeDomain;
             _personActivitiesDomain = personActivitiesDomain;
@@ -944,6 +946,45 @@ namespace DRRCore.Application.Main.CoreApplication
                     _logger.LogError(response.Message);
                 }
                 response.Data = await _personDomain.DesactivateWebAsync(id);
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
+        public async Task<Response<GetFileResponseDto>> DownloadF1(int idPerson, string language, string format)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+                var person = await _personDomain.GetByIdAsync(idPerson);
+
+                string companyCode = person.OldCode ?? "N" + person.Id.ToString("D6");
+                string languageFileName = language == "I" ? "ENG" : "ESP";
+                string fileFormat = "{0}_{1}{2}";
+                //string report = language == "I" ? "EIECORE-F1-EMPRESAS" : "EIECORE-F1-EMPRESAS_ES";
+                string report = "PERSONAS/F8-PERSONAS-ES";
+                var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                var extension = StaticFunctions.FileExtension(reportRenderType);
+                var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                var dictionary = new Dictionary<string, string>
+                {
+                    { "idPerson", idPerson.ToString() },
+                    { "language", "E" }
+                };
+
+                response.Data = new GetFileResponseDto
+                {
+                    File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                    ContentType = contentType,
+                    Name = string.Format(fileFormat, companyCode, languageFileName, extension)
+                };
+
             }
             catch (Exception ex)
             {

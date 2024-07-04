@@ -15,14 +15,12 @@ using DRRCore.Domain.Interfaces.MysqlDomain;
 using DRRCore.Transversal.Common;
 using DRRCore.Transversal.Common.Interface;
 using DRRCore.Transversal.Common.JsonReader;
+using iTextSharp.text.pdf.qrcode;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
-using Org.BouncyCastle.Utilities;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace DRRCore.Application.Main.CoreApplication
 {
@@ -51,18 +49,20 @@ namespace DRRCore.Application.Main.CoreApplication
         private readonly IPersonalDomain _personalDomain;
         private readonly IAgentDomain _agentDomain;
         private readonly ICompanyApplication _companyApplication;
+        private readonly IPersonApplication _personApplication;
         private IEmailHistoryDomain _emailHistoryDomain;
         private IMapper _mapper;
         private ILogger _logger;
-        private readonly LocalPath _path;
+        private readonly TicketPath _path;
         public TicketApplication(INumerationDomain numerationDomain, ITicketAssignationDomain ticketAssignationDomain, IEmployeeDomain employeeDomain,
-            ITCuponDomain tCuponDomain, ITicketDomain ticketDomain, IPersonalDomain personalDomain, IAgentDomain agentDomain,
+            ITCuponDomain tCuponDomain, ITicketDomain ticketDomain, IPersonalDomain personalDomain, IAgentDomain agentDomain, IPersonApplication personApplication,
             ITicketReceptorDomain ticketReceptorDomain, ITicketHistoryDomain ticketHistoryDomain, ICountryDomain countryDomain,
             ICompanyDomain companyDomain, IMapper mapper, ILogger logger, IReportingDownload reportingDownload, IMailFormatter mailFormatter, IEmailConfigurationDomain emailConfigurationDomain,
             IEmailApplication emailApplication, IUserLoginDomain userLoginDomain, IPersonDomain personDomain, ISubscriberDomain subscriberDomain, ICompanyApplication companyApplication,
-            IMailSender mailSender, IFileManager fileManager, IEmailHistoryDomain emailHistoryDomain  ,IOptions<LocalPath> path)
+            IMailSender mailSender, IFileManager fileManager, IEmailHistoryDomain emailHistoryDomain  ,IOptions<TicketPath> path)
         {
             _path = path.Value;
+            _personApplication = personApplication;
             _numerationDomain = numerationDomain;
             _companyApplication = companyApplication;
             _ticketDomain = ticketDomain;
@@ -104,17 +104,20 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             return response;
         }
-        public async Task<Response<GetFileDto>> DownloadFileByPath(string path)
+        public async Task<Response<GetFileDto>> DownloadFileById(int id)
         {
             var response = new Response<GetFileDto>();
             MemoryStream ms = new MemoryStream();
             try
             {
-                var file = await _ticketDomain.GetFileByPath(path);
+                using var context = new SqlCoreContext();
+                var file = await context.TicketFiles.Where(x => x.Id == id).FirstOrDefaultAsync();
+
+               
                 if (file != null)
                 {
                     ms.Position = 0;
-                    ms = await DescargarArchivo(path);
+                    ms = await DescargarArchivo(file.Path);
                     var documentDto = new GetFileDto();
                     documentDto.File = ms;
                     documentDto.ContentType = GetContentType(file.Extension);
@@ -163,18 +166,32 @@ namespace DRRCore.Application.Main.CoreApplication
         }
         private async Task<MemoryStream> DescargarArchivo(string? path)
         {
-            using (var ftpClient = new FtpClient(GetFtpClientConfiguration()))
+            if (string.IsNullOrEmpty(path))
             {
-                await ftpClient.LoginAsync();
+                throw new ArgumentException("The file path cannot be null or empty.", nameof(path));
+            }
 
-                using (var ftpReadStream = await ftpClient.OpenFileReadStreamAsync(path))
+            if (!File.Exists(path))
+            {
+                throw new FileNotFoundException("The specified file does not exist.", path);
+            }
+
+            MemoryStream memoryStream = new MemoryStream();
+
+            try
+            {
+                using (FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.Read))
                 {
-                    using (var stream = new MemoryStream())
-                    {
-                        await ftpReadStream.CopyToAsync(stream);
-                        return stream;
-                    }
+                    await fileStream.CopyToAsync(memoryStream);
                 }
+
+                memoryStream.Position = 0; // Reset the position to the beginning of the stream
+                return memoryStream;
+            }
+            catch (Exception ex)
+            {
+                memoryStream.Dispose(); // Dispose the MemoryStream in case of an error
+                throw new Exception($"An error occurred while downloading the file: {ex.Message}", ex);
             }
         }
 
@@ -219,8 +236,30 @@ namespace DRRCore.Application.Main.CoreApplication
                     {
                      
                         await _numerationDomain.UpdateTicketNumberAsync();
+                        var traduction = new List<Domain.Entities.SqlCoreContext.Traduction>();
                         if (request.About == "E" && newTicket.IdCompany == null)
                         {
+                            traduction.Add(new Domain.Entities.SqlCoreContext.Traduction
+                            {
+                                Identifier = "L_E_COMIDE",
+                                LargeValue = ""
+                            });
+                            traduction.Add(new Domain.Entities.SqlCoreContext.Traduction
+                            {
+                                Identifier = "S_E_DURATION",
+                                ShortValue = ""
+                            });
+                            traduction.Add(new Domain.Entities.SqlCoreContext.Traduction
+                            {
+                                Identifier = "L_E_REPUTATION",
+                                LargeValue = ""
+                            });
+                            traduction.Add(new Domain.Entities.SqlCoreContext.Traduction
+                            {
+                                Identifier = "L_E_NEW",
+                                LargeValue = ""
+                            });
+
                             var company = await _companyDomain.AddCompanyAsync(new Company
                             {
                                 Name = request.RequestedName ?? string.Empty,
@@ -232,20 +271,57 @@ namespace DRRCore.Application.Main.CoreApplication
                                 TaxTypeCode = request.TaxCode,
                                 Email = request.Email,
                                 Telephone = request.Telephone,
-                                Address = request.Address
+                                Address = request.Address,
+                                Traductions = traduction
                             });
                             var ticket = await _ticketDomain.GetByIdAsync(newTicket.Id);
                             ticket.IdCompany = company;
                             await _ticketDomain.UpdateAsync(ticket);
-
-
                         }
                         if (request.About == "P" && newTicket.IdPerson == null)
                         {
+                            traduction.Add(new Domain.Entities.SqlCoreContext.Traduction
+                            {
+                                Identifier = "S_P_NACIONALITY",
+                                ShortValue = ""
+                            });
+                            traduction.Add(new Domain.Entities.SqlCoreContext.Traduction
+                            {
+                                Identifier = "S_P_BIRTHPLACE",
+                                ShortValue = ""
+                            });
+                            traduction.Add(new Domain.Entities.SqlCoreContext.Traduction
+                            {
+                                Identifier = "S_P_MARRIEDTO",
+                                ShortValue = ""
+                            });
+                            traduction.Add(new Domain.Entities.SqlCoreContext.Traduction
+                            {
+                                Identifier = "S_P_PROFESSION",
+                                ShortValue = ""
+                            });
+                            traduction.Add(new Domain.Entities.SqlCoreContext.Traduction
+                            {
+                                Identifier = "L_P_NEWSCOMM",
+                                LargeValue = ""
+                            });
+                            traduction.Add(new Domain.Entities.SqlCoreContext.Traduction
+                            {
+                                Identifier = "L_P_REPUTATION",
+                                LargeValue = ""
+                            });
                             var person = await _personDomain.AddPersonAsync(new Person
                             {
                                 Fullname = request.RequestedName ?? string.Empty,
-                                Language = request.Language
+                                Language = request.Language,
+                                IdCountry = request.IdCountry ?? 0,
+                                City = request.City,
+                                TaxTypeName = request.TaxType,
+                                TaxTypeCode = request.TaxCode,
+                                Email = request.Email,
+                                Cellphone = request.Telephone,
+                                Address = request.Address,
+                                Traductions = traduction
                             });
                             var ticket = await _ticketDomain.GetByIdAsync(newTicket.Id);
                             ticket.IdPerson = person;
@@ -311,9 +387,9 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 using var context = new SqlCoreContext();
                 var ticket = await  context.Tickets.Where(x => x.Id == idTicket).FirstOrDefaultAsync();
-                if(ticket != null && ticket.ReportType != "OR")
+                if(ticket != null )
                 {
-                    var doc = await _companyApplication.DownloadF1(ticket.IdCompany ?? 0, "ESP", "pdf");
+                    var doc = ticket.About == "E" ? await _companyApplication.DownloadF1((int)ticket.IdCompany, "ESP", "pdf") : await _personApplication.DownloadF1((int)ticket.IdPerson, "ESP", "pdf");
                     if (doc != null && doc.Data != null)
                     {
                         var data = doc.Data;
@@ -598,7 +674,8 @@ namespace DRRCore.Application.Main.CoreApplication
                 ticket.RequestedName = ticket.RequestedName.Trim();
                 ticket.RequestedName = ticket.RequestedName.Replace("?", "");
                 ticket.RequestedName = ticket.RequestedName.Replace("¿", "");
-                var ticketPath = _path.TicketPath;
+                var ticketPath = _path.Path;
+                //var ticketPath = "G:\\ECORE_DOCUMENT"; 
                 var directoryPath = Path.Combine(ticketPath, "cupones", ticket.Number.ToString("D6"));
                 var filePath = Path.Combine(directoryPath, $"{ticket.ReportType}_{ticket.RequestedName}.pdf");
 
@@ -1110,28 +1187,37 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 using var context = new SqlCoreContext();
                 var ticket = await context.Tickets.Where(x => x.Id == idTicket).FirstOrDefaultAsync();
-                using (var ftpClient = new FtpClient(GetFtpClientConfiguration()))
+
+                //string filePath = "/cupones/" + ticket.Number.ToString("D6") + "/" + file.FileName;
+
+                var ticketPath = _path.Path;
+
+                var directoryPath = Path.Combine(ticketPath, "cupones", ticket.Number.ToString("D6"));
+
+                var filePath = Path.Combine(directoryPath, file.FileName);
+
+                if (!Directory.Exists(directoryPath))
                 {
-                    await ftpClient.LoginAsync();
-                    string filePath = "/cupones/" + ticket.Number.ToString("D6") + "/" + file.FileName;
-                    using (var writeStream = await ftpClient.OpenFileWriteStreamAsync(filePath))
-                    {
-                        file.CopyTo(writeStream);
-                    }
-                    response.Data = true;
-                    string fileExtension = Path.GetExtension(file.FileName);
-                    if (response.Data == true)
-                    {
-                        await _ticketDomain.AddTicketFile(new TicketFile
-                        {
-                            Id = 0,
-                            IdTicket = idTicket,
-                            Name = file.FileName,
-                            Path = filePath,
-                            Extension = fileExtension
-                        });
-                    }
+                    Directory.CreateDirectory(directoryPath);
                 }
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+                response.Data = true;
+                string fileExtension = Path.GetExtension(file.FileName);
+                if (response.Data == true)
+                {
+                    await _ticketDomain.AddTicketFile(new TicketFile
+                    {
+                        Id = 0,
+                        IdTicket = idTicket,
+                        Name = file.FileName,
+                        Path = filePath,
+                        Extension = fileExtension
+                    });
+                }
+
             }
             catch (Exception ex)
             {
@@ -1909,16 +1995,16 @@ namespace DRRCore.Application.Main.CoreApplication
                                         int? number = 1;
                                         if (numeration == null)
                                         {
-                                            await context.Numerations.AddAsync(new Numeration
+                                            numeration = new Numeration
                                             {
                                                 Name = nameAssignedTo,
                                                 Description = descriptionAssignedTo,
                                                 Number = 1
-                                            });
+                                            };
+                                            await context.Numerations.AddAsync(numeration);
                                         }
                                         else
                                         {
-                                            number = numeration.Number + 1;
                                             numeration.Number++;
                                             numeration.UpdateDate = DateTime.Now;
                                             context.Numerations.Update(numeration);
@@ -1980,42 +2066,50 @@ namespace DRRCore.Application.Main.CoreApplication
                                             await context.TicketHistories.AddAsync(newTicketHistory);
                                         }
 
+                                        // Declara emailDataDto fuera de los bloques if/else
+                                        EmailDataDTO emailDataDto = null;
+
                                         //ENVIAR CORREO
-                                        var emailDataDto = new EmailDataDTO();
+                                        var userFrom = await context.UserLogins
+                                            .Include(x => x.IdEmployeeNavigation)
+                                            .Where(x => x.Id == int.Parse(item.UserFrom)).FirstOrDefaultAsync();
+
                                         if (item.Internal)
                                         {
+                                            emailDataDto = new EmailDataDTO();
                                             var user = await context.UserLogins.Include(x => x.IdEmployeeNavigation).Where(x => x.Id == int.Parse(item.UserTo)).FirstOrDefaultAsync();
-                                            if(user != null)
+                                            
+                                            if (userFrom != null && user != null)
                                             {
                                                 emailDataDto.EmailKey = ticket.Language == "E" ? "DRR_WORKFLOW_ESP_0023" : "DRR_WORKFLOW_ENG_0023";
                                                 emailDataDto.BeAuthenticated = true;
-                                                emailDataDto.From = "diego.rodriguez@del-risco.com";// ticket.RequestedName + "_" + ticket.ReportType + "_" + DateTime.Now.ToString("dd-MM-yyyy"); // userLogin.IdEmployeeNavigation.Email;
-                                                emailDataDto.UserName = "diego.rodriguez@del-risco.com";//emailDataDto.From;
-                                                emailDataDto.Password = "w*@JHCr7mH";//userLogin.EmailPassword;
+                                                emailDataDto.From = "diego.rodriguez@del-risco.com";//userFrom.IdEmployeeNavigation.Email;
+                                                emailDataDto.UserName = "diego.rodriguez@del-risco.com"; //userFrom.IdEmployeeNavigation.Email;
+                                                emailDataDto.Password = "w*@JHCr7mH";  // userFrom.EmailPassword;
                                                 emailDataDto.To = new List<string>
                                                 {
                                                     "jfernandez@del-risco.com",
-                                                    "diego.rodriguez@del-risco.com"
-                                             //ticket.IdSubscriberNavigation.SendReportToEmail,
+                                                    //user.IdEmployeeNavigation.Email
                                                 };
                                                 emailDataDto.CC = new List<string>
                                                 {
-                                                    //"crc@del-risco.com"
+                                                    "diego.rodriguez@del-risco.com",
+                                                    //userFrom.IdEmployeeNavigation.Email,
+                                                    // "crc@del-risco.com"
                                                 };
-                                                emailDataDto.Subject = ticket.RequestedName + "_" + ticket.ReportType + "_" + DateTime.Now.ToString("dd-MM-yyyy");
+                                                emailDataDto.Subject = ticket.ReportType + ": " + (numeration != null ? numeration.Number : 1) + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureType + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
                                                 emailDataDto.IsBodyHTML = true;
-                                                emailDataDto.Parameters.Add("Cecilia Sayas");
-                                                emailDataDto.Parameters.Add("crc@del-risco.com");
+                                                emailDataDto.Parameters.Add("Cecilia Sayas"); //userFrom.IdEmployeeNavigation.FirstName + " " + userFrom.IdEmployeeNavigation.LastName
+                                                emailDataDto.Parameters.Add("crc@del-risco.com");//userFrom.IdEmployeeNavigation.Email;
                                                 emailDataDto.BodyHTML = emailDataDto.IsBodyHTML ? await GetBodyHtml(emailDataDto) : emailDataDto.BodyHTML;
                                                 _logger.LogInformation(JsonConvert.SerializeObject(emailDataDto));
 
-                                                var file = DownloadAssignAgent((int)ticket.Id, item.AssignedToCode).Result.Data;
+                                                var file = DownloadAssignAgent((int)ticket.Id, item.AssignedToCode, item.EndDate, numeration.Number ?? 1).Result.Data;
                                                 var attachment = new AttachmentDto();
                                                 attachment.FileName = file.Name + ".pdf";
                                                 attachment.Content = Convert.ToBase64String(file.File);
                                                 attachment.Path = await UploadFile(attachment);
                                                 emailDataDto.Attachments.Add(attachment);
-
 
                                                 var result = await _mailSender.SendMailAsync(_mapper.Map<EmailValues>(emailDataDto));
 
@@ -2027,38 +2121,43 @@ namespace DRRCore.Application.Main.CoreApplication
                                         }
                                         else
                                         {
-                                            var agent = await context.Agents.Where(x => x.Code == item.AssignedToCode).FirstOrDefaultAsync();
-                                            if (agent != null)
+                                            var agent = await context.Agents.Where(x => x.Code.Contains(item.AssignedToCode)).FirstOrDefaultAsync();
+                                            var emailAgents = agent.Email.Split();
+                                            if (userFrom != null && agent != null)
                                             {
+                                                emailDataDto = new EmailDataDTO();
                                                 emailDataDto.EmailKey = ticket.Language == "E" ? "DRR_WORKFLOW_ESP_0023" : "DRR_WORKFLOW_ENG_0023";
                                                 emailDataDto.BeAuthenticated = true;
-                                                emailDataDto.From = "diego.rodriguez@del-risco.com";// ticket.RequestedName + "_" + ticket.ReportType + "_" + DateTime.Now.ToString("dd-MM-yyyy"); // userLogin.IdEmployeeNavigation.Email;
-                                                emailDataDto.UserName = "diego.rodriguez@del-risco.com";//emailDataDto.From;
-                                                emailDataDto.Password = "w*@JHCr7mH";//userLogin.EmailPassword;
+                                                emailDataDto.From = "diego.rodriguez@del-risco.com";//userFrom.IdEmployeeNavigation.Email;
+                                                emailDataDto.UserName = "diego.rodriguez@del-risco.com"; //userFrom.IdEmployeeNavigation.Email;
+                                                emailDataDto.Password = "w*@JHCr7mH";  // userFrom.EmailPassword;
                                                 emailDataDto.To = new List<string>
                                                 {
                                                     "jfernandez@del-risco.com",
-                                                    "diego.rodriguez@del-risco.com"
-                                             //ticket.IdSubscriberNavigation.SendReportToEmail,
+                                                    // ticket.IdSubscriberNavigation.SendReportToEmail,
                                                 };
+                                                //foreach(var email in emailAgents)
+                                                //{
+                                                //    emailDataDto.To.Add(email);
+                                                //}
                                                 emailDataDto.CC = new List<string>
                                                 {
-                                                    //"crc@del-risco.com"
+                                                    "diego.rodriguez@del-risco.com"
+                                                    // "crc@del-risco.com"
                                                 };
-                                                emailDataDto.Subject = ticket.RequestedName + "_" + ticket.ReportType + "_" + DateTime.Now.ToString("dd-MM-yyyy");
+                                                emailDataDto.Subject = ticket.ReportType + ": " + (numeration != null ? numeration.Number : 1) + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureType + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
                                                 emailDataDto.IsBodyHTML = true;
-                                                emailDataDto.Parameters.Add("Cecilia Sayas");
-                                                emailDataDto.Parameters.Add("crc@del-risco.com");
+                                                emailDataDto.Parameters.Add("Cecilia Sayas"); //userFrom.IdEmployeeNavigation.FirstName + " " + userFrom.IdEmployeeNavigation.LastName
+                                                emailDataDto.Parameters.Add("crc@del-risco.com");//userFrom.IdEmployeeNavigation.Email;
                                                 emailDataDto.BodyHTML = emailDataDto.IsBodyHTML ? await GetBodyHtml(emailDataDto) : emailDataDto.BodyHTML;
-                                                _logger.LogInformation(JsonConvert.SerializeObject(emailDataDto));
+                                                //_logger.LogInformation(JsonConvert.SerializeObject(emailDataDto));
 
-                                                var file = DownloadAssignAgent((int)ticket.Id, item.AssignedToCode).Result.Data;
+                                                var file = DownloadAssignAgent((int)ticket.Id, item.AssignedToCode, item.EndDate, numeration.Number ?? 1).Result.Data;
                                                 var attachment = new AttachmentDto();
                                                 attachment.FileName = file.Name + ".pdf";
                                                 attachment.Content = Convert.ToBase64String(file.File);
                                                 attachment.Path = await UploadFile(attachment);
                                                 emailDataDto.Attachments.Add(attachment);
-
 
                                                 var result = await _mailSender.SendMailAsync(_mapper.Map<EmailValues>(emailDataDto));
 
@@ -2068,8 +2167,6 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 _logger.LogInformation(Messages.MailSuccessSend);
                                             }
                                         }
-
-
 
                                         if (item.References)
                                         {
@@ -2639,16 +2736,15 @@ namespace DRRCore.Application.Main.CoreApplication
 
 
 
-        public async Task<Response<GetFileResponseDto>> DownloadAssignAgent(int idTicket, string assignedTo)
+        public async Task<Response<GetFileResponseDto>> DownloadAssignAgent(int idTicket, string assignedTo, string expireDate, int number)
         {
             var response = new Response<GetFileResponseDto>();
             try
             {
                 using var context = new SqlCoreContext();
                 var ticket = await context.Tickets.Where(x => x.Id == idTicket).FirstOrDefaultAsync();
-                var numeration = await context.Numerations.Where(x => x.Name.Contains("AGENTE_" + assignedTo.Trim())).FirstOrDefaultAsync();
                 
-                if (ticket != null && numeration != null)
+                if (ticket != null)
                 {
                     string fileFormat = "{0}_{1}{2}";
                     string report = "SOLICITUD_INFORME_AGENTE";
@@ -2659,12 +2755,13 @@ namespace DRRCore.Application.Main.CoreApplication
                         {
                             { "idTicket", ticket.Id.ToString() },
                             { "codeAgent", assignedTo },
+                            { "expireDate", expireDate },
                          };
                     response.Data = new GetFileResponseDto
                     {
                         File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
                         ContentType = contentType,
-                        Name = "PED_AGE_" + numeration.Number
+                        Name = "PED_AGE_" + number
                     };
                 }
             }catch(Exception ex)
@@ -2695,7 +2792,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         string companyCode = company.OldCode ?? "N" + company.Id.ToString("D6");
                         string languageFileName = language == "I" ? "ENG" : "ESP";
                         string fileFormat = "{0}_{1}{2}";
-                        string report = language == "E" ? "F8-EMPRESAS-ES" : "F8-EMPRESAS-EN";
+                        string report = language == "E" ? "EMPRESAS/F8-EMPRESAS-ES" : "EMPRESAS/F8-EMPRESAS-EN";
                         var reportRenderType = StaticFunctions.GetReportRenderType(format);
                         var extension = StaticFunctions.FileExtension(reportRenderType);
                         var contentType = StaticFunctions.GetContentType(reportRenderType);
@@ -2774,7 +2871,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         if (lastTicketHistory != null && ticket != null)
                         {
                             lastTicketHistory.ElementAt(lastTicketHistory.Count - 2).Flag = false;
-                            //lastTicketHistory.ElementAt(lastTicketHistory.Count - 2).ReturnMessage = returnMessage;
+                            lastTicketHistory.ElementAt(lastTicketHistory.Count - 2).ReturnMessage = returnMessage;
                             lastTicketHistory.ElementAt(lastTicketHistory.Count - 2).ShippingDate = null;
                             context.TicketHistories.Update(lastTicketHistory.ElementAt(lastTicketHistory.Count - 2));
                             ticket.IdStatusTicket = lastTicketHistory.ElementAt(lastTicketHistory.Count - 2).IdStatusTicket;

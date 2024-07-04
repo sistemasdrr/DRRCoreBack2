@@ -233,6 +233,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                         obj.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TBhistory= traductions.Where(x => x.Identifier == "L_B_HISTORY").FirstOrDefault().LargeValue;
                         obj.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().UploadDate = DateTime.Now;
                     }
+                    obj.IdCompanyNavigation.Traductions = null;
                     context.CompanyBackgrounds.Update(obj);
 
                     //var listTraductions = await context.Traductions.Where(x => x.IdCompany == obj.IdCompany && x.Identifier.Contains("_B_")).ToListAsync();

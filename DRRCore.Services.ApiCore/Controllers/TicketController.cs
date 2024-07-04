@@ -251,10 +251,10 @@ namespace DRRCore.Services.ApiCore.Controllers
             return Ok(await _ticketApplication.GetTicketFilesByIdTicket(idTicket));
         }
         [HttpGet()]
-        [Route("getFileByPath")]
-        public async Task<ActionResult> getFileByPath(string path)
+        [Route("DownloadFileById")]
+        public async Task<ActionResult> getFileByPath(int id)
         {
-            var result = await _ticketApplication.DownloadFileByPath(path);
+            var result = await _ticketApplication.DownloadFileById(id);
 
             if (result != null && result.Data != null)
             {

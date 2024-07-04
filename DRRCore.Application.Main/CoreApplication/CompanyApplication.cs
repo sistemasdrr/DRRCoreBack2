@@ -2178,7 +2178,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 string languageFileName = language == "I" ? "ENG" : "ESP";
                 string fileFormat ="{0}_{1}{2}" ;
                 //string report = language == "I" ? "EIECORE-F1-EMPRESAS" : "EIECORE-F1-EMPRESAS_ES";
-                string report = "EMPRESAS/F1-EMPRESAS_ES";
+                string report = "EMPRESAS/F1-EMPRESAS-ES";
                 var reportRenderType = StaticFunctions.GetReportRenderType(format);
                 var extension = StaticFunctions.FileExtension(reportRenderType);
                 var contentType= StaticFunctions.GetContentType(reportRenderType);

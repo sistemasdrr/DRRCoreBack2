@@ -148,6 +148,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                         personActivity.IdPersonNavigation.TraductionPeople.FirstOrDefault().TAotherAct = traductions.Where(x => x.Identifier == "L_A_OTHERACT").FirstOrDefault().LargeValue;
                         personActivity.IdPersonNavigation.TraductionPeople.FirstOrDefault().UploadDate = DateTime.Now;
                     }
+                    personActivity.IdPersonNavigation.Traductions = null;
                     context.PersonActivities.Update(personActivity);
 
                     //foreach (var item in traductions)

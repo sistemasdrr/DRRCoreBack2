@@ -205,6 +205,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                         obj.IdPersonNavigation.TraductionPeople.FirstOrDefault().UploadDate = DateTime.Now;
                     }
 
+                    obj.IdPersonNavigation.Traductions = null;
                     context.PersonJobs.Update(obj);
 
                     //foreach (var item in traductions)

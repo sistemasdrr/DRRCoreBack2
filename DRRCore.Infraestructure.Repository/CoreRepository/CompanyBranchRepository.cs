@@ -267,6 +267,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                         obj.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TRadiBus = traductions.Where(x => x.Identifier == "L_R_ADIBUS").FirstOrDefault().LargeValue;
                         obj.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().UploadDate = DateTime.Now;
                     }
+                    obj.IdCompanyNavigation.Traductions = null;
                     context.CompanyBranches.Update(obj);
 
 

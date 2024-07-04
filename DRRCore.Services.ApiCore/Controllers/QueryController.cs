@@ -246,5 +246,11 @@ namespace DRRCore.Services.ApiCore.Controllers
 
             return File(result.Data.File, result.Data.ContentType, result.Data.Name);
         }
+        [HttpGet]
+        [Route("GetQuery5_1_1")]
+        public async Task<ActionResult> GetQuery5_1_1()
+        {
+            return Ok(await _queryApplication.GetQuery5_1_1());
+        }
     }
 }

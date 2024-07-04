@@ -37,7 +37,7 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<bool>> AddTicketHistory(List<AddOrUpdateAssignationsRequestDto> obj);
 
         Task<Response<bool>> UploadFile(int idTicket, string numCupon, IFormFile file);
-        Task<Response<GetFileDto>> DownloadFileByPath(string path);
+        Task<Response<GetFileDto>> DownloadFileById(int id);
         Task<Response<bool?>> DeleteFile(int id);
         Task<Response<string?>> GetNumCuponById(int idTicket);
 

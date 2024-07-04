@@ -151,6 +151,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                         personProperty.IdPersonNavigation.TraductionPeople.FirstOrDefault().TPrdetails = traductions.Where(x => x.Identifier == "L_PR_DETAILS").FirstOrDefault().LargeValue;
                         personProperty.IdPersonNavigation.TraductionPeople.FirstOrDefault().UploadDate = DateTime.Now;
                     }
+                    personProperty.IdPersonNavigation.Traductions = null;
                     context.PersonProperties.Update(personProperty);
 
                     //foreach (var item in traductions)

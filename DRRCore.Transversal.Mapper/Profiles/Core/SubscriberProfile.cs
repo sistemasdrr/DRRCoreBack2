@@ -29,6 +29,14 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
             .ForMember(dest => dest.FacturationType, opt => opt?.MapFrom(src => src.FacturationType))
             .ForMember(dest => dest.Enable, opt => opt?.MapFrom(src => src.Enable))
         .ReverseMap();
+            CreateMap<SubscriberPrice, GetComboValueFlagResponseDto>()
+           .ForMember(dest => dest.Id, opt => opt?.MapFrom(src => src.IdCountry))
+           .ForMember(dest => dest.Valor, opt => opt?.MapFrom(src => src.IdCountryNavigation.Name))
+           .ForMember(dest => dest.Abreviation, opt => opt?.MapFrom(src => src.IdCountryNavigation.Iso))
+           .ForMember(dest => dest.Bandera, opt => opt?.MapFrom(src => src.IdCountryNavigation.FlagIso))
+           .ForMember(dest => dest.Regtrib, opt => opt?.MapFrom(src => src.IdCountryNavigation.TaxTypeName))
+           .ForMember(dest => dest.CodCel, opt => opt?.MapFrom(src => src.IdCountryNavigation.CodePhone))
+       .ReverseMap();
             CreateMap<Subscriber, GetSubscriberResponseDto>()
             .ForMember(dest => dest.Id, opt => opt?.MapFrom(src => src.Id))
             .ForMember(dest => dest.IdContinent, opt => opt?.MapFrom(src => src.IdContinent))
@@ -72,6 +80,8 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
            .ForMember(dest => dest.Id, opt => opt?.MapFrom(src => src.IdCountry == 0 ? null : src.IdCountry))
            .ForMember(dest => dest.Valor, opt => opt?.MapFrom(src => src.IdCountryNavigation != null ? src.IdCountryNavigation.Name : string.Empty))
            .ForMember(dest => dest.Bandera, opt => opt?.MapFrom(src => src.IdCountryNavigation != null ? src.IdCountryNavigation.FlagIso : string.Empty))
+           .ForMember(dest => dest.Regtrib, opt => opt?.MapFrom(src => src.IdCountryNavigation.TaxTypeName))
+           .ForMember(dest => dest.CodCel, opt => opt?.MapFrom(src => src.IdCountryNavigation.CodePhone))
        .ReverseMap();
             CreateMap<CouponBillingSubscriberHistory, GetCouponBillingSubscriberHistoryResponseDto>()
            .ForMember(dest => dest.PurchaseDate, opt => opt?.MapFrom(src => StaticFunctions.DateTimeToString(src.PurchaseDate)))

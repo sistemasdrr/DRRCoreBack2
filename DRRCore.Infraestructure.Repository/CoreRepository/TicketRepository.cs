@@ -111,16 +111,14 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
             try
             {
                 using var context = new SqlCoreContext();
-                return await context.Tickets.Include(x=>x.IdSubscriberNavigation)
-                    .Include(x => x.IdSubscriberNavigation.IdCountryNavigation)
-                    .Include(x => x.IdContinentNavigation).Include(x => x.IdCompanyNavigation)
-                    .Include(x => x.IdCompanyNavigation.IdCountryNavigation)
-                    .Include(x => x.IdCompanyNavigation.IdCountryNavigation.IdContinentNavigation)
-                    .Include(x => x.IdPersonNavigation)
-                    .Include(x => x.IdPersonNavigation.IdCountryNavigation)
-                    .Include(x => x.IdPersonNavigation.IdCountryNavigation.IdContinentNavigation)
+                return await context.Tickets
+                    .Include(x=>x.IdSubscriberNavigation).ThenInclude(x => x.IdCountryNavigation)
+                    .Include(x => x.IdContinentNavigation)
+                    .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.IdCountryNavigation).ThenInclude(x => x.IdContinentNavigation)
+                    .Include(x => x.IdPersonNavigation).ThenInclude(x => x.IdCountryNavigation).ThenInclude(x => x.IdContinentNavigation)
                     .Include(x => x.IdCountryNavigation)
                     .Include(x => x.IdStatusTicketNavigation)
+                    .Include(x => x.TicketAssignation).ThenInclude(x => x.IdEmployeeNavigation)
                     .Include(x => x.TicketQuery)
                     .Include(x => x.TicketHistories.OrderByDescending(x=>x.Id)).Where(x => x.Enable == true)
                     .Where(x => (x.IdStatusTicket == (int?)TicketStatusEnum.Pendiente ||
