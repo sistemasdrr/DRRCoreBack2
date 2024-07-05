@@ -98,7 +98,8 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                  .ForMember(dest => dest.SubscriberIndications, opt => opt?.MapFrom(src => src.IdSubscriberNavigation.Indications))
 
                  .ForMember(dest => dest.InvestigatedContinent, opt => opt?.MapFrom(src => src.About == "E" ? (src.IdCompanyNavigation.IdCountryNavigation.IdContinentNavigation != null ? src.IdCompanyNavigation.IdCountryNavigation.IdContinentNavigation.Name : "") : (src.IdPersonNavigation.IdCountryNavigation.IdContinentNavigation != null ? src.IdPersonNavigation.IdCountryNavigation.IdContinentNavigation.Name : "")))
-                 .ForMember(dest => dest.InvestigatedCountry, opt => opt?.MapFrom(src =>  src.About == "E" ? (src.IdCompanyNavigation.IdCountryNavigation != null ?  src.IdCompanyNavigation.IdCountryNavigation.Name : "") : (src.IdPersonNavigation.IdCountryNavigation != null ? src.IdPersonNavigation.IdCountryNavigation.Name : "")))
+                 .ForMember(dest => dest.InvestigatedCountry, opt => opt?.MapFrom(src => src.About == "E" ? (src.IdCompanyNavigation.IdCountryNavigation != null ? src.IdCompanyNavigation.IdCountryNavigation.Name : "") : (src.IdPersonNavigation.IdCountryNavigation != null ? src.IdPersonNavigation.IdCountryNavigation.Name : "")))
+                 .ForMember(dest => dest.InvestigatedIsoCountry, opt => opt?.MapFrom(src => src.About == "E" ? (src.IdCompanyNavigation.IdCountryNavigation != null ? src.IdCompanyNavigation.IdCountryNavigation.Iso : "") : (src.IdPersonNavigation.IdCountryNavigation != null ? src.IdPersonNavigation.IdCountryNavigation.Iso : "")))
                  .ForMember(dest => dest.InvestigatedFlag, opt => opt?.MapFrom(src => src.About == "E" ? (src.IdCompanyNavigation.IdCountryNavigation != null ? src.IdCompanyNavigation.IdCountryNavigation.FlagIso : "") : (src.IdPersonNavigation.IdCountryNavigation != null ? src.IdPersonNavigation.IdCountryNavigation.FlagIso : "")))
 
 
@@ -162,11 +163,11 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                  .ForMember(dest => dest.SubscriberCountry, opt => opt?.MapFrom(src => src.IdTicketNavigation.IdSubscriberNavigation.IdCountryNavigation.Name))
                  .ForMember(dest => dest.SubscriberFlag, opt => opt?.MapFrom(src => src.IdTicketNavigation.IdSubscriberNavigation.IdCountryNavigation.FlagIso))
                  .ForMember(dest => dest.SubscriberIndications, opt => opt?.MapFrom(src => src.IdTicketNavigation.IdSubscriberNavigation.Indications))
+                 .ForMember(dest => dest.InvestigatedContinent, opt => opt.MapFrom(src => src.IdTicketNavigation.About == "E" ? src.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation.IdContinentNavigation.Name : src.IdTicketNavigation.IdPersonNavigation.IdCountryNavigation.IdContinentNavigation.Name))
 
-                 .ForMember(dest => dest.InvestigatedContinent, opt => opt?.MapFrom(src => src.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation.IdContinentNavigation.Name))
-                 .ForMember(dest => dest.InvestigatedIsoCountry, opt => opt?.MapFrom(src => src.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation.Iso))
-                 .ForMember(dest => dest.InvestigatedCountry, opt => opt?.MapFrom(src => src.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation.Name))
-                 .ForMember(dest => dest.InvestigatedFlag, opt => opt?.MapFrom(src => src.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation.FlagIso))
+                .ForMember(dest => dest.InvestigatedIsoCountry, opt => opt.MapFrom(src => src.IdTicketNavigation.About == "E" ? src.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation.Iso : src.IdTicketNavigation.IdPersonNavigation.IdCountryNavigation.Iso))
+                .ForMember(dest => dest.InvestigatedCountry, opt => opt.MapFrom(src => src.IdTicketNavigation.About == "E" ? src.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation.Name : src.IdTicketNavigation.IdPersonNavigation.IdCountryNavigation.Name))
+                .ForMember(dest => dest.InvestigatedFlag, opt => opt.MapFrom(src => src.IdTicketNavigation.About == "E" ? src.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation.FlagIso : src.IdTicketNavigation.IdPersonNavigation.IdCountryNavigation.FlagIso))
 
 
                  .ForMember(dest => dest.OrderDate, opt => opt?.MapFrom(src => StaticFunctions.DateTimeToString(src.IdTicketNavigation.OrderDate)))
@@ -231,11 +232,12 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                 .ForMember(dest => dest.SubscriberCountry, opt => opt.MapFrom(src => src.IdTicketNavigation.IdSubscriberNavigation.IdCountryNavigation.Name ?? string.Empty))
                 .ForMember(dest => dest.SubscriberFlag, opt => opt.MapFrom(src => src.IdTicketNavigation.IdSubscriberNavigation.IdCountryNavigation.FlagIso ?? string.Empty))
                 .ForMember(dest => dest.SubscriberIndications, opt => opt.MapFrom(src => src.IdTicketNavigation.IdSubscriberNavigation.Indications ?? string.Empty))
-                .ForMember(dest => dest.InvestigatedContinent, opt => opt.MapFrom(src => src.IdTicketNavigation.IdSubscriberNavigation.IdCountryNavigation.IdContinentNavigation != null ? src.IdTicketNavigation.IdSubscriberNavigation.IdCountryNavigation.IdContinentNavigation.Name : ""))
 
-                .ForMember(dest => dest.InvestigatedIsoCountry, opt => opt.MapFrom(src => src.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation != null ? src.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation.Iso : string.Empty))
-                .ForMember(dest => dest.InvestigatedCountry, opt => opt.MapFrom(src => src.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation != null ? src.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation.Name : string.Empty))
-                .ForMember(dest => dest.InvestigatedFlag, opt => opt.MapFrom(src => src.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation != null ? src.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation.FlagIso : string.Empty))
+                .ForMember(dest => dest.InvestigatedContinent, opt => opt.MapFrom(src => src.IdTicketNavigation.About == "E" ? src.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation.IdContinentNavigation.Name : src.IdTicketNavigation.IdPersonNavigation.IdCountryNavigation.IdContinentNavigation.Name))
+
+                .ForMember(dest => dest.InvestigatedIsoCountry, opt => opt.MapFrom(src => src.IdTicketNavigation.About == "E" ? src.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation.Iso : src.IdTicketNavigation.IdPersonNavigation.IdCountryNavigation.Iso))
+                .ForMember(dest => dest.InvestigatedCountry, opt => opt.MapFrom(src => src.IdTicketNavigation.About == "E" ? src.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation.Name : src.IdTicketNavigation.IdPersonNavigation.IdCountryNavigation.Name))
+                .ForMember(dest => dest.InvestigatedFlag, opt => opt.MapFrom(src => src.IdTicketNavigation.About == "E" ? src.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation.FlagIso : src.IdTicketNavigation.IdPersonNavigation.IdCountryNavigation.FlagIso))
                 .ForMember(dest => dest.OrderDate, opt => opt.MapFrom(src => StaticFunctions.DateTimeToString(src.IdTicketNavigation.OrderDate) ?? string.Empty))
                 .ForMember(dest => dest.ExpireDate, opt => opt.MapFrom(src => StaticFunctions.DateTimeToString(src.IdTicketNavigation.ExpireDate) ?? string.Empty))
                 .ForMember(dest => dest.RealExpireDate, opt => opt.MapFrom(src => StaticFunctions.DateTimeToString(src.IdTicketNavigation.RealExpireDate) ?? string.Empty))

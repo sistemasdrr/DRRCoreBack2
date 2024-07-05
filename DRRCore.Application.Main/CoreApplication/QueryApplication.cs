@@ -12,6 +12,7 @@ using DRRCore.Transversal.Common.Interface;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.IdentityModel.Tokens;
 using Mysqlx.Crud;
 using Newtonsoft.Json;
 using static iTextSharp.text.pdf.AcroFields;
@@ -22,11 +23,12 @@ namespace DRRCore.Application.Main.CoreApplication
     {
         private readonly IMailFormatter _mailFormatter;
         private readonly ILogger _logger;
+        private IEmailHistoryDomain _emailHistoryDomain;
         private readonly IReportingDownload _reportingDownload;
         private readonly IEmailConfigurationDomain _emailConfigurationDomain;
         private readonly IMailSender _mailSender;
         private IMapper _mapper;
-        public QueryApplication(ILogger logger, IMapper mapper, IReportingDownload reportingDownload, 
+        public QueryApplication(ILogger logger, IMapper mapper, IReportingDownload reportingDownload, IEmailHistoryDomain emailHistoryDomain,
             IEmailConfigurationDomain emailConfigurationDomain, IMailSender mailSender, IMailFormatter mailFormatter) 
         {
             _logger = logger;
@@ -35,6 +37,7 @@ namespace DRRCore.Application.Main.CoreApplication
             _emailConfigurationDomain = emailConfigurationDomain;
             _mailSender = mailSender;
             _mailFormatter = mailFormatter;
+            _emailHistoryDomain  = emailHistoryDomain;
         }
 
 
@@ -130,7 +133,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 using var context = new SqlCoreContext();
                 var tickets = await context.Tickets
                     .Where(x => x.DispatchtDate != null && x.DispatchtDate.Value.Year == year
-                    && (x.IdStatusTicket == (int?)TicketStatusEnum.Despachado || x.IdStatusTicket == (int?)TicketStatusEnum.Despachado_con_Observacion))
+                    && (x.IdStatusTicket == (int?)TicketStatusEnum.Despachado || x.IdStatusTicket == (int?)TicketStatusEnum.Despachado_con_Observacion) && x.Enable == true)
                     .Include(x => x.IdCountryNavigation)
                     .ToListAsync();
                 var idsCountries = tickets.DistinctBy(x => x.IdCountry);
@@ -174,7 +177,7 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 using var context = new SqlCoreContext();
                 var tickets = await context.Tickets
-                    .Where(x => x.OrderDate.Year == year && x.IdSubscriber == idSubscriber)
+                    .Where(x => x.OrderDate.Year == year && x.IdSubscriber == idSubscriber && x.Enable == true)
                     .Include(x => x.IdCountryNavigation)
                     .ToListAsync();
                 var idsCountries = tickets.DistinctBy(x => x.IdCountry);
@@ -365,7 +368,7 @@ namespace DRRCore.Application.Main.CoreApplication
 
                 var tickets = await context.Tickets
                     .Where(x => x.OrderDate > startDateTime && x.OrderDate <= endDateTime 
-                    && x.IdStatusTicket != (int?)TicketStatusEnum.Despachado_con_Observacion 
+                    && x.IdStatusTicket != (int?)TicketStatusEnum.Despachado_con_Observacion && x.Enable == true
                     && x.IdStatusTicket != (int?)TicketStatusEnum.Despachado && x.IdStatusTicket != (int?)TicketStatusEnum.Rechazado)
                     .Include(x => x.IdSubscriberNavigation)
                     .Include(x => x.IdCountryNavigation)
@@ -407,8 +410,8 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 using var context = new SqlCoreContext();
                 var tickets = await context.Tickets
-                    .Where(x => x.IdStatusTicket != (int?)TicketStatusEnum.Despachado_con_Observacion
-                    && x.IdStatusTicket != (int?)TicketStatusEnum.Despachado && x.IdStatusTicket != (int?)TicketStatusEnum.Rechazado)
+                    .Where(x => x.IdStatusTicket != (int?)TicketStatusEnum.Despachado_con_Observacion && x.Enable == true
+                    && x.IdStatusTicket != (int?)TicketStatusEnum.Despachado && x.IdStatusTicket != (int?)TicketStatusEnum.Rechazado )
                     .Include(x => x.IdSubscriberNavigation).ThenInclude(x => x.IdCountryNavigation)
                     .ToListAsync();
                 if(tickets.Count > 0)
@@ -444,7 +447,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 using var context = new SqlCoreContext();
 
                 var tickets = await context.Tickets
-                    .Where(x => x.IdStatusTicket != (int?)TicketStatusEnum.Despachado_con_Observacion
+                    .Where(x => x.IdStatusTicket != (int?)TicketStatusEnum.Despachado_con_Observacion && x.Enable == true
                     && x.IdStatusTicket != (int?)TicketStatusEnum.Despachado && x.IdStatusTicket != (int?)TicketStatusEnum.Rechazado)
                     .Include(x => x.IdSubscriberNavigation).ThenInclude(x => x.IdCountryNavigation)
                     .Include(x => x.IdCountryNavigation)
@@ -526,7 +529,7 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 using var context = new SqlCoreContext();
                 var tickets = await context.Tickets
-                    .Where(x => x.OrderDate.Year == year && x.OrderDate.Month == month && x.IdSubscriber == idSubscriber)
+                    .Where(x => x.OrderDate.Year == year && x.OrderDate.Month == month && x.IdSubscriber == idSubscriber && x.Enable == true)
                     .Include(x => x.IdCountryNavigation)
                     .ToListAsync();
                 foreach (var item in tickets)
@@ -606,7 +609,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 using var context = new SqlCoreContext();
                 var tickets = await context.Tickets
                     .Where(x => (x.IdStatusTicket == (int?)TicketStatusEnum.Despachado_con_Observacion || x.IdStatusTicket == (int?)TicketStatusEnum.Despachado) &&
-                    x.DispatchtDate.Value.Year == year && x.DispatchtDate.Value.Month == month)
+                    x.DispatchtDate.Value.Year == year && x.DispatchtDate.Value.Month == month && x.Enable == true)
                     .Include(x => x.IdSubscriberNavigation)
                     .ToListAsync();
                 var idSubscribers = tickets.DistinctBy(x => x.IdSubscriber);
@@ -643,7 +646,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 var endDateTime = StaticFunctions.VerifyDate(endDate)?.Date.AddDays(1).AddTicks(-1);
 
                 var tickets = await context.Tickets
-                    .Where(x => x.IdSubscriber == idSubscriber && x.OrderDate > startDateTime && x.OrderDate < endDateTime)
+                    .Where(x => x.IdSubscriber == idSubscriber && x.OrderDate > startDateTime && x.OrderDate < endDateTime && x.Enable == true)
                     .Include(x => x.IdCountryNavigation)
                     .ToListAsync();
                 foreach (var item in tickets)
@@ -682,7 +685,7 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 using var context = new SqlCoreContext();
                 var tickets = await context.Tickets
-                    .Where(x => x.DispatchtDate.Value.Year == year && (x.IdStatusTicket == (int?)TicketStatusEnum.Despachado_con_Observacion || x.IdStatusTicket == (int?)TicketStatusEnum.Despachado))
+                    .Where(x => x.DispatchtDate.Value.Year == year && x.Enable == true && (x.IdStatusTicket == (int?)TicketStatusEnum.Despachado_con_Observacion || x.IdStatusTicket == (int?)TicketStatusEnum.Despachado))
                     .Include(x => x.IdSubscriberNavigation)
                     .ToListAsync();
                 var idsSubscribers = tickets.DistinctBy(x => x.IdSubscriber);
@@ -726,7 +729,7 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 using var context = new SqlCoreContext();
                 var tickets = await context.Tickets
-                    .Where(x => x.IdSubscriber == idSubscriber && (x.IdStatusTicket == (int?)TicketStatusEnum.Despachado_con_Observacion || x.IdStatusTicket == (int?)TicketStatusEnum.Despachado)
+                    .Where(x => x.IdSubscriber == idSubscriber && x.Enable == true && (x.IdStatusTicket == (int?)TicketStatusEnum.Despachado_con_Observacion || x.IdStatusTicket == (int?)TicketStatusEnum.Despachado)
                     && x.DispatchtDate.Value.Year == year && x.DispatchtDate.Value.Month == month)
                     .Include(x => x.IdCountryNavigation)
                     .ToListAsync();
@@ -1670,7 +1673,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 using var context = new SqlCoreContext();
                 var subscribers = await context.Subscribers.Include(x => x.IdCountryNavigation).OrderBy(x => x.Code).ToListAsync();
                 var pendingTickets = await context.Tickets
-                    .Where(x => x.IdStatusTicket != (int?)TicketStatusEnum.Despachado && x.IdStatusTicket != (int?)TicketStatusEnum.Despachado_con_Observacion)
+                    .Where(x => x.IdStatusTicket != (int?)TicketStatusEnum.Despachado && x.IdStatusTicket != (int?)TicketStatusEnum.Despachado_con_Observacion && x.Enable == true)
                     .Include(x => x.IdStatusTicketNavigation)
                     .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.IdCountryNavigation)
                     .Include(x => x.IdPersonNavigation).ThenInclude(x => x.IdCountryNavigation)
@@ -1749,15 +1752,15 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        private int GetFlagDate(DateTime? orderDate)
+        private int GetFlagDate(DateTime? expireDate)
         {
-            if (!orderDate.HasValue)
+            if (!expireDate.HasValue)
             {
-                throw new ArgumentNullException(nameof(orderDate), "orderDate es null");
+                throw new ArgumentNullException(nameof(expireDate), "expireDate es null");
             }
 
             DateTime currentDate = DateTime.Now.Date;
-            DateTime targetDate = orderDate.Value.Date;
+            DateTime targetDate = expireDate.Value.Date;
 
             int difference = (targetDate - currentDate).Days;
 
@@ -1775,5 +1778,167 @@ namespace DRRCore.Application.Main.CoreApplication
             }
         }
 
+        public async Task<Response<bool>> SendTicketAlert(int idTicket, int idUser)
+        {
+            var response = new Response<bool>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var user = await context.UserLogins
+                    .Where(x => x.Id == idUser)
+                    .Include(x => x.IdEmployeeNavigation)
+                    .FirstOrDefaultAsync();
+                var ticketHistory = await context.TicketHistories
+                    .Where(x => x.IdTicket == idTicket && x.Flag == false)
+                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCountryNavigation)
+                    .OrderByDescending(x => x.CreationDate)
+                    .ToListAsync();
+                var emailDataDto = new EmailDataDTO();
+                if(ticketHistory.Count > 0 && user != null) 
+                {
+                    var userTo = "";
+                    foreach (var item in ticketHistory)
+                    {
+                        if(item.UserTo.IsNullOrEmpty() == false)
+                        {
+                            userTo = item.UserTo;
+                            break;
+                        }
+                    }
+                    var userLoginTo = await context.UserLogins.Include(x => x.IdEmployeeNavigation).Where(x => x.Id == int.Parse(userTo)).FirstOrDefaultAsync();
+                    if(userLoginTo != null)
+                    {
+                        emailDataDto.EmailKey = "DRR_WORKFLOW_ESP_0050";
+                        emailDataDto.BeAuthenticated = true;
+                        emailDataDto.From = "diego.rodriguez@del-risco.com";//user.IdEmployeeNavigation.Email;
+                        emailDataDto.UserName = "diego.rodriguez@del-risco.com"; //user.IdEmployeeNavigation.Email;
+                        emailDataDto.Password = "w*@JHCr7mH";  // user.EmailPassword;
+                        emailDataDto.To = new List<string>
+                                                {
+                                                    "jfernandez@del-risco.com",
+                                                    //userLoginTo.IdEmployeeNavigation.Email
+                                                };
+                        emailDataDto.CC = new List<string>
+                                                {
+                                                    "diego.rodriguez@del-risco.com",
+                                                    //user.IdEmployeeNavigation.Email,
+                                                    // "crc@del-risco.com"
+                                                };
+                        emailDataDto.Subject = "Alerta de Informe";
+                        emailDataDto.IsBodyHTML = true;
+                        emailDataDto.Parameters.Add(ticketHistory.First().AsignedTo);
+                        emailDataDto.Parameters.Add(userLoginTo.IdEmployeeNavigation.FirstName + " " + userLoginTo.IdEmployeeNavigation.LastName);
+                        emailDataDto.Parameters.Add(ticketHistory.First().IdTicketNavigation.RequestedName);
+                        emailDataDto.Parameters.Add(ticketHistory.First().IdTicketNavigation.Number.ToString("D6"));
+                        emailDataDto.Parameters.Add(ticketHistory.First().IdTicketNavigation.IdCountryNavigation.Name);
+                        emailDataDto.Parameters.Add(ticketHistory.First().IdTicketNavigation.ProcedureType);
+                        emailDataDto.Parameters.Add(ticketHistory.First().IdTicketNavigation.ReportType);
+                        emailDataDto.Parameters.Add(GetFlagDate(ticketHistory.First().IdTicketNavigation.ExpireDate) == 0 || GetFlagDate(ticketHistory.First().IdTicketNavigation.ExpireDate) == 1 ? " esta proximo a vencer " : " esta vencido ");
+                        emailDataDto.Parameters.Add(StaticFunctions.DateTimeToString(ticketHistory.First().IdTicketNavigation.ExpireDate));
+                        emailDataDto.Parameters.Add(user.IdEmployeeNavigation.FirstName + " " + user.IdEmployeeNavigation.LastName);
+                        emailDataDto.BodyHTML = emailDataDto.IsBodyHTML ? await GetBodyHtml(emailDataDto) : emailDataDto.BodyHTML;
+                        _logger.LogInformation(JsonConvert.SerializeObject(emailDataDto));
+                        var result = await _mailSender.SendMailAsync(_mapper.Map<EmailValues>(emailDataDto)); 
+                        var emailHistory = _mapper.Map<EmailHistory>(emailDataDto);
+                        emailHistory.Success = result;
+                        response.Data = await _emailHistoryDomain.AddAsync(emailHistory);
+                        _logger.LogInformation(Messages.MailSuccessSend);
+                    }
+                }
+
+            }catch(Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+        public async Task<Response<List<GetQuery5_1_2ResponseDto>>> GetQuery5_1_2(string idUser)
+        {
+            var response = new Response<List<GetQuery5_1_2ResponseDto>>();
+            response.Data = new List<GetQuery5_1_2ResponseDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var ticketHistories = await context.TicketHistories
+                    .Where(x => x.UserTo == idUser)
+                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCountryNavigation)
+                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCompanyNavigation).ThenInclude(x => x.IdCountryNavigation)
+                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdPersonNavigation).ThenInclude(x => x.IdCountryNavigation)
+                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdStatusTicketNavigation)
+                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdSubscriberNavigation).ThenInclude(x => x.IdCountryNavigation)
+                    .ToListAsync();
+                var accc = ticketHistories.DistinctBy(x => x.IdTicket);
+                var idSubscribers = accc.DistinctBy(x => x.IdTicketNavigation.IdSubscriber); 
+                var subscriberTickets = new List<GetQueryTicket5_1_2ResponseDto>();
+                foreach (var item in idSubscribers)
+                {
+                    foreach (var item1 in ticketHistories.Where(x => x.IdTicketNavigation.IdSubscriber == item.IdTicketNavigation.IdSubscriber))
+                    {
+                        subscriberTickets.Add(new GetQueryTicket5_1_2ResponseDto
+                        {
+                            Id = item1.Id,
+                            Number = item1.IdTicketNavigation.Number.ToString("D6"),
+                            Language = item1.IdTicketNavigation.Language,
+                            About = item1.IdTicketNavigation.About,
+                            Status = item1.IdTicketNavigation.IdStatusTicketNavigation.Abrev,
+                            StatusColor = item1.IdTicketNavigation.IdStatusTicketNavigation.Color,
+                            Country = item1.IdTicketNavigation.IdCountryNavigation.Iso,
+                            FlagCountry = item1.IdTicketNavigation.IdCountryNavigation.FlagIso,
+                            SubscriberCode = item1.IdTicketNavigation.IdSubscriberNavigation.Code,
+                            SubscriberName = item1.IdTicketNavigation.IdSubscriberNavigation.Name,
+                            SubscriberCountry = item1.IdTicketNavigation.IdSubscriberNavigation.IdCountryNavigation.Name,
+                            SubscriberFlag = item1.IdTicketNavigation.IdSubscriberNavigation.IdCountryNavigation.FlagIso,
+                            SubscriberIndications = item1.IdTicketNavigation.IdSubscriberNavigation.Indications,
+                            QueryCredit = item1.IdTicketNavigation.QueryCredit,
+                            TimeLimit = item1.IdTicketNavigation.TimeLimit,
+                            ReferenceNumber = item1.IdTicketNavigation.ReferenceNumber,
+                            RevealName = item1.IdTicketNavigation.IdSubscriberNavigation.RevealName,
+                            NameRevealed = item1.IdTicketNavigation.IdSubscriberNavigation.RevealName == true ? item1.IdTicketNavigation.IdSubscriberNavigation.Name : "",
+                            AditionalData = item1.IdTicketNavigation.AditionalData,
+                            BusineesName = item1.IdTicketNavigation.About == "E" ? item1.IdTicketNavigation.IdCompanyNavigation.Name : item1.IdTicketNavigation.IdPersonNavigation.Fullname,
+                            RequestedName = item1.IdTicketNavigation.RequestedName,
+                            TaxType = item1.IdTicketNavigation.About == "E" ? item1.IdTicketNavigation.IdCompanyNavigation.TaxTypeName : item1.IdTicketNavigation.IdPersonNavigation.TaxTypeName,
+                            TaxCode = item1.IdTicketNavigation.About == "E" ? item1.IdTicketNavigation.IdCompanyNavigation.TaxTypeCode : item1.IdTicketNavigation.IdPersonNavigation.TaxTypeCode,
+                            InvestigatedIsoCountry = item1.IdTicketNavigation.About == "E" ? item1.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation.FlagIso : item1.IdTicketNavigation.IdPersonNavigation.IdCountryNavigation.FlagIso,
+                            InvestigatedCountry = item1.IdTicketNavigation.About == "E" ? item1.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation.Name : item1.IdTicketNavigation.IdPersonNavigation.IdCountryNavigation.Name,
+                            InvestigatedFlag = item1.IdTicketNavigation.About == "E" ? item1.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation.FlagIso : item1.IdTicketNavigation.IdPersonNavigation.IdCountryNavigation.FlagIso,
+                            City = item1.IdTicketNavigation.About == "E" ? item1.IdTicketNavigation.IdCompanyNavigation.Place : item1.IdTicketNavigation.IdPersonNavigation.City,
+                            Email = item1.IdTicketNavigation.About == "E" ? item1.IdTicketNavigation.IdCompanyNavigation.Email : item1.IdTicketNavigation.IdPersonNavigation.Email,
+                            Address = item1.IdTicketNavigation.About == "E" ? item1.IdTicketNavigation.IdCompanyNavigation.Address : item1.IdTicketNavigation.IdPersonNavigation.Address,
+                            Telephone = item1.IdTicketNavigation.About == "E" ? item1.IdTicketNavigation.IdCompanyNavigation.Telephone : item1.IdTicketNavigation.IdPersonNavigation.Cellphone,
+                            WebPage = item1.IdTicketNavigation.About == "E" ? item1.IdTicketNavigation.IdCompanyNavigation.WebPage : "",
+
+
+                            OrderDate = StaticFunctions.DateTimeToString(item1.IdTicketNavigation.OrderDate),
+                            ExpireDate = StaticFunctions.DateTimeToString(item1.IdTicketNavigation.ExpireDate),
+                            RealExpireDate = StaticFunctions.DateTimeToString(item1.IdTicketNavigation.RealExpireDate),
+                            ProcedureType = item1.IdTicketNavigation.ProcedureType,
+                            ReportType = item1.IdTicketNavigation.ReportType,
+                            Flag = GetFlagDate(item1.IdTicketNavigation.ExpireDate)
+                        });
+                    }
+                    response.Data.Add(new GetQuery5_1_2ResponseDto
+                    {
+                        Id = item.IdTicketNavigation.IdSubscriberNavigation.Id,
+                        Name = item.IdTicketNavigation.IdSubscriberNavigation.Name,
+                        Code = item.IdTicketNavigation.IdSubscriberNavigation.Code,
+                        Country = item.IdTicketNavigation.IdSubscriberNavigation.IdCountryNavigation.Iso ?? "",
+                        FlagCountry = item.IdTicketNavigation.IdSubscriberNavigation.IdCountryNavigation.FlagIso ?? "",
+                        Flag = true,
+                        Quantity = subscriberTickets.Count,
+                        Tickets = subscriberTickets
+                    });
+                }
+            }
+            catch(Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
     }
 }

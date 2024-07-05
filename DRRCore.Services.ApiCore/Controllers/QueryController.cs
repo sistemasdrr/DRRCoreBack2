@@ -252,5 +252,18 @@ namespace DRRCore.Services.ApiCore.Controllers
         {
             return Ok(await _queryApplication.GetQuery5_1_1());
         }
+
+        [HttpGet]
+        [Route("SendTicketAlert")]
+        public async Task<ActionResult> SendTicketAlert(int idTicket, int idUser)
+        {
+            return Ok(await _queryApplication.SendTicketAlert(idTicket, idUser));
+        }
+        [HttpGet]
+        [Route("GetQuery5_1_2")]
+        public async Task<ActionResult> GetQuery5_1_2(string idUser)
+        {
+            return Ok(await _queryApplication.GetQuery5_1_2(idUser));
+        }
     }
 }

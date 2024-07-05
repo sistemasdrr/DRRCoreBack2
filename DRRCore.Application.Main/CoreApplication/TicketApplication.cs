@@ -716,7 +716,7 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 
                 var ticket = await _ticketDomain.GetByIdAsync(idTicket);
-                var path = "/cupones/" + ticket.Number.ToString("D6") + "/" + fileName + ".pdf";
+                var path = _path.Path + "/cupones/" + ticket.Number.ToString("D6") + "/" + fileName + ".pdf";
                     using (var ftpClient = new FtpClient(GetFtpClientConfiguration()))
                     {
                         await ftpClient.LoginAsync();
@@ -1048,7 +1048,8 @@ namespace DRRCore.Application.Main.CoreApplication
                             AsignedTo = assignetTo,
                             IdStatusTicket = ticket.IdStatusTicket,
                             NumberAssign=number,
-                            Flag=false
+                            Flag=false,
+                            AsignationType = "PA"
                         };
                         await _ticketHistoryDomain.AddAsync(newTicketHistory);
                         
@@ -2414,7 +2415,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
-
+                                                AsignationType = item.Type,
                                             };
                                             ticket.UpdateDate = DateTime.Now;
                                             history.Flag = true;
@@ -2460,6 +2461,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
+                                                AsignationType = item.Type,
 
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
@@ -2568,6 +2570,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
+                                                AsignationType = item.Type,
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
 
