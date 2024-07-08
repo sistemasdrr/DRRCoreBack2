@@ -113,11 +113,14 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                  .ForMember(dest => dest.DispatchDate, opt => opt?.MapFrom(src => StaticFunctions.DateTimeToString(src.DispatchtDate)))
                  .ForMember(dest => dest.StatusQuery, opt => opt?.MapFrom(src => src.TicketQuery != null ? src.TicketQuery.Status : 0))
                  .ForMember(dest => dest.HasQuery, opt => opt?.MapFrom(src => src.TicketQuery != null))
-                 //.ForMember(dest => dest.Commentary, opt => opt.MapFrom(src => src.TicketAssignation != null ? src.TicketAssignation.Commentary : "" ))
+                 .ForMember(dest => dest.Commentary, opt => opt.MapFrom(src => src.TicketAssignation != null ? src.TicketAssignation.Commentary : "" ))
 
                  //.ForMember(dest => dest.Commentary, opt => opt?.MapFrom(src => src.TicketAssignation == null ? string.Empty : src.TicketAssignation.Commentary ?? string.Empty))
-                 .ForMember(dest => dest.Receptor, opt => opt?.MapFrom(src => src.TicketAssignation.IdEmployeeNavigation == null ? 0 : src.TicketAssignation.IdEmployeeNavigation.UserLogins.FirstOrDefault().Id))////////
+                 
+                 
                  .ForMember(dest => dest.Receptor2, opt => opt?.MapFrom(src => src.TicketAssignation == null ? 0 : src.TicketAssignation.IdUserLogin))
+                 
+                 
                  .ForMember(dest => dest.HasFiles, opt => opt?.MapFrom(src => src.TicketFiles.Count > 0))
                  .ForMember(dest => dest.WebPage, opt => opt?.MapFrom(src => src.IdCompanyNavigation.WebPage ?? ""))
                  .ForMember(dest => dest.Files, opt => opt?.MapFrom(src => src.TicketFiles))

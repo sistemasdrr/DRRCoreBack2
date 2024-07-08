@@ -334,6 +334,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 else
                 {
                     var existingTicket = await _ticketDomain.GetByIdAsync(request.Id);
+                    existingTicket.TicketAssignation.Commentary = request.Commentary;
                     if (existingTicket == null)
                     {
                         response.IsSuccess = false;
@@ -1616,9 +1617,9 @@ namespace DRRCore.Application.Main.CoreApplication
                         var assignedToName = "";
                         if (item.AsignedTo != null && item.AsignedTo.Contains("PA"))
                         {
-                            assignedToName = item.AsignedTo == "PA1" ? "KATIA BUSTAMANTE" : item.AsignedTo == "PA2" ? "MARIELA ACOSTA" : item.AsignedTo == "PA3" ? "MONICA YEPEZ" :
-                                item.AsignedTo == "PA4" ? "RAFAEL DEL RISCO" : item.AsignedTo == "PA5" ? "CECILIA RODRIGUEZ" : item.AsignedTo == "PA6" ? "JESSICA LIAU" :
-                                item.AsignedTo == "PA7" ? "CECILIA SAYAS" : "";
+                            assignedToName = item.AsignedTo.Trim() == "PA1" ? "KATIA BUSTAMANTE" : item.AsignedTo.Trim() == "PA2" ? "MARIELA ACOSTA" : item.AsignedTo.Trim() == "PA3" ? "MONICA YEPEZ" :
+                                item.AsignedTo.Trim() == "PA4" ? "RAFAEL DEL RISCO" : item.AsignedTo.Trim() == "PA5" ? "CECILIA RODRIGUEZ" : item.AsignedTo.Trim() == "PA6" ? "JESSICA LIAU" :
+                                item.AsignedTo.Trim() == "PA7" ? "CECILIA SAYAS" : "";
                         }
                         else if (item.AsignedTo != null && item.AsignedTo.Contains("CR"))
                         {

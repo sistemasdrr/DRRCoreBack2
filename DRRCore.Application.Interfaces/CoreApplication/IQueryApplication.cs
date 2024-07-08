@@ -70,5 +70,7 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<List<GetQuery5_1_1ResponseDto>>> GetQuery5_1_1();
         Task<Response<bool>> SendTicketAlert(int idTicket, int idUser);
         Task<Response<List<GetQuery5_1_2ResponseDto>>> GetQuery5_1_2(string idUser);
+        Task<Response<List<GetQuery5_1_2ResponseDto>>> GetQuery5_1_2Daily(string idUser);
+        Task<Response<List<GetQuery5_1_2ResponseDto>>> GetQuery5_1_2Monthly(string idUser, int month);
     }
 }

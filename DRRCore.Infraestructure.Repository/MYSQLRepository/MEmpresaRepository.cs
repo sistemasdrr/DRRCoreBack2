@@ -282,7 +282,7 @@ namespace DRRCore.Infraestructure.Repository.MYSQLRepository
                         .Where(x => x.Migra == migra && x.EmActivo == 1 && x.EmNombre != null).Take(100)
                         .ToListAsync();
 
-                    empresas = empresas.Where(x => !x.EmCodigo.StartsWith('Z')).ToList();
+                    empresas = empresas.Where(x => !x.EmCodigo.Contains('Z')).ToList();
 
                     return empresas;
                 }

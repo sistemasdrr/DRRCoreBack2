@@ -28,7 +28,7 @@ namespace DRRCore.Services.ApiCore.Controllers
         public async Task<ActionResult> ChatGpt(string query)
         {
             var _httpClient = new HttpClient();
-            string apiKey = "458196fd1b2c4b91aed6fbb231cdcba7"; // Reemplaza con tu clave API
+            string apiKey = "458196fd1b2c4b91aed6fbb231cdcba7";
             string endpoint = $"https://api.bing.microsoft.com/v7.0/search?q={Uri.EscapeDataString(query)}";
 
             _httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", apiKey);

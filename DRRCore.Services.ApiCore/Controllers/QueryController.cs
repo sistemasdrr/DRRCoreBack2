@@ -265,5 +265,17 @@ namespace DRRCore.Services.ApiCore.Controllers
         {
             return Ok(await _queryApplication.GetQuery5_1_2(idUser));
         }
+        [HttpGet]
+        [Route("GetQuery5_1_2Daily")]
+        public async Task<ActionResult> GetQuery5_1_2Daily(string idUser)
+        {
+            return Ok(await _queryApplication.GetQuery5_1_2Daily(idUser));
+        }
+        [HttpGet]
+        [Route("GetQuery5_1_2Monthly")]
+        public async Task<ActionResult> GetQuery5_1_2Monthly(string idUser, int month)
+        {
+            return Ok(await _queryApplication.GetQuery5_1_2Monthly(idUser, month));
+        }
     }
 }

@@ -487,6 +487,7 @@
     {
 
         public int Id { get; set; }
+        public int? IdTicket { get; set; }
         public string Number { get; set; }
         public string? Language { get; set; }
         public string About { get; set; } = null!;
@@ -547,6 +548,7 @@
     {
 
         public int Id { get; set; }
+        public int? IdTicket { get; set; }
         public string Number { get; set; }
         public string? Language { get; set; }
         public string About { get; set; } = null!;
