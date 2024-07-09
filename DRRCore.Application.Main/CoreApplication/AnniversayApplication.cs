@@ -6,7 +6,6 @@ using DRRCore.Domain.Entities.SqlCoreContext;
 using DRRCore.Domain.Interfaces.CoreDomain;
 using DRRCore.Transversal.Common;
 using DRRCore.Transversal.Common.Interface;
-using Microsoft.IdentityModel.Tokens;
 using System.Globalization;
 
 namespace DRRCore.Application.Main.CoreApplication
