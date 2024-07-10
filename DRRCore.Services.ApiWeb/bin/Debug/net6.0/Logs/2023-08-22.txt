@@ -1,0 +1,162 @@
+2023-08-22 12:08:08,499 [3] ERROR App  
+ No se pudo realizar la consulta 
+ 
+Microsoft.Data.SqlClient.SqlException (0x80131904): The offset specified in a OFFSET clause may not be negative.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at DRRCore.Infraestructure.Repository.SQLRepository.WebQueryRepository.GetByParamAsync(String param, Int32 page) in C:\Repositorio\DRRCore2024\DRRCore.Infraestructure.Repository\SQLRepository\WebQueryRepository.cs:line 49
+   at DRRCore.Domain.Main.WebDataDomain.GetByParamAsync(String param, Int32 page) in C:\Repositorio\DRRCore2024\DRRCore.Domain.Main\WebDataDomain.cs:line 45
+   at DRRCore.Application.Main.WebDataApplication.GetByParamAsync(String param, Int32 page) in C:\Repositorio\DRRCore2024\DRRCore.Application.Main\WebDataApplication.cs:line 92
+ClientConnectionId:8e418012-de87-4502-a5ad-d8da2bb5403a
+Error Number:10742,State:1,Class:15
+2023-08-22 12:08:35,002 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-22 12:08:39,395 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-22 12:08:46,802 [31] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-22 12:08:46,994 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-22 12:08:47,651 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-22 12:08:47,809 [23] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-22 12:08:56,778 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-22 12:08:57,002 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-22 12:17:44,953 [23] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-22 12:17:45,064 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-22 12:17:45,492 [5] ERROR App  
+ No se pudo realizar la consulta 
+ 
+Microsoft.Data.SqlClient.SqlException (0x80131904): The offset specified in a OFFSET clause may not be negative.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at DRRCore.Infraestructure.Repository.SQLRepository.WebQueryRepository.GetByParamAsync(String param, Int32 page) in C:\Repositorio\DRRCore2024\DRRCore.Infraestructure.Repository\SQLRepository\WebQueryRepository.cs:line 49
+   at DRRCore.Domain.Main.WebDataDomain.GetByParamAsync(String param, Int32 page) in C:\Repositorio\DRRCore2024\DRRCore.Domain.Main\WebDataDomain.cs:line 45
+   at DRRCore.Application.Main.WebDataApplication.GetByParamAsync(String param, Int32 page) in C:\Repositorio\DRRCore2024\DRRCore.Application.Main\WebDataApplication.cs:line 92
+ClientConnectionId:8e418012-de87-4502-a5ad-d8da2bb5403a
+Error Number:10742,State:1,Class:15
+2023-08-22 12:17:45,780 [23] ERROR App  
+ No se pudo realizar la consulta 
+ 
+Microsoft.Data.SqlClient.SqlException (0x80131904): The offset specified in a OFFSET clause may not be negative.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at DRRCore.Infraestructure.Repository.SQLRepository.WebQueryRepository.GetByParamAsync(String param, Int32 page) in C:\Repositorio\DRRCore2024\DRRCore.Infraestructure.Repository\SQLRepository\WebQueryRepository.cs:line 49
+   at DRRCore.Domain.Main.WebDataDomain.GetByParamAsync(String param, Int32 page) in C:\Repositorio\DRRCore2024\DRRCore.Domain.Main\WebDataDomain.cs:line 45
+   at DRRCore.Application.Main.WebDataApplication.GetByParamAsync(String param, Int32 page) in C:\Repositorio\DRRCore2024\DRRCore.Application.Main\WebDataApplication.cs:line 92
+ClientConnectionId:8e418012-de87-4502-a5ad-d8da2bb5403a
+Error Number:10742,State:1,Class:15
+2023-08-22 12:17:47,341 [31] ERROR App  
+ No se pudo realizar la consulta 
+ 
+Microsoft.Data.SqlClient.SqlException (0x80131904): The offset specified in a OFFSET clause may not be negative.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at DRRCore.Infraestructure.Repository.SQLRepository.WebQueryRepository.GetByParamAsync(String param, Int32 page) in C:\Repositorio\DRRCore2024\DRRCore.Infraestructure.Repository\SQLRepository\WebQueryRepository.cs:line 49
+   at DRRCore.Domain.Main.WebDataDomain.GetByParamAsync(String param, Int32 page) in C:\Repositorio\DRRCore2024\DRRCore.Domain.Main\WebDataDomain.cs:line 45
+   at DRRCore.Application.Main.WebDataApplication.GetByParamAsync(String param, Int32 page) in C:\Repositorio\DRRCore2024\DRRCore.Application.Main\WebDataApplication.cs:line 92
+ClientConnectionId:8e418012-de87-4502-a5ad-d8da2bb5403a
+Error Number:10742,State:1,Class:15
+2023-08-22 12:17:58,390 [23] ERROR App  
+ No se pudo realizar la consulta 
+ 
+Microsoft.Data.SqlClient.SqlException (0x80131904): The offset specified in a OFFSET clause may not be negative.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at DRRCore.Infraestructure.Repository.SQLRepository.WebQueryRepository.GetByParamAsync(String param, Int32 page) in C:\Repositorio\DRRCore2024\DRRCore.Infraestructure.Repository\SQLRepository\WebQueryRepository.cs:line 49
+   at DRRCore.Domain.Main.WebDataDomain.GetByParamAsync(String param, Int32 page) in C:\Repositorio\DRRCore2024\DRRCore.Domain.Main\WebDataDomain.cs:line 45
+   at DRRCore.Application.Main.WebDataApplication.GetByParamAsync(String param, Int32 page) in C:\Repositorio\DRRCore2024\DRRCore.Application.Main\WebDataApplication.cs:line 92
+ClientConnectionId:8e418012-de87-4502-a5ad-d8da2bb5403a
+Error Number:10742,State:1,Class:15
+2023-08-22 12:19:37,859 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-22 12:19:38,026 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-22 12:19:38,430 [5] ERROR App  
+ No se pudo realizar la consulta 
+ 
+Microsoft.Data.SqlClient.SqlException (0x80131904): The offset specified in a OFFSET clause may not be negative.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at DRRCore.Infraestructure.Repository.SQLRepository.WebQueryRepository.GetByParamAsync(String param, Int32 page) in C:\Repositorio\DRRCore2024\DRRCore.Infraestructure.Repository\SQLRepository\WebQueryRepository.cs:line 49
+   at DRRCore.Domain.Main.WebDataDomain.GetByParamAsync(String param, Int32 page) in C:\Repositorio\DRRCore2024\DRRCore.Domain.Main\WebDataDomain.cs:line 45
+   at DRRCore.Application.Main.WebDataApplication.GetByParamAsync(String param, Int32 page) in C:\Repositorio\DRRCore2024\DRRCore.Application.Main\WebDataApplication.cs:line 92
+ClientConnectionId:3c391efb-90d9-4343-8420-064aed90c5bb
+Error Number:10742,State:1,Class:15
+2023-08-22 14:47:16,219 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-22 14:47:16,390 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 

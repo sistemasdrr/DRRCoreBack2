@@ -1,0 +1,78 @@
+2024-07-04 09:49:37,458 [26] ERROR App  
+ El nombre de objeto 'Traduction' no es válido. 
+ 
+2024-07-04 09:49:37,467 [26] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-07-04 09:49:37,817 [23] ERROR App  
+ El nombre de objeto 'Traduction' no es válido. 
+ 
+2024-07-04 09:49:37,817 [23] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-07-04 09:50:09,251 [22] ERROR App  
+ El nombre de objeto 'Traduction' no es válido. 
+ 
+2024-07-04 09:50:09,252 [22] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-07-04 09:50:17,033 [28] ERROR App  
+ El nombre de objeto 'Traduction' no es válido. 
+ 
+2024-07-04 09:50:17,034 [28] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-07-04 09:50:17,870 [23] ERROR App  
+ El nombre de objeto 'Traduction' no es válido. 
+ 
+2024-07-04 09:50:17,871 [23] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-07-04 09:53:16,820 [7] ERROR App  
+ El nombre de objeto 'Traduction' no es válido. 
+ 
+2024-07-04 09:53:16,821 [7] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-07-04 09:53:39,171 [37] ERROR App  
+ El nombre de objeto 'Traduction' no es válido. 
+ 
+2024-07-04 09:53:39,172 [37] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-07-04 09:53:39,687 [40] ERROR App  
+ El nombre de objeto 'Traduction' no es válido. 
+ 
+2024-07-04 09:53:39,687 [40] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-07-04 09:53:39,928 [24] ERROR App  
+ El nombre de objeto 'Traduction' no es válido. 
+ 
+2024-07-04 09:53:39,929 [24] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-07-04 09:53:40,199 [7] ERROR App  
+ El nombre de objeto 'Traduction' no es válido. 
+ 
+2024-07-04 09:53:40,200 [7] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-07-04 09:54:19,669 [7] ERROR App  
+ El nombre de objeto 'Traduction' no es válido. 
+ 
+2024-07-04 09:54:19,670 [7] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-07-04 09:54:22,424 [24] ERROR App  
+ El nombre de objeto 'Traduction' no es válido. 
+ 
+2024-07-04 09:54:22,424 [24] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-07-04 09:55:24,161 [62] ERROR App  
+ El nombre de objeto 'Traduction' no es válido. 
+ 
+2024-07-04 09:55:41,352 [62] ERROR App  
+ No se encontró datos en la entidad 
+ 

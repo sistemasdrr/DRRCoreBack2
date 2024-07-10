@@ -1,0 +1,6 @@
+2024-07-03 16:16:39,062 [8] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2024-07-03 16:16:39,742 [8] INFO  App  
+ Email ha sido enviado con éxito 
+ 

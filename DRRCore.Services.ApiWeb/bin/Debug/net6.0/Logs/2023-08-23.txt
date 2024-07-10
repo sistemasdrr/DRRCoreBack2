@@ -1,0 +1,374 @@
+2023-08-23 08:59:45,883 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 08:59:47,916 [12] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 08:59:56,442 [3] ERROR App  
+ No se pudo realizar la consulta 
+ 
+Microsoft.Data.SqlClient.SqlException (0x80131904): The offset specified in a OFFSET clause may not be negative.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at DRRCore.Infraestructure.Repository.SQLRepository.WebQueryRepository.GetByParamAsync(String param, Int32 page) in C:\Repositorio\DRRCore2024\DRRCore.Infraestructure.Repository\SQLRepository\WebQueryRepository.cs:line 49
+   at DRRCore.Domain.Main.WebDataDomain.GetByParamAsync(String param, Int32 page) in C:\Repositorio\DRRCore2024\DRRCore.Domain.Main\WebDataDomain.cs:line 45
+   at DRRCore.Application.Main.WebDataApplication.GetByParamAsync(String param, Int32 page) in C:\Repositorio\DRRCore2024\DRRCore.Application.Main\WebDataApplication.cs:line 92
+ClientConnectionId:cf3ebcf8-3d92-4d12-871b-c7de142d8448
+Error Number:10742,State:1,Class:15
+2023-08-23 09:06:47,830 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:06:48,026 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:06:50,211 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:06:50,490 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:15:22,067 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:15:23,282 [8] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:15:25,121 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:15:25,151 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:16:05,692 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:16:08,491 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:16:08,633 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:16:22,642 [31] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:16:23,202 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:16:24,985 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:16:27,619 [30] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:16:27,648 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:16:28,690 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:16:29,289 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:16:29,442 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:16:33,346 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:16:33,529 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:16:36,385 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:16:36,538 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:16:40,242 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:16:40,418 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:16:51,643 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:16:51,801 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:17:06,261 [30] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:17:06,292 [19] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:17:07,082 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:17:07,288 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:17:09,026 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:17:09,882 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:17:10,025 [30] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:17:11,137 [30] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:17:12,041 [19] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:17:12,187 [19] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:18:52,187 [3] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2023-08-23 09:20:04,234 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:20:04,826 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:21:10,892 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:21:10,953 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:21:17,626 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:21:18,859 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:21:31,457 [19] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:21:33,448 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:21:33,800 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:21:33,945 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:21:51,522 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:21:52,569 [30] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:21:53,465 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:21:53,704 [19] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:22:21,503 [30] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:22:22,209 [19] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:24:04,643 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:24:04,729 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:24:22,373 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:24:23,418 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:24:30,369 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:27:02,330 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:27:02,920 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:28:22,547 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:28:22,945 [14] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:28:24,145 [14] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:28:24,321 [14] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:28:24,744 [14] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:28:25,065 [14] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 09:29:52,441 [3] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2023-08-23 10:06:56,596 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 10:06:57,079 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 10:24:13,788 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 10:24:14,406 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 10:25:01,070 [5] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2023-08-23 10:25:11,766 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 10:25:12,158 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 11:13:12,124 [5] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 11:13:13,067 [6] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 11:44:05,584 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 11:44:06,376 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 11:58:59,094 [17] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 11:59:00,161 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 13:56:41,367 [35] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 13:56:41,831 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 13:56:42,877 [42] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 13:56:43,150 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 14:02:24,519 [15] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 14:02:24,732 [15] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 14:07:01,196 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 14:07:03,444 [28] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 14:08:46,445 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 14:08:46,853 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 14:11:07,734 [35] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 14:11:08,332 [12] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 14:12:06,503 [15] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 14:12:06,900 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 14:12:32,189 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 14:12:32,748 [35] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 14:27:02,779 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 14:27:03,547 [12] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 14:35:20,190 [39] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 14:35:20,572 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 14:46:17,113 [3] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2023-08-23 14:46:37,805 [49] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2023-08-23 14:46:54,612 [3] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2023-08-23 14:47:02,799 [37] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2023-08-23 14:47:05,715 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 14:47:06,868 [49] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 14:47:09,447 [49] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2023-08-23 14:47:23,253 [56] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2023-08-23 14:47:48,053 [54] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2023-08-23 14:48:23,127 [37] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2023-08-23 14:48:33,087 [3] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2023-08-23 14:48:51,014 [37] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2023-08-23 15:06:05,005 [3] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2023-08-23 15:06:06,417 [37] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 
+2023-08-23 15:06:07,320 [3] WARN  App  
+ El parámetro no tiene la longitud correcta 
+ 

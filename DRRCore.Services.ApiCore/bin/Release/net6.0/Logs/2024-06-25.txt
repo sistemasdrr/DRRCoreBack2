@@ -1,0 +1,48 @@
+2024-06-25 12:11:33,117 [6] ERROR App  
+ No se pudo realizar la consulta 
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.TicketApplication.GetTicketsToUser(String userTo) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\TicketApplication.cs:line 1016
+2024-06-25 12:11:54,649 [9] ERROR App  
+ No se pudo realizar la consulta 
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.TicketApplication.GetTicketsToUser(String userTo) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\TicketApplication.cs:line 1016
+2024-06-25 14:55:14,150 [69] ERROR App  
+ Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding. 
+ 
+2024-06-25 14:55:14,150 [64] ERROR App  
+ No se pudo realizar la consulta 
+ 
+Microsoft.Data.SqlClient.SqlException (0x80131904): Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.
+ ---> System.ComponentModel.Win32Exception (258): Tiempo de espera de la operación de espera agotado.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__208_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.Tasks.Task.<>c.<.cctor>b__272_0(Object obj)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at DRRCore.Application.Main.CoreApplication.TicketApplication.GetTicketsToUser(String userTo) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\TicketApplication.cs:line 997
+ClientConnectionId:b8002acc-682f-41da-bbb7-a2de2f0ea5e5
+Error Number:-2,State:0,Class:11
+2024-06-25 14:55:14,150 [50] ERROR App  
+ Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding. 
+ 
+2024-06-25 14:55:14,150 [58] ERROR App  
+ Connection Timeout Expired.  The timeout period elapsed while attempting to consume the pre-login handshake acknowledgement.  This could be because the pre-login handshake failed or the server was unable to respond back in time.  The duration spent while attempting to connect to this server was - [Pre-Login] initialization=59014; handshake=1344;  
+ 
+2024-06-25 14:55:14,150 [73] ERROR App  
+ Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding. 
+ 
+2024-06-25 14:55:14,629 [58] ERROR App  
+ No se encontró datos en la entidad 
+ 

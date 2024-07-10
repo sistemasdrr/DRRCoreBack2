@@ -1,0 +1,21 @@
+2023-09-04 10:53:59,900 [8] INFO  App  
+ Email ha sido enviado con Ã©xito 
+ 
+2023-09-04 10:54:00,474 [8] INFO  App  
+ Email ha sido enviado con Ã©xito 
+ 
+2023-09-04 11:37:50,012 [9] ERROR App  
+ Se produjo el siguiente error en el sistema :  Object reference not set to an instance of an object. 
+ 
+2023-09-04 11:43:04,880 [52] INFO  App  
+ Hubo un error al enviar el correo : The parameter 'addresses' cannot be an empty string. (Parameter 'addresses') 
+ 
+2023-09-04 11:43:08,577 [52] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-09-04 11:43:58,079 [57] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-09-04 11:44:01,446 [57] INFO  App  
+ Email ha sido enviado con éxito 
+ 

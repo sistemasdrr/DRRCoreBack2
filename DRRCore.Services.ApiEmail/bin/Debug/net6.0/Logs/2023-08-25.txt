@@ -1,0 +1,345 @@
+2023-08-25 12:22:49,620 [21] INFO  App  
+ Email ha sido enviado con Ã©xito 
+ 
+2023-08-25 12:22:50,198 [21] INFO  App  
+ Email ha sido enviado con Ã©xito 
+ 
+2023-08-25 12:25:21,056 [3] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 12:25:21,417 [3] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 12:32:51,175 [3] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 12:32:51,375 [3] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 12:34:16,171 [16] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 12:34:16,340 [16] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 12:34:50,402 [16] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 12:34:50,585 [16] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 12:36:46,398 [16] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 12:36:46,569 [16] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 12:37:37,035 [16] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 12:37:37,207 [16] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 12:39:10,264 [16] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 12:39:10,435 [16] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 12:40:43,934 [47] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 12:40:44,112 [47] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 12:42:17,209 [16] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 12:42:17,377 [16] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 12:44:39,481 [16] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 12:44:39,651 [16] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 12:46:14,463 [16] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 12:46:14,632 [16] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 12:47:00,872 [57] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 12:47:01,042 [57] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 12:48:05,282 [57] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 12:48:05,451 [57] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 12:51:36,475 [57] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 12:51:36,644 [57] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 12:56:35,720 [32] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 12:56:35,914 [32] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 12:58:34,681 [52] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 12:58:34,849 [52] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 12:59:51,385 [52] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 12:59:51,581 [52] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:01:08,829 [52] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:01:09,002 [52] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:02:01,218 [91] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:02:01,391 [91] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:02:17,066 [52] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:02:17,240 [52] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:05:26,691 [52] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:05:26,865 [52] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:06:53,524 [57] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:06:53,697 [57] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:07:50,215 [88] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:07:50,388 [88] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:08:31,971 [57] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:08:32,146 [57] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:09:33,189 [38] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:09:33,363 [38] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:10:21,328 [88] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:10:21,502 [88] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:10:53,716 [68] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:10:53,890 [68] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:11:20,836 [57] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:11:21,010 [57] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:13:38,225 [57] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:13:38,399 [57] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:15:58,925 [60] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:15:59,102 [60] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:17:21,123 [50] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:17:21,297 [50] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:18:16,079 [46] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:18:16,253 [46] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:23:17,733 [31] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:23:17,907 [31] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:24:23,898 [17] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:24:24,072 [17] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:25:20,816 [24] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:25:20,991 [24] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:27:58,981 [7] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:27:59,157 [7] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:28:50,608 [41] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:28:50,781 [41] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:29:39,614 [27] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:29:39,788 [27] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:30:34,793 [41] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:30:34,971 [41] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:34:52,289 [41] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:34:52,465 [41] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:35:24,989 [16] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:35:25,163 [16] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:38:53,229 [29] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:38:53,420 [29] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:39:26,852 [29] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:39:27,026 [29] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:42:04,701 [41] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:42:04,875 [41] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:42:46,309 [24] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:42:46,484 [24] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:43:52,817 [41] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:43:52,991 [41] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:44:37,936 [41] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:44:38,109 [41] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 13:55:04,394 [42] ERROR App  
+ Se produjo el siguiente error en el sistema :  Index (zero based) must be greater than or equal to zero and less than the size of the argument list. 
+ 
+2023-08-25 13:56:45,241 [51] ERROR App  
+ Se produjo el siguiente error en el sistema :  Index (zero based) must be greater than or equal to zero and less than the size of the argument list. 
+ 
+2023-08-25 13:57:30,490 [74] ERROR App  
+ Se produjo el siguiente error en el sistema :  Index (zero based) must be greater than or equal to zero and less than the size of the argument list. 
+ 
+2023-08-25 14:15:36,128 [8] INFO  App  
+ Email ha sido enviado con Ã©xito 
+ 
+2023-08-25 14:15:50,874 [8] INFO  App  
+ Email ha sido enviado con Ã©xito 
+ 
+2023-08-25 14:19:44,978 [26] INFO  App  
+ Email ha sido enviado con Ã©xito 
+ 
+2023-08-25 14:19:45,555 [26] INFO  App  
+ Email ha sido enviado con Ã©xito 
+ 
+2023-08-25 14:24:24,857 [12] INFO  App  
+ Email ha sido enviado con Ã©xito 
+ 
+2023-08-25 14:24:25,431 [12] INFO  App  
+ Email ha sido enviado con Ã©xito 
+ 
+2023-08-25 14:26:06,956 [13] INFO  App  
+ Email ha sido enviado con Ã©xito 
+ 
+2023-08-25 14:26:07,521 [13] INFO  App  
+ Email ha sido enviado con Ã©xito 
+ 
+2023-08-25 14:27:51,479 [3] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 14:27:51,647 [3] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 14:30:21,711 [5] INFO  App  
+ Email ha sido enviado con Ã©xito 
+ 
+2023-08-25 14:30:22,266 [5] INFO  App  
+ Email ha sido enviado con Ã©xito 
+ 
+2023-08-25 14:37:11,711 [29] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 14:37:11,879 [29] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-25 14:37:44,311 [11] INFO  App  
+ Email ha sido enviado con Ã©xito 
+ 
+2023-08-25 14:37:44,878 [11] INFO  App  
+ Email ha sido enviado con Ã©xito 
+ 
