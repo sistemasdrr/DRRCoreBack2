@@ -56,9 +56,10 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
          .ForMember(dest => dest.Valor, opt => opt?.MapFrom(src => src.Name))
          .ReverseMap();
 
-            CreateMap<LegalRegisterSituation, GetComboValueResponseDto>()
+            CreateMap<LegalRegisterSituation, GetComboValueSitResponseDto>()
         .ForMember(dest => dest.Id, opt => opt?.MapFrom(src => src.Id))
         .ForMember(dest => dest.Valor, opt => opt?.MapFrom(src => src.Name))
+        .ForMember(dest => dest.Flag, opt => opt?.MapFrom(src => src.Since))
         .ReverseMap();
 
             CreateMap<Currency, GetComboValueResponseDto>()

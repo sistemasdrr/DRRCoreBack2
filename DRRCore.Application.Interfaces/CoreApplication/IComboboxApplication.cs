@@ -22,7 +22,7 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<List<GetComboCreditRiskResponseDto>>> GetCreditRisk();
         Task<Response<List<GetComboColorResponseDto>>> GetPaymentPolicy();
         Task<Response<List<GetComboColorResponseDto>>> GetCompanyReputation();
-        Task<Response<List<GetComboValueResponseDto>>> GetLegalRegisterSituation();
+        Task<Response<List<GetComboValueSitResponseDto>>> GetLegalRegisterSituation();
         Task<Response<List<GetComboValueResponseDto>>> GetSubscriberCategories();
         Task<Response<List<GetFinancialSituationResponseDto>>> GetFinancialSituacion();
         Task<Response<List<GetComboValueResponseDto>>> GetCollaborationDegree();

@@ -77,6 +77,8 @@ public partial class CompanyBranch
 
     public string? CountriesExportEng { get; set; }
 
+    public string? MainAddress { get; set; }
+
     public virtual ICollection<CompanyBusineesActivity> CompanyBusineesActivities { get; set; } = new List<CompanyBusineesActivity>();
 
     public virtual BranchSector? IdBranchSectorNavigation { get; set; }
