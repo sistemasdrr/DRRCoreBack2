@@ -38,7 +38,9 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                 {
                     obj.DeleteDate = DateTime.Now;
                     obj.LastUpdateUser = 1;
+                    obj.Enable = false;
                     context.WorkersHistories.Update(obj);
+                    await context.SaveChangesAsync();
                     return true;
                 }
                 else

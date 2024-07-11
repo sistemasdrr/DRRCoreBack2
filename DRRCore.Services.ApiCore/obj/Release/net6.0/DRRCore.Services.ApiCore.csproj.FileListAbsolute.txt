@@ -138,6 +138,7 @@ C:\Repositorio\DRRCore2024\DRRCore.Services.ApiCore\obj\Release\net6.0\refint\DR
 C:\Repositorio\DRRCore2024\DRRCore.Services.ApiCore\obj\Release\net6.0\DRRCore.Services.ApiCore.pdb
 C:\Repositorio\DRRCore2024\DRRCore.Services.ApiCore\obj\Release\net6.0\DRRCore.Services.ApiCore.genruntimeconfig.cache
 C:\Repositorio\DRRCore2024\DRRCore.Services.ApiCore\obj\Release\net6.0\ref\DRRCore.Services.ApiCore.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\bin\Release\net6.0\log4net.config
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\bin\Release\net6.0\appsettings.Development.json
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\bin\Release\net6.0\appsettings.json
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\bin\Release\net6.0\DRRCore.Services.ApiCore.exe
@@ -151,12 +152,14 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\bin\Rel
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\bin\Release\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\bin\Release\net6.0\Azure.Core.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\bin\Release\net6.0\Azure.Identity.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\bin\Release\net6.0\BouncyCastle.Crypto.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\bin\Release\net6.0\BouncyCastle.Cryptography.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\bin\Release\net6.0\CoreFtp.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\bin\Release\net6.0\Dapper.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\bin\Release\net6.0\EntityFramework.SqlServer.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\bin\Release\net6.0\EntityFramework.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\bin\Release\net6.0\Google.Protobuf.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\bin\Release\net6.0\itextsharp.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\bin\Release\net6.0\K4os.Compression.LZ4.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\bin\Release\net6.0\K4os.Compression.LZ4.Streams.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\bin\Release\net6.0\K4os.Hash.xxHash.dll
@@ -266,6 +269,7 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Rel
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\DRRCore.Services.ApiCore.AssemblyInfoInputs.cache
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\DRRCore.Services.ApiCore.AssemblyInfo.cs
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\DRRCore.Services.ApiCore.csproj.CoreCompileInputs.cache
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\DRRCore.Services.ApiCore.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\DRRCore.Services.ApiCore.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\staticwebassets\msbuild.DRRCore.Services.ApiCore.Microsoft.AspNetCore.StaticWebAssets.props
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\staticwebassets\msbuild.build.DRRCore.Services.ApiCore.props
@@ -281,7 +285,3 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Rel
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\DRRCore.Services.ApiCore.pdb
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\DRRCore.Services.ApiCore.genruntimeconfig.cache
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\ref\DRRCore.Services.ApiCore.dll
-C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\bin\Release\net6.0\log4net.config
-C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\bin\Release\net6.0\BouncyCastle.Crypto.dll
-C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\bin\Release\net6.0\itextsharp.dll
-C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\DRRCore.Services.ApiCore.MvcApplicationPartsAssemblyInfo.cs

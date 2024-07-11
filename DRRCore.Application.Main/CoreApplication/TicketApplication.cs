@@ -314,7 +314,11 @@ namespace DRRCore.Application.Main.CoreApplication
                                 Identifier = "L_E_NEW",
                                 LargeValue = ""
                             });
-
+                            var financial = new List<CompanyFinancialInformation>();
+                            financial.Add(new CompanyFinancialInformation
+                            {
+                                IdFinancialSituacion = null
+                            });
                             var company = await _companyDomain.AddCompanyAsync(new Company
                             {
                                 Name = request.RequestedName ?? string.Empty,
@@ -327,7 +331,8 @@ namespace DRRCore.Application.Main.CoreApplication
                                 Email = request.Email,
                                 Telephone = request.Telephone,
                                 Address = request.Address,
-                                Traductions = traduction
+                                Traductions = traduction,
+                                CompanyFinancialInformations = financial
                             });
                             var ticket = await _ticketDomain.GetByIdAsync(newTicket.Id);
                             ticket.IdCompany = company;

@@ -1,10 +1,3 @@
-C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.Migration\obj\Release\net6.0\DRRCore.Services.Migration.csproj.AssemblyReference.cache
-C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.Migration\obj\Release\net6.0\DRRCore.Services.Migration.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.Migration\obj\Release\net6.0\DRRCore.Services.Migration.AssemblyInfoInputs.cache
-C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.Migration\obj\Release\net6.0\DRRCore.Services.Migration.AssemblyInfo.cs
-C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.Migration\obj\Release\net6.0\DRRCore.Services.Migration.csproj.CoreCompileInputs.cache
-C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.Migration\obj\Release\net6.0\DRRCore.Services.Migration.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.Migration\obj\Release\net6.0\DRRCore.Services.Migration.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.Migration\bin\Release\net6.0\log4net.config
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.Migration\bin\Release\net6.0\DRRCore.Services.Migration.exe
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.Migration\bin\Release\net6.0\DRRCore.Services.Migration.deps.json
@@ -128,6 +121,13 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.Migration\bin\R
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.Migration\bin\Release\net6.0\DRRCore.Infraestructure.Configuration.pdb
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.Migration\bin\Release\net6.0\DRRCore.Transversal.Common.pdb
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.Migration\bin\Release\net6.0\DRRCore.Transversal.Mapper.pdb
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.Migration\obj\Release\net6.0\DRRCore.Services.Migration.csproj.AssemblyReference.cache
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.Migration\obj\Release\net6.0\DRRCore.Services.Migration.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.Migration\obj\Release\net6.0\DRRCore.Services.Migration.AssemblyInfoInputs.cache
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.Migration\obj\Release\net6.0\DRRCore.Services.Migration.AssemblyInfo.cs
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.Migration\obj\Release\net6.0\DRRCore.Services.Migration.csproj.CoreCompileInputs.cache
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.Migration\obj\Release\net6.0\DRRCore.Services.Migration.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.Migration\obj\Release\net6.0\DRRCore.Services.Migration.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.Migration\obj\Release\net6.0\staticwebassets\msbuild.DRRCore.Services.Migration.Microsoft.AspNetCore.StaticWebAssets.props
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.Migration\obj\Release\net6.0\staticwebassets\msbuild.build.DRRCore.Services.Migration.props
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.Migration\obj\Release\net6.0\staticwebassets\msbuild.buildMultiTargeting.DRRCore.Services.Migration.props

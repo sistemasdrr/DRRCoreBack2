@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "GJ3CeDIfvrmux8sqKH9EEHFwTmFKiRCmrJWiI/u0J5A=",
+  "Source": "DRRCore.Services.ApiWeb",
+  "BasePath": "_content/DRRCore.Services.ApiWeb",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

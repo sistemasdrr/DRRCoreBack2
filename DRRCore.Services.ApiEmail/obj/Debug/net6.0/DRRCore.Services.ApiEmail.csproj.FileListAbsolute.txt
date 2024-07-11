@@ -159,12 +159,14 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\De
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\Azure.Core.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\Azure.Identity.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\BouncyCastle.Crypto.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\BouncyCastle.Cryptography.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\CoreFtp.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\Dapper.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\EntityFramework.SqlServer.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\EntityFramework.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\Google.Protobuf.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\itextsharp.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\K4os.Compression.LZ4.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\K4os.Compression.LZ4.Streams.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\K4os.Hash.xxHash.dll
@@ -292,5 +294,3 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\obj\De
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\obj\Debug\net6.0\DRRCore.Services.ApiEmail.pdb
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\obj\Debug\net6.0\DRRCore.Services.ApiEmail.genruntimeconfig.cache
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\obj\Debug\net6.0\ref\DRRCore.Services.ApiEmail.dll
-C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\BouncyCastle.Crypto.dll
-C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\itextsharp.dll

@@ -18,10 +18,8 @@ C:\Repositorio\DRRCore2024\DRRCore.Application.DTO\bin\Release\net6.0\DRRCore.In
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.DTO\bin\Release\net6.0\DRRCore.Application.DTO.deps.json
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.DTO\bin\Release\net6.0\DRRCore.Application.DTO.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.DTO\bin\Release\net6.0\DRRCore.Application.DTO.pdb
-C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.DTO\bin\Release\net6.0\DRRCore.Infraestructure.Configuration.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.DTO\bin\Release\net6.0\DRRCore.Transversal.Common.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.DTO\bin\Release\net6.0\DRRCore.Transversal.Common.pdb
-C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.DTO\bin\Release\net6.0\DRRCore.Infraestructure.Configuration.pdb
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.DTO\obj\Release\net6.0\DRRCore.Application.DTO.csproj.AssemblyReference.cache
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.DTO\obj\Release\net6.0\DRRCore.Application.DTO.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.DTO\obj\Release\net6.0\DRRCore.Application.DTO.AssemblyInfoInputs.cache
@@ -32,3 +30,5 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.DTO\obj\Rele
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.DTO\obj\Release\net6.0\refint\DRRCore.Application.DTO.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.DTO\obj\Release\net6.0\DRRCore.Application.DTO.pdb
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.DTO\obj\Release\net6.0\ref\DRRCore.Application.DTO.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.DTO\bin\Release\net6.0\DRRCore.Infraestructure.Configuration.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.DTO\bin\Release\net6.0\DRRCore.Infraestructure.Configuration.pdb
