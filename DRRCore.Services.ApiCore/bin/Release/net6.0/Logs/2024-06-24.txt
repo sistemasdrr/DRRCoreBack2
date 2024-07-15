@@ -1,0 +1,367 @@
+2024-06-24 10:46:56,404 [6] ERROR App  
+ Invalid object name 'Traduction'. 
+ 
+2024-06-24 10:46:56,415 [6] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-06-24 10:47:36,566 [6] ERROR App  
+ An error occurred while saving the entity changes. See the inner exception for details. 
+ 
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'Traduction'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__208_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.Tasks.Task.<>c.<.cctor>b__272_0(Object obj)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+ClientConnectionId:a9eacd25-2962-487b-957f-3f21863f41f0
+Error Number:208,State:1,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at DRRCore.Infraestructure.Repository.CoreRepository.PersonRepository.AddPersonAsync(Person person) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Repository\CoreRepository\PersonRepository.cs:line 109
+2024-06-24 10:47:51,167 [8] ERROR App  
+ No existe la persona solicitada 
+ 
+2024-06-24 10:47:51,167 [6] ERROR App  
+ No existe la persona solicitada 
+ 
+2024-06-24 10:47:51,170 [8] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-06-24 10:47:51,904 [8] ERROR App  
+ No existe la persona solicitada 
+ 
+2024-06-24 10:47:51,905 [8] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-06-24 10:47:53,326 [8] ERROR App  
+ Invalid object name 'Traduction'. 
+ 
+2024-06-24 10:47:53,326 [8] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-06-24 10:59:40,434 [6] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 10:59:40,619 [6] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 10:59:40,782 [8] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 10:59:40,950 [22] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 10:59:41,134 [22] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 10:59:41,708 [12] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 10:59:41,886 [16] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 11:00:00,872 [6] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 11:47:02,969 [22] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 11:47:03,199 [9] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 11:47:03,378 [10] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 11:47:03,569 [8] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 11:47:03,765 [9] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 11:47:04,412 [6] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 11:47:04,596 [6] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 11:47:55,137 [9] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 11:47:55,358 [9] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 11:47:55,520 [8] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 11:47:55,756 [10] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 11:47:58,143 [12] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 11:47:58,737 [12] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 11:47:58,914 [17] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 11:48:16,390 [13] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 11:48:16,531 [28] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 11:48:16,756 [12] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 11:48:16,893 [12] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 11:48:17,032 [8] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 11:48:17,538 [10] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 11:48:17,679 [10] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 11:57:02,843 [6] ERROR App  
+ Invalid object name 'Traduction'. 
+ 
+2024-06-24 11:57:02,858 [6] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-06-24 11:57:46,299 [21] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 11:57:46,510 [21] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 11:57:46,677 [10] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 11:57:46,867 [16] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 11:57:47,045 [35] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 11:57:47,612 [16] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 11:57:47,776 [16] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 12:02:11,637 [8] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 12:02:11,792 [6] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 12:02:11,794 [6] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-06-24 12:02:12,527 [6] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 12:02:12,527 [6] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-06-24 12:04:20,664 [8] ERROR App  
+ No se pudo realizar la consulta 
+ 
+System.Exception: Invalid object name 'Traduction'.
+   at DRRCore.Infraestructure.Repository.CoreRepository.CompanyRepository.AddCompanyAsync(Company obj) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Repository\CoreRepository\CompanyRepository.cs:line 84
+   at DRRCore.Domain.Main.CoreDomain.CompanyDomain.AddCompanyAsync(Company obj) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Main\CoreDomain\CompanyDomain.cs:line 26
+   at DRRCore.Application.Main.CoreApplication.CompanyApplication.AddOrUpdateAsync(AddOrUpdateCompanyRequestDto obj) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\CompanyApplication.cs:line 115
+2024-06-24 12:05:57,316 [10] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 12:05:57,373 [10] ERROR App  
+ No se pudo realizar la consulta 
+ 
+System.NotImplementedException: The method or operation is not implemented.
+   at DRRCore.Infraestructure.Repository.CoreRepository.CompanyBranchRepository.GetByIdAsync(Int32 id) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Repository\CoreRepository\CompanyBranchRepository.cs:line 105
+   at DRRCore.Domain.Main.CoreDomain.CompanyBranchDomain.GetByIdAsync(Int32 id) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Main\CoreDomain\CompanyBranchDomain.cs:line 38
+   at DRRCore.Application.Main.CoreApplication.CompanyApplication.GetStatusCompany(Int32 idCompany) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\CompanyApplication.cs:line 2259
+2024-06-24 12:06:11,567 [8] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-06-24 12:14:50,721 [8] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 12:14:50,783 [8] ERROR App  
+ No se pudo realizar la consulta 
+ 
+System.NotImplementedException: The method or operation is not implemented.
+   at DRRCore.Infraestructure.Repository.CoreRepository.CompanyBranchRepository.GetByIdAsync(Int32 id) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Repository\CoreRepository\CompanyBranchRepository.cs:line 105
+   at DRRCore.Domain.Main.CoreDomain.CompanyBranchDomain.GetByIdAsync(Int32 id) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Main\CoreDomain\CompanyBranchDomain.cs:line 38
+   at DRRCore.Application.Main.CoreApplication.CompanyApplication.GetStatusCompany(Int32 idCompany) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\CompanyApplication.cs:line 2259
+2024-06-24 12:14:52,923 [6] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-06-24 12:15:42,583 [8] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 12:15:42,635 [8] ERROR App  
+ No se pudo realizar la consulta 
+ 
+System.NotImplementedException: The method or operation is not implemented.
+   at DRRCore.Infraestructure.Repository.CoreRepository.CompanyBranchRepository.GetByIdAsync(Int32 id) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Repository\CoreRepository\CompanyBranchRepository.cs:line 105
+   at DRRCore.Domain.Main.CoreDomain.CompanyBranchDomain.GetByIdAsync(Int32 id) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Main\CoreDomain\CompanyBranchDomain.cs:line 38
+   at DRRCore.Application.Main.CoreApplication.CompanyApplication.GetStatusCompany(Int32 idCompany) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\CompanyApplication.cs:line 2259
+2024-06-24 12:15:44,603 [6] ERROR App  
+ No se pudo realizar la consulta 
+ 
+AutoMapper.AutoMapperMappingException: Missing type map configuration or unsupported mapping.
+
+Mapping types:
+CompanyImage -> GetCompanyImageResponseDto
+DRRCore.Domain.Entities.SqlCoreContext.CompanyImage -> DRRCore.Application.DTO.Core.Response.GetCompanyImageResponseDto
+   at lambda_method2423(Closure , Object , GetCompanyImageResponseDto , ResolutionContext )
+   at DRRCore.Application.Main.CoreApplication.CompanyImagesApplication.GetCompanyImagesByIdCompany(Int32 idCompany) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\CompanyImagesApplication.cs:line 99
+2024-06-24 12:17:01,673 [35] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 12:18:34,454 [6] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 12:18:34,511 [6] ERROR App  
+ No se pudo realizar la consulta 
+ 
+System.NotImplementedException: The method or operation is not implemented.
+   at DRRCore.Infraestructure.Repository.CoreRepository.CompanyBranchRepository.GetByIdAsync(Int32 id) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Repository\CoreRepository\CompanyBranchRepository.cs:line 105
+   at DRRCore.Domain.Main.CoreDomain.CompanyBranchDomain.GetByIdAsync(Int32 id) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Main\CoreDomain\CompanyBranchDomain.cs:line 38
+   at DRRCore.Application.Main.CoreApplication.CompanyApplication.GetStatusCompany(Int32 idCompany) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\CompanyApplication.cs:line 2259
+2024-06-24 12:19:27,123 [9] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 12:19:27,293 [9] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 12:19:27,452 [8] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 12:19:28,245 [10] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 12:19:28,808 [8] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 12:19:28,963 [8] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 12:22:37,450 [6] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 12:22:37,600 [10] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 12:22:37,740 [8] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 12:22:37,881 [8] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 12:22:38,014 [6] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 12:22:38,516 [8] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 12:22:38,649 [6] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 12:26:11,414 [8] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 12:26:11,417 [8] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-06-24 12:26:13,609 [8] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 12:26:13,611 [8] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-06-24 12:27:39,025 [9] ERROR App  
+ No existe la persona solicitada 
+ 
+2024-06-24 12:27:39,026 [9] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-06-24 12:27:39,047 [8] ERROR App  
+ No existe la persona solicitada 
+ 
+2024-06-24 12:27:39,817 [9] ERROR App  
+ No existe la persona solicitada 
+ 
+2024-06-24 12:27:39,817 [9] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-06-24 17:20:51,560 [14] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 17:20:51,620 [14] ERROR App  
+ No se pudo realizar la consulta 
+ 
+System.NotImplementedException: The method or operation is not implemented.
+   at DRRCore.Infraestructure.Repository.CoreRepository.CompanyBranchRepository.GetByIdAsync(Int32 id) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Repository\CoreRepository\CompanyBranchRepository.cs:line 105
+   at DRRCore.Domain.Main.CoreDomain.CompanyBranchDomain.GetByIdAsync(Int32 id) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Main\CoreDomain\CompanyBranchDomain.cs:line 38
+   at DRRCore.Application.Main.CoreApplication.CompanyApplication.GetStatusCompany(Int32 idCompany) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\CompanyApplication.cs:line 2259
+2024-06-24 17:21:00,159 [14] ERROR App  
+ An error occurred while saving the entity changes. See the inner exception for details. 
+ 
+2024-06-24 17:21:00,214 [14] ERROR App  
+ No se pudo realizar la consulta 
+ 
+System.Exception: An error occurred while saving the entity changes. See the inner exception for details.
+   at DRRCore.Infraestructure.Repository.CoreRepository.CompanyRepository.UpdateAsync(Company obj) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Repository\CoreRepository\CompanyRepository.cs:line 464
+   at DRRCore.Domain.Main.CoreDomain.CompanyDomain.UpdateAsync(Company obj) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Main\CoreDomain\CompanyDomain.cs:line 76
+   at DRRCore.Application.Main.CoreApplication.CompanyApplication.AddOrUpdateAsync(AddOrUpdateCompanyRequestDto obj) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\CompanyApplication.cs:line 142
+2024-06-24 17:21:39,310 [6] ERROR App  
+ An error occurred while saving the entity changes. See the inner exception for details. 
+ 
+2024-06-24 17:22:12,048 [6] ERROR App  
+ No se pudo realizar la consulta 
+ 
+System.Exception: An error occurred while saving the entity changes. See the inner exception for details.
+   at DRRCore.Infraestructure.Repository.CoreRepository.CompanyRepository.UpdateAsync(Company obj) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Repository\CoreRepository\CompanyRepository.cs:line 464
+   at DRRCore.Domain.Main.CoreDomain.CompanyDomain.UpdateAsync(Company obj) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Main\CoreDomain\CompanyDomain.cs:line 76
+   at DRRCore.Application.Main.CoreApplication.CompanyApplication.AddOrUpdateAsync(AddOrUpdateCompanyRequestDto obj) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\CompanyApplication.cs:line 142
+2024-06-24 17:23:42,953 [6] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 17:23:43,014 [6] ERROR App  
+ No se pudo realizar la consulta 
+ 
+System.NotImplementedException: The method or operation is not implemented.
+   at DRRCore.Infraestructure.Repository.CoreRepository.CompanyBranchRepository.GetByIdAsync(Int32 id) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Repository\CoreRepository\CompanyBranchRepository.cs:line 105
+   at DRRCore.Domain.Main.CoreDomain.CompanyBranchDomain.GetByIdAsync(Int32 id) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Main\CoreDomain\CompanyBranchDomain.cs:line 38
+   at DRRCore.Application.Main.CoreApplication.CompanyApplication.GetStatusCompany(Int32 idCompany) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\CompanyApplication.cs:line 2259
+2024-06-24 17:26:16,692 [8] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-06-24 17:35:36,941 [6] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-24 17:35:36,943 [6] ERROR App  
+ No se encontró datos en la entidad 
+ 

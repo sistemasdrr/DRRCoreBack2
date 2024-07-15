@@ -125,7 +125,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         return response;
                     }
                     existingCompany = _mapper.Map(obj, existingCompany);
-
+                    existingCompany.Since = obj.Since;
                     foreach (var item in obj.Traductions)
                     {
                         traductions.Add(new Traduction

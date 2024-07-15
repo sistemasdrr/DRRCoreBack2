@@ -238,7 +238,9 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                     obj.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().UploadDate = DateTime.Now;
                 }
                 obj.IdCompanyNavigation.Traductions = null;
+                obj.IdCompanyNavigation.IdCreditRisk = obj.IdFinancialSituacion == null ? null : obj.IdFinancialSituacion == 8 ? null : obj.IdFinancialSituacion == 9 ? 1 : obj.IdFinancialSituacion == 10 ? 2 : obj.IdFinancialSituacion == 11 ? 3 : obj.IdFinancialSituacion == 12 ? 4 : obj.IdFinancialSituacion == 13 ? 5 : obj.IdFinancialSituacion == 14 ? 7 : obj.IdFinancialSituacion == 15 ? 6 : null;
                 context.CompanyFinancialInformations.Update(obj);
+                await context.SaveChangesAsync();
 
                 //var listTraductions = await context.Traductions.Where(x => x.IdCompany == obj.IdCompany && x.Identifier.Contains("_F_")).ToListAsync();
                 //foreach (var item in listTraductions)

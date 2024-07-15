@@ -47,6 +47,8 @@ public partial class TicketHistory
 
     public string? ReturnMessage { get; set; }
 
+    public string? Cycle { get; set; }
+
     public virtual ICollection<AgentInvoiceDetail> AgentInvoiceDetails { get; set; } = new List<AgentInvoiceDetail>();
 
     public virtual StatusTicket? IdStatusTicketNavigation { get; set; }

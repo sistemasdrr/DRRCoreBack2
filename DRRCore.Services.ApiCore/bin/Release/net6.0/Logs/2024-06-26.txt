@@ -1,0 +1,181 @@
+2024-06-26 15:06:39,633 [10] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-26 15:06:39,695 [10] ERROR App  
+ No se pudo realizar la consulta 
+ 
+System.NotImplementedException: The method or operation is not implemented.
+   at DRRCore.Infraestructure.Repository.CoreRepository.CompanyBranchRepository.GetByIdAsync(Int32 id) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Repository\CoreRepository\CompanyBranchRepository.cs:line 105
+   at DRRCore.Domain.Main.CoreDomain.CompanyBranchDomain.GetByIdAsync(Int32 id) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Main\CoreDomain\CompanyBranchDomain.cs:line 38
+   at DRRCore.Application.Main.CoreApplication.CompanyApplication.GetStatusCompany(Int32 idCompany) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\CompanyApplication.cs:line 2259
+2024-06-26 15:16:21,549 [11] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-06-26 15:16:21,622 [11] ERROR App  
+ No se pudo realizar la consulta 
+ 
+System.NotImplementedException: The method or operation is not implemented.
+   at DRRCore.Infraestructure.Repository.CoreRepository.CompanyBranchRepository.GetByIdAsync(Int32 id) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Repository\CoreRepository\CompanyBranchRepository.cs:line 105
+   at DRRCore.Domain.Main.CoreDomain.CompanyBranchDomain.GetByIdAsync(Int32 id) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Main\CoreDomain\CompanyBranchDomain.cs:line 38
+   at DRRCore.Application.Main.CoreApplication.CompanyApplication.GetStatusCompany(Int32 idCompany) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\CompanyApplication.cs:line 2259
+2024-06-26 17:14:39,134 [6] ERROR App  
+ An error occurred while saving the entity changes. See the inner exception for details. 
+ 
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The UPDATE statement conflicted with the FOREIGN KEY constraint "FK_TicketAssignation_Employee". The conflict occurred in database "db_a9ccf0_eecore", table "dbo.Employee", column 'id'.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetWithRowsAffectedOnlyAsync(Int32 commandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+ClientConnectionId:f81ccfe8-4159-4bf2-8d48-25e47643f46a
+Error Number:547,State:0,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at DRRCore.Infraestructure.Repository.CoreRepository.TicketAssignationRepository.UpdateAsync(TicketAssignation obj) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Repository\CoreRepository\TicketAssignationRepository.cs:line 63
+2024-06-26 17:14:40,746 [20] ERROR App  
+ An error occurred while saving the entity changes. See the inner exception for details. 
+ 
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The UPDATE statement conflicted with the FOREIGN KEY constraint "FK_TicketAssignation_Employee". The conflict occurred in database "db_a9ccf0_eecore", table "dbo.Employee", column 'id'.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetWithRowsAffectedOnlyAsync(Int32 commandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+ClientConnectionId:f81ccfe8-4159-4bf2-8d48-25e47643f46a
+Error Number:547,State:0,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at DRRCore.Infraestructure.Repository.CoreRepository.TicketAssignationRepository.UpdateAsync(TicketAssignation obj) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Repository\CoreRepository\TicketAssignationRepository.cs:line 63
+2024-06-26 17:14:42,315 [6] ERROR App  
+ An error occurred while saving the entity changes. See the inner exception for details. 
+ 
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The UPDATE statement conflicted with the FOREIGN KEY constraint "FK_TicketAssignation_Employee". The conflict occurred in database "db_a9ccf0_eecore", table "dbo.Employee", column 'id'.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetWithRowsAffectedOnlyAsync(Int32 commandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+ClientConnectionId:f81ccfe8-4159-4bf2-8d48-25e47643f46a
+Error Number:547,State:0,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at DRRCore.Infraestructure.Repository.CoreRepository.TicketAssignationRepository.UpdateAsync(TicketAssignation obj) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Repository\CoreRepository\TicketAssignationRepository.cs:line 63
+2024-06-26 17:23:29,811 [8] ERROR App  
+ Cannot create a DbSet for 'CompanyShareholderSP' because this type is not included in the model for the context. 
+ 
+System.InvalidOperationException: Cannot create a DbSet for 'CompanyShareholderSP' because this type is not included in the model for the context.
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.get_EntityType()
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.get_EntityQueryable()
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.System.Linq.IQueryable.get_Provider()
+   at Microsoft.EntityFrameworkCore.RelationalQueryableExtensions.FromSqlRaw[TEntity](DbSet`1 source, String sql, Object[] parameters)
+   at DRRCore.Application.Main.CoreApplication.XmlApplication.GetXmlAtradiusAsync(Int32 idTicket) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\XmlApplication.cs:line 572
+2024-06-26 17:28:11,221 [9] ERROR App  
+ Cannot create a DbSet for 'CompanyShareholderSP' because this type is not included in the model for the context. 
+ 
+System.InvalidOperationException: Cannot create a DbSet for 'CompanyShareholderSP' because this type is not included in the model for the context.
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.get_EntityType()
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.get_EntityQueryable()
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.System.Linq.IQueryable.get_Provider()
+   at Microsoft.EntityFrameworkCore.RelationalQueryableExtensions.FromSqlRaw[TEntity](DbSet`1 source, String sql, Object[] parameters)
+   at DRRCore.Application.Main.CoreApplication.XmlApplication.GetXmlAtradiusAsync(Int32 idTicket) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\XmlApplication.cs:line 572
+2024-06-26 17:28:40,909 [6] ERROR App  
+ Cannot create a DbSet for 'CompanyShareholderSP' because this type is not included in the model for the context. 
+ 
+System.InvalidOperationException: Cannot create a DbSet for 'CompanyShareholderSP' because this type is not included in the model for the context.
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.get_EntityType()
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.get_EntityQueryable()
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.System.Linq.IQueryable.get_Provider()
+   at Microsoft.EntityFrameworkCore.RelationalQueryableExtensions.FromSqlRaw[TEntity](DbSet`1 source, String sql, Object[] parameters)
+   at DRRCore.Application.Main.CoreApplication.XmlApplication.GetXmlAtradiusAsync(Int32 idTicket) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\XmlApplication.cs:line 572
+2024-06-26 17:31:00,134 [10] ERROR App  
+ Cannot create a DbSet for 'CompanyShareholderSP' because this type is not included in the model for the context. 
+ 
+System.InvalidOperationException: Cannot create a DbSet for 'CompanyShareholderSP' because this type is not included in the model for the context.
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.get_EntityType()
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.get_EntityQueryable()
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.System.Linq.IQueryable.get_Provider()
+   at Microsoft.EntityFrameworkCore.RelationalQueryableExtensions.FromSqlRaw[TEntity](DbSet`1 source, String sql, Object[] parameters)
+   at DRRCore.Application.Main.CoreApplication.XmlApplication.GetXmlAtradiusAsync(Int32 idTicket) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\XmlApplication.cs:line 572
+2024-06-26 17:33:25,367 [8] ERROR App  
+ Cannot create a DbSet for 'CompanyShareholderSP' because this type is not included in the model for the context. 
+ 
+System.InvalidOperationException: Cannot create a DbSet for 'CompanyShareholderSP' because this type is not included in the model for the context.
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.get_EntityType()
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.get_EntityQueryable()
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.System.Linq.IQueryable.get_Provider()
+   at Microsoft.EntityFrameworkCore.RelationalQueryableExtensions.FromSqlRaw[TEntity](DbSet`1 source, String sql, Object[] parameters)
+   at DRRCore.Application.Main.CoreApplication.XmlApplication.GetXmlAtradiusAsync(Int32 idTicket) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\XmlApplication.cs:line 572
+2024-06-26 17:36:16,088 [6] ERROR App  
+ Invalid object name 'Traduction'. 
+ 
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'Traduction'.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at Microsoft.Data.SqlClient.SqlDataReader.get_MetaData()
+   at Microsoft.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean isAsync, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+   at Microsoft.EntityFrameworkCore.Query.Internal.FromSqlQueryingEnumerable`1.Enumerator.InitializeReader(Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.FromSqlQueryingEnumerable`1.Enumerator.MoveNext()
+   at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at DRRCore.Application.Main.CoreApplication.XmlApplication.GetXmlAtradiusAsync(Int32 idTicket) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\XmlApplication.cs:line 576
+ClientConnectionId:42f973a1-1f68-4ad1-a943-e58def5f8fc0
+Error Number:208,State:1,Class:16

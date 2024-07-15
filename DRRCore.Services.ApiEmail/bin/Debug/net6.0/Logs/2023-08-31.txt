@@ -1,0 +1,96 @@
+2023-08-31 10:51:46,193 [5] INFO  App  
+ Email ha sido enviado con Ã©xito 
+ 
+2023-08-31 10:51:47,257 [5] INFO  App  
+ Email ha sido enviado con Ã©xito 
+ 
+2023-08-31 10:54:39,972 [5] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-31 10:54:40,623 [5] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-31 13:00:48,923 [3] INFO  App  
+ Email ha sido enviado con Ã©xito 
+ 
+2023-08-31 13:00:49,691 [3] INFO  App  
+ Email ha sido enviado con Ã©xito 
+ 
+2023-08-31 13:02:06,177 [31] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-31 13:02:06,341 [31] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-31 13:14:38,875 [5] INFO  App  
+ Hubo un error al enviar el correo : The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters. 
+ 
+2023-08-31 13:14:38,920 [5] ERROR App  
+ Se produjo el siguiente error en el sistema :  The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters. 
+ 
+2023-08-31 13:15:17,371 [5] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-31 13:15:18,397 [5] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-31 13:19:51,242 [5] INFO  App  
+ Email ha sido enviado con Ã©xito 
+ 
+2023-08-31 13:19:51,788 [5] INFO  App  
+ Email ha sido enviado con Ã©xito 
+ 
+2023-08-31 13:22:02,609 [3] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-31 13:22:02,774 [3] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-31 13:24:20,361 [5] INFO  App  
+ Email ha sido enviado con Ã©xito 
+ 
+2023-08-31 13:24:20,918 [5] INFO  App  
+ Email ha sido enviado con Ã©xito 
+ 
+2023-08-31 13:25:46,628 [12] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-31 13:25:46,795 [12] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-31 13:27:53,352 [31] INFO  App  
+ Hubo un error al enviar el correo : Index was out of range. Must be non-negative and less than the size of the collection. (Parameter 'index') 
+ 
+2023-08-31 13:27:53,519 [31] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-31 13:30:03,001 [32] INFO  App  
+ Hubo un error al enviar el correo : Index was out of range. Must be non-negative and less than the size of the collection. (Parameter 'index') 
+ 
+2023-08-31 13:30:03,168 [32] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-31 13:31:20,079 [5] INFO  App  
+ Email ha sido enviado con Ã©xito 
+ 
+2023-08-31 13:31:20,628 [5] INFO  App  
+ Email ha sido enviado con Ã©xito 
+ 
+2023-08-31 13:31:42,124 [3] INFO  App  
+ Hubo un error al enviar el correo : Index was out of range. Must be non-negative and less than the size of the collection. (Parameter 'index') 
+ 
+2023-08-31 13:31:42,285 [3] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-31 13:35:36,322 [29] INFO  App  
+ Hubo un error al enviar el correo : Index was out of range. Must be non-negative and less than the size of the collection. (Parameter 'index') 
+ 
+2023-08-31 13:38:06,972 [29] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-31 13:39:50,140 [3] INFO  App  
+ Email ha sido enviado con Ã©xito 
+ 
+2023-08-31 13:39:50,689 [3] INFO  App  
+ Email ha sido enviado con Ã©xito 
+ 

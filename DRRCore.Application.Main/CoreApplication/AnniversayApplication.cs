@@ -6,6 +6,7 @@ using DRRCore.Domain.Entities.SqlCoreContext;
 using DRRCore.Domain.Interfaces.CoreDomain;
 using DRRCore.Transversal.Common;
 using DRRCore.Transversal.Common.Interface;
+using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 
 namespace DRRCore.Application.Main.CoreApplication
@@ -86,6 +87,63 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
+        public async Task<Response<bool>> AddOrUpdateAsync(AddOrUpdateAnniversaryDto obj)
+        {
+            var response = new Response<bool>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                if(obj.Id > 0)
+                {
+                    if(obj.GroupId == "FI")
+                    {
+                        var anniversary = await context.Anniversaries.Where(x => x.Id == obj.Id).FirstOrDefaultAsync();
+                        if(anniversary != null)
+                        {
+                            anniversary.Name = obj.Title;
+                            anniversary.StartDate = (DateTime)obj.StartDate.Value.ToUniversalTime();
+                            anniversary.EndDate = (DateTime)obj.EndDate.Value.ToUniversalTime();
+                            anniversary.ClassName = obj.ClassName;
+                            anniversary.Observations = obj.Details;
+                            context.Anniversaries.Update(anniversary);
+                        }
+                    }
+                    else
+                    {
+                        var productionClosure = await context.ProductionClosures.Where(x => x.Id == obj.Id).FirstOrDefaultAsync();
+                        if(productionClosure != null)
+                        {
+                            productionClosure.Title = obj.Title;
+                            productionClosure.Observations = obj.Details;
+                            productionClosure.EndDate = (DateTime)obj.EndDate;
+                        }
+                    }
+                }
+                else
+                {
+                    if (obj.GroupId == "FI")
+                    {
+                        await context.Anniversaries.AddAsync(new Anniversary
+                        {
+                            Name = obj.Title,
+                            StartDate = (DateTime)obj.StartDate,
+                            EndDate = (DateTime)obj.EndDate,
+                            ClassName = obj.ClassName,
+                            Observations = obj.Details
+                        });
+                    }
+                }
+                await context.SaveChangesAsync();
+            }
+            catch(Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
         public async Task<Response<bool>> DeleteAsync(int id)
         {
             var response = new Response<bool>();
@@ -148,6 +206,63 @@ namespace DRRCore.Application.Main.CoreApplication
                 response.Data = _mapper.Map<GetAnniversaryResponseDto>(employee);
             }
             catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
+        public async Task<Response<List<GetListAnniversaryResponseDto>>> GetCalendarAniversary()
+        {
+            var response = new Response<List<GetListAnniversaryResponseDto>>();
+            response.Data = new List<GetListAnniversaryResponseDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var aniversaries = await context.Anniversaries.Where(x => x.Enable == true).ToListAsync();
+                var production = await context.ProductionClosures.Where(x =>x.Enable == true).ToListAsync();
+               
+                if(aniversaries.Count > 0)
+                {
+                    foreach (var item in aniversaries)
+                    {
+                        DateTime startDate = new DateTime(DateTime.Now.Year, item.StartDate.Month, item.StartDate.Day, item.StartDate.Hour, item.StartDate.Minute, item.StartDate.Second);
+
+                        DateTime endDate = item.EndDate ?? new DateTime(DateTime.Now.Year, item.StartDate.Month, item.StartDate.Day, 23, 59, 59);
+
+
+                        response.Data.Add(new GetListAnniversaryResponseDto
+                        {
+                            Id = item.Id.ToString(),
+                            Title = item.Name,
+                            Start = startDate,
+                            End = endDate,
+                            ClassName = item.ClassName,
+                            GroupId = "FI",
+                            Details = item.Observations
+                        });
+                    }
+                }
+                if (production.Count > 0)
+                {
+                    foreach (var item in production)
+                    {
+                        response.Data.Add(new GetListAnniversaryResponseDto
+                        {
+                            Id = item.Id.ToString(),
+                            Title = item.Title,
+                            Start = item.EndDate,
+                            End = item.EndDate.Value.AddSeconds(1),
+                            ClassName = "fc-event-success",
+                            GroupId = "CP",
+                            Details = item.Observations
+                        });
+                    }
+                }
+            }
+            catch(Exception ex)
             {
                 response.IsSuccess = false;
                 response.Message = Messages.BadQuery;

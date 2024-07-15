@@ -39,6 +39,7 @@
         public int CodeRelationed { get; set; }
 
         public bool? Print { get; set; }
+        public string? Since { get; set; }
 
         public List<TraductionDto> Traductions { get; set; }=new List<TraductionDto>();
     }

@@ -20,4 +20,10 @@ public partial class Anniversary
     public DateTime? DeleteDate { get; set; }
 
     public bool? Enable { get; set; }
+
+    public string? Type { get; set; }
+
+    public string? Observations { get; set; }
+
+    public string? ClassName { get; set; }
 }

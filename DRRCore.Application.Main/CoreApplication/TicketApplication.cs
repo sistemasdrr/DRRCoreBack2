@@ -203,6 +203,60 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 using var context = new SqlCoreContext();
 
+                var code = "CP_" + DateTime.Now.Month.ToString("D2") + "_" + DateTime.Now.Year;
+                var productionClosure = await context.ProductionClosures.Where(x => x.Code.Contains(code)).FirstOrDefaultAsync();
+                if (productionClosure == null)
+                {
+
+                    DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1).AddDays(-1);
+                    await context.ProductionClosures.AddAsync(new ProductionClosure
+                    {
+                        EndDate = lastDayOfCurrentMonth,
+                        Code = code,
+                        Title = "Cierre de Producción " + DateTime.Now.Month.ToString("D2") + " - " + DateTime.Now.Year,
+                        Observations = ""
+                    });
+                }
+                else
+                {
+                    if (productionClosure.EndDate > DateTime.Now)
+                    {
+                        if (DateTime.Now.Month == 12)
+                        {
+                            code = "CP_" + (1).ToString("D2") + "_" + (DateTime.Now.Year + 1);
+                            var nextProductionClosureExistent = await context.ProductionClosures.Where(x => x.Code.Contains(code)).FirstOrDefaultAsync();
+                            if (nextProductionClosureExistent == null)
+                            {
+                                DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year + 1, 1, 1).AddMonths(1).AddDays(-1);
+                                await context.ProductionClosures.AddAsync(new ProductionClosure
+                                {
+                                    EndDate = lastDayOfCurrentMonth,
+                                    Code = code,
+                                    Title = "Cierre de Producción " + (1).ToString("D2") + " - " + DateTime.Today.Year + 1,
+                                    Observations = ""
+                                });
+                            }
+                        }
+                        else
+                        {
+                            code = "CP_" + (DateTime.Now.Month + 1).ToString("D2") + "_" + DateTime.Now.Year;
+                            var nextProductionClosureExistent = await context.ProductionClosures.Where(x => x.Code.Contains(code)).FirstOrDefaultAsync();
+                            if (nextProductionClosureExistent == null)
+                            {
+                                DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1).AddDays(-1);
+                                await context.ProductionClosures.AddAsync(new ProductionClosure
+                                {
+                                    EndDate = lastDayOfCurrentMonth,
+                                    Code = code,
+                                    Title = "Cierre de Producción " + (DateTime.Now.Month + 1).ToString("D2") + " - " + DateTime.Now.Year,
+                                    Observations = ""
+                                });
+                            }
+
+                        }
+
+                    }
+                }
 
                 if (request == null && request.RequestedName.IsNullOrEmpty() == false)
                 {
@@ -220,7 +274,8 @@ namespace DRRCore.Application.Main.CoreApplication
                     newTicket.TicketHistories.Add(new TicketHistory
                     {
                         IdStatusTicket = (int?)TicketStatusEnum.Pendiente,
-                        UserFrom = request.UserFrom
+                        UserFrom = request.UserFrom,
+                        Cycle = code
                     });
                     var idEmployee = await GetReceptorDefault(request.IdCountry ?? 0, request.ReportType, request.IdSubscriber);
                     var userLogin = await context.UserLogins
@@ -259,7 +314,11 @@ namespace DRRCore.Application.Main.CoreApplication
                                 Identifier = "L_E_NEW",
                                 LargeValue = ""
                             });
-
+                            var financial = new List<CompanyFinancialInformation>();
+                            financial.Add(new CompanyFinancialInformation
+                            {
+                                IdFinancialSituacion = null
+                            });
                             var company = await _companyDomain.AddCompanyAsync(new Company
                             {
                                 Name = request.RequestedName ?? string.Empty,
@@ -272,7 +331,8 @@ namespace DRRCore.Application.Main.CoreApplication
                                 Email = request.Email,
                                 Telephone = request.Telephone,
                                 Address = request.Address,
-                                Traductions = traduction
+                                Traductions = traduction,
+                                CompanyFinancialInformations = financial
                             });
                             var ticket = await _ticketDomain.GetByIdAsync(newTicket.Id);
                             ticket.IdCompany = company;
@@ -715,23 +775,20 @@ namespace DRRCore.Application.Main.CoreApplication
         {
             try
             {
-                
+
                 var ticket = await _ticketDomain.GetByIdAsync(idTicket);
-                var path = _path.Path + "/cupones/" + ticket.Number.ToString("D6") + "/" + fileName + ".pdf";
-                    using (var ftpClient = new FtpClient(GetFtpClientConfiguration()))
-                    {
-                        await ftpClient.LoginAsync();
+                var directoryPath = _path.Path + "/cupones/" + ticket.Number.ToString("D6");
+                var filePath = Path.Combine(directoryPath, fileName + ".pdf");
 
-                        MemoryStream memoryStream = new MemoryStream(byteArray);
-                        memoryStream.Position = 0;
+                if (!Directory.Exists(directoryPath))
+                {
+                    Directory.CreateDirectory(directoryPath);
+                }
 
-                        using (var writeStream = await ftpClient.OpenFileWriteStreamAsync(path))
-                        {
-                            await memoryStream.CopyToAsync(writeStream);
-                        }
-                    }
-                    return path;
-                
+                await File.WriteAllBytesAsync(filePath, byteArray);
+
+                return filePath;
+
             }
             catch (Exception ex)
             {
@@ -1756,7 +1813,62 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 using (var context = new SqlCoreContext())
                 {
-                    if(obj.OtherUserCode.Count > 0)
+                    var code = "CP_" + DateTime.Now.Month.ToString("D2") + "_" + DateTime.Now.Year;
+                    var productionClosure = await context.ProductionClosures.Where(x => x.Code.Contains(code)).FirstOrDefaultAsync();
+                    if (productionClosure == null)
+                    {
+
+                        DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1).AddDays(-1);
+                        await context.ProductionClosures.AddAsync(new ProductionClosure
+                        {
+                            EndDate = lastDayOfCurrentMonth,
+                            Code = code,
+                            Title = "Cierre de Producción " + DateTime.Now.Month.ToString("D2") + " - " + DateTime.Now.Year,
+                            Observations = ""
+                        });
+                    }
+                    else
+                    {
+                        if (productionClosure.EndDate < DateTime.Now)
+                        {
+                            if (DateTime.Now.Month == 12)
+                            {
+                                code = "CP_" + (1).ToString("D2") + "_" + (DateTime.Now.Year + 1);
+                                var nextProductionClosureExistent = await context.ProductionClosures.Where(x => x.Code.Contains(code)).FirstOrDefaultAsync();
+                                if(nextProductionClosureExistent == null)
+                                {
+                                    DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year + 1, 1, 1).AddMonths(1).AddDays(-1);
+                                    await context.ProductionClosures.AddAsync(new ProductionClosure
+                                    {
+                                        EndDate = lastDayOfCurrentMonth,
+                                        Code = code,
+                                        Title = "Cierre de Producción " + (1).ToString("D2") + " - " + DateTime.Today.Year + 1,
+                                        Observations = ""
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                code = "CP_" + (DateTime.Now.Month + 1).ToString("D2") + "_" + DateTime.Now.Year;
+                                var nextProductionClosureExistent = await context.ProductionClosures.Where(x => x.Code.Contains(code)).FirstOrDefaultAsync();
+                                if (nextProductionClosureExistent == null)
+                                {
+                                    DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year, (DateTime.Today.Month + 1), 1).AddMonths(1).AddDays(-1);
+                                    await context.ProductionClosures.AddAsync(new ProductionClosure
+                                    {
+                                        EndDate = lastDayOfCurrentMonth,
+                                        Code = code,
+                                        Title = "Cierre de Producción " + (DateTime.Now.Month + 1).ToString("D2") + " - " + DateTime.Now.Year,
+                                        Observations = ""
+                                    });
+                                }
+                                
+                            }
+
+                        }
+                    }
+
+                    if (obj.OtherUserCode.Count > 0)
                     {
                         var ticketHistory = await context.TicketHistories.Where(x => x.Id == obj.IdTicketHistory).FirstOrDefaultAsync();
                         if (ticketHistory != null)
@@ -1786,6 +1898,8 @@ namespace DRRCore.Application.Main.CoreApplication
                                     newTicketHistory.Observations = ticketHistory.Observations;
                                     newTicketHistory.StartDate = ticketHistory.StartDate;
                                     newTicketHistory.EndDate = ticketHistory.EndDate;
+                                    newTicketHistory.AsignationType = ticketHistory.AsignationType;
+                                    newTicketHistory.Cycle = code;
 
                                     await context.TicketHistories.AddAsync(newTicketHistory);
                                 }
@@ -1797,7 +1911,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         foreach (var item in obj.Asignacion)
                         {
                             var history = await context.TicketHistories.Where(x => x.IdTicket == item.IdTicket && x.AsignedTo == item.AssignedFromCode && x.NumberAssign==item.NumberAssign).FirstOrDefaultAsync();
-
+                            
                             if (history != null)
                             {
                                 var ticket = await context.Tickets.Include(x=>x.TicketHistories).Where(x => x.Id == history.IdTicket).FirstOrDefaultAsync();
@@ -1845,7 +1959,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                         ticket.UpdateDate = DateTime.Now;
                                         ticket.IdStatusTicket = (int)TicketStatusEnum.Pre_Asignacion;
                                         history.Flag = true;
-                                        history.ShippingDate = DateTime.Today;
+                                        history.ShippingDate = DateTime.Now;
                                         history.UpdateDate = DateTime.Now;
 
                                         context.Tickets.Update(ticket);
@@ -1865,7 +1979,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                             Observations=item.Observations,
                                             Balance=item.Balance,
                                             AsignationType = item.Type,
-
+                                            Cycle = code
                                         };
                                         await context.TicketHistories.AddAsync(newTicketHistory);
 
@@ -1899,7 +2013,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                         ticket.UpdateDate = DateTime.Now;
                                         ticket.IdStatusTicket = (int)TicketStatusEnum.Asig_Reportero;
                                         history.Flag = true;
-                                        history.ShippingDate = DateTime.Today;
+                                        history.ShippingDate = DateTime.Now;
                                         history.UpdateDate = DateTime.Now;
 
                                       
@@ -1921,6 +2035,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = item.Type,
+                                                Cycle = code
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
                                         }
@@ -1941,6 +2056,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = item.Type,
+                                                Cycle = code
 
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
@@ -1981,6 +2097,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = item.Type,
+                                                Cycle = code
 
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
@@ -2015,7 +2132,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                        
                                         ticket.UpdateDate = DateTime.Now;
                                         history.Flag = true;
-                                        history.ShippingDate = DateTime.Today;
+                                        history.ShippingDate = DateTime.Now;
                                         history.UpdateDate = DateTime.Now;
 
 
@@ -2036,12 +2153,13 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 AsignationType = item.Type,
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
-                                                References = item.References
+                                                References = item.References,
+                                                Cycle = code
 
                                             };
                                             ticket.UpdateDate = DateTime.Now;
                                             history.Flag = true;
-                                            history.ShippingDate = DateTime.Today;
+                                            history.ShippingDate = DateTime.Now;
                                             history.UpdateDate = DateTime.Now;
 
                                             await context.TicketHistories.AddAsync(newTicketHistory);
@@ -2064,6 +2182,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Balance = item.Balance,
                                                 References = item.References,
                                                 AsignationType = item.Type,
+                                                Cycle = code
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
                                         }
@@ -2207,12 +2326,13 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Balance = item.Balance,
                                                 References = item.References,
                                                 AsignationType = item.Type,
+                                                Cycle = code
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
                                         }
                                         ticket.UpdateDate = DateTime.Now;
                                         history.Flag = true;
-                                        history.ShippingDate = DateTime.Today;
+                                        history.ShippingDate = DateTime.Now;
                                         history.UpdateDate = DateTime.Now;
 
                                         context.Tickets.Update(ticket);
@@ -2246,7 +2366,7 @@ namespace DRRCore.Application.Main.CoreApplication
 
                                         ticket.UpdateDate = DateTime.Now;
                                         history.Flag = true;
-                                        history.ShippingDate = DateTime.Today;
+                                        history.ShippingDate = DateTime.Now;
                                         history.UpdateDate = DateTime.Now;
 
 
@@ -2265,6 +2385,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = item.Type,
+                                                Cycle = code
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
                                         
@@ -2314,10 +2435,11 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = item.Type,
+                                                Cycle = code
                                             };
                                             ticket.UpdateDate = DateTime.Now;
                                             history.Flag = true;
-                                            history.ShippingDate = DateTime.Today;
+                                            history.ShippingDate = DateTime.Now;
                                             history.UpdateDate = DateTime.Now;
                                             await context.TicketHistories.AddAsync(newTicketHistory);
 
@@ -2348,7 +2470,7 @@ namespace DRRCore.Application.Main.CoreApplication
 
                                             ticket.UpdateDate = DateTime.Now;
                                             history.Flag = true;
-                                            history.ShippingDate = DateTime.Today;
+                                            history.ShippingDate = DateTime.Now;
                                             history.UpdateDate = DateTime.Now;
 
 
@@ -2367,6 +2489,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = item.Type,
+                                                Cycle = code
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
 
@@ -2417,10 +2540,11 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = item.Type,
+                                                Cycle = code
                                             };
                                             ticket.UpdateDate = DateTime.Now;
                                             history.Flag = true;
-                                            history.ShippingDate = DateTime.Today;
+                                            history.ShippingDate = DateTime.Now;
                                             history.UpdateDate = DateTime.Now;
                                             await context.TicketHistories.AddAsync(newTicketHistory);
 
@@ -2463,6 +2587,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = item.Type,
+                                                Cycle = code
 
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
@@ -2471,7 +2596,7 @@ namespace DRRCore.Application.Main.CoreApplication
 
                                         ticket.UpdateDate = DateTime.Now;
                                         history.Flag = true;
-                                        history.ShippingDate = DateTime.Today;
+                                        history.ShippingDate = DateTime.Now;
                                         history.UpdateDate = DateTime.Now;
 
                                         context.Tickets.Update(ticket);
@@ -2521,10 +2646,11 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = item.Type,
+                                                Cycle = code
                                             };
                                             ticket.UpdateDate = DateTime.Now;
                                             history.Flag = true;
-                                            history.ShippingDate = DateTime.Today;
+                                            history.ShippingDate = DateTime.Now;
                                             history.UpdateDate = DateTime.Now;
                                             await context.TicketHistories.AddAsync(newTicketHistory);
 
@@ -2554,7 +2680,7 @@ namespace DRRCore.Application.Main.CoreApplication
 
                                             ticket.UpdateDate = DateTime.Now;
                                             history.Flag = true;
-                                            history.ShippingDate = DateTime.Today;
+                                            history.ShippingDate = DateTime.Now;
                                             history.UpdateDate = DateTime.Now;  
 
                                             ticket.IdStatusTicket = (int)TicketStatusEnum.Asig_Supervisor;
@@ -2572,11 +2698,13 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = item.Type,
+                                                Cycle = code
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
 
                                         }
                                         context.Tickets.Update(ticket);
+                                        
                                         context.TicketHistories.Update(history);
                                         await context.SaveChangesAsync();
                                     }
@@ -2913,6 +3041,61 @@ namespace DRRCore.Application.Main.CoreApplication
                     var history = await context.TicketHistories.Where(x => x.IdTicket == obj.IdTicket && x.AsignedTo == obj.AssignedFromCode && x.NumberAssign == obj.NumberAssign).FirstOrDefaultAsync();
                     if (history != null)
                     {
+                        var code = "CP_" + DateTime.Now.Month.ToString("D2") + "_" + DateTime.Now.Year;
+                        var productionClosure = await context.ProductionClosures.Where(x => x.Code.Contains(code)).FirstOrDefaultAsync();
+                        if (productionClosure == null)
+                        {
+
+                            DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1).AddDays(-1);
+                            await context.ProductionClosures.AddAsync(new ProductionClosure
+                            {
+                                EndDate = lastDayOfCurrentMonth,
+                                Code = code,
+                                Title = "Cierre de Producción " + DateTime.Now.Month.ToString("D2") + " - " + DateTime.Now.Year,
+                                Observations = ""
+                            });
+                        }
+                        else
+                        {
+                            if (productionClosure.EndDate > DateTime.Now)
+                            {
+                                if (DateTime.Now.Month == 12)
+                                {
+                                    code = "CP_" + (1).ToString("D2") + "_" + (DateTime.Now.Year + 1);
+                                    var nextProductionClosureExistent = await context.ProductionClosures.Where(x => x.Code.Contains(code)).FirstOrDefaultAsync();
+                                    if (nextProductionClosureExistent == null)
+                                    {
+                                        DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year + 1, 1, 1).AddMonths(1).AddDays(-1);
+                                        await context.ProductionClosures.AddAsync(new ProductionClosure
+                                        {
+                                            EndDate = lastDayOfCurrentMonth,
+                                            Code = code,
+                                            Title = "Cierre de Producción " + (1).ToString("D2") + " - " + DateTime.Today.Year + 1,
+                                            Observations = ""
+                                        });
+                                    }
+                                }
+                                else
+                                {
+                                    code = "CP_" + (DateTime.Now.Month + 1).ToString("D2") + "_" + DateTime.Now.Year;
+                                    var nextProductionClosureExistent = await context.ProductionClosures.Where(x => x.Code.Contains(code)).FirstOrDefaultAsync();
+                                    if (nextProductionClosureExistent == null)
+                                    {
+                                        DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1).AddDays(-1);
+                                        await context.ProductionClosures.AddAsync(new ProductionClosure
+                                        {
+                                            EndDate = lastDayOfCurrentMonth,
+                                            Code = code,
+                                            Title = "Cierre de Producción " + (DateTime.Now.Month + 1).ToString("D2") + " - " + DateTime.Now.Year,
+                                            Observations = ""
+                                        });
+                                    }
+
+                                }
+
+                            }
+                        }
+
                         var ticket = await context.Tickets.Include(x => x.TicketHistories).Where(x => x.Id == history.IdTicket).FirstOrDefaultAsync();
                         if (ticket != null)
                         {
@@ -2952,7 +3135,8 @@ namespace DRRCore.Application.Main.CoreApplication
                                         EndDate = StaticFunctions.VerifyDate(obj.EndDate),
                                         Observations = obj.Observations,
                                         Balance = obj.Balance,
-
+                                        AsignationType = obj.Type,
+                                        Cycle = code
                                     };
                                     await context.TicketHistories.AddAsync(newTicketHistory);
 
@@ -3006,8 +3190,8 @@ namespace DRRCore.Application.Main.CoreApplication
                                     EndDate = DateTime.Parse(obj.EndDate),
                                     Observations = obj.Observations,
                                     Balance = obj.Balance,
-
-
+                                    AsignationType = obj.Type,
+                                    Cycle = code
                                 };
                                 await context.TicketHistories.AddAsync(newTicketHistory);
 

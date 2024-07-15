@@ -1,5 +1,4 @@
 ﻿using DRRCore.Application.DTO.Core.Request;
-using DRRCore.Application.DTO.Core.Response;
 using DRRCore.Application.Interfaces.CoreApplication;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,0 +1,330 @@
+2023-08-28 09:58:51,857 [3] INFO  App  
+ Email ha sido enviado con Ã©xito 
+ 
+2023-08-28 09:58:52,422 [3] INFO  App  
+ Email ha sido enviado con Ã©xito 
+ 
+2023-08-28 10:03:41,916 [8] INFO  App  
+ Email ha sido enviado con Ã©xito 
+ 
+2023-08-28 10:03:42,715 [8] INFO  App  
+ Email ha sido enviado con Ã©xito 
+ 
+2023-08-28 10:08:30,491 [24] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 10:08:30,665 [24] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 10:13:40,672 [3] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 10:13:41,026 [3] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 10:18:44,334 [33] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 10:18:44,511 [33] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 10:19:58,355 [32] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 10:19:58,534 [32] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 10:20:17,253 [32] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 10:20:17,444 [32] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 10:21:48,568 [39] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 10:21:48,763 [39] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 10:23:33,516 [50] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 10:23:33,701 [50] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 10:38:08,785 [45] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 10:38:09,122 [45] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 10:39:09,507 [45] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 10:39:09,680 [45] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 10:43:03,307 [53] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 10:43:03,477 [53] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 10:43:49,344 [60] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 10:43:49,546 [60] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 10:44:32,311 [53] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 10:44:32,482 [53] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 10:45:34,259 [72] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 10:45:34,428 [72] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 10:46:39,287 [72] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 10:46:39,458 [72] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 10:49:22,646 [68] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 10:49:22,842 [68] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 10:52:03,730 [53] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 10:52:03,901 [53] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 10:54:10,967 [82] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 10:54:11,146 [82] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:00:15,929 [85] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:00:16,268 [85] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:00:33,388 [86] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:00:33,567 [86] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:02:52,680 [86] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:02:52,852 [86] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:07:59,192 [76] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:07:59,524 [76] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:08:26,472 [68] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:08:26,639 [68] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:09:54,910 [68] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:09:55,078 [68] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:10:32,663 [51] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:10:32,832 [51] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:23:38,183 [8] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:23:39,027 [8] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:25:59,139 [68] INFO  App  
+ Hubo un error al enviar el correo : The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters. 
+ 
+2023-08-28 11:25:59,174 [68] ERROR App  
+ Se produjo el siguiente error en el sistema :  The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters. 
+ 
+2023-08-28 11:27:05,306 [67] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:27:05,937 [67] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:29:41,948 [74] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:29:42,737 [74] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:31:12,427 [58] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:31:13,049 [58] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:31:30,719 [74] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:31:31,376 [74] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:33:24,556 [68] INFO  App  
+ Hubo un error al enviar el correo : The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters. 
+ 
+2023-08-28 11:33:24,588 [68] ERROR App  
+ Se produjo el siguiente error en el sistema :  The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters. 
+ 
+2023-08-28 11:33:44,592 [68] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:33:45,218 [68] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:34:07,768 [74] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:34:08,395 [74] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:35:22,081 [53] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:35:22,706 [53] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:36:48,280 [46] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:36:48,904 [46] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:37:19,505 [74] INFO  App  
+ Hubo un error al enviar el correo : The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters. 
+ 
+2023-08-28 11:37:19,537 [74] ERROR App  
+ Se produjo el siguiente error en el sistema :  The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters. 
+ 
+2023-08-28 11:38:53,903 [54] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:38:54,524 [54] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:39:35,154 [30] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:39:35,777 [30] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:40:32,676 [47] INFO  App  
+ Hubo un error al enviar el correo : The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters. 
+ 
+2023-08-28 11:40:32,709 [47] ERROR App  
+ Se produjo el siguiente error en el sistema :  The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters. 
+ 
+2023-08-28 11:41:53,988 [17] INFO  App  
+ Hubo un error al enviar el correo : The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters. 
+ 
+2023-08-28 11:41:54,038 [17] ERROR App  
+ Se produjo el siguiente error en el sistema :  The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters. 
+ 
+2023-08-28 11:42:33,181 [27] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:42:33,814 [27] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:43:25,244 [27] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:43:25,870 [27] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:44:30,185 [13] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:44:30,813 [13] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:45:04,124 [27] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:45:04,750 [27] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:47:01,348 [89] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:47:02,005 [89] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:47:31,992 [27] INFO  App  
+ Hubo un error al enviar el correo : The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters. 
+ 
+2023-08-28 11:47:32,024 [27] ERROR App  
+ Se produjo el siguiente error en el sistema :  The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters. 
+ 
+2023-08-28 11:47:50,648 [27] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:47:51,270 [27] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:48:38,335 [90] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:48:38,970 [90] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:49:25,173 [27] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 11:49:25,796 [27] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 12:52:52,187 [3] INFO  App  
+ Hubo un error al enviar el correo : The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters. 
+ 
+2023-08-28 12:52:52,235 [3] ERROR App  
+ Se produjo el siguiente error en el sistema :  The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters. 
+ 
+2023-08-28 12:53:19,112 [20] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 12:53:19,617 [20] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 13:58:40,102 [5] INFO  App  
+ Email ha sido enviado con Ã©xito 
+ 
+2023-08-28 13:58:40,651 [5] INFO  App  
+ Email ha sido enviado con Ã©xito 
+ 
+2023-08-28 13:59:48,112 [3] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-28 13:59:48,272 [3] INFO  App  
+ Email ha sido enviado con éxito 
+ 

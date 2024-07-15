@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "uZGgaE7YN09yibtICCEdx4b7XbMCK9+owxf0a23kzCU=",
+  "Source": "DRRCore.Services.ApiCore",
+  "BasePath": "_content/DRRCore.Services.ApiCore",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

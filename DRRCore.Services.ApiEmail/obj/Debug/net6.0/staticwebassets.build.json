@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "cbYnLrsP3/ve3Bj7IWXirgVazIXY3iTpYxg0+9DhyNA=",
+  "Source": "DRRCore.Services.ApiEmail",
+  "BasePath": "_content/DRRCore.Services.ApiEmail",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

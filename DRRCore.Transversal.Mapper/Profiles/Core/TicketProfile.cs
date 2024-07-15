@@ -178,7 +178,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                  .ForMember(dest => dest.RealExpireDate, opt => opt?.MapFrom(src => StaticFunctions.DateTimeToString(src.IdTicketNavigation.RealExpireDate)))
 
                  .ForMember(dest => dest.Price, opt => opt?.MapFrom(src => src.IdTicketNavigation.Price == null ? 0 : src.IdTicketNavigation.Price))
-                 .ForMember(dest => dest.Quality, opt => opt?.MapFrom(src => src.IdTicketNavigation.About == "E" ? src.IdTicketNavigation.IdCompanyNavigation.Quality : src.IdTicketNavigation.IdPersonNavigation.Language))
+                 .ForMember(dest => dest.Quality, opt => opt?.MapFrom(src => src.IdTicketNavigation.Quality))
                  .ForMember(dest => dest.DispatchDate, opt => opt?.MapFrom(src => StaticFunctions.DateTimeToString(src.IdTicketNavigation.DispatchtDate)))
                  .ForMember(dest => dest.StatusQuery, opt => opt?.MapFrom(src => src.IdTicketNavigation.TicketQuery != null ? src.IdTicketNavigation.TicketQuery.Status : 0))
                   .ForMember(dest => dest.HasQuery, opt => opt?.MapFrom(src => src.IdTicketNavigation.TicketQuery != null))
@@ -245,7 +245,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                 .ForMember(dest => dest.ExpireDate, opt => opt.MapFrom(src => StaticFunctions.DateTimeToString(src.IdTicketNavigation.ExpireDate) ?? string.Empty))
                 .ForMember(dest => dest.RealExpireDate, opt => opt.MapFrom(src => StaticFunctions.DateTimeToString(src.IdTicketNavigation.RealExpireDate) ?? string.Empty))
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.IdTicketNavigation.Price ?? 0))
-                .ForMember(dest => dest.Quality, opt => opt.MapFrom(src => src.IdTicketNavigation.Quality ?? " "))
+                .ForMember(dest => dest.Quality, opt => opt.MapFrom(src => src.IdTicketNavigation.Quality ?? ""))
                 .ForMember(dest => dest.QualityTypist, opt => opt.MapFrom(src => src.IdTicketNavigation.QualityTypist ?? ""))
                 .ForMember(dest => dest.QualityTranslator, opt => opt.MapFrom(src => src.IdTicketNavigation.QualityTranslator ?? ""))
 

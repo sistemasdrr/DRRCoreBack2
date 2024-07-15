@@ -1,0 +1,45 @@
+2023-08-10 13:04:38,919 [49] ERROR App  
+ Se produjo el siguiente error en el sistema :  Se produjo el siguiente error en el sistema :  Operation is not valid due to the current state of the object. 
+ 
+2023-08-10 13:17:38,948 [5] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-10 14:27:32,464 [5] INFO  App  
+ Hubo un error al enviar el correo : Failure sending mail. 
+ 
+2023-08-10 14:27:38,571 [5] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-10 14:31:02,796 [3] ERROR App  
+ Se produjo el siguiente error en el sistema :  Se produjo el siguiente error en el sistema :  Can't open /public_html/__drrtest/adjuntos/atajo.pdf: No such file or directory 
+ 
+2023-08-10 14:31:11,216 [3] ERROR App  
+ Se produjo el siguiente error en el sistema :  Se produjo el siguiente error en el sistema :  Operation is not valid due to the current state of the object. 
+ 
+2023-08-10 14:41:19,738 [27] ERROR App  
+ Se produjo el siguiente error en el sistema :  Se produjo el siguiente error en el sistema :  Can't open /public_html/__drrtest/adjuntos/atajo.pdf: No such file or directory 
+ 
+2023-08-10 14:41:25,029 [27] ERROR App  
+ Se produjo el siguiente error en el sistema :  Se produjo el siguiente error en el sistema :  Operation is not valid due to the current state of the object. 
+ 
+2023-08-10 14:41:44,355 [26] ERROR App  
+ Se produjo el siguiente error en el sistema :  Se produjo el siguiente error en el sistema :  Can't open /public_html/__drrtest/adjuntos/atajo.pdf: No such file or directory 
+ 
+2023-08-10 14:41:46,955 [26] ERROR App  
+ Se produjo el siguiente error en el sistema :  Se produjo el siguiente error en el sistema :  Operation is not valid due to the current state of the object. 
+ 
+2023-08-10 14:42:24,684 [14] INFO  App  
+ Hubo un error al enviar el correo : Failure sending mail. 
+ 
+2023-08-10 14:42:28,293 [14] INFO  App  
+ Email ha sido enviado con �xito 
+ 
+2023-08-10 14:46:28,323 [5] ERROR App  
+ Se produjo el siguiente error en el sistema :  Se produjo el siguiente error en el sistema :  Operation is not valid due to the current state of the object. 
+ 
+2023-08-10 14:58:15,681 [8] ERROR App  
+ Se produjo el siguiente error en el sistema :  Se produjo el siguiente error en el sistema :  Operation is not valid due to the current state of the object. 
+ 
+2023-08-10 14:58:20,141 [3] ERROR App  
+ Se produjo el siguiente error en el sistema :  Se produjo el siguiente error en el sistema :  Operation is not valid due to the current state of the object. 
+ 
