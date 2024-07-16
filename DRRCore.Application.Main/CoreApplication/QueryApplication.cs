@@ -2115,7 +2115,7 @@ namespace DRRCore.Application.Main.CoreApplication
             catch (Exception ex)
             {
                 response.IsSuccess = false;
-                response.Message = Messages.BadQuery;
+                //response.Message = Messages.BadQuery;
                 _logger.LogError(response.Message, ex);
             }
             return response;
