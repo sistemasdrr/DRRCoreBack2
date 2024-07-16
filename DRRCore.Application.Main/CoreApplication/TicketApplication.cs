@@ -21,6 +21,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using SharpCompress.Archives;
+using SharpCompress.Archives.Zip;
+using SharpCompress.Common;
+using SharpCompress.Writers;
 
 namespace DRRCore.Application.Main.CoreApplication
 {
@@ -132,7 +136,43 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             return response;
         }
+        public async Task<Response<GetFileDto>> DownloadZipByIdTicket(int idTicket)
+        {
+            var response = new Response<GetFileDto>();
+            MemoryStream ms = new MemoryStream();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var ticket = await context.Tickets.Where(x => x.Id == idTicket).FirstOrDefaultAsync();
+                if(ticket != null)
+                {
+                    var directoryPath = Path.Combine(_path.Path, "cupones", ticket.Number.ToString("D6"));
+                    var memoryStream = new MemoryStream();
+                    using (var archive = ZipArchive.Create())
+                    {
+                        archive.AddAllFromDirectory(directoryPath);
+                        archive.SaveTo(memoryStream, new WriterOptions(CompressionType.Deflate)
+                        {
+                            LeaveStreamOpen = true
+                        });
+                    }
+                    
+                    var documentDto = new GetFileDto();
+                    documentDto.File = memoryStream;
+                    documentDto.ContentType = GetContentType(".zip");
+                    documentDto.FileName = ticket.Number.ToString("D6");
+                    response.Data = documentDto;
+                    memoryStream.Position = 0;
 
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Data = null;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
         private string GetContentType(string extension)
         {
             switch (extension.ToLower())
@@ -1292,8 +1332,22 @@ namespace DRRCore.Application.Main.CoreApplication
             var response = new Response<bool?>();
             try
             {
-                var ticketFile = await _ticketDomain.GetTicketFileById(id);
-                response.Data = await _ticketDomain.DeleteTicketFile(id);
+                using var context = new SqlCoreContext();
+                var ticketFile = await context.TicketFiles.Include(x => x.IdTicketNavigation).Where(x => x.Id == id).FirstOrDefaultAsync();
+                if(ticketFile != null)
+                {
+                    ticketFile.DeleteDate = DateTime.Now;
+                    ticketFile.Enable = false;
+                    var path = ticketFile.Path;
+
+                    if (File.Exists(path))
+                    {
+                        File.Delete(path);
+                    }
+
+                    context.TicketFiles.Update(ticketFile);
+                    await context.SaveChangesAsync();
+                }
             }
             catch (Exception ex)
             {
@@ -2231,6 +2285,15 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 attachment.Content = Convert.ToBase64String(file.File);
                                                 attachment.Path = await UploadFile(attachment);
                                                 emailDataDto.Attachments.Add(attachment);
+                                                if (item.SendZip == true)
+                                                {
+                                                    var zip = DownloadZipByIdTicket((int)ticket.Id).Result.Data;
+                                                    var attachment2 = new AttachmentDto();
+                                                    attachment2.FileName = ticket.Number.ToString("D6") + ".zip";
+                                                    attachment2.Content = Convert.ToBase64String(zip.File.ToArray());
+                                                    emailDataDto.Attachments.Add(attachment2);
+                                                }
+
 
                                                 var result = await _mailSender.SendMailAsync(_mapper.Map<EmailValues>(emailDataDto));
 
@@ -2277,9 +2340,15 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 var attachment = new AttachmentDto();
                                                 attachment.FileName = file.Name + ".pdf";
                                                 attachment.Content = Convert.ToBase64String(file.File);
-                                                attachment.Path = await UploadFile(attachment);
                                                 emailDataDto.Attachments.Add(attachment);
-
+                                                if (item.SendZip == true)
+                                                {
+                                                    var zip = DownloadZipByIdTicket((int)ticket.Id).Result.Data;
+                                                    var attachment2 = new AttachmentDto();
+                                                    attachment2.FileName = ticket.Number.ToString("D6") + ".zip";
+                                                    attachment2.Content = Convert.ToBase64String(zip.File.ToArray());
+                                                    emailDataDto.Attachments.Add(attachment2);
+                                                }
                                                 var result = await _mailSender.SendMailAsync(_mapper.Map<EmailValues>(emailDataDto));
 
                                                 var emailHistory = _mapper.Map<EmailHistory>(emailDataDto);

@@ -15,7 +15,8 @@
           "DRRCore.Domain.Interfaces": "1.0.0",
           "DRRCore.Infraestructure.Configuration": "1.0.0",
           "DRRCore.Transversal.Mapper": "1.0.0",
-          "Microsoft.AspNetCore.Http.Abstractions": "2.2.0"
+          "Microsoft.AspNetCore.Http.Abstractions": "2.2.0",
+          "SharpCompress": "0.37.2"
         },
         "runtime": {
           "DRRCore.Application.Main.dll": {}
@@ -601,7 +602,7 @@
           "System.Text.Encoding.CodePages": "8.0.0",
           "System.Text.Json": "7.0.1",
           "System.Threading.Tasks.Extensions": "4.5.4",
-          "ZstdSharp.Port": "0.7.1"
+          "ZstdSharp.Port": "0.8.0"
         },
         "runtime": {
           "lib/net6.0/MySql.Data.dll": {
@@ -817,6 +818,17 @@
             "rid": "win-x86",
             "assetType": "native",
             "fileVersion": "4.6.25512.1"
+          }
+        }
+      },
+      "SharpCompress/0.37.2": {
+        "dependencies": {
+          "ZstdSharp.Port": "0.8.0"
+        },
+        "runtime": {
+          "lib/net6.0/SharpCompress.dll": {
+            "assemblyVersion": "0.37.2.0",
+            "fileVersion": "0.37.2.0"
           }
         }
       },
@@ -1701,11 +1713,11 @@
           "System.Xml.ReaderWriter": "4.0.11"
         }
       },
-      "ZstdSharp.Port/0.7.1": {
+      "ZstdSharp.Port/0.8.0": {
         "runtime": {
           "lib/net6.0/ZstdSharp.dll": {
-            "assemblyVersion": "0.7.1.0",
-            "fileVersion": "0.7.1.0"
+            "assemblyVersion": "0.8.0.0",
+            "fileVersion": "0.8.0.0"
           }
         }
       },
@@ -2357,6 +2369,13 @@
       "path": "runtime.win-x86.runtime.native.system.data.sqlclient.sni/4.4.0",
       "hashPath": "runtime.win-x86.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512"
     },
+    "SharpCompress/0.37.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-cFBpTct57aubLQXkdqMmgP8GGTFRh7fnRWP53lgE/EYUpDZJ27SSvTkdjB4OYQRZ20SJFpzczUquKLbt/9xkhw==",
+      "path": "sharpcompress/0.37.2",
+      "hashPath": "sharpcompress.0.37.2.nupkg.sha512"
+    },
     "System.AppContext/4.1.0": {
       "type": "package",
       "serviceable": true,
@@ -2938,12 +2957,12 @@
       "path": "system.xml.xdocument/4.0.11",
       "hashPath": "system.xml.xdocument.4.0.11.nupkg.sha512"
     },
-    "ZstdSharp.Port/0.7.1": {
+    "ZstdSharp.Port/0.8.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-Idgg+mJEyAujqDPzA3APy9dNoyw0YQcNA65GgYjktDRtJ+nvx/hv+J+m6Eax3JJMGEYGy04oc5YNP6ZvQ3Y1vQ==",
-      "path": "zstdsharp.port/0.7.1",
-      "hashPath": "zstdsharp.port.0.7.1.nupkg.sha512"
+      "sha512": "sha512-Z62eNBIu8E8YtbqlMy57tK3dV1+m2b9NhPeaYovB5exmLKvrGCqOhJTzrEUH5VyUWU6vwX3c1XHJGhW5HVs8dA==",
+      "path": "zstdsharp.port/0.8.0",
+      "hashPath": "zstdsharp.port.0.8.0.nupkg.sha512"
     },
     "DRRCore.Application.DTO/1.0.0": {
       "type": "project",

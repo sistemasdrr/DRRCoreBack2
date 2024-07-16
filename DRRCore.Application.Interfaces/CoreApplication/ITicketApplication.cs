@@ -61,6 +61,7 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<bool>> TicketToDispatch(int idTicketHistory,int idTicket);
         Task<Response<string>> GetSupervisorTicket(int idTicket);
         Task<Response<bool>> DeleteTicketHistoryById(int idTicket);
+        Task<Response<GetFileDto>> DownloadZipByIdTicket(int idTicket);
 
     }
 }

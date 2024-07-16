@@ -265,9 +265,9 @@ namespace DRRCore.Services.ApiCore.Controllers
                 return NotFound();
             }
         }
-        [HttpPost()]
-        [Route("deleteFile")]
-        public async Task<ActionResult> deleteFile(int id)
+        [HttpGet()]
+        [Route("DeleteFile")]
+        public async Task<ActionResult> DeleteFile(int id)
         {
             return Ok(await _ticketApplication.DeleteFile(id));
         }
@@ -329,8 +329,23 @@ namespace DRRCore.Services.ApiCore.Controllers
         {
             return Ok(await _ticketApplication.GetSupervisorTicket(idTicket));
         }
+        [HttpGet()]
+        [Route("DownloadZipByIdTicket")]
+        public async Task<ActionResult> DownloadZipByIdTicket(int idTicket)
+        {
+            var result = await _ticketApplication.DownloadZipByIdTicket(idTicket);
 
+            if (result != null && result.Data != null)
+            {
+                return File(result.Data.File?.ToArray(), result.Data.ContentType, result.Data.FileName);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
         
+
 
     }
 }

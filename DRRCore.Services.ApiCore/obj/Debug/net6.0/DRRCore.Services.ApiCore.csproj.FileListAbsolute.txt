@@ -292,3 +292,4 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Deb
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Debug\net6.0\DRRCore.Services.ApiCore.pdb
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Debug\net6.0\DRRCore.Services.ApiCore.genruntimeconfig.cache
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Debug\net6.0\ref\DRRCore.Services.ApiCore.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\bin\Debug\net6.0\SharpCompress.dll
