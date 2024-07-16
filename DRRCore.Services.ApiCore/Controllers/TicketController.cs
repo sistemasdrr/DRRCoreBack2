@@ -316,13 +316,21 @@ namespace DRRCore.Services.ApiCore.Controllers
         {
             return Ok(await _ticketApplication.FinishTicketObservation(idTicketObservation,conclusion,dr,ag,cl));
         }
-        
+
         [HttpGet()]
         [Route("GetOtherUserCode")]
         public async Task<ActionResult> GetOtherUserCode(int idUser)
         {
             return Ok(await _ticketApplication.GetOtherUserCode(idUser));
         }
+        [HttpGet()]
+        [Route("GetSupervisorTicket")]
+        public async Task<ActionResult> GetSupervisorTicket(int idTicket)
+        {
+            return Ok(await _ticketApplication.GetSupervisorTicket(idTicket));
+        }
+
         
+
     }
 }

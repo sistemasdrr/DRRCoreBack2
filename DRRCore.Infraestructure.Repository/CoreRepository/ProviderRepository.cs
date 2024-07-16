@@ -20,6 +20,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
             try
             {
                 using var context = new SqlCoreContext();
+                obj.Flag = true;
                 await context.Providers.AddAsync(obj);
                 await context.SaveChangesAsync();
                 return true;

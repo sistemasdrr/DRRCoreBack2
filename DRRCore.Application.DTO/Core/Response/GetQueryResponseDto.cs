@@ -549,6 +549,11 @@
 
         public int Id { get; set; }
         public int? IdTicket { get; set; }
+        public int? IdCompany { get; set; }
+        public int? IdPerson { get; set; }
+        public int? IdStatusTicket { get; set; }
+        public string? Quality { get; set; }
+
         public string Number { get; set; }
         public string? Language { get; set; }
         public string About { get; set; } = null!;

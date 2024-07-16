@@ -59,6 +59,8 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<List<string>>> GetOtherUserCode(int idUser);
         Task<Response<List<GetTicketHistoryResponseDto>>> getCountAsignation();
         Task<Response<bool>> TicketToDispatch(int idTicketHistory,int idTicket);
-       
+        Task<Response<string>> GetSupervisorTicket(int idTicket);
+        Task<Response<bool>> DeleteTicketHistoryById(int idTicket);
+
     }
 }

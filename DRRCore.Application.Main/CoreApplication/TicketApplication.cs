@@ -3544,7 +3544,52 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-       
+        public async Task<Response<string>> GetSupervisorTicket(int idTicket)
+        {
+            var response = new Response<string>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var ticketHistory = await context.TicketHistories.Where(x => x.IdTicket == idTicket && x.AsignationType == "SU" && x.AsignedTo.Contains("S")).FirstOrDefaultAsync();
+                if(ticketHistory != null)
+                {
+                    var user = await context.UserLogins.Where(x => x.Id == int.Parse(ticketHistory.UserTo)).Include(x => x.IdEmployeeNavigation).FirstOrDefaultAsync();
+                    if (user != null)
+                    {
+                        response.Data = ticketHistory.AsignedTo + " - " + user.IdEmployeeNavigation.FirstName + " " + user.IdEmployeeNavigation.LastName;
+                    }
+                }
+            }catch  (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                response.IsSuccess = false;
+            }
+            return response;
+        }
+
+        public async Task<Response<bool>> DeleteTicketHistoryById(int idTicketHistory)
+        {
+            var response = new Response<bool>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var ticketHistory = await context.TicketHistories.Where(x => x.Id == idTicketHistory).FirstOrDefaultAsync();
+                if(ticketHistory != null)
+                {
+                    ticketHistory.Flag = true;
+                    ticketHistory.ShippingDate = DateTime.Now;
+                    ticketHistory.UpdateDate = DateTime.Now;
+                    context.TicketHistories.Update(ticketHistory);
+                    await context.SaveChangesAsync();
+                }
+
+            }catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                response.IsSuccess = false;
+            }
+            return response;
+        }
     }
 
 }

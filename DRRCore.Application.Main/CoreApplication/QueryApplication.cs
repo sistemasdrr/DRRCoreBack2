@@ -1881,6 +1881,10 @@ namespace DRRCore.Application.Main.CoreApplication
                         {
                             Id = item1.Id,
                             IdTicket = item1.IdTicket,
+                            IdCompany = item1.IdTicketNavigation.IdCompany,
+                            IdPerson = item1.IdTicketNavigation.IdPerson,
+                            IdStatusTicket = item1.IdTicketNavigation.IdStatusTicket,
+                            Quality  = item1.IdTicketNavigation.Quality,
                             Number = item1.IdTicketNavigation.Number.ToString("D6"),
                             Language = item1.IdTicketNavigation.Language,
                             About = item1.IdTicketNavigation.About,
@@ -1970,6 +1974,10 @@ namespace DRRCore.Application.Main.CoreApplication
                         {
                             Id = item1.Id,
                             IdTicket = item1.IdTicket,
+                            IdCompany = item1.IdTicketNavigation.IdCompany,
+                            IdPerson = item1.IdTicketNavigation.IdPerson,
+                            IdStatusTicket = item1.IdTicketNavigation.IdStatusTicket,
+                            Quality = item1.IdTicketNavigation.Quality,
                             Number = item1.IdTicketNavigation.Number.ToString("D6"),
                             Language = item1.IdTicketNavigation.Language,
                             About = item1.IdTicketNavigation.About,
@@ -2059,6 +2067,10 @@ namespace DRRCore.Application.Main.CoreApplication
                         {
                             Id = item1.Id,
                             IdTicket = item1.IdTicket,
+                            IdCompany = item1.IdTicketNavigation.IdCompany,
+                            IdPerson = item1.IdTicketNavigation.IdPerson,
+                            IdStatusTicket = item1.IdTicketNavigation.IdStatusTicket,
+                            Quality = item1.IdTicketNavigation.Quality,
                             Number = item1.IdTicketNavigation.Number.ToString("D6"),
                             Language = item1.IdTicketNavigation.Language,
                             About = item1.IdTicketNavigation.About,
@@ -2120,5 +2132,7 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             return response;
         }
+
+
     }
 }
