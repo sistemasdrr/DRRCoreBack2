@@ -248,6 +248,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                 .ForMember(dest => dest.Quality, opt => opt.MapFrom(src => src.IdTicketNavigation.Quality ?? ""))
                 .ForMember(dest => dest.QualityTypist, opt => opt.MapFrom(src => src.IdTicketNavigation.QualityTypist ?? ""))
                 .ForMember(dest => dest.QualityTranslator, opt => opt.MapFrom(src => src.IdTicketNavigation.QualityTranslator ?? ""))
+                .ForMember(dest => dest.QualityReport, opt => opt.MapFrom(src => src.IdTicketNavigation.About == "E" ? src.IdTicketNavigation.IdCompanyNavigation.Quality : src.IdTicketNavigation.IdPersonNavigation.Quality))
 
                 .ForMember(dest => dest.StatusQuery, opt => opt.MapFrom(src => src.IdTicketNavigation.TicketQuery != null ? src.IdTicketNavigation.TicketQuery.Status : 0))
                 .ForMember(dest => dest.HasQuery, opt => opt.MapFrom(src => src.IdTicketNavigation.TicketQuery != null))

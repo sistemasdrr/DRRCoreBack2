@@ -1,0 +1,21 @@
+2024-07-17 10:12:27,940 [7] ERROR App  
+ No se pudo realizar la consulta 
+ 
+System.ArgumentNullException: Value cannot be null. (Parameter 'inArray')
+   at System.Convert.ToBase64String(Byte[] inArray)
+   at DRRCore.Application.Main.CoreApplication.TicketApplication.AssignTicket(NewAsignationDto obj) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\TicketApplication.cs:line 2342
+2024-07-17 10:49:39,352 [34] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2024-07-17 10:49:42,063 [34] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2024-07-17 12:11:50,492 [15] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2024-07-17 12:11:50,919 [15] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2024-07-17 16:04:41,554 [3] ERROR App  
+ No existe la empresa solicitada 
+ 

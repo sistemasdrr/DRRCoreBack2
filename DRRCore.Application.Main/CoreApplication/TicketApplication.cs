@@ -2279,7 +2279,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 emailDataDto.BodyHTML = emailDataDto.IsBodyHTML ? await GetBodyHtml(emailDataDto) : emailDataDto.BodyHTML;
                                                 _logger.LogInformation(JsonConvert.SerializeObject(emailDataDto));
 
-                                                var file = DownloadAssignAgent((int)ticket.Id, item.AssignedToCode, item.EndDate, numeration.Number ?? 1).Result.Data;
+                                                var file = DownloadAssignAgent((int)ticket.Id, item.AssignedToCode,item.StartDate,item.EndDate, numeration.Number ?? 1, item.Observations).Result.Data;
                                                 var attachment = new AttachmentDto();
                                                 attachment.FileName = file.Name + ".pdf";
                                                 attachment.Content = Convert.ToBase64String(file.File);
@@ -2336,7 +2336,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 emailDataDto.BodyHTML = emailDataDto.IsBodyHTML ? await GetBodyHtml(emailDataDto) : emailDataDto.BodyHTML;
                                                 //_logger.LogInformation(JsonConvert.SerializeObject(emailDataDto));
 
-                                                var file = DownloadAssignAgent((int)ticket.Id, item.AssignedToCode, item.EndDate, numeration.Number ?? 1).Result.Data;
+                                                var file = DownloadAssignAgent((int)ticket.Id, item.AssignedToCode, item.StartDate, item.EndDate, numeration.Number ?? 1, item.Observations).Result.Data;
                                                 var attachment = new AttachmentDto();
                                                 attachment.FileName = file.Name + ".pdf";
                                                 attachment.Content = Convert.ToBase64String(file.File);
@@ -2937,7 +2937,7 @@ namespace DRRCore.Application.Main.CoreApplication
 
 
 
-        public async Task<Response<GetFileResponseDto>> DownloadAssignAgent(int idTicket, string assignedTo, string expireDate, int number)
+        public async Task<Response<GetFileResponseDto>> DownloadAssignAgent(int idTicket, string assignedTo, string startDate, string endDate, int number, string observations)
         {
             var response = new Response<GetFileResponseDto>();
             try
@@ -2956,7 +2956,10 @@ namespace DRRCore.Application.Main.CoreApplication
                         {
                             { "idTicket", ticket.Id.ToString() },
                             { "codeAgent", assignedTo },
-                            { "expireDate", expireDate },
+                            { "startDate", startDate },
+                            { "endDate", endDate },
+                            { "number", number.ToString() },
+                            { "observations", observations },
                          };
                     response.Data = new GetFileResponseDto
                     {

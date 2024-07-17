@@ -2204,7 +2204,27 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             return response;
         }
-
+        public string? GetReportName(string language,string format)
+        {
+            string result = "";
+            if(language == "I")
+            {
+                switch(format.ToLower())
+                {
+                    case "pdf": result = "EMPRESAS/F8-EMPRESAS-EN"; break;
+                    case "word": result = "EMPRESAS/F8-EMPRESAS-WORD-EN"; break;
+                }
+            }
+            else
+            {
+                switch (format.ToLower())
+                {
+                    case "pdf": result =  "EMPRESAS/F8-EMPRESAS-ES"; break;
+                    case "word": result = "EMPRESAS/F8-EMPRESAS-WORD-ES"; break;
+                }
+            }
+            return result;
+        }
         public async Task<Response<GetFileResponseDto>> DownloadF8(int idCompany, string language, string format)
         {
             var response = new Response<GetFileResponseDto>();
@@ -2215,7 +2235,8 @@ namespace DRRCore.Application.Main.CoreApplication
                 string companyCode = company.OldCode ?? "N" + company.Id.ToString("D6");
                 string languageFileName = language == "I" ? "ENG" : "ESP";
                 string fileFormat = "{0}_{1}{2}";
-                string report = language == "I" ? "EMPRESAS/F8-EMPRESAS-EN" : "EMPRESAS/F8-EMPRESAS-ES";
+                //string report = language == "I" ? "EMPRESAS/F8-EMPRESAS-EN" : "EMPRESAS/F8-EMPRESAS-ES";
+                string report = GetReportName(language,format);
                 var reportRenderType = StaticFunctions.GetReportRenderType(format);
                 var extension = StaticFunctions.FileExtension(reportRenderType);
                 var contentType = StaticFunctions.GetContentType(reportRenderType);
