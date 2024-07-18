@@ -20,6 +20,12 @@ namespace DRRCore.Services.ApiCore.Controllers
             return Ok(await _comboboxApplication.GetDocumentTypeNatural());
         }
         [HttpGet()]
+        [Route("occupations")]
+        public async Task<ActionResult> GetOccupations()
+        {
+            return Ok(await _comboboxApplication.GetOccupations());
+        }
+        [HttpGet()]
         [Route("documentType")]
         public async Task<ActionResult> GetDocumentType()
         {

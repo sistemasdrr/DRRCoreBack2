@@ -27,6 +27,7 @@ namespace DRRCore.Transversal.Common
                         Path = "/" + reportName,
                         RenderType = render,
                         ExecuteType = ReportExecuteType.Export,
+                        
                         Reset = true,
                         Parameters = parameters,
 

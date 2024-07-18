@@ -26,6 +26,7 @@
         Task<bool> UpdatePersonJob();
 
         Task<bool> UpdateSubscriber();
+        Task<bool> MigrateOccupation();
 
     }
 }

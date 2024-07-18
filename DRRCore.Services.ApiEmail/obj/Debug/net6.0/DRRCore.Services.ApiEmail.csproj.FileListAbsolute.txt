@@ -294,3 +294,4 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\obj\De
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\obj\Debug\net6.0\DRRCore.Services.ApiEmail.pdb
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\obj\Debug\net6.0\DRRCore.Services.ApiEmail.genruntimeconfig.cache
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\obj\Debug\net6.0\ref\DRRCore.Services.ApiEmail.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\SharpCompress.dll

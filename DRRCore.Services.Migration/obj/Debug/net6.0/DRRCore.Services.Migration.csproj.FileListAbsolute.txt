@@ -285,3 +285,4 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.Migration\obj\D
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.Migration\obj\Debug\net6.0\DRRCore.Services.Migration.pdb
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.Migration\obj\Debug\net6.0\DRRCore.Services.Migration.genruntimeconfig.cache
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.Migration\obj\Debug\net6.0\ref\DRRCore.Services.Migration.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.Migration\bin\Debug\net6.0\SharpCompress.dll

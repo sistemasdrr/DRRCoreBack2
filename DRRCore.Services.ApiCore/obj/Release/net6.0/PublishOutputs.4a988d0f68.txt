@@ -18,6 +18,9 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Rel
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\Dapper.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\EntityFramework.SqlServer.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\EntityFramework.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\EPPlus.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\EPPlus.Interfaces.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\EPPlus.System.Drawing.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\Google.Protobuf.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\itextsharp.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\K4os.Compression.LZ4.dll
@@ -33,9 +36,15 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Rel
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\Microsoft.EntityFrameworkCore.SqlServer.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\Microsoft.Extensions.Caching.Abstractions.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\Microsoft.Extensions.Caching.Memory.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\Microsoft.Extensions.Configuration.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\Microsoft.Extensions.Configuration.Abstractions.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\Microsoft.Extensions.Configuration.FileExtensions.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\Microsoft.Extensions.Configuration.Json.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\Microsoft.Extensions.DependencyInjection.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\Microsoft.Extensions.FileProviders.Abstractions.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\Microsoft.Extensions.FileProviders.Physical.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\Microsoft.Extensions.FileSystemGlobbing.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\Microsoft.Extensions.Logging.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\Microsoft.Extensions.Logging.Abstractions.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\Microsoft.Extensions.Options.dll
@@ -48,6 +57,7 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Rel
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\Microsoft.IdentityModel.Protocols.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\Microsoft.IdentityModel.Tokens.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\Microsoft.IO.RecyclableMemoryStream.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\Microsoft.OpenApi.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\Microsoft.SqlServer.Server.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\Microsoft.Win32.SystemEvents.dll
@@ -56,6 +66,7 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Rel
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\MySqlConnector.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\Newtonsoft.Json.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\Pomelo.EntityFrameworkCore.MySql.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\SharpCompress.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\Swashbuckle.AspNetCore.SwaggerUI.dll
@@ -64,10 +75,12 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Rel
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\System.Data.SqlClient.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\System.Diagnostics.DiagnosticSource.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\System.Drawing.Common.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\System.Formats.Asn1.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\System.IO.Pipelines.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\System.Memory.Data.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\System.Runtime.Caching.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\System.Security.Cryptography.Pkcs.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\System.Security.Cryptography.ProtectedData.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\System.Security.Permissions.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\System.ServiceModel.Http.dll
@@ -98,6 +111,7 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Rel
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\runtimes\unix\lib\netstandard2.0\System.Private.ServiceModel.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\runtimes\win\lib\netstandard2.0\System.Private.ServiceModel.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\runtimes\win\lib\net6.0\System.Security.Cryptography.Pkcs.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\runtimes\win\lib\net6.0\System.Text.Encoding.CodePages.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\PubTmp\Out\runtimes\browser\lib\net6.0\System.Text.Encodings.Web.dll

@@ -36,6 +36,12 @@ namespace DRRCore.Services.Migration.Controllers
         {
             return Ok(await _migraUser.MigratePersonByMigra(migra));
         }
+        [HttpPost()]
+        [Route("MigrateOccupation")]
+        public async Task<ActionResult> MigrateOccupation()
+        {
+            return Ok(await _migraUser.MigrateOccupation());
+        }
         //[HttpPost()]
         //[Route("correcMigra")]
         //public async Task<ActionResult> correcMigra(int migra)

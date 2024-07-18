@@ -55,6 +55,12 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
          .ForMember(dest => dest.Id, opt => opt?.MapFrom(src => src.Id))
          .ForMember(dest => dest.Valor, opt => opt?.MapFrom(src => src.Name))
          .ReverseMap();
+            CreateMap<Occupation, GetComboValueCodeResponseDto>()
+         .ForMember(dest => dest.Id, opt => opt?.MapFrom(src => src.Id))
+         .ForMember(dest => dest.Valor, opt => opt?.MapFrom(src => src.Name))
+         .ForMember(dest => dest.ValorEng, opt => opt?.MapFrom(src => src.EnglishName))
+         .ForMember(dest => dest.Code, opt => opt?.MapFrom(src => src.Code))
+         .ReverseMap();
 
             CreateMap<LegalRegisterSituation, GetComboValueSitResponseDto>()
         .ForMember(dest => dest.Id, opt => opt?.MapFrom(src => src.Id))

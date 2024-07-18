@@ -136,6 +136,12 @@ namespace DRRCore.Services.ApiCore.Controllers
         {
             return Ok(await _ticketApplication.DispatchTicket(idTicket, idUser));
         }
+        [HttpPost()]
+        [Route("GetExcel")]
+        public async Task<ActionResult> GetExcel(int idTicket)
+        {
+            return Ok(await _ticketApplication.GetExcel(idTicket));
+        }
         [HttpGet()]
         [Route("getListby")]
         public async Task<ActionResult> getListBy(string? ticket, string? name, string? subscriber, string? type, string? procedure)

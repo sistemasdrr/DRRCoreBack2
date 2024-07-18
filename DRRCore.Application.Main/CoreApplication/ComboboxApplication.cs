@@ -475,6 +475,24 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
+        public async Task<Response<List<GetComboValueCodeResponseDto>>> GetOccupations()
+        {
+            var response = new Response<List<GetComboValueCodeResponseDto>>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var list = await context.Occupations.Where(x => x.Enable == true).OrderBy(x => x.Name).ToListAsync();
+                response.Data = _mapper.Map<List<GetComboValueCodeResponseDto>>(list);
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
         public async Task<Response<List<GetComboValueResponseDto>>> GetOpcionalCommentarySbs()
         {
             var response = new Response<List<GetComboValueResponseDto>>();

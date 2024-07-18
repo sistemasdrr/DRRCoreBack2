@@ -49,6 +49,8 @@ public partial class TicketHistory
 
     public string? Cycle { get; set; }
 
+    public bool? DirectTranslation { get; set; }
+
     public virtual ICollection<AgentInvoiceDetail> AgentInvoiceDetails { get; set; } = new List<AgentInvoiceDetail>();
 
     public virtual StatusTicket? IdStatusTicketNavigation { get; set; }

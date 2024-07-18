@@ -115,6 +115,8 @@ public partial class EecoreContext : DbContext
 
     public virtual DbSet<Numeration> Numerations { get; set; }
 
+    public virtual DbSet<Occupation> Occupations { get; set; }
+
     public virtual DbSet<OldTicket> OldTickets { get; set; }
 
     public virtual DbSet<OpcionalCommentarySb> OpcionalCommentarySbs { get; set; }
@@ -207,8 +209,8 @@ public partial class EecoreContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-    //=> optionsBuilder.UseSqlServer("Data Source=200.58.123.184,14330;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
-    => optionsBuilder.UseSqlServer("Data Source=SD-4154134-W;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
+     => optionsBuilder.UseSqlServer("Data Source=200.58.123.184,14330;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
+    //=> optionsBuilder.UseSqlServer("Data Source=SD-4154134-W;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -2851,6 +2853,41 @@ public partial class EecoreContext : DbContext
                 .HasColumnName("updateDate");
         });
 
+        modelBuilder.Entity<Occupation>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Occupati__3213E83FD67977F6");
+
+            entity.ToTable("Occupation");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Code)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("code");
+            entity.Property(e => e.CreationDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("creationDate");
+            entity.Property(e => e.DeleteDate)
+                .HasColumnType("datetime")
+                .HasColumnName("deleteDate");
+            entity.Property(e => e.Enable)
+                .HasDefaultValueSql("((1))")
+                .HasColumnName("enable");
+            entity.Property(e => e.EnglishName)
+                .HasMaxLength(200)
+                .IsUnicode(false)
+                .HasColumnName("englishName");
+            entity.Property(e => e.LastUpdateUser).HasColumnName("lastUpdateUser");
+            entity.Property(e => e.Name)
+                .HasMaxLength(200)
+                .IsUnicode(false)
+                .HasColumnName("name");
+            entity.Property(e => e.UpdateDate)
+                .HasColumnType("datetime")
+                .HasColumnName("updateDate");
+        });
+
         modelBuilder.Entity<OldTicket>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__OldTicke__3213E83FD8E203AA");
@@ -4718,6 +4755,7 @@ public partial class EecoreContext : DbContext
             entity.Property(e => e.ExpireDate)
                 .HasColumnType("datetime")
                 .HasColumnName("expireDate");
+            entity.Property(e => e.HasBalance).HasColumnName("hasBalance");
             entity.Property(e => e.IdCompany).HasColumnName("idCompany");
             entity.Property(e => e.IdContinent).HasColumnName("idContinent");
             entity.Property(e => e.IdCountry).HasColumnName("idCountry");
@@ -4949,6 +4987,7 @@ public partial class EecoreContext : DbContext
             entity.Property(e => e.DeleteDate)
                 .HasColumnType("datetime")
                 .HasColumnName("deleteDate");
+            entity.Property(e => e.DirectTranslation).HasColumnName("directTranslation");
             entity.Property(e => e.Enable)
                 .HasDefaultValueSql("((1))")
                 .HasColumnName("enable");

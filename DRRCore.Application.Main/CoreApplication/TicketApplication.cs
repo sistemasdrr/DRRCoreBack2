@@ -15,7 +15,6 @@ using DRRCore.Domain.Interfaces.MysqlDomain;
 using DRRCore.Transversal.Common;
 using DRRCore.Transversal.Common.Interface;
 using DRRCore.Transversal.Common.JsonReader;
-using iTextSharp.text.pdf.qrcode;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -25,6 +24,10 @@ using SharpCompress.Archives;
 using SharpCompress.Archives.Zip;
 using SharpCompress.Common;
 using SharpCompress.Writers;
+using OfficeOpenXml;
+using System;
+using System.IO;
+
 
 namespace DRRCore.Application.Main.CoreApplication
 {
@@ -53,18 +56,20 @@ namespace DRRCore.Application.Main.CoreApplication
         private readonly IPersonalDomain _personalDomain;
         private readonly IAgentDomain _agentDomain;
         private readonly ICompanyApplication _companyApplication;
+        private readonly IXmlApplication _xmlApplication;
         private readonly IPersonApplication _personApplication;
         private IEmailHistoryDomain _emailHistoryDomain;
         private IMapper _mapper;
         private ILogger _logger;
         private readonly TicketPath _path;
-        public TicketApplication(INumerationDomain numerationDomain, ITicketAssignationDomain ticketAssignationDomain, IEmployeeDomain employeeDomain,
+        public TicketApplication(INumerationDomain numerationDomain, ITicketAssignationDomain ticketAssignationDomain, IEmployeeDomain employeeDomain, IXmlApplication xmlApplication,
             ITCuponDomain tCuponDomain, ITicketDomain ticketDomain, IPersonalDomain personalDomain, IAgentDomain agentDomain, IPersonApplication personApplication,
             ITicketReceptorDomain ticketReceptorDomain, ITicketHistoryDomain ticketHistoryDomain, ICountryDomain countryDomain,
             ICompanyDomain companyDomain, IMapper mapper, ILogger logger, IReportingDownload reportingDownload, IMailFormatter mailFormatter, IEmailConfigurationDomain emailConfigurationDomain,
             IEmailApplication emailApplication, IUserLoginDomain userLoginDomain, IPersonDomain personDomain, ISubscriberDomain subscriberDomain, ICompanyApplication companyApplication,
             IMailSender mailSender, IFileManager fileManager, IEmailHistoryDomain emailHistoryDomain  ,IOptions<TicketPath> path)
         {
+            _xmlApplication = xmlApplication;
             _path = path.Value;
             _personApplication = personApplication;
             _numerationDomain = numerationDomain;
@@ -811,14 +816,14 @@ namespace DRRCore.Application.Main.CoreApplication
                 throw new Exception(string.Format(Messages.ExceptionMessage, ex.Message));
             }
         }
-        private async Task<string> UploadDispatchReport(int idTicket, string fileName, byte[] byteArray)
+        private async Task<string> UploadDispatchReport(int idTicket, string fileName, byte[] byteArray, string format)
         {
             try
             {
 
                 var ticket = await _ticketDomain.GetByIdAsync(idTicket);
                 var directoryPath = _path.Path + "/cupones/" + ticket.Number.ToString("D6");
-                var filePath = Path.Combine(directoryPath, fileName + ".pdf");
+                var filePath = Path.Combine(directoryPath, fileName + format);
 
                 if (!Directory.Exists(directoryPath))
                 {
@@ -1529,7 +1534,7 @@ namespace DRRCore.Application.Main.CoreApplication
                             {
                                 IdTicket = ticket.Id,
                                 Path = path,
-                                Name = "RV_" + DateTime.Now.ToString("ddMMyy") + "_" + request.Number.ToString("D6"),
+                                Name = "RV_" + DateTime.Now.ToString("ddMMyy") + "_" + request.Number.ToString("D6") + ".pdf",
                                 Extension = ".pdf"
                             });
                             await context.SaveChangesAsync();
@@ -2871,6 +2876,8 @@ namespace DRRCore.Application.Main.CoreApplication
                     emailDataDto.BodyHTML = emailDataDto.IsBodyHTML ? await GetBodyHtml(emailDataDto) : emailDataDto.BodyHTML;
                     _logger.LogInformation(JsonConvert.SerializeObject(emailDataDto));
 
+                    //ADJUNTOS
+
                     byte[] fileArray = DownloadF8((int)ticket.Id, ticket.Language, "pdf").Result.Data.File;
                     var attachment = new AttachmentDto();
                     attachment.FileName = emailDataDto.Subject+".pdf";
@@ -2878,7 +2885,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     attachment.Path = await UploadFile(attachment);
                     emailDataDto.Attachments.Add(attachment);
 
-                    string path = await UploadDispatchReport(idTicket, emailDataDto.Subject, fileArray);
+                    string path = await UploadDispatchReport(idTicket, emailDataDto.Subject, fileArray,".pdf");
                     await context.TicketFiles.AddAsync(new TicketFile
                     {
                         IdTicket = idTicket,
@@ -2887,7 +2894,61 @@ namespace DRRCore.Application.Main.CoreApplication
                         Extension = ".pdf"
                     });
 
-                   
+                    if (ticket.IdSubscriberNavigation.ReportInWord != null && ticket.IdSubscriberNavigation.ReportInWord == true)
+                    {
+                        byte[] fileArrayWord = DownloadF8((int)ticket.Id, ticket.Language, "word").Result.Data.File;
+                        
+                        var attachmentWord = new AttachmentDto();
+                        attachmentWord.FileName = emailDataDto.Subject + ".docx";
+                        attachmentWord.Content = Convert.ToBase64String(fileArrayWord);
+                        attachmentWord.Path = await UploadFile(attachmentWord);
+                        emailDataDto.Attachments.Add(attachmentWord);
+
+                        string pathWord = await UploadDispatchReport(idTicket, emailDataDto.Subject, fileArray, ".docx");
+                        await context.TicketFiles.AddAsync(new TicketFile
+                        {
+                            IdTicket = idTicket,
+                            Path = pathWord,
+                            Name = emailDataDto.Subject + ".docx",
+                            Extension = ".docx"
+                        });
+                    }
+                    if (ticket.IdSubscriberNavigation.ReportInXml != null && ticket.IdSubscriberNavigation.ReportInXml == true)
+                    {
+                        byte[] fileArrayXml = _xmlApplication.GetXmlAtradiusAsync(idTicket).Result.Data.File;
+                        var attachmentXml = new AttachmentDto();
+                        attachmentXml.FileName = emailDataDto.Subject + ".xml";
+                        attachmentXml.Content = Convert.ToBase64String(fileArrayXml);
+                        attachmentXml.Path = await UploadFile(attachmentXml);
+                        emailDataDto.Attachments.Add(attachmentXml);
+
+                        string pathXml = await UploadDispatchReport(idTicket, emailDataDto.Subject, fileArray, ".xml");
+                        await context.TicketFiles.AddAsync(new TicketFile
+                        {
+                            IdTicket = idTicket,
+                            Path = pathXml,
+                            Name = emailDataDto.Subject + ".xml",
+                            Extension = ".xml"
+                        });
+                    }
+                    if (ticket.IdSubscriberNavigation.ReportInXmlCredendo != null && ticket.IdSubscriberNavigation.ReportInXmlCredendo == true)
+                    {
+                        byte[] fileArrayXmlCred = _xmlApplication.GetXmlCredendoAsync(idTicket).Result.Data.File;
+                        var attachmentXmlCred = new AttachmentDto();
+                        attachmentXmlCred.FileName = emailDataDto.Subject + "_Credendo.xml";
+                        attachmentXmlCred.Content = Convert.ToBase64String(fileArrayXmlCred);
+                        attachmentXmlCred.Path = await UploadFile(attachmentXmlCred);
+                        emailDataDto.Attachments.Add(attachmentXmlCred);
+
+                        string pathXmlCred = await UploadDispatchReport(idTicket, emailDataDto.Subject+ "_Credendo", fileArray, ".xml");
+                        await context.TicketFiles.AddAsync(new TicketFile
+                        {
+                            IdTicket = idTicket,
+                            Path = pathXmlCred,
+                            Name = emailDataDto.Subject + "_Credendo.xml" + ".xml",
+                            Extension = ".xml"
+                        });
+                    }
 
                     var result = await _mailSender.SendMailAsync(_mapper.Map<EmailValues>(emailDataDto));
 
@@ -2976,6 +3037,263 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             return response;
         }
+        public string? GetReportName(string language, string about, string format)
+        {
+            string result = "";
+            if (language == "I")
+            {
+                if(about == "E")
+                {
+                    switch (format.ToLower())
+                    {
+                        case "pdf": result = "EMPRESAS/F8-EMPRESAS-EN"; break;
+                        case "word": result = "EMPRESAS/F8-EMPRESAS-WORD-EN"; break;
+                    }
+                }
+                else
+                {
+                    switch (format.ToLower())
+                    {
+                        case "pdf": result = "PERSONAS/F8-PERSONAS-EN"; break;
+                        case "word": result = "PERSONAS/F8-PERSONAS-WORD-EN"; break;
+                    }
+                }
+            }
+            else
+            {
+                if (about == "E")
+                {
+                    switch (format.ToLower())
+                    {
+                        case "pdf": result = "EMPRESAS/F8-EMPRESAS-ES"; break;
+                        case "word": result = "EMPRESAS/F8-EMPRESAS-WORD-ES"; break;
+                    }
+                }
+                else
+                {
+                    switch (format.ToLower())
+                    {
+                        case "pdf": result = "PERSONAS/F8-PERSONAS-ES"; break;
+                        case "word": result = "PERSONAS/F8-PERSONAS-WORD-ES"; break;
+                    }
+                }
+            }
+            return result;
+        }
+
+        public async Task<Response<GetFileDto>> GetExcel(int idTicket)
+        {
+            var response = new Response<GetFileDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var ticket = await context.Tickets.Where(x => x.Id == idTicket)
+                    .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.TraductionCompanies)
+                    .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.IdLegalPersonTypeNavigation)
+                    .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.IdPaymentPolicyNavigation)
+                    .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.CompanyBackgrounds)
+                    .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.CompanyBranches).ThenInclude(x => x.IdBranchSectorNavigation)
+                    .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.CompanyBranches).ThenInclude(x => x.IdBusinessBranchNavigation)
+                    .FirstOrDefaultAsync();
+                if(ticket != null)
+                {
+                    ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                    var directoryPath = Path.Combine(_path.Path, "cupones", ticket.Number.ToString("D6")); // => "C:\\Debug_EIECORE\\cupones\\000162"
+
+                    using (ExcelPackage package = new ExcelPackage(new FileInfo(directoryPath)))
+                    {
+                        ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Hoja1");
+
+
+                        worksheet.Cells["A1"].Value = "FIELD NM";
+                        worksheet.Cells["B1"].Value = "DATA";
+
+                        worksheet.Cells["A2"].Value = "KSURE_REFERENCE";
+                        worksheet.Cells["B2"].Value = ticket.ReferenceNumber.PadLeft(10);
+
+                        worksheet.Cells["A3"].Value = "TRGTPSN_NM";
+                        worksheet.Cells["B3"].Value = ticket.IdCompanyNavigation.Name;
+
+                        worksheet.Cells["A4"].Value = "TRGTPSN_ABBR_NM";
+                        worksheet.Cells["B4"].Value = ticket.IdCompanyNavigation.SocialName ?? "";
+
+                        worksheet.Cells["A5"].Value = "TRGTPSN_ENG_NM";
+                        worksheet.Cells["B5"].Value = ticket.IdCompanyNavigation.Name;
+
+                        worksheet.Cells["A6"].Value = "TRGTPSN_ENG_ABBR_NM";
+                        worksheet.Cells["B6"].Value = ticket.IdCompanyNavigation.SocialName ?? "";
+
+                        worksheet.Cells["A7"].Value = "TRGTPSN_TELNO";
+                        worksheet.Cells["B7"].Value = ticket.IdCompanyNavigation.SubTelephone + " " + ticket.IdCompanyNavigation.Telephone;
+
+                        worksheet.Cells["A8"].Value = "TRGTPSN_FAX_NO";
+                        worksheet.Cells["B8"].Value = "-";
+                    
+                        worksheet.Cells["A9"].Value = "EMAIL_ADDR";
+                        worksheet.Cells["B9"].Value = ticket.IdCompanyNavigation.Email ?? "";
+
+                        worksheet.Cells["A10"].Value = "HMPG_ADDR";
+                        worksheet.Cells["B10"].Value = ticket.IdCompanyNavigation.WebPage ?? "";
+
+                        worksheet.Cells["A11"].Value = "EXPR_PRVD_TELNO";
+                        worksheet.Cells["B11"].Value = "";
+
+                        worksheet.Cells["A12"].Value = "EXPR_PRVD_FAX_NO";
+                        worksheet.Cells["B12"].Value = "";
+
+                        worksheet.Cells["A13"].Value = "EXPR_PRVD_EMAIL_ADDR";
+                        worksheet.Cells["B13"].Value = "";
+
+                        worksheet.Cells["A14"].Value = "TRGTPSN_1_ADDR";
+                        worksheet.Cells["B14"].Value = ticket.IdCompanyNavigation.Address ?? "";
+
+                        worksheet.Cells["A15"].Value = "TRGTPSN_2_ADDR";
+                        worksheet.Cells["B15"].Value = ticket.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TRotherLocals ?? "";
+
+                        worksheet.Cells["A16"].Value = "RPRSNT_1_DSCRM_NO";
+                        worksheet.Cells["B16"].Value = "";
+
+                        worksheet.Cells["A17"].Value = "RPRSNT_1_NM";
+                        worksheet.Cells["B17"].Value = "";
+
+                        worksheet.Cells["A18"].Value = "RPRSNT_1_DTL_CTNT";
+                        worksheet.Cells["B18"].Value = "";
+
+                        worksheet.Cells["A19"].Value = "RPRSNT_2_DSCRM_NO";
+                        worksheet.Cells["B19"].Value = "";
+
+                        worksheet.Cells["A20"].Value = "RPRSNT_2_NM";
+                        worksheet.Cells["B20"].Value = "";
+
+                        worksheet.Cells["A21"].Value = "RPRSNT_2_DTL_CTNT";
+                        worksheet.Cells["B21"].Value = "";
+
+                        worksheet.Cells["A22"].Value = "TRGTPSN_1_EMP_CNT";
+                        worksheet.Cells["B22"].Value = ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault().WorkerNumber.ToString() ?? "";
+
+                        worksheet.Cells["A23"].Value = "BIZTYP_1_NO";
+                        worksheet.Cells["B23"].Value = ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault().IdBranchSectorNavigation.OldCode ?? "";
+
+                        worksheet.Cells["A24"].Value = "BIZTYP_1_EXPL_CTNT";
+                        worksheet.Cells["B24"].Value = ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault().IdBranchSectorNavigation.EnglishName ?? "";
+
+                        worksheet.Cells["A25"].Value = "BIZTYP_2_NO";
+                        worksheet.Cells["B25"].Value = ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault().IdBusinessBranch.ToString() ?? "";
+
+                        worksheet.Cells["A26"].Value = "BIZTYP_2_EXPL_CTNT";
+                        worksheet.Cells["B26"].Value = ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault().IdBusinessBranchNavigation.EnglishName ?? "";
+
+                        worksheet.Cells["A27"].Value = "RMK_CTNT";
+                        worksheet.Cells["B27"].Value = "";
+
+                        worksheet.Cells["A28"].Value = "STL_CND_CTNT";
+                        worksheet.Cells["B28"].Value = "";
+
+                        worksheet.Cells["A29"].Value = "ABRD_ENTPR_REG_NO";
+                        worksheet.Cells["B29"].Value = ticket.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TBpublicRegis ?? "";
+
+                        worksheet.Cells["A30"].Value = "TAXPAY_NO";
+                        worksheet.Cells["B30"].Value = ticket.IdCompanyNavigation.TaxTypeCode;
+
+                        worksheet.Cells["A31"].Value = "OVRS_CRD_RSRCH_ORG_ENTPR_NO";
+                        worksheet.Cells["B31"].Value = "";
+
+                        worksheet.Cells["A32"].Value = "FUND_DD";
+                        worksheet.Cells["B32"].Value = ticket.IdCompanyNavigation.CompanyBackgrounds.FirstOrDefault().ConstitutionDate.Value.ToString("yyyyMMdd") ?? "";
+
+                        worksheet.Cells["A33"].Value = "PROD_1_NM";
+                        worksheet.Cells["B33"].Value = "";
+
+                        worksheet.Cells["A34"].Value = "PROD_2_NM";
+                        worksheet.Cells["B34"].Value = "";
+
+                        worksheet.Cells["A35"].Value = "PROD_3_NM";
+                        worksheet.Cells["B35"].Value = "";
+
+                        worksheet.Cells["A36"].Value = "KOREAN_PRINCIPAL_YN";
+                        worksheet.Cells["B36"].Value = "";
+
+                        worksheet.Cells["A37"].Value = "STATUS";
+                        worksheet.Cells["B37"].Value = ticket.IdCompanyNavigation?.IdLegalRegisterSituationNavigation?.EnglishName ?? "";
+
+                        worksheet.Cells["A38"].Value = "BRANCH_YN";
+                        worksheet.Cells["B38"].Value = "";
+
+                        worksheet.Cells["A39"].Value = "EST_FS_YN";
+                        worksheet.Cells["B39"].Value = "";
+
+                        worksheet.Cells["A40"].Value = "LSTD_ENTPR_YN";
+                        worksheet.Cells["B40"].Value = ticket.IdCompanyNavigation.CompanyBackgrounds.FirstOrDefault().Traded != null && ticket.IdCompanyNavigation.CompanyBackgrounds.FirstOrDefault().Traded == "Si" ? "Y" :"N";
+
+                        worksheet.Cells["A41"].Value = "STLACC_YYMM";
+                        worksheet.Cells["B41"].Value = "";
+
+                        worksheet.Cells["A42"].Value = "RSRCH_ORG_GRD_NM";
+                        worksheet.Cells["B42"].Value = "";
+
+                        worksheet.Cells["A43"].Value = "PUBENTPR_YN";
+                        worksheet.Cells["B43"].Value = "";
+
+                        worksheet.Cells["A44"].Value = "INTRNT_ORG_YN";
+                        worksheet.Cells["B44"].Value = "";
+
+                        worksheet.Cells["A45"].Value = "STL_STAT_SPEC_CTNT";
+                        worksheet.Cells["B45"].Value = ticket.IdCompanyNavigation.IdPaymentPolicyNavigation.EnglishName ?? "";
+
+                        string data = "";
+                        int i = 1;
+                        var companyRelations = await context.CompanyRelations
+                            .Include(x => x.IdCompanyRelationNavigation).ThenInclude(x => x.IdCountryNavigation)
+                            .Where(x => x.IdCompany == ticket.IdCompany)
+                            .OrderBy(x => x.IdCompanyRelationNavigation.Name)
+                            .ToListAsync();
+                        var companyShareholder = await context.CompanyShareHolders
+                            .Include(x => x.IdCompanyShareHolderNavigation).ThenInclude(x => x.IdCountryNavigation)
+                            .Where(x => x.IdCompany == ticket.IdCompany)
+                            .OrderBy(x => x.IdCompanyShareHolderNavigation.Name)
+                            .ToListAsync();
+                        foreach ( var cr in companyRelations)
+                        {
+                            data = data + i+ ". " + cr.IdCompanyRelationNavigation.Name + " (" + cr.IdCompanyRelationNavigation.IdCountryNavigation.Name + " / " + cr.IdCompanyRelationNavigation.TaxTypeCode + " / " + cr.RelationEng + " )   ";
+                            i++;
+                        }
+                        foreach (var cs in companyShareholder)
+                        {
+                            data = data + i + ". " + cs.IdCompanyShareHolderNavigation.Name + " (" + cs.IdCompanyShareHolderNavigation.IdCountryNavigation.Name + " / " + cs.IdCompanyShareHolderNavigation.TaxTypeCode + " / " + cs.RelationEng + " )   ";
+                            i++;
+                        }
+
+                        worksheet.Cells["A46"].Value = "RSRCH_ORG_GRD_NM";
+                        worksheet.Cells["B46"].Value = data;
+
+                        worksheet.Cells["A47"].Value = "RSRCH_ORG_GRD_NM";
+                        worksheet.Cells["B47"].Value = "";
+
+                        worksheet.Cells["A48"].Value = "RSRCH_ORG_GRD_NM";
+                        worksheet.Cells["B48"].Value = "";
+
+                        worksheet.Cells["A49"].Value = "RSRCH_ORG_GRD_NM";
+                        worksheet.Cells["B49"].Value = "";
+
+                        worksheet.Cells["A50"].Value = "RSRCH_ORG_GRD_NM";
+                        worksheet.Cells["B42"].Value = "";
+                        // Guardamos el archivo
+
+                        worksheet.Column(1).Width = 25;
+                        worksheet.Column(2).Width = 150;
+
+                        package.Save();
+                    }
+                }
+            }catch(Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
         public async Task<Response<GetFileResponseDto>> DownloadF8(int idTicket, string language, string format)
         {
             var response = new Response<GetFileResponseDto>();
@@ -2996,7 +3314,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         string companyCode = company.OldCode ?? "N" + company.Id.ToString("D6");
                         string languageFileName = language == "I" ? "ENG" : "ESP";
                         string fileFormat = "{0}_{1}{2}";
-                        string report = language == "E" ? "EMPRESAS/F8-EMPRESAS-ES" : "EMPRESAS/F8-EMPRESAS-EN";
+                        string report = GetReportName(language, ticket.About, format);
                         var reportRenderType = StaticFunctions.GetReportRenderType(format);
                         var extension = StaticFunctions.FileExtension(reportRenderType);
                         var contentType = StaticFunctions.GetContentType(reportRenderType);
@@ -3020,7 +3338,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         string personCode = person.OldCode ?? "N" + person.Id.ToString("D6");
                         string languageFileName = language == "I" ? "ENG" : "ESP";
                         string fileFormat = "{0}_{1}{2}";
-                        string report = language == "E" ? "F8-PERSONAS-ES" : "F8-PERSONAS-EN";
+                        string report = GetReportName(language, ticket.About, format);
                         var reportRenderType = StaticFunctions.GetReportRenderType(format);
                         var extension = StaticFunctions.FileExtension(reportRenderType);
                         var contentType = StaticFunctions.GetContentType(reportRenderType);
@@ -3309,20 +3627,6 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 _logger.LogError(ex.Message);
                 response.Data = null;
-                response.IsSuccess = false;
-            }
-            return response;
-        }
-
-        public async Task<Response<bool>> TicketToDispacth(int idTicket)
-        {
-            var response = new Response<bool>();
-            try
-            {
-                using var context = new SqlCoreContext();
-            }catch(Exception ex)
-            {
-                _logger.LogError(ex.Message);
                 response.IsSuccess = false;
             }
             return response;

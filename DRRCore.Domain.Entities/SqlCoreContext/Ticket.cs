@@ -97,6 +97,8 @@ public partial class Ticket
 
     public string? QualityTypist { get; set; }
 
+    public bool? HasBalance { get; set; }
+
     public virtual Company? IdCompanyNavigation { get; set; }
 
     public virtual Continent? IdContinentNavigation { get; set; }

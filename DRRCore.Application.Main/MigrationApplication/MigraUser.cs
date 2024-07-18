@@ -3432,5 +3432,30 @@ namespace DRRCore.Application.Main.MigrationApplication
             }
 
         }
+
+        public async Task<bool> MigrateOccupation()
+        {
+            try
+            {
+                using var context = new SqlCoreContext();
+                using var mysqlContext = new MySqlContext();
+                var cargos = await mysqlContext.TCargos.ToListAsync();
+                foreach(var cargo in cargos)
+                {
+                    await context.Occupations.AddAsync(new Occupation
+                    {
+                        Name = cargo.CaNombre,
+                        EnglishName = cargo.CaNombreIng,
+                        Code = cargo.CaCodigoIng
+                    });
+                }
+                await context.SaveChangesAsync();
+                return true;
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
+        }
     }
 }

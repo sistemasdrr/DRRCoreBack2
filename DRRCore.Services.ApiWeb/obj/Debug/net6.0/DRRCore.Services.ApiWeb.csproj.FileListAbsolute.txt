@@ -290,3 +290,4 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiWeb\obj\Debu
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiWeb\obj\Debug\net6.0\DRRCore.Services.ApiWeb.pdb
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiWeb\obj\Debug\net6.0\DRRCore.Services.ApiWeb.genruntimeconfig.cache
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiWeb\obj\Debug\net6.0\ref\DRRCore.Services.ApiWeb.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiWeb\bin\Debug\net6.0\SharpCompress.dll
