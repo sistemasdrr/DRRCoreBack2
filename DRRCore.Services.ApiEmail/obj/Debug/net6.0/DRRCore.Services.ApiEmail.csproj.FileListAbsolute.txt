@@ -165,9 +165,6 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\De
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\Dapper.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\EntityFramework.SqlServer.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\EntityFramework.dll
-C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\EPPlus.dll
-C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\EPPlus.Interfaces.dll
-C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\EPPlus.System.Drawing.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\Google.Protobuf.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\itextsharp.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\K4os.Compression.LZ4.dll
@@ -184,15 +181,9 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\De
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.SqlServer.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\Microsoft.Extensions.Caching.Abstractions.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\Microsoft.Extensions.Caching.Memory.dll
-C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\Microsoft.Extensions.Configuration.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\Microsoft.Extensions.Configuration.Abstractions.dll
-C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\Microsoft.Extensions.Configuration.FileExtensions.dll
-C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\Microsoft.Extensions.Configuration.Json.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
-C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\Microsoft.Extensions.FileProviders.Abstractions.dll
-C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\Microsoft.Extensions.FileProviders.Physical.dll
-C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\Microsoft.Extensions.FileSystemGlobbing.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\Microsoft.Extensions.Logging.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\Microsoft.Extensions.Logging.Abstractions.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\Microsoft.Extensions.Options.dll
@@ -205,7 +196,6 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\De
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\Microsoft.IdentityModel.Tokens.dll
-C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\Microsoft.IO.RecyclableMemoryStream.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\Microsoft.OpenApi.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\Microsoft.SqlServer.Server.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\Microsoft.Win32.SystemEvents.dll
@@ -224,12 +214,10 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\De
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\System.Data.SqlClient.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\System.Diagnostics.DiagnosticSource.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\System.Drawing.Common.dll
-C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\System.Formats.Asn1.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\System.IO.Pipelines.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\System.Memory.Data.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\System.Runtime.Caching.dll
-C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\System.Security.Cryptography.Pkcs.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\System.Security.Permissions.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\System.ServiceModel.Http.dll
@@ -260,7 +248,6 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\De
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\runtimes\unix\lib\netstandard2.0\System.Private.ServiceModel.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\runtimes\win\lib\netstandard2.0\System.Private.ServiceModel.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
-C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Security.Cryptography.Pkcs.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Text.Encoding.CodePages.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\runtimes\browser\lib\net6.0\System.Text.Encodings.Web.dll
@@ -308,3 +295,6 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\obj\De
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\obj\Debug\net6.0\DRRCore.Services.ApiEmail.pdb
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\obj\Debug\net6.0\DRRCore.Services.ApiEmail.genruntimeconfig.cache
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\obj\Debug\net6.0\ref\DRRCore.Services.ApiEmail.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\DocumentFormat.OpenXml.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\SpreadsheetLight.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\bin\Debug\net6.0\System.IO.Packaging.dll

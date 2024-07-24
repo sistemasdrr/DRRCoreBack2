@@ -245,6 +245,7 @@ builder.Services.AddScoped<IEmailHistoryDomain, EmailHistoryDomain>();
 builder.Services.AddScoped<IAttachmentsNotSendDomain, AttachmentsNotSendDomain>();
 builder.Services.AddScoped<IEmailConfigurationDomain, EmailConfigurationDomain>();
 
+builder.Services.AddScoped<IWebDataApplication, WebDataApplication>();
 builder.Services.AddScoped<IComboboxApplication, ComboboxApplication>();
 builder.Services.AddScoped<IEmployeeApplication, EmployeeAplication>();
 builder.Services.AddScoped<ICompanyApplication, CompanyApplication>();

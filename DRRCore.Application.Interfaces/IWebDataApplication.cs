@@ -1,4 +1,5 @@
-﻿using DRRCore.Application.DTO.Web;
+﻿using DRRCore.Application.DTO.Core.Response;
+using DRRCore.Application.DTO.Web;
 using DRRCore.Transversal.Common;
 
 namespace DRRCore.Application.Interfaces
@@ -11,6 +12,8 @@ namespace DRRCore.Application.Interfaces
         Task<Response<List<WebDataDto>>> GetByCountryAndBranchAsync(int country, string branch, int page);
         Task<Response<List<WebDataDto>>> GetSimilarBrunchAsync(string code);
         Task<Response<string>> GetOldCodeAsync(string code);
+
+        Task<Response<GetFileResponseDto>> DispatchPDF(WebDTO obj);
 
     }
 }

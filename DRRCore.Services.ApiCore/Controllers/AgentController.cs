@@ -1,5 +1,8 @@
 ﻿using DRRCore.Application.DTO.Core.Request;
+using DRRCore.Application.DTO.Web;
+using DRRCore.Application.Interfaces;
 using DRRCore.Application.Interfaces.CoreApplication;
+using DRRCore.Application.Main.CoreApplication;
 using Microsoft.AspNetCore.Mvc;
 using Org.BouncyCastle.Asn1.Ocsp;
 using System.Net.Http;
@@ -13,16 +16,24 @@ namespace DRRCore.Services.ApiCore.Controllers
     [Route("api/[controller]")]
     public class AgentController : Controller
     {
-       // private readonly HttpClient _httpClient; 
+        // private readonly HttpClient _httpClient; 
+        private readonly IWebDataApplication _webDataApplication;
         public readonly IAgentApplication _agentApplication;
         public readonly IAgentPriceApplication _agentPriceApplication;
-        public AgentController(IAgentApplication agentApplication, IAgentPriceApplication agentPriceApplication)
+        public AgentController(IAgentApplication agentApplication, IAgentPriceApplication agentPriceApplication, IWebDataApplication webDataApplication)
         {
-            _agentApplication = agentApplication;
-            _agentPriceApplication = agentPriceApplication; 
-           
+           _agentApplication = agentApplication;
+           _agentPriceApplication = agentPriceApplication; 
+           _webDataApplication = webDataApplication;
         }
-       
+        [HttpPost()]
+        [Route("DispatchPDF")]
+        public async Task<IActionResult> DispatchPDF(WebDTO obj)
+        {
+            var result = await _webDataApplication.DispatchPDF(obj);
+
+            return File(result.Data.File, result.Data.ContentType, result.Data.Name);
+        }
         [HttpPost]
         [Route("copilot")]
         public async Task<ActionResult> ChatGpt(string query)

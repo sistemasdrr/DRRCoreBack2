@@ -20,6 +20,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using Pomelo.EntityFrameworkCore.MySql.Query.Internal;
 using SharpCompress.Archives;
 using SharpCompress.Archives.Zip;
 using SharpCompress.Common;
@@ -3093,8 +3094,10 @@ namespace DRRCore.Application.Main.CoreApplication
                     .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.IdLegalRegisterSituationNavigation)
                     .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.IdPaymentPolicyNavigation)
                     .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.CompanyBackgrounds)
+                    .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.CompanyBackgrounds).ThenInclude(x => x.CurrentPaidCapitalCurrencyNavigation)
                     .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.CompanyBranches).ThenInclude(x => x.IdBranchSectorNavigation)
                     .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.CompanyBranches).ThenInclude(x => x.IdBusinessBranchNavigation)
+                    .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.FinancialBalances)
                     .FirstOrDefaultAsync();
                 if (ticket != null)
                 {
@@ -3105,6 +3108,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     }
                     var filePath = Path.Combine(directoryPath, ticket.IdCompanyNavigation.Name + ".xlsx");
                     SLDocument sLDocument = new SLDocument();
+                    
                     sLDocument.SetCellValue("A1", "FIELD_NM");
                     sLDocument.SetCellValue("B1", "DATA");
 
@@ -3178,7 +3182,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     sLDocument.SetCellValue("B24", ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault()?.IdBranchSectorNavigation.EnglishName ?? "");
 
                     sLDocument.SetCellValue("A25", "BIZTYP_2_NO");
-                    sLDocument.SetCellValue("B25", ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault()?.IdBusinessBranch.ToString() ?? "");
+                    sLDocument.SetCellValue("B25", ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault()?.IdBusinessBranchNavigation.OldCode.ToString() ?? "");
 
                     sLDocument.SetCellValue("A26", "BIZTYP_2_EXPL_CTNT");
                     sLDocument.SetCellValue("B26", ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault()?.IdBusinessBranchNavigation.EnglishName ?? "");
@@ -3190,7 +3194,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     sLDocument.SetCellValue("B28", "");
 
                     sLDocument.SetCellValue("A29", "ABRD_ENTPR_REG_NO");
-                    sLDocument.SetCellValue("B29", ticket.IdCompanyNavigation.TraductionCompanies.FirstOrDefault()?.TBpublicRegis ?? "");
+                    sLDocument.SetCellValue("B29", ticket.IdCompanyNavigation.CompanyBackgrounds.FirstOrDefault().PublicRegister ?? ""); //ticket.IdCompanyNavigation.TraductionCompanies.FirstOrDefault()?.TBpublicRegis ?? ""
 
                     sLDocument.SetCellValue("A30", "TAXPAY_NO");
                     sLDocument.SetCellValue("B30", ticket.IdCompanyNavigation.TaxTypeCode ?? "");
@@ -3290,14 +3294,42 @@ namespace DRRCore.Application.Main.CoreApplication
                     var imports = await context.ImportsAndExports.Where(x => x.IdCompany == ticket.IdCompany && x.Type == "I" && x.Enable == true).ToListAsync();
                     foreach (var import in imports)
                     {
-                        dataImports = dataImports + " | " + import.Year + " US$ FOB " + import.Amount;
+                        if(dataImports == "")
+                        {
+                            if(ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault().CountriesImportEng.IsNullOrEmpty() == false)
+                            {
+                                dataImports = ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault().CountriesImportEng + " | " + import.Year + " US$ FOB " + import.Amount;
+                            }
+                            else
+                            {
+                                dataImports = import.Year + " US$ FOB " + import.Amount;
+                            }
+                        }
+                        else
+                        {
+                            dataImports = dataImports + " | " + import.Year + " US$ FOB " + import.Amount;
+                        }
                     }
 
                     string dataExports = "";
                     var exports = await context.ImportsAndExports.Where(x => x.IdCompany == ticket.IdCompany && x.Type == "E" && x.Enable == true).ToListAsync();
                     foreach (var export in exports)
                     {
-                        dataExports = dataExports + " | " + export.Year + " US$ FOB " + export.Amount;
+                        if (dataExports == "")
+                        {
+                            if (ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault().CountriesExportEng.IsNullOrEmpty() == false)
+                            {
+                                dataExports = ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault().CountriesExportEng + " | " + export.Year + " US$ FOB " + export.Amount;
+                            }
+                            else
+                            {
+                                dataExports = export.Year + " US$ FOB " + export.Amount;
+                            }
+                        }
+                        else
+                        {
+                            dataExports = dataExports + " | " + export.Year + " US$ FOB " + export.Amount;
+                        }
                     }
                     string dataImportsAndExports = "";
                     if(imports.Count > 0)
@@ -3346,8 +3378,9 @@ namespace DRRCore.Application.Main.CoreApplication
                         sLDocument.SetCellValue("A62", "PAYCPT_AMT_CURR_NM");
                         sLDocument.SetCellValue("B62", balance[0].IdCurrencyNavigation.Abreviation);
 
-                        string currentCapital = (ticket.IdCompanyNavigation.CompanyBackgrounds.FirstOrDefault().CurrentPaidCapitalCurrencyNavigation.Abreviation ?? "" )+
-                            " | " + ticket.IdCompanyNavigation.CompanyBackgrounds.FirstOrDefault().CurrentPaidCapital + " | " + (ticket.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TBpaidCapital ?? "");
+                        //string currentCapital = (ticket.IdCompanyNavigation?.CompanyBackgrounds?.FirstOrDefault().CurrentPaidCapitalCurrencyNavigation?.Abreviation ?? "" )+
+                        //    " | " + ticket.IdCompanyNavigation?.CompanyBackgrounds?.FirstOrDefault().CurrentPaidCapital + " | " + (ticket.IdCompanyNavigation?.TraductionCompanies?.FirstOrDefault().TBpaidCapital ?? "");
+                        string currentCapital = ticket.IdCompanyNavigation?.CompanyBackgrounds?.FirstOrDefault().CurrentPaidCapital.ToString();
 
                         sLDocument.SetCellValue("A63", "PAYCPT_AMT");
                         sLDocument.SetCellValue("B63", currentCapital);
@@ -3366,28 +3399,27 @@ namespace DRRCore.Application.Main.CoreApplication
                         sLDocument.SetCellValue("A70", "LQID_AST_AMT");
                         sLDocument.SetCellValue("B70", balance[0].TotalCurrentAssets ?? 0);
                         sLDocument.SetCellValue("A71", "LQID_LIAB_AMT");
-                        sLDocument.SetCellValue("B71", "");
+                        sLDocument.SetCellValue("B71", balance[0].TotalCurrentLiabilities ?? 0);
                         sLDocument.SetCellValue("A72", "NET_PRFT_AMT");
-                        sLDocument.SetCellValue("B72", "");
+                        sLDocument.SetCellValue("B72", balance[0].Utilities ?? 0);
                         sLDocument.SetCellValue("A73", "NETAST_AMT");
-                        sLDocument.SetCellValue("B73", "");
+                        sLDocument.SetCellValue("B73", (balance[0].PCapital ?? 0) + (balance[0].PStockPile ?? 0) + (balance[0].PUtilities ?? 0) + (balance[0].POther ?? 0));
                         sLDocument.SetCellValue("A74", "PRFLOS_BIL_BASE_YYMM");
-                        sLDocument.SetCellValue("B74", "");
+                        sLDocument.SetCellValue("B74", balance[0].Date.Value.ToString("yyyyMM"));
                         sLDocument.SetCellValue("A75", "PRFT_SRPLS_AMT");
-                        sLDocument.SetCellValue("B75", "");
+                        sLDocument.SetCellValue("B75", balance[0].POther ?? 0);
                         sLDocument.SetCellValue("A76", "PRVYY_AL_AST_AMT");
-                        sLDocument.SetCellValue("B76", "");
+                        sLDocument.SetCellValue("B76", balance[1].TotalAssets ?? 0);
                         sLDocument.SetCellValue("A77", "PRVYY_BS_BASE_YYMM");
-                        sLDocument.SetCellValue("B77", "");
+                        sLDocument.SetCellValue("B77", balance[1].Date.Value.ToString("yyyyMM"));
                         sLDocument.SetCellValue("A78", "PRVYY_NET_PRFT_AMT");
-                        sLDocument.SetCellValue("B78", "");
+                        sLDocument.SetCellValue("B78", balance[1].Utilities ?? 0);
                         sLDocument.SetCellValue("A79", "PRVYY_PRFLOS_BIL_BASE_YYMM");
-                        sLDocument.SetCellValue("B79", "");
+                        sLDocument.SetCellValue("B79", balance[1].Date.Value.ToString("yyyyMM"));
                         sLDocument.SetCellValue("A80", "PRVYY_SALE_AMT");
-                        sLDocument.SetCellValue("B80", "");
+                        sLDocument.SetCellValue("B80", balance[1].Sales ?? 0);
                         sLDocument.SetCellValue("A81", "SALE_AMT");
-                        sLDocument.SetCellValue("B81", "");
-
+                        sLDocument.SetCellValue("B81", balance[0].Sales ?? 0);
                     }
                     else
                     {
@@ -3441,15 +3473,15 @@ namespace DRRCore.Application.Main.CoreApplication
                         sLDocument.SetCellValue("B80", "");
                         sLDocument.SetCellValue("A81", "SALE_AMT");
                         sLDocument.SetCellValue("B81", "");
-
                     }
-
-
                     sLDocument.SetColumnWidth(1, 30);
                     sLDocument.SetColumnWidth(2, 150);
-
+                    
+                    SLStyle style = new SLStyle();
+                    style.Alignment.Horizontal = DocumentFormat.OpenXml.Spreadsheet.HorizontalAlignmentValues.Left;
+                    
+                    sLDocument.SetColumnStyle(2, style);
                     sLDocument.SaveAs(filePath);
-
                 }
             }
             catch (Exception ex)
