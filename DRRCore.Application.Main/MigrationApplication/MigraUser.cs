@@ -750,7 +750,7 @@ namespace DRRCore.Application.Main.MigrationApplication
                         AdditionalCommentary = item.ProvComen,
                         AdditionalCommentaryEng = item.ProvComenIng,
                         ReferentCommentary = item.ProvTexto,
-                       
+                       Flag = true
 
                     };
                     lista.Add(objeto);
@@ -3366,7 +3366,8 @@ namespace DRRCore.Application.Main.MigrationApplication
                     ComercialLatePayments = await GetComercialLatePayments(empresa.EmCodigo),
                     BankDebts = await GetBankDebts(empresa.EmCodigo),
                     WorkersHistories = await GetWorkersHistories(empresa),
-                    TraductionCompanies = await GetAllTraductions(empresa)
+                    TraductionCompanies = await GetAllTraductions(empresa),
+                    
                 };
                 await context.Companies.AddAsync(company);
                 await context.SaveChangesAsync();

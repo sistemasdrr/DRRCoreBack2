@@ -18,12 +18,12 @@ namespace DRRCore.Services.Migration.Controllers
         //{
         //    return Ok(await _migraUser.MigrateCompany());
         //}
-        //[HttpPost()]
-        //[Route("empresasPorCodigo")]
-        //public async Task<ActionResult> MigrarEmpresasPorCodigo(string oldCode)
-        //{
-        //    return Ok(await _migraUser.MigrateCompanyByOldCode(oldCode));
-        //}
+        [HttpPost()]
+        [Route("empresasPorCodigo")]
+        public async Task<ActionResult> MigrarEmpresasPorCodigo(string oldCode)
+        {
+            return Ok(await _migraUser.MigrateCompanyByOldCode(oldCode));
+        }
         //[HttpPost()]
         //[Route("personas")]
         //public async Task<ActionResult> MigrarPersonas()
