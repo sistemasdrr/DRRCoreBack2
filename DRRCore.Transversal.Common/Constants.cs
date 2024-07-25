@@ -87,6 +87,8 @@
         public const string DRR_WORKFLOW_ESP_0040 = "DRR_WORKFLOW_ESP_0040";
         public const string DRR_WORKFLOW_ESP_0041 = "DRR_WORKFLOW_ESP_0041";
         public const string DRR_WORKFLOW_ESP_0050 = "DRR_WORKFLOW_ESP_0050";
+        public const string DRR_WORKFLOW_ESP_0060 = "DRR_WORKFLOW_ESP_0060";
+        public const string DRR_WORKFLOW_ENG_0060 = "DRR_WORKFLOW_ENG_0060";
         public const string DRR_EECORE_ESP_QUERYTICKET = "DRR_EECORE_ESP_QUERYTICKET";
         public const string DRR_EECORE_ENG_QUERYTICKET = "DRR_EECORE_ENG_QUERYTICKET";
 

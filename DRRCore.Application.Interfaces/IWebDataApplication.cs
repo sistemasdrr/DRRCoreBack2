@@ -13,7 +13,7 @@ namespace DRRCore.Application.Interfaces
         Task<Response<List<WebDataDto>>> GetSimilarBrunchAsync(string code);
         Task<Response<string>> GetOldCodeAsync(string code);
 
-        Task<Response<GetFileResponseDto>> DispatchPDF(WebDTO obj);
+        Task<Response<bool>> DispatchPDF(WebDTO obj);
 
     }
 }

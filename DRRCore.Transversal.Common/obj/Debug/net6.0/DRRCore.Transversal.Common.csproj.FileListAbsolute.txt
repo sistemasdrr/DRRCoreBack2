@@ -22,3 +22,16 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Transversal.Common\obj\D
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Transversal.Common\obj\Debug\net6.0\refint\DRRCore.Transversal.Common.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Transversal.Common\obj\Debug\net6.0\DRRCore.Transversal.Common.pdb
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Transversal.Common\obj\Debug\net6.0\ref\DRRCore.Transversal.Common.dll
+C:\Users\jpfer\Source\Repos\DRRCoreBack2\DRRCore.Transversal.Common\bin\Debug\net6.0\DRRCore.Transversal.Common.deps.json
+C:\Users\jpfer\Source\Repos\DRRCoreBack2\DRRCore.Transversal.Common\bin\Debug\net6.0\DRRCore.Transversal.Common.dll
+C:\Users\jpfer\Source\Repos\DRRCoreBack2\DRRCore.Transversal.Common\bin\Debug\net6.0\DRRCore.Transversal.Common.pdb
+C:\Users\jpfer\Source\Repos\DRRCoreBack2\DRRCore.Transversal.Common\obj\Debug\net6.0\DRRCore.Transversal.Common.csproj.AssemblyReference.cache
+C:\Users\jpfer\Source\Repos\DRRCoreBack2\DRRCore.Transversal.Common\obj\Debug\net6.0\DRRCore.Transversal.Common.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\jpfer\Source\Repos\DRRCoreBack2\DRRCore.Transversal.Common\obj\Debug\net6.0\DRRCore.Transversal.Common.AssemblyInfoInputs.cache
+C:\Users\jpfer\Source\Repos\DRRCoreBack2\DRRCore.Transversal.Common\obj\Debug\net6.0\DRRCore.Transversal.Common.AssemblyInfo.cs
+C:\Users\jpfer\Source\Repos\DRRCoreBack2\DRRCore.Transversal.Common\obj\Debug\net6.0\DRRCore.Transversal.Common.csproj.CoreCompileInputs.cache
+C:\Users\jpfer\Source\Repos\DRRCoreBack2\DRRCore.Transversal.Common\obj\Debug\net6.0\DRRCore.Transversal.Common.sourcelink.json
+C:\Users\jpfer\Source\Repos\DRRCoreBack2\DRRCore.Transversal.Common\obj\Debug\net6.0\DRRCore.Transversal.Common.dll
+C:\Users\jpfer\Source\Repos\DRRCoreBack2\DRRCore.Transversal.Common\obj\Debug\net6.0\refint\DRRCore.Transversal.Common.dll
+C:\Users\jpfer\Source\Repos\DRRCoreBack2\DRRCore.Transversal.Common\obj\Debug\net6.0\DRRCore.Transversal.Common.pdb
+C:\Users\jpfer\Source\Repos\DRRCoreBack2\DRRCore.Transversal.Common\obj\Debug\net6.0\ref\DRRCore.Transversal.Common.dll

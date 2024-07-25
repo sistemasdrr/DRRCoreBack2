@@ -1,4 +1,5 @@
-﻿using DRRCore.Application.DTO.Core.Request;
+﻿using Azure.Core;
+using DRRCore.Application.DTO.Core.Request;
 using DRRCore.Application.DTO.Web;
 using DRRCore.Application.Interfaces;
 using DRRCore.Application.Interfaces.CoreApplication;
@@ -30,9 +31,7 @@ namespace DRRCore.Services.ApiCore.Controllers
         [Route("DispatchPDF")]
         public async Task<IActionResult> DispatchPDF(WebDTO obj)
         {
-            var result = await _webDataApplication.DispatchPDF(obj);
-
-            return File(result.Data.File, result.Data.ContentType, result.Data.Name);
+            return Ok(await _webDataApplication.DispatchPDF(obj));
         }
         [HttpPost]
         [Route("copilot")]

@@ -2,32 +2,56 @@
 using AutoMapper;
 using DocumentFormat.OpenXml.Bibliography;
 using DocumentFormat.OpenXml.ExtendedProperties;
+using DocumentFormat.OpenXml.Math;
+using DocumentFormat.OpenXml.Spreadsheet;
 using DRRCore.Application.DTO.Core.Response;
+using DRRCore.Application.DTO.Email;
 using DRRCore.Application.DTO.Web;
 using DRRCore.Application.Interfaces;
+using DRRCore.Domain.Entities.SQLContext;
 using DRRCore.Domain.Entities.SqlCoreContext;
 using DRRCore.Domain.Interfaces;
+using DRRCore.Domain.Interfaces.EmailDomain;
 using DRRCore.Transversal.Common;
 using DRRCore.Transversal.Common.Interface;
 using Google.Protobuf;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace DRRCore.Application.Main
 {
     public class WebDataApplication : IWebDataApplication
     {
+        private readonly IMailFormatter _mailFormatter;
         private readonly IWebDataDomain _webDataDomain;
         private readonly IReportingDownload _reportingDownload;
+        private readonly IEmailConfigurationDomain _emailConfigurationDomain;
+        private readonly IMailSender _mailSender;
+        private readonly IFileManager _fileManager;
+        private readonly IEmailHistoryDomain _emailHistoryDomain;
 
         private readonly ILogger _logger;
-        private IMapper Mapper { get; }
-        public WebDataApplication(IWebDataDomain webDataDomain, ILogger logger, IMapper mapper, IReportingDownload reportingDownload)
+        private IMapper _mapper { get; }
+        public WebDataApplication(IMailFormatter mailFormatter,
+                                  IEmailHistoryDomain emailHistoryDomain,
+                                  IWebDataDomain webDataDomain,
+                                  ILogger logger,
+                                  IMapper mapper,
+                                  IReportingDownload reportingDownload,
+                                  IEmailConfigurationDomain emailConfigurationDomain,
+                                  IMailSender mailSender,
+                                  IFileManager fileManager)
         {
-
+            _mailFormatter = mailFormatter;
+            _emailConfigurationDomain = emailConfigurationDomain;
             _webDataDomain = webDataDomain;
             _logger = logger;
-            Mapper = mapper;
+            _mapper = mapper;
             _reportingDownload = reportingDownload;
+            _emailConfigurationDomain = emailConfigurationDomain;
+            _mailSender = mailSender;
+            _fileManager = fileManager;
+            _emailHistoryDomain = emailHistoryDomain;
         }
         public async Task<Response<bool>> AddOrUpdateWebDataAsync()
         {
@@ -55,7 +79,7 @@ namespace DRRCore.Application.Main
                 var data = await _webDataDomain.GetByCodeAsync(code);
                 if (data != null)
                 {
-                    response.Data = Mapper.Map<WebDataDto>(data);
+                    response.Data = _mapper.Map<WebDataDto>(data);
                 }
                 else
                 {
@@ -98,7 +122,7 @@ namespace DRRCore.Application.Main
             try
             {
                 var data = await _webDataDomain.GetByParamAsync(param.ToUpper(), page);
-                response.Data = Mapper.Map<List<WebDataDto>>(data);
+                response.Data = _mapper.Map<List<WebDataDto>>(data);
 
             }
             catch (Exception exception)
@@ -118,7 +142,7 @@ namespace DRRCore.Application.Main
                 if (country > 0 && !string.IsNullOrEmpty(branch) && page > 0)
                 {
                     var data = await _webDataDomain.GetByCountryAndBranchAsync(country, branch, page);
-                    response.Data = Mapper.Map<List<WebDataDto>>(data);                   
+                    response.Data = _mapper.Map<List<WebDataDto>>(data);                   
                 }
                 else
                 {
@@ -147,7 +171,7 @@ namespace DRRCore.Application.Main
                 if (!string.IsNullOrEmpty(code))
                 {
                     var data = await _webDataDomain.GetSimilarBrunchAsync(code);
-                    response.Data = Mapper.Map<List<WebDataDto>>(data);                  
+                    response.Data = _mapper.Map<List<WebDataDto>>(data);                  
                 }
                 else
                 {
@@ -196,9 +220,10 @@ namespace DRRCore.Application.Main
             }
         }
 
-        public async Task<Response<GetFileResponseDto>> DispatchPDF(WebDTO obj)
+        public async Task<Response<bool>> DispatchPDF(WebDTO obj)
         {
-            var response = new Response<GetFileResponseDto>();
+            var response = new Response<bool>();
+            var fileDto = new GetFileResponseDto();
             try
             {
                 using var context = new SqlCoreContext();
@@ -207,9 +232,9 @@ namespace DRRCore.Application.Main
                 var reportName = "";
                 var language = obj.Language == "C" ? "E" : "I";
 
-                if(obj.Language.Trim() == "C")
+                if (obj.Language.Trim() == "C")
                 {
-                    if(obj.Quality.Trim() == "A")
+                    if (obj.Quality.Trim() == "A")
                     {
                         reportName = "EMPRESAS/F8-EMPRESAS-A-ES";
                     }
@@ -222,7 +247,7 @@ namespace DRRCore.Application.Main
                         reportName = "EMPRESAS/F8-EMPRESAS-C-ES";
                     }
                 }
-                else if(obj.Language.Trim() == "I")
+                else if (obj.Language.Trim() == "I")
                 {
                     if (obj.Quality.Trim() == "A")
                     {
@@ -237,7 +262,7 @@ namespace DRRCore.Application.Main
                         reportName = "EMPRESAS/F8-EMPRESAS-C-EN";
                     }
                 }
-                string fileFormat = "{0}_{1}{2}";
+                string fileFormat = "{0}-{1}-{2}{3}";
                 var reportRenderType = StaticFunctions.GetReportRenderType("pdf");
                 var extension = StaticFunctions.FileExtension(reportRenderType);
                 var contentType = StaticFunctions.GetContentType(reportRenderType);
@@ -249,13 +274,74 @@ namespace DRRCore.Application.Main
                 };
 
                 var file = await _reportingDownload.GenerateReportAsync(reportName, reportRenderType, dictionary);
-                response.Data = new GetFileResponseDto
+                fileDto = new GetFileResponseDto
                 {
                     File = file,
                     ContentType = contentType,
-                    Name = string.Format(fileFormat, company.OldCode, language, extension)
+                    Name = string.Format(fileFormat, obj.TransactionCode, obj.RequestedName, obj.Quality,".pdf")
                 };
 
+
+                var emailDataDto = new EmailDataDTO();
+                emailDataDto.To = new List<string>();
+                emailDataDto.CC = new List<string>();
+
+                emailDataDto.EmailKey = obj.Language == "C" ? "DRR_WORKFLOW_ESP_0060" : "DRR_WORKFLOW_ENG_0060";
+                emailDataDto.BeAuthenticated = true;
+                emailDataDto.From = "diego.rodriguez@del-risco.com";//info@del-risco.com;
+                emailDataDto.UserName = "diego.rodriguez@del-risco.com"; //info@del-risco.com;
+                emailDataDto.Password = "w*@JHCr7mH";  // gD@rQKC0xN;
+
+                if (obj.UserEmail.Contains(';'))
+                {
+                    var emails = obj.UserEmail.Split(';');
+                    foreach (var email in emails)
+                    {
+                        emailDataDto.To.Add(email);
+                        emailDataDto.CC.Add(email);
+                    }
+                }
+                else
+                {
+                    emailDataDto.To.Add(obj.UserEmail);
+                    emailDataDto.CC.Add(obj.UserEmail);
+                }
+
+                emailDataDto.To = new List<string>
+                {
+                    "jfernandez@del-risco.com",
+                };
+                emailDataDto.CC = new List<string>
+                {
+                     "diego.rodriguez@del-risco.com",
+                };
+
+                var subjectName = (obj.Language == "C" ? "Pedido : " : "Order : ") + obj.TransactionCode + " - " + obj.RequestedName;
+                emailDataDto.Subject = subjectName;
+                emailDataDto.IsBodyHTML = true;
+                emailDataDto.Parameters.Add(obj.User);
+                emailDataDto.Parameters.Add(obj.Name);
+                emailDataDto.Parameters.Add(obj.UserCountry);
+                emailDataDto.Parameters.Add(obj.User);
+                emailDataDto.Parameters.Add(obj.RequestedName);
+                emailDataDto.Parameters.Add(obj.Quality);
+                emailDataDto.Parameters.Add(obj.Price.ToString());
+                emailDataDto.Parameters.Add("info@del-risco.com");
+                emailDataDto.BodyHTML = emailDataDto.IsBodyHTML ? await GetBodyHtml(emailDataDto) : emailDataDto.BodyHTML;
+                _logger.LogInformation(JsonConvert.SerializeObject(emailDataDto));
+
+                var attachment = new AttachmentDto();
+                attachment.FileName = fileDto.Name;
+                attachment.Content = Convert.ToBase64String(fileDto.File);
+                attachment.Path = await UploadFile(attachment);
+                emailDataDto.Attachments.Add(attachment);
+
+                var result = await _mailSender.SendMailAsync(_mapper.Map<EmailValues>(emailDataDto));
+
+                var emailHistory = _mapper.Map<EmailHistory>(emailDataDto);
+                emailHistory.Success = result;
+                response.Data = await _emailHistoryDomain.AddAsync(emailHistory);
+                _logger.LogInformation(Messages.MailSuccessSend);
             }
             catch (Exception ex)
             {
@@ -265,6 +351,20 @@ namespace DRRCore.Application.Main
                 _logger.LogError(response.Message, ex);
             }
             return response;
+        }
+
+        private async Task<string> GetBodyHtml(EmailDataDTO emailDataDto)
+        {
+            var emailConfiguration = await _emailConfigurationDomain.GetByNameAsync(emailDataDto.EmailKey);
+
+            var emailConfigurationFooter = await _emailConfigurationDomain.GetByNameAsync(Constants.DRR_WORKFLOW_FOOTER);
+            var stringBody = await _mailFormatter.GetEmailBody(emailConfiguration.Name, emailConfiguration.Value, emailDataDto.Parameters, emailDataDto.Table);
+            return stringBody.Replace(Constants.FOOTER, emailConfiguration.FlagFooter.Value ? emailConfigurationFooter.Value : string.Empty);
+
+        }
+        private async Task<string> UploadFile(AttachmentDto attachmentDto)
+        {
+            return await _fileManager.UploadFile(new MemoryStream(Convert.FromBase64String(attachmentDto.Content)), attachmentDto.FileName);
         }
     }
 }

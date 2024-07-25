@@ -16,7 +16,7 @@ namespace DRRCore.Transversal.Common
                 var con = new ServerReport(new ReportSettings()
                 {
                     ReportServer = "http://200.58.123.184/Reports/",
-                    Credential = new NetworkCredential("dattaguest", "6KoVMN3igumZ"),
+                    Credential = new NetworkCredential("dattaguest", "x3KoVHN4igFw#!"),
                 });
                 var res = new ReportData();
                 if(con != null )
@@ -51,7 +51,7 @@ namespace DRRCore.Transversal.Common
                 var con = new ServerReport(new ReportSettings()
                 {
                     ReportServer = "http://200.58.123.184/Reports/",
-                    Credential = new NetworkCredential("dattaguest", "6KoVMN3igumZ"),
+                    Credential = new NetworkCredential("dattaguest", "x3KoVHN4igFw#!"),
                 });
                 var res = new ReportData();
                 if (con != null)
