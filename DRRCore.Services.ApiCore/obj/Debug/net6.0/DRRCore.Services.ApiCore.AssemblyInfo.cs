@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DRRCore.Services.ApiCore")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9443ad5587ef6460079c425ae3c905a2b3dcc5dc")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+304bf288c1b97b932508826f3791f5aca6ca16c0")]
 [assembly: System.Reflection.AssemblyProductAttribute("DRRCore.Services.ApiCore")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DRRCore.Services.ApiCore")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
