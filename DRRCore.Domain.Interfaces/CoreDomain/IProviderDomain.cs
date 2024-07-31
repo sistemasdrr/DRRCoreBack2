@@ -5,6 +5,7 @@ namespace DRRCore.Domain.Interfaces.CoreDomain
 {
     public interface IProviderDomain : IBaseDomain<Provider>
     {
+        Task<List<Provider>> GetListProviderHistoryByIdTicket(int idTicket);
         Task<List<Provider>> GetProvidersByIdCompany(int idCompany);
         Task<List<Provider>> GetProviderByIdPerson(int idPerson);
         Task<List<GetProviderHistoryResponseDto>> GetProvidersHistoryByIdCompany(int idCompany);

@@ -202,6 +202,12 @@ namespace DRRCore.Services.ApiCore.Controllers
             return Ok(await _companyApplication.GetProviderHistory(type, id));
         }
         [HttpGet()]
+        [Route("GetListProviderHistoryByIdTicket")]
+        public async Task<ActionResult> GetListProviderHistoryByIdTicket(int idTicket)
+        {
+            return Ok(await _companyApplication.GetListProviderHistoryByIdTicket(idTicket));
+        }
+        [HttpGet()]
         [Route("getProviderById")]
         public async Task<ActionResult> getProviderById(int id)
         {

@@ -1,4 +1,7 @@
 ﻿using AutoMapper;
+using DocumentFormat.OpenXml.ExtendedProperties;
+using DocumentFormat.OpenXml.InkML;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using DRRCore.Application.DTO.Core.Request;
 using DRRCore.Application.DTO.Core.Response;
 using DRRCore.Application.Interfaces.CoreApplication;
@@ -12,7 +15,6 @@ using log4net.Config;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Org.BouncyCastle.Ocsp;
 using System.Security.Claims;
 
 namespace DRRCore.Application.Main.CoreApplication
@@ -110,13 +112,20 @@ namespace DRRCore.Application.Main.CoreApplication
                             LastUpdaterUser=1
                         });
                     }
-                    var newCompany = _mapper.Map<Company>(obj);
+                    var newCompany = _mapper.Map<Domain.Entities.SqlCoreContext.Company>(obj);
                     newCompany.Traductions = traductions;
                      response.Data = await _companyDomain.AddCompanyAsync(newCompany);
                 }
                 else
                 {
-                    var existingCompany = await _companyDomain.GetByIdAsync(obj.Id);
+                    using var context = new SqlCoreContext();
+                    var existingCompany = await context.Companies
+                    .Where(x => x.Id == obj.Id)
+                    .Include(x => x.CompanyFinancialInformations)
+                    .Include(x => x.TraductionCompanies)
+                   .FirstOrDefaultAsync();
+
+
                     if (existingCompany == null)
                     {
                         response.IsSuccess = false;
@@ -183,7 +192,10 @@ namespace DRRCore.Application.Main.CoreApplication
                 }
                 else
                 {
-                    var existingCompany = await _companyBackgroundDomain.GetByIdAsync(obj.IdCompany);
+                    using var context = new SqlCoreContext();
+                    var existingCompany = await context.CompanyBackgrounds
+                    .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.TraductionCompanies)
+                    .Where(x => x.IdCompany == obj.IdCompany).FirstOrDefaultAsync();
                     if (existingCompany == null)
                     {
                         response.IsSuccess = false;
@@ -417,7 +429,10 @@ namespace DRRCore.Application.Main.CoreApplication
                 }
                 else
                 {
-                    var existingCompany = await _companyFinancialInformationDomain.GetByIdCompany((int)obj.IdCompany);
+                    using var context = new SqlCoreContext();
+                    var existingCompany = await context.CompanyFinancialInformations
+                    .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.TraductionCompanies)
+                    .Where(x => x.IdCompany == obj.IdCompany).FirstOrDefaultAsync();
                     if (existingCompany == null)
                     {
                         response.IsSuccess = false;
@@ -744,6 +759,7 @@ namespace DRRCore.Application.Main.CoreApplication
         public async Task<Response<List<GetListProviderResponseDto>>> GetListProvidersAsync(int idCompany)
         {
             var response = new Response<List<GetListProviderResponseDto>>();
+            response.Data = new List<GetListProviderResponseDto>();
             try
             {
                 var list = await _providerDomain.GetProvidersByIdCompany(idCompany);
@@ -754,7 +770,50 @@ namespace DRRCore.Application.Main.CoreApplication
                     _logger.LogError(response.Message);
                     return response;
                 }
-                response.Data = _mapper.Map<List<GetListProviderResponseDto>>(list);
+                using var context = new SqlCoreContext();
+                foreach (var item in list)
+                {
+                    var ticket = new Ticket();
+                    if (item.IdTicket != null)
+                    {
+                        ticket = await context.Tickets.Where(x => x.Id == item.IdTicket).FirstOrDefaultAsync();
+                    }
+                    response.Data.Add(new GetListProviderResponseDto
+                    {
+                        Id = item.Id,
+                        IdCompany = item.IdCompany,
+                        IdPerson = item.IdPerson,
+                        Name = item.Name,
+                        IdCountry = item.IdCountry,
+                        Country = item.IdCountryNavigation.Iso ?? "",
+                        FlagCountry = item.IdCountryNavigation.FlagIso ?? "",
+                        Date = StaticFunctions.DateTimeToString(item.Date),
+                        DateReferent = StaticFunctions.DateTimeToString(item.DateReferent),
+                        Qualification = item.Qualification,
+                        QualificationEng = item.QualificationEng,
+                        AdditionalCommentary = item.AdditionalCommentary,
+                        AdditionalCommentaryEng = item.AdditionalCommentaryEng,
+                        AttendedBy = item.AttendedBy,
+                        MaximumAmount = item.MaximumAmount,
+                        MaximumAmountEng = item.MaximumAmountEng,
+                        ClientSince = item.ClientSince,
+                        ClientSinceEng  = item.ClientSinceEng,
+                        Compliance = item.Compliance,
+                        ComplianceEng  = item.ComplianceEng,
+                        IdCurrency = item.IdCurrency,
+                        ReferentCommentary = item.ReferentCommentary,
+                        Telephone = item.Telephone,
+                        TimeLimitEng = item.TimeLimitEng,
+                        TimeLimit = item.TimeLimit,
+                        IdTicket = item.IdTicket,
+                        Ticket = item.Ticket == null ? ticket?.Number.ToString("D6") : item.Ticket,
+                        ProductsTheySell = item.ProductsTheySell,
+                        ProductsTheySellEng = item.ProductsTheySellEng,
+                        ReferentName = item.ReferentName,
+
+                    });
+                }
+                
             }
             catch (Exception ex)
             {
@@ -1063,7 +1122,10 @@ namespace DRRCore.Application.Main.CoreApplication
                 }
                 else
                 {
-                    var existingCompanySbs = await _companySBSDomain.GetByIdCompany((int)obj.IdCompany);
+                    using var context = new SqlCoreContext();
+                    var existingCompanySbs = await context.CompanySbs
+                    .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.TraductionCompanies)
+                    .Where(x => x.IdCompany == obj.IdCompany).FirstOrDefaultAsync();
                     if (existingCompanySbs == null)
                     {
                         response.IsSuccess = false;
@@ -1492,7 +1554,12 @@ namespace DRRCore.Application.Main.CoreApplication
                 }
                 else
                 {
-                    var existingCompanyBranch= await _companyBranchDomain.GetCompanyBranchByIdCompany((int)obj.IdCompany);
+                    using var context = new SqlCoreContext();
+                    var existingCompanyBranch = await context.CompanyBranches
+                    .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.TraductionCompanies)
+                    .Include(x => x.IdLandOwnershipNavigation)
+                    .Where(x => x.IdCompany == obj.IdCompany)
+                    .FirstOrDefaultAsync();
                     if (existingCompanyBranch == null)
                     {
                         response.IsSuccess = false;
@@ -2498,6 +2565,36 @@ namespace DRRCore.Application.Main.CoreApplication
 
             }
             catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                response.IsSuccess = false;
+            }
+            return response;
+        }
+
+        public async Task<Response<List<GetListProviderResponseDto>>> GetListProviderHistoryByIdTicket(int idTicket)
+        {
+            var response = new Response<List<GetListProviderResponseDto>>();
+            response.Data = new List<GetListProviderResponseDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var list = await context.Providers
+                    .Where(x => x.IdTicket == idTicket && x.Qualification == "Dió referencia")
+                    .Include(x => x.IdCountryNavigation)
+                    .ToListAsync();
+                foreach (var item in list)
+                {
+                    response.Data.Add(new GetListProviderResponseDto
+                    {
+                        Name = item.Name,
+                        Country = item.IdCountryNavigation.Iso ?? "",
+                        FlagCountry = item.IdCountryNavigation.FlagIso ?? "",
+                        Telephone = item.Telephone
+                    });
+                }
+            }
+            catch(Exception ex) 
             {
                 _logger.LogError(ex.Message);
                 response.IsSuccess = false;

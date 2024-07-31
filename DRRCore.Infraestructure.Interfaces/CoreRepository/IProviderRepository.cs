@@ -5,6 +5,7 @@ namespace DRRCore.Infraestructure.Interfaces.CoreRepository
 {
     public interface IProviderRepository : IBaseRepository<Provider>
     {
+        Task<List<Provider>> GetListProviderHistoryByIdTicket(int idTicket);
         Task<List<Provider>> GetProviderByIdCompany(int idCompany);
         Task<List<Provider>> GetProviderByIdPerson(int idPerson);
         Task<List<GetProviderHistoryResponseDto>> GetProvidersHistoryByIdCompany(int idCompany);

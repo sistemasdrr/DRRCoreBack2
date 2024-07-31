@@ -7,6 +7,7 @@ namespace DRRCore.Application.Interfaces.CoreApplication
 {
     public interface ICompanyApplication
     {
+        Task<Response<List<GetListProviderResponseDto>>> GetListProviderHistoryByIdTicket(int idTicket);
         Task<Response<int>> AddOrUpdateAsync(AddOrUpdateCompanyRequestDto obj);
         Task<Response<GetCompanyResponseDto>> GetCompanyById(int id);
         Task<Response<List<GetListCompanyResponseDto>>> GetAllCompanys(string name,string form,int idCountry,bool haveReport,string similar); 

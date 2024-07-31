@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DocumentFormat.OpenXml.ExtendedProperties;
 using DRRCore.Application.DTO.Core.Request;
 using DRRCore.Application.DTO.Core.Response;
 using DRRCore.Application.Interfaces.CoreApplication;
@@ -179,7 +180,10 @@ namespace DRRCore.Application.Main.CoreApplication
                 }
                 else
                 {
-                    var existingPerson = await _personDomain.GetByIdAsync(obj.Id);
+                    using var context = new SqlCoreContext();
+                    var existingPerson = await context.People
+                        .Where(x => x.Id == obj.Id)
+                    .Include(x => x.TraductionPeople).FirstOrDefaultAsync();
                     if (existingPerson == null)
                     {
                         response.IsSuccess = false;
@@ -1197,6 +1201,7 @@ namespace DRRCore.Application.Main.CoreApplication
         public async Task<Response<List<GetListProviderResponseDto>>> GetListProvidersAsync(int idPerson)
         {
             var response = new Response<List<GetListProviderResponseDto>>();
+            response.Data = new List<GetListProviderResponseDto>();
             try
             {
                 var list = await _providerDomain.GetProviderByIdPerson(idPerson);
@@ -1207,7 +1212,50 @@ namespace DRRCore.Application.Main.CoreApplication
                     _logger.LogError(response.Message);
                     return response;
                 }
-                response.Data = _mapper.Map<List<GetListProviderResponseDto>>(list);
+                using var context = new SqlCoreContext();
+                foreach (var item in list)
+                {
+                    var ticket = new Ticket();
+                    if (item.IdTicket != null)
+                    {
+                        ticket = await context.Tickets.Where(x => x.Id == item.IdTicket).FirstOrDefaultAsync();
+                    }
+                    response.Data.Add(new GetListProviderResponseDto
+                    {
+                        Id = item.Id,
+                        IdCompany = item.IdCompany,
+                        IdPerson = item.IdPerson,
+                        Name = item.Name,
+                        IdCountry = item.IdCountry,
+                        Country = item.IdCountryNavigation.Iso ?? "",
+                        FlagCountry = item.IdCountryNavigation.FlagIso ?? "",
+                        Date = StaticFunctions.DateTimeToString(item.Date),
+                        DateReferent = StaticFunctions.DateTimeToString(item.DateReferent),
+                        Qualification = item.Qualification,
+                        QualificationEng = item.QualificationEng,
+                        AdditionalCommentary = item.AdditionalCommentary,
+                        AdditionalCommentaryEng = item.AdditionalCommentaryEng,
+                        AttendedBy = item.AttendedBy,
+                        MaximumAmount = item.MaximumAmount,
+                        MaximumAmountEng = item.MaximumAmountEng,
+                        ClientSince = item.ClientSince,
+                        ClientSinceEng = item.ClientSinceEng,
+                        Compliance = item.Compliance,
+                        ComplianceEng = item.ComplianceEng,
+                        IdCurrency = item.IdCurrency,
+                        ReferentCommentary = item.ReferentCommentary,
+                        Telephone = item.Telephone,
+                        TimeLimitEng = item.TimeLimitEng,
+                        TimeLimit = item.TimeLimit,
+                        IdTicket = item.IdTicket,
+                        Ticket = item.Ticket == null ? ticket?.Number.ToString("D6") : item.Ticket,
+                        ProductsTheySell = item.ProductsTheySell,
+                        ProductsTheySellEng = item.ProductsTheySellEng,
+                        ReferentName = item.ReferentName,
+
+                    });
+                }
+
             }
             catch (Exception ex)
             {

@@ -51,7 +51,8 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<bool?>> AssignTicket(NewAsignationDto obj);
         Task<Response<bool>> FinishWork(AssignTicketRequestDto obj);
         Task<Response<List<GetShortProviderByTicket>>> GetProvidersByIdTicket(int idTicket);
-        
+        Task<Response<List<GetShortProviderByTicket>>> GetProvidersHistoryByIdTicket(int idTicket);
+
         Task<Response<List<GetTicketPendingObservationsResponseDto>>> GetTicketPendingObservations(int idTicket);
         Task<Response<bool>> AddOrUpdateTicketPendingObservations(AddOrUpdateTicketPendingObservationsResponseDto obj);
         Task<Response<List<GetEmployeeAssignated>>> GetEmployeesAssignatedToTicket(int idTicket);

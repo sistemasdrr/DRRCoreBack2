@@ -49,6 +49,8 @@ namespace DRRCore.Transversal.Common
                     return GetHtmlStringBody(body, parameters);
                 case Constants.DRR_WORKFLOW_ENG_0060:
                     return GetHtmlStringBody(body, parameters);
+                case Constants.DRR_WORKFLOW_ESP_0061:
+                    return GetHtmlStringBody(body, parameters);
                 case Constants.DRR_WORKFLOW_ENG_0001:
                 case Constants.DRR_WORKFLOW_ESP_0001:
                 case Constants.DRR_WORKFLOW_ESP_0003:

@@ -289,6 +289,12 @@ namespace DRRCore.Services.ApiCore.Controllers
         {
             return Ok(await _ticketApplication.GetProvidersByIdTicket(idTicket));
         }
+        [HttpGet()]
+        [Route("providerHistoryByIdTicket")]
+        public async Task<ActionResult> providerHistoryByIdTicket(int idTicket)
+        {
+            return Ok(await _ticketApplication.GetProvidersHistoryByIdTicket(idTicket));
+        }
         [HttpPost()]
         [Route("finishWork")]
         public async Task<ActionResult> FinishWork(AssignTicketRequestDto obj)

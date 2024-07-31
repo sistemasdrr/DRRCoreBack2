@@ -102,7 +102,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                  .ForMember(dest => dest.InvestigatedIsoCountry, opt => opt?.MapFrom(src => src.About == "E" ? (src.IdCompanyNavigation.IdCountryNavigation != null ? src.IdCompanyNavigation.IdCountryNavigation.Iso : "") : (src.IdPersonNavigation.IdCountryNavigation != null ? src.IdPersonNavigation.IdCountryNavigation.Iso : "")))
                  .ForMember(dest => dest.InvestigatedFlag, opt => opt?.MapFrom(src => src.About == "E" ? (src.IdCompanyNavigation.IdCountryNavigation != null ? src.IdCompanyNavigation.IdCountryNavigation.FlagIso : "") : (src.IdPersonNavigation.IdCountryNavigation != null ? src.IdPersonNavigation.IdCountryNavigation.FlagIso : "")))
 
-
+                 .ForMember(dest => dest.Files, opt => opt?.MapFrom(src => src.TicketFiles))
                  .ForMember(dest => dest.OrderDate, opt => opt?.MapFrom(src => StaticFunctions.DateTimeToString(src.OrderDate)))
                  .ForMember(dest => dest.ExpireDate, opt => opt?.MapFrom(src => StaticFunctions.DateTimeToString(src.ExpireDate)))
                  .ForMember(dest => dest.RealExpireDate, opt => opt?.MapFrom(src => StaticFunctions.DateTimeToString(src.RealExpireDate)))

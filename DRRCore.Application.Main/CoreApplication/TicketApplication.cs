@@ -2137,6 +2137,60 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Cycle = code
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
+                                            
+                                            var emailDataDto = new EmailDataDTO();
+                                            emailDataDto.Parameters = new List<string>();
+                                            //ENVIAR CORREO
+                                            var userFrom = await context.UserLogins
+                                                .Include(x => x.IdEmployeeNavigation)
+                                                .Where(x => x.Id == int.Parse(item.UserFrom)).FirstOrDefaultAsync();
+
+                                            if (item.Internal)
+                                            {
+                                                var user = await context.UserLogins.Include(x => x.IdEmployeeNavigation).Where(x => x.Id == int.Parse(item.UserTo)).FirstOrDefaultAsync();
+
+                                                if (userFrom != null && user != null)
+                                                {
+                                                    emailDataDto.EmailKey = "DRR_WORKFLOW_ESP_0061";
+                                                    emailDataDto.BeAuthenticated = true;
+                                                    emailDataDto.From = "diego.rodriguez@del-risco.com";//userFrom.IdEmployeeNavigation.Email;
+                                                    emailDataDto.UserName = "diego.rodriguez@del-risco.com"; //userFrom.IdEmployeeNavigation.Email;
+                                                    emailDataDto.Password = "w*@JHCr7mH";  // userFrom.EmailPassword;
+                                                    emailDataDto.To = new List<string>
+                                                {
+                                                    "jfernandez@del-risco.com",
+                                                    //user.IdEmployeeNavigation.Email
+                                                };
+                                                    emailDataDto.CC = new List<string>
+                                                {
+                                                    "diego.rodriguez@del-risco.com",
+                                                    //userFrom.IdEmployeeNavigation.Email,
+                                                    // "crc@del-risco.com"
+                                                };
+                                                    emailDataDto.Subject = ticket.ReportType + ": " + (numeration != null ? numeration.Number : 1) + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureType + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
+                                                    emailDataDto.IsBodyHTML = true;
+                                                    emailDataDto.Parameters.Add("Cecilia Sayas"); //userFrom.IdEmployeeNavigation.FirstName + " " + userFrom.IdEmployeeNavigation.LastName
+                                                    emailDataDto.Parameters.Add("crc@del-risco.com");//userFrom.IdEmployeeNavigation.Email;
+                                                    emailDataDto.BodyHTML = emailDataDto.IsBodyHTML ? await GetBodyHtml(emailDataDto) : emailDataDto.BodyHTML;
+                                                    _logger.LogInformation(JsonConvert.SerializeObject(emailDataDto));
+
+                                                    var file = DownloadAssignReporter((int)ticket.Id, item.AssignedToCode, item.StartDate, item.EndDate, numeration.Number ?? 1, item.Observations).Result.Data;
+                                                    var attachment = new AttachmentDto();
+                                                    attachment.FileName = file.Name + ".pdf";
+                                                    attachment.Content = Convert.ToBase64String(file.File);
+                                                    attachment.Path = await UploadFile(attachment);
+                                                    emailDataDto.Attachments.Add(attachment);
+                                                    
+
+
+                                                    var result = await _mailSender.SendMailAsync(_mapper.Map<EmailValues>(emailDataDto));
+
+                                                    var emailHistory = _mapper.Map<EmailHistory>(emailDataDto);
+                                                    emailHistory.Success = result;
+                                                    response.Data = await _emailHistoryDomain.AddAsync(emailHistory);
+                                                    _logger.LogInformation(Messages.MailSuccessSend);
+                                                }
+                                            }
                                         }
                                         else
                                         {
@@ -2990,12 +3044,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         });
                     }
 
-                    var result = await _mailSender.SendMailAsync(_mapper.Map<EmailValues>(emailDataDto));
-
-                    var emailHistory = _mapper.Map<EmailHistory>(emailDataDto);
-                    emailHistory.Success = result;
-                    response.Data = await _emailHistoryDomain.AddAsync(emailHistory);
-                    _logger.LogInformation(Messages.MailSuccessSend);
+                 
 
                     ticket.IdCompanyNavigation.LastSearched = DateTime.Now;
 
@@ -3004,14 +3053,17 @@ namespace DRRCore.Application.Main.CoreApplication
                     ticket.DispatchedName = emailDataDto.Subject;
                     context.Tickets.Update(ticket);
 
-                    if(ticket.IdSubscriberNavigation.FacturationType == "CC")
+                    if (ticket.IdSubscriberNavigation.FacturationType == "CC")
                     {
                         var couponBilling = await context.CouponBillingSubscribers.Where(x => x.IdSubscriber == ticket.IdSubscriber).FirstOrDefaultAsync();
                         var couponBillingHistory = new CouponBillingSubscriberHistory();
                         couponBillingHistory.PurchaseDate = DateTime.Now;
                         couponBillingHistory.Type = "E";
                         var lastHistory = await context.CouponBillingSubscriberHistories.Where(x => x.IdCouponBilling == couponBilling.Id).FirstOrDefaultAsync();
-
+                        if (lastHistory == null)
+                        {
+                            throw new Exception("El abonado no tiene historial de cupon. Por favor contactar con Sistemas.");
+                        }
                         decimal? decimalDiscount = couponBilling.PriceT1;
 
                         switch (ticket.ProcedureType)
@@ -3038,7 +3090,14 @@ namespace DRRCore.Application.Main.CoreApplication
                         context.CouponBillingSubscribers.Update(couponBilling);
                     }
 
-                    await context.SaveChangesAsync();
+                  
+                    var result = await _mailSender.SendMailAsync(_mapper.Map<EmailValues>(emailDataDto));
+
+                    var emailHistory = _mapper.Map<EmailHistory>(emailDataDto);
+                    emailHistory.Success = result;
+                    response.Data = await _emailHistoryDomain.AddAsync(emailHistory);
+                      await context.SaveChangesAsync();
+                    _logger.LogInformation(Messages.MailSuccessSend);
                     response.IsSuccess = true;
                     response.Data = result;
                 }
@@ -3105,6 +3164,46 @@ namespace DRRCore.Application.Main.CoreApplication
                     };
                 }
             }catch(Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+        public async Task<Response<GetFileResponseDto>> DownloadAssignReporter(int idTicket, string assignedTo, string startDate, string endDate, int number, string observations)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var ticket = await context.Tickets.Where(x => x.Id == idTicket).FirstOrDefaultAsync();
+
+                if (ticket != null)
+                {
+                    string fileFormat = "{0}_{1}{2}";
+                    string report = "SOLICITUD_INFORME_REPORTERO";
+                    var reportRenderType = StaticFunctions.GetReportRenderType("pdf");
+                    var extension = StaticFunctions.FileExtension(reportRenderType);
+                    var contentType = StaticFunctions.GetContentType(reportRenderType);
+                    var dictionary = new Dictionary<string, string>
+                        {
+                            { "idTicket", ticket.Id.ToString() },
+                            { "codeReporter", assignedTo },
+                            { "startDate", startDate },
+                            { "endDate", endDate },
+                            { "number", number.ToString() },
+                            { "observations", observations },
+                         };
+                    response.Data = new GetFileResponseDto
+                    {
+                        File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                        ContentType = contentType,
+                        Name = "PED_REP_" + number
+                    };
+                }
+            }
+            catch (Exception ex)
             {
                 response.IsSuccess = false;
                 response.Message = Messages.BadQuery;
@@ -4235,6 +4334,40 @@ namespace DRRCore.Application.Main.CoreApplication
             }catch(Exception ex)
             {
                 _logger.LogError(ex.Message);
+                response.IsSuccess = false;
+            }
+            return response;
+        }
+
+        public async Task<Response<List<GetShortProviderByTicket>>> GetProvidersHistoryByIdTicket(int idTicket)
+        {
+            var response = new Response<List<GetShortProviderByTicket>>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var ticket = await context.Tickets.FindAsync(idTicket);
+                if (ticket != null)
+                {
+                    var providers = new List<Domain.Entities.SqlCoreContext.Provider>();
+                    if (ticket.About == "E")
+                    {
+                        providers = await context.Providers
+                            .Include(x => x.IdCountryNavigation)
+                            .Where(x => x.IdCompany == ticket.IdCompany && x.IdTicket == ticket.Id && x.Qualification == "Dió referencia").ToListAsync();
+                    }
+                    else
+                    {
+                        providers = await context.Providers
+                            .Include(x => x.IdCountryNavigation)
+                            .Where(x => x.IdPerson == ticket.IdPerson && x.IdTicket == ticket.Id && x.Qualification == "Dió referencia").ToListAsync();
+                    }
+                    response.Data = _mapper.Map<List<GetShortProviderByTicket>>(providers);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                response.Data = null;
                 response.IsSuccess = false;
             }
             return response;
