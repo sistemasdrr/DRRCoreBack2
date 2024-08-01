@@ -17,6 +17,22 @@
         public string CalidadDisponibleEng { get; set; } = string.Empty;
         public object CodigoEmpresaWeb { get; set; } = string.Empty;
     }
+    public class WebDTO
+    {
+        public string? TransactionCode { get; set; }
+        public string? TypeTransaction { get; set; }
+        public string? Date { get; set; }
+        public string? User { get; set; }
+        public string? UserCountry { get; set; }
+        public string? UserEmail { get; set; }
+        public string? OldCode { get; set; }
+        public string? Name { get; set; }
+        public string? RequestedName { get; set; }
+        public string? TaxCode { get; set; }
+        public string? Language { get; set; }
+        public decimal? Price { get; set; }
+        public string? Quality { get; set; }
+    }
 }
 
   

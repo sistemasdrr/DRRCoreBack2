@@ -56,6 +56,11 @@ namespace DRRCore.Transversal.Common.JsonReader
         public string? CodeAgent {get; set;}
         public List<QualityAgent>? QualityAgent { get; set; }
     }
+
+    public class TicketPath
+    {
+       public string Path { get; set; }
+    }
     public class QualityAgent
     {
         public string? Quality { get; set; }

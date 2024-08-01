@@ -13,24 +13,28 @@ namespace DRRCore.Transversal.Common
         {
             try
             {
-
-
-                return new ServerReport(new ReportSettings()
+                var con = new ServerReport(new ReportSettings()
                 {
-                    ReportServer = "https://sql5090.site4now.net/ReportServer",
-                    Credential = new NetworkCredential("admindrrreports-001", "drrti2023"),
-                    
-
-                }).Execute(new ReportRequest
+                    ReportServer = "http://200.58.123.184/Reports/",
+                    Credential = new NetworkCredential("dattaguest", "6KoVMN3igumZ"),
+                });
+                var res = new ReportData();
+                if(con != null )
                 {
-                    Name = reportName,
-                    Path = "/admindrrreports-001/" + reportName,
-                    RenderType = render,
-                    ExecuteType = ReportExecuteType.Export,
-                    Reset = true,
-                    Parameters = parameters,
-                    
-                }).Data.Stream;
+                    res = con.Execute(new ReportRequest
+                    {
+                        Name = reportName,
+                        Path = "/" + reportName,
+                        RenderType = render,
+                        ExecuteType = ReportExecuteType.Export,
+                        
+                        Reset = true,
+                        Parameters = parameters,
+
+                    }).Data;
+                }
+                
+                return res.Stream;
             }
             catch (Exception ex)
             {
@@ -43,21 +47,28 @@ namespace DRRCore.Transversal.Common
         {
             try
             {
-                return new ServerReport(new ReportSettings()
-                {
-                    ReportServer = "https://sql5090.site4now.net/ReportServer",
-                    Credential = new NetworkCredential("admindrrreports-001", "drrti2023"),
 
-                }).Execute(new ReportRequest
+                var con = new ServerReport(new ReportSettings()
                 {
-                    Name = reportName,
-                    Path = reportName,
-                    RenderType = render,
-                    ExecuteType = ReportExecuteType.Export,
-                    Reset = true,
-                    Parameters = parameters
+                    ReportServer = "http://200.58.123.184/Reports/",
+                    Credential = new NetworkCredential("dattaguest", "6KoVMN3igumZ"),
+                });
+                var res = new ReportData();
+                if (con != null)
+                {
+                    res = con.Execute(new ReportRequest
+                    {
+                        Name = reportName,
+                        Path = "/" + reportName,
+                        RenderType = render,
+                        ExecuteType = ReportExecuteType.Export,
+                        Reset = true,
+                        Parameters = parameters,
 
-                }).Data.Stream;
+                    }).Data;
+                }
+
+                return res.Stream;
             }
             catch (Exception ex)
             {
@@ -65,6 +76,8 @@ namespace DRRCore.Transversal.Common
                 throw new Exception(ex.Message, ex);
             }
         }
+
+     
         public async Task<byte[]> GenerateCombinedReportAsync(List<string> reportNames, ReportRenderType render, Dictionary<string, string> parameters)
         {
             List<byte[]> files = new List<byte[]>();

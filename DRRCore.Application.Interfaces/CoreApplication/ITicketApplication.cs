@@ -37,7 +37,7 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<bool>> AddTicketHistory(List<AddOrUpdateAssignationsRequestDto> obj);
 
         Task<Response<bool>> UploadFile(int idTicket, string numCupon, IFormFile file);
-        Task<Response<GetFileDto>> DownloadFileByPath(string path);
+        Task<Response<GetFileDto>> DownloadFileById(int id);
         Task<Response<bool?>> DeleteFile(int id);
         Task<Response<string?>> GetNumCuponById(int idTicket);
 
@@ -51,7 +51,8 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<bool?>> AssignTicket(NewAsignationDto obj);
         Task<Response<bool>> FinishWork(AssignTicketRequestDto obj);
         Task<Response<List<GetShortProviderByTicket>>> GetProvidersByIdTicket(int idTicket);
-        Task<Response<bool>> TicketToDispacth(int idTicket);
+        Task<Response<List<GetShortProviderByTicket>>> GetProvidersHistoryByIdTicket(int idTicket);
+
         Task<Response<List<GetTicketPendingObservationsResponseDto>>> GetTicketPendingObservations(int idTicket);
         Task<Response<bool>> AddOrUpdateTicketPendingObservations(AddOrUpdateTicketPendingObservationsResponseDto obj);
         Task<Response<List<GetEmployeeAssignated>>> GetEmployeesAssignatedToTicket(int idTicket);
@@ -59,6 +60,10 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<List<string>>> GetOtherUserCode(int idUser);
         Task<Response<List<GetTicketHistoryResponseDto>>> getCountAsignation();
         Task<Response<bool>> TicketToDispatch(int idTicketHistory,int idTicket);
-       
+        Task<Response<string>> GetSupervisorTicket(int idTicket);
+        Task<Response<bool>> DeleteTicketHistoryById(int idTicket);
+        Task<Response<GetFileDto>> DownloadZipByIdTicket(int idTicket);
+        Task<Response<GetFileDto>> GetExcel(int idTicket);
+
     }
 }

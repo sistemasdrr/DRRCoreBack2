@@ -92,7 +92,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
             try
             {
                 using var context = new SqlCoreContext();
-                var list = await context.CompanyRelations.Where(x => x.IdCompany == idCompany && x.Enable == true)
+                var list = await context.CompanyRelations.Where(x => x.IdCompany == idCompany && x.Enable == true && x.IdCompanyRelationNavigation.Enable == true)
                     .Include(x => x.IdCompanyRelationNavigation).Include(x => x.IdCompanyRelationNavigation.IdCountryNavigation)
                     .Include(x => x.IdCompanyRelationNavigation.IdLegalRegisterSituationNavigation).ToListAsync();
                 return list;

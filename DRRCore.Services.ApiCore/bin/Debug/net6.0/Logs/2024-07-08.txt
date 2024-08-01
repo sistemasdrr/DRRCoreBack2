@@ -1,0 +1,12 @@
+2024-07-08 11:19:04,264 [65] ERROR App  
+ No existe el objeto solicitado 
+ 
+2024-07-08 14:29:00,997 [3] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2024-07-08 14:29:01,318 [3] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2024-07-08 17:00:19,175 [5] ERROR App  
+ No se ha encontrado valores 
+ 

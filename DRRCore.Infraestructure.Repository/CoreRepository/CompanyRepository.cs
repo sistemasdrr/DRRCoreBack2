@@ -1,10 +1,7 @@
 ﻿using DRRCore.Domain.Entities.SqlCoreContext;
 using DRRCore.Infraestructure.Interfaces.CoreRepository;
-using DRRCore.Transversal.Common;
 using DRRCore.Transversal.Common.Interface;
 using Microsoft.EntityFrameworkCore;
-using Mysqlx.Crud;
-using static iTextSharp.text.pdf.AcroFields;
 
 namespace DRRCore.Infraestructure.Repository.CoreRepository
 {
@@ -74,7 +71,11 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                     //}
                     await context.Companies.AddAsync(obj);
                     await context.SaveChangesAsync();
-                    obj.OldCode = "N"+obj.Id.ToString("D6");
+                    obj.OldCode = "N" + obj.Id.ToString("D6");
+                    obj.CompanyFinancialInformations.Add(new CompanyFinancialInformation
+                    {
+                        IdFinancialSituacion = obj.IdCreditRisk == null ? 8 : obj.IdCreditRisk == 1 ? 9 : obj.IdCreditRisk == 1 ? 10 : obj.IdCreditRisk == 3 ? 11 : obj.IdCreditRisk == 4 ? 12 : obj.IdCreditRisk == 5 ? 13 : obj.IdCreditRisk == 6 ? 15 : obj.IdCreditRisk == 7 ? 14 : 8
+                    });
                     context.Companies.Update(obj);
                     await context.SaveChangesAsync();
                     return obj.Id;
@@ -146,6 +147,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                     .Include(x => x.IdLegalPersonTypeNavigation)
                     .Include(x => x.IdPaymentPolicyNavigation)
                     .Include(x => x.IdCreditRiskNavigation)
+                    .Include(x => x.CompanyFinancialInformations)
                     .Include(x => x.TraductionCompanies)
                    .FirstOrDefaultAsync() ?? throw new Exception("No existe la empresa solicitada");
                 if (company.TraductionCompanies.Any())
@@ -444,17 +446,22 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                         obj.TraductionCompanies.Add(traduction);
                     }
                     obj.Traductions = null;
-                    context.Companies.Update(obj);
-
-                    //var listTraductions = await context.Traductions.Where(x => x.IdCompany == obj.Id && x.Identifier.Contains("_E_")).ToListAsync();
-                    //
-                    //foreach (var item in listTraductions)
-                    //{
-                    //    item.ShortValue = existTraduction.Where(x => x.Identifier == item.Identifier).FirstOrDefault().ShortValue;
-                    //    item.LargeValue = existTraduction.Where(x => x.Identifier == item.Identifier).FirstOrDefault().LargeValue;
-                    //    item.LastUpdaterUser = existTraduction.Where(x => x.Identifier == item.Identifier).FirstOrDefault().LastUpdaterUser;
-                    //    context.Traductions.Update(item);
-                    //}                    
+                    if(obj.CompanyFinancialInformations.Count > 0)
+                    {
+                        obj.CompanyFinancialInformations.FirstOrDefault().IdFinancialSituacion = obj.IdCreditRisk == null ? 8 : obj.IdCreditRisk == 1 ? 9 : obj.IdCreditRisk == 1 ? 10 : obj.IdCreditRisk == 3 ? 11 : obj.IdCreditRisk == 4 ? 12 : obj.IdCreditRisk == 5 ? 13 : obj.IdCreditRisk == 6 ? 15 : obj.IdCreditRisk == 7 ? 14 : 8;
+                    }
+                    else
+                    {
+                        var financial = new List<CompanyFinancialInformation>
+                        {
+                            new CompanyFinancialInformation
+                            {
+                                IdFinancialSituacion = obj.IdCreditRisk == null ? 8 : obj.IdCreditRisk == 1 ? 9 : obj.IdCreditRisk == 1 ? 10 : obj.IdCreditRisk == 3 ? 11 : obj.IdCreditRisk == 4 ? 12 : obj.IdCreditRisk == 5 ? 13 : obj.IdCreditRisk == 6 ? 15 : obj.IdCreditRisk == 7 ? 14 : 8
+                            }
+                        };
+                        obj.CompanyFinancialInformations = financial;
+                    }
+                    context.Companies.Update(obj);    
                     await context.SaveChangesAsync();
                     return true;
                 }

@@ -458,13 +458,31 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<List<GetComboValueResponseDto>>> GetLegalRegisterSituation()
+        public async Task<Response<List<GetComboValueSitResponseDto>>> GetLegalRegisterSituation()
         {
-            var response = new Response<List<GetComboValueResponseDto>>();
+            var response = new Response<List<GetComboValueSitResponseDto>>();
             try
             {
                 var list = await _legalRegisterSituationDomain.GetAllAsync();
-                response.Data = _mapper.Map<List<GetComboValueResponseDto>>(list);
+                response.Data = _mapper.Map<List<GetComboValueSitResponseDto>>(list);
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
+        public async Task<Response<List<GetComboValueCodeResponseDto>>> GetOccupations()
+        {
+            var response = new Response<List<GetComboValueCodeResponseDto>>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var list = await context.Occupations.Where(x => x.Enable == true).OrderBy(x => x.Name).ToListAsync();
+                response.Data = _mapper.Map<List<GetComboValueCodeResponseDto>>(list);
             }
             catch (Exception ex)
             {

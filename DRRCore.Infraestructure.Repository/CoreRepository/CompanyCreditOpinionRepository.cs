@@ -195,6 +195,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                         obj.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TOcommentary = traductions.Where(x => x.Identifier == "L_O_COMENTARY").FirstOrDefault().LargeValue;
                         obj.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().UploadDate = DateTime.Now;
                     }
+                    obj.IdCompanyNavigation.Traductions = null;
                     context.CompanyCreditOpinions.Update(obj);
 
                     //var listTraductions = await context.Traductions.Where(x => x.IdCompany == obj.IdCompany && x.Identifier.Contains("_O_")).ToListAsync();

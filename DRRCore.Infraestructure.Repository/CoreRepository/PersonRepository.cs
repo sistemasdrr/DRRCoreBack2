@@ -197,7 +197,6 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                     if (filterBy == "N")
                     {
                         people = await context.People
-                            .Include(x => x.Traductions)
                             .Include(x => x.IdCreditRiskNavigation)
                             .Include(x => x.IdDocumentTypeNavigation)
                             .Include(x => x.IdCountryNavigation)
@@ -208,7 +207,6 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                     else if (filterBy == "D")
                     {
                         people = await context.People
-                            .Include(x => x.Traductions)
                             .Include(x => x.IdCreditRiskNavigation)
                             .Include(x => x.IdDocumentTypeNavigation)
                             .Include(x => x.IdCountryNavigation)
@@ -218,7 +216,6 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                     else if (filterBy == "R")
                     {
                         people = await context.People
-                            .Include(x => x.Traductions)
                             .Include(x => x.IdCreditRiskNavigation)
                             .Include(x => x.IdDocumentTypeNavigation)
                             .Include(x => x.IdCountryNavigation)
@@ -228,7 +225,6 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                     else if (filterBy == "T")
                     {
                         people = await context.People
-                            .Include(x => x.Traductions)
                             .Include(x => x.IdCreditRiskNavigation)
                             .Include(x => x.IdDocumentTypeNavigation)
                             .Include(x => x.IdCountryNavigation)
@@ -244,81 +240,6 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                 }
             
             }
-
-
-        public async Task<List<Company>> GetByNameAsync(string name, string form, int idCountry, bool haveReport, bool similar)
-        {
-          
-            List<Company> companys = new List<Company>();
-            try
-            {
-                using var context = new SqlCoreContext();
-                if (haveReport)
-                {
-                    if (form == "C")
-                    {
-                        if (idCountry == 0)
-                        {
-                            companys = await context.Companies.Include(x => x.Traductions).Include(x => x.IdCreditRiskNavigation).
-                                Include(x => x.IdCountryNavigation).Where(x => (x.Name.Contains(name) || x.SocialName.Contains(name)) && x.HaveReport == haveReport).Take(100).ToListAsync();
-                        }
-                        else
-                        {
-                            companys = await context.Companies.Include(x => x.Traductions).Include(x => x.IdCreditRiskNavigation).
-                                Include(x => x.IdCountryNavigation).Where(x => x.IdCountry == idCountry && (x.Name.Contains(name) || x.SocialName.Contains(name)) && x.HaveReport == haveReport).Take(100).ToListAsync();
-                        }
-                    }
-                    else
-                    {
-                        if (idCountry == 0)
-                        {
-                            companys = await context.Companies.Include(x => x.Traductions).Include(x => x.IdCreditRiskNavigation).
-                                Include(x => x.IdCountryNavigation).Where(x => (x.Name.StartsWith(name) || x.SocialName.StartsWith(name)) && x.HaveReport == haveReport).Take(100).ToListAsync();
-                        }
-                        else
-                        {
-                            companys = await context.Companies.Include(x => x.Traductions).Include(x => x.IdCreditRiskNavigation).
-                                Include(x => x.IdCountryNavigation).Where(x => x.IdCountry == idCountry && (x.Name.StartsWith(name) || x.SocialName.StartsWith(name)) && x.HaveReport == haveReport).Take(100).ToListAsync();
-                        }
-                    }
-                }
-                else
-                {
-                    if (form == "C")
-                    {
-                        if (idCountry == 0)
-                        {
-                            companys = await context.Companies.Include(x => x.Traductions).Include(x => x.IdCreditRiskNavigation).
-                                Include(x => x.IdCountryNavigation).Where(x => (x.Name.Contains(name) || x.SocialName.Contains(name))).Take(100).ToListAsync();
-                        }
-                        else
-                        {
-                            companys = await context.Companies.Include(x => x.Traductions).Include(x => x.IdCreditRiskNavigation).
-                                Include(x => x.IdCountryNavigation).Where(x => x.IdCountry == idCountry && (x.Name.Contains(name) || x.SocialName.Contains(name))).Take(100).ToListAsync();
-                        }
-                    }
-                    else
-                    {
-                        if (idCountry == 0)
-                        {
-                            companys = await context.Companies.Include(x => x.Traductions).Include(x => x.IdCreditRiskNavigation).
-                                Include(x => x.IdCountryNavigation).Where(x => x.Name.StartsWith(name) || x.SocialName.StartsWith(name)).Take(100).ToListAsync();
-                        }
-                        else
-                        {
-                            companys = await context.Companies.Include(x => x.Traductions).Include(x => x.IdCreditRiskNavigation).
-                                Include(x => x.IdCountryNavigation).Where(x => x.IdCountry == idCountry && (x.Name.StartsWith(name) || x.SocialName.StartsWith(name))).Take(100).ToListAsync();
-                        }
-                    }
-                }
-                return companys;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return null;
-            }
-        }
 
         public async Task<Person> GetByIdAsync(int id)
         {
@@ -441,31 +362,8 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                         traduction.TPreputation = obj.Traductions.Where(x => x.Identifier == "L_P_REPUTATION").FirstOrDefault().LargeValue;
                         obj.TraductionPeople.Add(traduction);
                     }
-
+                    obj.Traductions = null;
                     context.People.Update(obj);
-
-                    //foreach (var item in existTraduction)
-                    //{
-                    //    var modifierTraduction = await context.Traductions.Where(x => x.IdPerson == obj.Id && x.Identifier == item.Identifier).FirstOrDefaultAsync();
-                    //    if (modifierTraduction != null)
-                    //    {
-                    //        modifierTraduction.ShortValue = item.ShortValue;
-                    //        modifierTraduction.LargeValue = item.LargeValue;
-                    //        modifierTraduction.LastUpdaterUser = item.LastUpdaterUser;
-                    //        context.Traductions.Update(modifierTraduction);
-                    //    }
-                    //    else
-                    //    {
-                    //        var newTraduction = new Traduction();
-                    //        newTraduction.Id = 0;
-                    //        newTraduction.IdPerson = obj.Id;
-                    //        newTraduction.Identifier = item.Identifier;
-                    //        newTraduction.ShortValue = item.ShortValue;
-                    //        newTraduction.LargeValue = item.LargeValue;
-                    //        newTraduction.LastUpdaterUser = item.LastUpdaterUser;
-                    //        await context.Traductions.AddAsync(newTraduction);
-                    //    }
-                    //}
                     await context.SaveChangesAsync();
                     return true;
                 }

@@ -1,5 +1,9 @@
-﻿using DRRCore.Application.DTO.Core.Request;
+﻿using Azure.Core;
+using DRRCore.Application.DTO.Core.Request;
+using DRRCore.Application.DTO.Web;
+using DRRCore.Application.Interfaces;
 using DRRCore.Application.Interfaces.CoreApplication;
+using DRRCore.Application.Main.CoreApplication;
 using Microsoft.AspNetCore.Mvc;
 using Org.BouncyCastle.Asn1.Ocsp;
 using System.Net.Http;
@@ -13,22 +17,28 @@ namespace DRRCore.Services.ApiCore.Controllers
     [Route("api/[controller]")]
     public class AgentController : Controller
     {
-       // private readonly HttpClient _httpClient; 
+        // private readonly HttpClient _httpClient; 
+        private readonly IWebDataApplication _webDataApplication;
         public readonly IAgentApplication _agentApplication;
         public readonly IAgentPriceApplication _agentPriceApplication;
-        public AgentController(IAgentApplication agentApplication, IAgentPriceApplication agentPriceApplication)
+        public AgentController(IAgentApplication agentApplication, IAgentPriceApplication agentPriceApplication, IWebDataApplication webDataApplication)
         {
-            _agentApplication = agentApplication;
-            _agentPriceApplication = agentPriceApplication; 
-           
+           _agentApplication = agentApplication;
+           _agentPriceApplication = agentPriceApplication; 
+           _webDataApplication = webDataApplication;
         }
-       
+        [HttpPost()]
+        [Route("DispatchPDF")]
+        public async Task<IActionResult> DispatchPDF(WebDTO obj)
+        {
+            return Ok(await _webDataApplication.DispatchPDF(obj));
+        }
         [HttpPost]
         [Route("copilot")]
         public async Task<ActionResult> ChatGpt(string query)
         {
             var _httpClient = new HttpClient();
-            string apiKey = "458196fd1b2c4b91aed6fbb231cdcba7"; // Reemplaza con tu clave API
+            string apiKey = "458196fd1b2c4b91aed6fbb231cdcba7";
             string endpoint = $"https://api.bing.microsoft.com/v7.0/search?q={Uri.EscapeDataString(query)}";
 
             _httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", apiKey);

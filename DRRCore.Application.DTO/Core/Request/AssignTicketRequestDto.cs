@@ -30,6 +30,7 @@ namespace DRRCore.Application.DTO.Core.Request
         public DateTime? EndDateD { get; set; }
         public int IdTicket { get; set; }
         public int? NumberAssign { get; set; }
+        public bool? SendZip { get; set; }
     }
     public class NewAsignationDto
     {

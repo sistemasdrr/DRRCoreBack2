@@ -1,4 +1,5 @@
-﻿using DRRCore.Application.Interfaces;
+﻿using DRRCore.Application.DTO.Web;
+using DRRCore.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -56,7 +57,12 @@ namespace DRRCore.Services.ApiWeb.Controllers
         {
             return Ok(await _webDataApplication.GetOldCodeAsync(code));
         }
-
+        [HttpPost()]
+        [Route("DispatchPDF")]
+        public async Task<IActionResult> DispatchPDF(WebDTO obj)
+        {
+            return Ok(await _webDataApplication.DispatchPDF(obj));
+        }
 
     }
 }

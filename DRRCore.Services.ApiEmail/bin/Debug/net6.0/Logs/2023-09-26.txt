@@ -1,0 +1,6 @@
+2023-09-26 10:22:25,202 [9] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-09-26 10:22:25,771 [9] INFO  App  
+ Email ha sido enviado con éxito 
+ 

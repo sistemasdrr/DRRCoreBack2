@@ -166,6 +166,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                         personHome.IdPersonNavigation.TraductionPeople.FirstOrDefault().UploadDate = DateTime.Now;
                     }
 
+                    personHome.IdPersonNavigation.Traductions = null;
                     context.PersonHomes.Update(personHome);
 
                     //foreach (var item in traductions)

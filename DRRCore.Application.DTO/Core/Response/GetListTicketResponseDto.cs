@@ -91,6 +91,7 @@
         public string? Quality { get; set; }
         public string? QualityTypist { get; set; }
         public string? QualityTranslator { get; set; }
+        public string? QualityReport { get; set; }
         public string? Status { get; set; }
         public string? StatusColor { get; set; }
         public string? StatusFinalOwner { get; set; }

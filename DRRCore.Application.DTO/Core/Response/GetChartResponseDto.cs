@@ -6,15 +6,15 @@ namespace DRRCore.Application.DTO.Core.Response
     {
         
     }
-    public class GetQuery5_1_1ResponseDto
+    public class GetChart5_1_1ResponseDto
     {
-        public List<GetQuery5_1_1_Subscribers>? SubscribersList { get; set; }
-        public List<GetQuery5_1_1_Countries>? CountriesList { get; set; }
-        public GetQuery5_1_1Procedure? ProcedureType { get; set; }
-        public GetQuery5_1_1Report? ReportType { get; set; }
-        public GetQuery5_1_1Currency? Currency { get; set; }
+        public List<GetChart5_1_1_Subscribers>? SubscribersList { get; set; }
+        public List<GetChart5_1_1_Countries>? CountriesList { get; set; }
+        public GetChart5_1_1Procedure? ProcedureType { get; set; }
+        public GetChart5_1_1Report? ReportType { get; set; }
+        public GetChart5_1_1Currency? Currency { get; set; }
     }
-    public class GetQuery5_1_1_Subscribers
+    public class GetChart5_1_1_Subscribers
     {
         public string? Code { get; set; }
         public string? Name { get; set; }
@@ -22,39 +22,39 @@ namespace DRRCore.Application.DTO.Core.Response
         public string? FlagCountry { get; set; }
         public int? Quantity { get; set; }
     }
-    public class GetQuery5_1_1_Countries
+    public class GetChart5_1_1_Countries
     {
         public string? Country { get; set; }
         public string? FlagCountry { get; set; }
         public int? Quantity { get; set; }
     }
-    public class GetQuery5_1_1Procedure
+    public class GetChart5_1_1Procedure
     {
         public int? T1 { get; set; }
         public int? T2 { get; set; }
         public int? T3 { get; set; }
     }
-    public class GetQuery5_1_1Report
+    public class GetChart5_1_1Report
     {
         public int? OR { get; set; }
         public int? RV { get; set; }
         public int? EF { get; set; }
     }
-    public class GetQuery5_1_1Currency
+    public class GetChart5_1_1Currency
     {
         public int? PEN { get; set; }
         public int? USD { get; set; }
     }
 
-    public class GetQuery5_1_2ResponseDto
+    public class GetChart5_1_2ResponseDto
     {
-        public List<GetQuery5_1_2_Subscribers>? SubscribersList { get; set; }
-        public List<GetQuery5_1_2_Countries>? CountriesList { get; set; }
-        public GetQuery5_1_2Procedure? ProcedureType { get; set; }
-        public GetQuery5_1_2Report? ReportType { get; set; }
-        public GetQuery5_1_2Currency? Currency { get; set; }
+        public List<GetChart5_1_2_Subscribers>? SubscribersList { get; set; }
+        public List<GetChart5_1_2_Countries>? CountriesList { get; set; }
+        public GetChart5_1_2Procedure? ProcedureType { get; set; }
+        public GetChart5_1_2Report? ReportType { get; set; }
+        public GetChart5_1_2Currency? Currency { get; set; }
     }
-    public class GetQuery5_1_2_Subscribers
+    public class GetChart5_1_2_Subscribers
     {
         public string? Code { get; set; }
         public string? Name { get; set; }
@@ -62,37 +62,37 @@ namespace DRRCore.Application.DTO.Core.Response
         public string? FlagCountry { get; set; }
         public int? Quantity { get; set; }
     }
-    public class GetQuery5_1_2_Countries
+    public class GetChart5_1_2_Countries
     {
         public string? Country { get; set; }
         public string? FlagCountry { get; set; }
         public int? Quantity { get; set; }
     }
-    public class GetQuery5_1_2Procedure
+    public class GetChart5_1_2Procedure
     {
         public int? T1 { get; set; }
         public int? T2 { get; set; }
         public int? T3 { get; set; }
     }
-    public class GetQuery5_1_2Report
+    public class GetChart5_1_2Report
     {
         public int? OR { get; set; }
         public int? RV { get; set; }
         public int? EF { get; set; }
     }
-    public class GetQuery5_1_2Currency
+    public class GetChart5_1_2Currency
     {
         public int? PEN { get; set; }
         public int? USD { get; set; }
     }
-    public class GetQuery5_1_3ResponseDto
+    public class GetChart5_1_3ResponseDto
     {
         public string? Code { get; set; }
         public string? Name { get; set; }
         public string? Country { get; set; }
         public string? FlagCountry { get; set; }
     }
-    public class GetQuery5_1_4ResponseDto
+    public class GetChart5_1_4ResponseDto
     {
         public int? Id { get; set; }
         public string? Ticket { get; set; }
@@ -106,14 +106,14 @@ namespace DRRCore.Application.DTO.Core.Response
         public string? ReportType { get; set; }
         public decimal? Price { get; set; }
     }
-    public class GetQuery5_1_5ResponseDto
+    public class GetChart5_1_5ResponseDto
     {
         public string? Code { get; set; }
         public string? Name { get; set; }
         public string? Country { get; set; }
         public string? FlagCountry { get; set; }
     }
-    public class GetQuery5_1_6ResponseDto
+    public class GetChart5_1_6ResponseDto
     {
         public string? Code { get; set; }
         public string? Name { get; set; }
@@ -121,12 +121,12 @@ namespace DRRCore.Application.DTO.Core.Response
         public string? FlagCountry { get; set; }
         public int? Total { get; set; }
     }
-    public class GetQuery5_1_15ResponseDto
+    public class GetChart5_1_15ResponseDto
     {
         public string? Country { get; set; }
         public string? FlagCountry { get; set; }
     }
-    public class GetQuery5_1_18ResponseDto
+    public class GetChart5_1_18ResponseDto
     {
         public string? Code { get; set; }
         public string? Name { get; set; }
@@ -144,34 +144,34 @@ namespace DRRCore.Application.DTO.Core.Response
         public int? December { get; set; }
         public int? Total { get; set; }
     }
-    public class GetQuery5_1_19_1ResponseDto 
+    public class GetChart5_1_19_1ResponseDto
     {
-        public List<GetQuery5_1_19SubscribersResponseDto> Subscribers { get; set; }
-        public GetQueryProcedureType ProcedureType { get; set; }
-        public GetQueryReportType ReportType { get; set; }
-        public GetQueryLanguage Language { get; set; }
+        public List<GetChart5_1_19SubscribersResponseDto> Subscribers { get; set; }
+        public GetChartProcedureType ProcedureType { get; set; }
+        public GetChartReportType ReportType { get; set; }
+        public GetChartLanguage Language { get; set; }
 
     }
-    public class GetQueryProcedureType
+    public class GetChartProcedureType
     {
         public int? T1 { get; set; }
         public int? T2 { get; set; }
         public int? T3 { get; set; }
     }
-    public class GetQueryReportType
+    public class GetChartReportType
     {
         public int? OR { get; set; }
         public int? RV { get; set; }
         public int? EF { get; set; }
         public int? DF { get; set; }
     }
-    public class GetQueryLanguage
+    public class GetChartLanguage
     {
         public int? English { get; set; }
         public int? Spanish { get; set; }
     }
 
-    public class GetQuery5_1_19SubscribersResponseDto
+    public class GetChart5_1_19SubscribersResponseDto
     {
         public int? IdSubcsriber{ get; set; }
         public string? Name { get; set; }
@@ -210,15 +210,15 @@ namespace DRRCore.Application.DTO.Core.Response
         public int? Total { get; set; }
     }
 
-    public class GetQuery5_1_19_2ResponseDto
+    public class GetChart5_1_19_2ResponseDto
     {
-        public List<GetQuery5_1_19CountriesResponseDto> Countries { get; set; }
-        public GetQueryProcedureType ProcedureType { get; set; }
-        public GetQueryReportType ReportType { get; set; }
-        public GetQueryLanguage Language { get; set; }
+        public List<GetChart5_1_19CountriesResponseDto> Countries { get; set; }
+        public GetChartProcedureType ProcedureType { get; set; }
+        public GetChartReportType ReportType { get; set; }
+        public GetChartLanguage Language { get; set; }
 
     }
-    public class GetQuery5_1_19CountriesResponseDto
+    public class GetChart5_1_19CountriesResponseDto
     {
         public int? IdCountry { get; set; }
         public string? Country { get; set; }
@@ -256,14 +256,14 @@ namespace DRRCore.Application.DTO.Core.Response
         public int? Day31 { get; set; }
         public int? Total { get; set; }
     }
-    public class GetQuery5_1_20ResponseDto
+    public class GetChart5_1_20ResponseDto
     {
-        public List<GetQuery5_1_20SubscribersResponseDto> Subscribers { get; set; }
-        public GetQueryProcedureType ProcedureType { get; set; }
-        public GetQueryReportType ReportType { get; set; }
-        public GetQueryLanguage Language { get; set; }
+        public List<GetChart5_1_20SubscribersResponseDto> Subscribers { get; set; }
+        public GetChartProcedureType ProcedureType { get; set; }
+        public GetChartReportType ReportType { get; set; }
+        public GetChartLanguage Language { get; set; }
     }
-    public class GetQuery5_1_20SubscribersResponseDto
+    public class GetChart5_1_20SubscribersResponseDto
     {
         public int? IdSubcsriber { get; set; }
         public string? Name { get; set; }
@@ -301,7 +301,7 @@ namespace DRRCore.Application.DTO.Core.Response
         public int? Day31 { get; set; }
         public int? Total { get; set; }
     }
-    public class GetQuery5_1_21ResponseDto
+    public class GetChart5_1_21ResponseDto
     {
         public int? IdSubcsriber { get; set; }
         public string? Name { get; set; }
@@ -322,7 +322,7 @@ namespace DRRCore.Application.DTO.Core.Response
 
         public int? Total { get; set; }
     }
-    public class GetQuery5_1_26ResponseDto
+    public class GetChart5_1_26ResponseDto
     {
         public int? Year { get; set; }
         public int? QualityA { get; set; }
@@ -331,7 +331,7 @@ namespace DRRCore.Application.DTO.Core.Response
         public int? Total { get; set; }
 
     }
-    public class GetQuery5_1_27ResponseDto
+    public class GetChart5_1_27ResponseDto
     {
         public int? IdSubscriber { get; set; }
         public string? Code { get; set; }
@@ -353,7 +353,7 @@ namespace DRRCore.Application.DTO.Core.Response
 
         public int? Total { get; set; }
     }
-    public class GetQuery5_2_1ResponseDto
+    public class GetChart5_2_1ResponseDto
     {
         public int? IdTicket { get; set; }
         public string? Ticket { get; set; }
@@ -368,7 +368,7 @@ namespace DRRCore.Application.DTO.Core.Response
         public string? Subscriber { get; set; }
         public decimal? Price { get; set; }
     }
-    public class GetQuery5_2_2ResponseDto 
+    public class GetChart5_2_2ResponseDto
     {
         public int? IdTicket { get; set; }
         public string? RequestedName { get; set; }
@@ -380,7 +380,7 @@ namespace DRRCore.Application.DTO.Core.Response
         public string? ReportType { get; set; }
         public string? Subscriber { get; set; }
     }
-    public class GetQuery5_2_3ResponseDto
+    public class GetChart5_2_3ResponseDto
     {
         public int? IdTicket { get; set; }
         public int? IdTicketHistory { get; set; }
@@ -394,7 +394,7 @@ namespace DRRCore.Application.DTO.Core.Response
         public string? ProcedureType { get; set; }
         public string? ReportType { get; set; }
     }
-    public class GetQuery5_2_4ResponseDto
+    public class GetChart5_2_4ResponseDto
     {
         public string? AsignedTo { get; set; }
         public string? Name { get; set; }
@@ -411,7 +411,7 @@ namespace DRRCore.Application.DTO.Core.Response
         public int? Total { get; set; }
     }
 
-    public class GetQuery5_3_2ResponseDto
+    public class GetChart5_3_2ResponseDto
     {
         public int? Id { get; set; }
         public string? OrderDate { get; set; }

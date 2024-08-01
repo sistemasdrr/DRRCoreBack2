@@ -68,6 +68,7 @@ namespace DRRCore.Application.DTO.Core.Response
         public string? IdentificacionCommentary { get; set; }
         public bool Enable { get; set; }
         public bool? Print { get; set; }
+        public string? Since { get; set; }
 
         public List<TraductionDto> Traductions { get; set; } = new List<TraductionDto>();
     }

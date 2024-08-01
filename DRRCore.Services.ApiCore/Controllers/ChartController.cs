@@ -15,22 +15,22 @@ namespace DRRCore.Services.ApiCore.Controllers
         }
 
         [HttpGet]
-        [Route("GetQuery5_1_1")]
-        public async Task<ActionResult> GetQuery5_1_1(string startDate, string endDate)
+        [Route("GetChart5_1_1")]
+        public async Task<ActionResult> GetChart5_1_1(string startDate, string endDate)
         {
-            return Ok(await _chartApplication.GetQuery5_1_1(startDate, endDate));
+            return Ok(await _chartApplication.GetChart5_1_1(startDate, endDate));
         }
         [HttpGet]
-        [Route("GetQuery5_1_2")]
-        public async Task<ActionResult> GetQuery5_1_2(string startDate, string endDate)
+        [Route("GetChart5_1_2")]
+        public async Task<ActionResult> GetChart5_1_2(string startDate, string endDate)
         {
-            return Ok(await _chartApplication.GetQuery5_1_2(startDate, endDate));
+            return Ok(await _chartApplication.GetChart5_1_2(startDate, endDate));
         }
         [HttpGet]
-        [Route("GetQuery5_1_3")]
-        public async Task<ActionResult> GetQuery5_1_3(int month, int year)
+        [Route("GetChart5_1_3")]
+        public async Task<ActionResult> GetChart5_1_3(int month, int year)
         {
-            return Ok(await _chartApplication.GetQuery5_1_3(month, year));
+            return Ok(await _chartApplication.GetChart5_1_3(month, year));
         }
         [HttpGet]
         [Route("DownloadReport5_1_3")]
@@ -40,16 +40,16 @@ namespace DRRCore.Services.ApiCore.Controllers
             return File(result.Data.File, result.Data.ContentType, result.Data.Name);
         }
         [HttpGet]
-        [Route("GetQuery5_1_4")]
-        public async Task<ActionResult> GetQuery5_1_4(int month, int year)
+        [Route("GetChart5_1_4")]
+        public async Task<ActionResult> GetChart5_1_4(int month, int year)
         {
-            return Ok(await _chartApplication.GetQuery5_1_4(month, year));
+            return Ok(await _chartApplication.GetChart5_1_4(month, year));
         }
         [HttpGet]
-        [Route("GetQuery5_1_5")]
-        public async Task<ActionResult> GetQuery5_1_5()
+        [Route("GetChart5_1_5")]
+        public async Task<ActionResult> GetChart5_1_5()
         {
-            return Ok(await _chartApplication.GetQuery5_1_5());
+            return Ok(await _chartApplication.GetChart5_1_5());
         }
         [HttpGet]
         [Route("DownloadReport5_1_5")]
@@ -59,10 +59,10 @@ namespace DRRCore.Services.ApiCore.Controllers
             return File(result.Data.File, result.Data.ContentType, result.Data.Name);
         }
         [HttpGet]
-        [Route("GetQuery5_1_6")]
-        public async Task<ActionResult> GetQuery5_1_6(int month, int year)
+        [Route("GetChart5_1_6")]
+        public async Task<ActionResult> GetChart5_1_6(int month, int year)
         {
-            return Ok(await _chartApplication.GetQuery5_1_6(month, year));
+            return Ok(await _chartApplication.GetChart5_1_6(month, year));
         }
         [HttpGet]
         [Route("DownloadReport5_1_7")]
@@ -72,10 +72,10 @@ namespace DRRCore.Services.ApiCore.Controllers
             return File(result.Data.File, result.Data.ContentType, result.Data.Name);
         }
         [HttpGet]
-        [Route("GetQuery5_1_26")]
-        public async Task<ActionResult> GetQuery5_1_26(int idCountry)
+        [Route("GetChart5_1_26")]
+        public async Task<ActionResult> GetChart5_1_26(int idCountry)
         {
-            return Ok(await _chartApplication.GetQuery5_1_26(idCountry));
+            return Ok(await _chartApplication.GetChart5_1_26(idCountry));
         }
     }
 }

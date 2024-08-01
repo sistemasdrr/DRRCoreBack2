@@ -37,6 +37,7 @@ builder.Services.Configure<FormOptions>(options =>
 });
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.Configure<List<SpecialPriceAgent>>(builder.Configuration.GetSection("SpecialPricesAgent"));
+builder.Services.Configure<TicketPath>(builder.Configuration.GetSection("TicketPath"));
 builder.Services.AddHttpClient();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -244,6 +245,7 @@ builder.Services.AddScoped<IEmailHistoryDomain, EmailHistoryDomain>();
 builder.Services.AddScoped<IAttachmentsNotSendDomain, AttachmentsNotSendDomain>();
 builder.Services.AddScoped<IEmailConfigurationDomain, EmailConfigurationDomain>();
 
+builder.Services.AddScoped<IWebDataApplication, WebDataApplication>();
 builder.Services.AddScoped<IComboboxApplication, ComboboxApplication>();
 builder.Services.AddScoped<IEmployeeApplication, EmployeeAplication>();
 builder.Services.AddScoped<ICompanyApplication, CompanyApplication>();

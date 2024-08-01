@@ -20,6 +20,27 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
             try
             {
                 using var context = new SqlCoreContext();
+                int? idTicket = 0;
+                string ticket = "";
+                if(obj.IdCompany != null)
+                {
+                    var lastProvider = await context.Providers
+                        .Where(x => x.IdCompany == obj.IdCompany)
+                        .OrderByDescending(x => x.CreationDate).FirstOrDefaultAsync();
+                    idTicket = lastProvider != null ? lastProvider.IdTicket : null;
+                    ticket = lastProvider != null ? lastProvider.Ticket : null;
+                }
+                else
+                {
+                    var lastProvider = await context.Providers
+                        .Where(x => x.IdPerson == obj.IdPerson)
+                        .OrderByDescending(x => x.CreationDate).FirstOrDefaultAsync();
+                    idTicket = lastProvider != null ? lastProvider.IdTicket : null;
+                    ticket = lastProvider != null ? lastProvider.Ticket : null;
+                }
+                obj.IdTicket = idTicket;
+                obj.Ticket = ticket;
+                obj.Flag = true;
                 await context.Providers.AddAsync(obj);
                 await context.SaveChangesAsync();
                 return true;
@@ -107,7 +128,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
             try
             {
                 using var context = new SqlCoreContext();
-                var list = await context.Providers.Include(x => x.IdCountryNavigation).Where(x => x.IdPerson == idPerson && x.Enable == true).ToListAsync();
+                var list = await context.Providers.Include(x => x.IdCountryNavigation).Where(x => x.IdPerson == idPerson && x.Enable == true && x.Flag == true).ToListAsync();
                 return list;
             }
             catch (Exception ex)
@@ -116,7 +137,19 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                 return null;
             }
         }
-
+        public async Task<List<Provider>> GetListProviderHistoryByIdTicket(int idTicket)
+        {
+            try
+            {
+                using var context = new SqlCoreContext();
+                var list = await context.Providers.Where(x => x.IdTicket == idTicket && x.Qualification == "Dió referencia").ToListAsync();
+                return list;
+            }catch(Exception ex )
+            {
+                _logger.LogError(ex.Message, ex);
+                return null;
+            }
+        }
         public async Task<List<GetProviderHistoryResponseDto>> GetProvidersHistoryByIdCompany(int idCompany)
         {
             var list = new List<GetProviderHistoryResponseDto>();
@@ -128,7 +161,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                     .Select(x => new GetProviderHistoryResponseDto
                     {
                         Ticket = x.Ticket,
-                        NumReferences = context.Providers.Count(p => p.IdTicket == x.IdTicket && p.IdCompany == idCompany),
+                        NumReferences = context.Providers.Count(p => p.IdTicket == x.IdTicket && p.IdCompany == idCompany && p.Flag == true && p.Qualification == "Dió referencia"),
                         ReferentName = x.ReferentName,
                         Date = StaticFunctions.DateTimeToString(x.DateReferent)
                     })                               

@@ -47,6 +47,12 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
             {
                 using (var context = new SqlCoreContext())
                 {
+                    var couponBilling = new CouponBillingSubscriber();
+                    couponBilling.NumCoupon = 0;
+                    couponBilling.PriceT1 = 1;
+                    couponBilling.PriceT2 = (decimal)1.5;
+                    couponBilling.PriceT3 = 2;
+                    subscriber.CouponBillingSubscribers.Add(couponBilling);
                     await context.Subscribers.AddAsync(subscriber);
                     await context.SaveChangesAsync();
                     return subscriber.Id;

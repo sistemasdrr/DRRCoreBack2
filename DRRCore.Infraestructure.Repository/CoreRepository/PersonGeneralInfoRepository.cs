@@ -148,6 +148,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                         obj.IdPersonNavigation.TraductionPeople.FirstOrDefault().TIgdetails = traductions.Where(x => x.Identifier == "L_IG_DETAILS").FirstOrDefault().LargeValue;
                         obj.IdPersonNavigation.TraductionPeople.FirstOrDefault().UploadDate = DateTime.Now;
                     }
+                    obj.IdPersonNavigation.Traductions = null;
                     context.PersonGeneralInformations.Update(obj);
 
                     //foreach (var item in traductions)

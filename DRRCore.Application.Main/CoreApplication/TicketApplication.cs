@@ -1,6 +1,7 @@
 ﻿using AspNetCore.Reporting;
 using AutoMapper;
 using CoreFtp;
+using DocumentFormat.OpenXml.Bibliography;
 using DRRCore.Application.DTO.Core.Request;
 using DRRCore.Application.DTO.Core.Response;
 using DRRCore.Application.DTO.Email;
@@ -14,14 +15,18 @@ using DRRCore.Domain.Interfaces.EmailDomain;
 using DRRCore.Domain.Interfaces.MysqlDomain;
 using DRRCore.Transversal.Common;
 using DRRCore.Transversal.Common.Interface;
+using DRRCore.Transversal.Common.JsonReader;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
-
-
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using Pomelo.EntityFrameworkCore.MySql.Query.Internal;
+using SharpCompress.Archives;
+using SharpCompress.Archives.Zip;
+using SharpCompress.Common;
+using SharpCompress.Writers;
+using SpreadsheetLight;
 
 namespace DRRCore.Application.Main.CoreApplication
 {
@@ -50,17 +55,22 @@ namespace DRRCore.Application.Main.CoreApplication
         private readonly IPersonalDomain _personalDomain;
         private readonly IAgentDomain _agentDomain;
         private readonly ICompanyApplication _companyApplication;
+        private readonly IXmlApplication _xmlApplication;
+        private readonly IPersonApplication _personApplication;
         private IEmailHistoryDomain _emailHistoryDomain;
         private IMapper _mapper;
         private ILogger _logger;
-
-        public TicketApplication(INumerationDomain numerationDomain, ITicketAssignationDomain ticketAssignationDomain, IEmployeeDomain employeeDomain,
-            ITCuponDomain tCuponDomain, ITicketDomain ticketDomain, IPersonalDomain personalDomain, IAgentDomain agentDomain,
+        private readonly TicketPath _path;
+        public TicketApplication(INumerationDomain numerationDomain, ITicketAssignationDomain ticketAssignationDomain, IEmployeeDomain employeeDomain, IXmlApplication xmlApplication,
+            ITCuponDomain tCuponDomain, ITicketDomain ticketDomain, IPersonalDomain personalDomain, IAgentDomain agentDomain, IPersonApplication personApplication,
             ITicketReceptorDomain ticketReceptorDomain, ITicketHistoryDomain ticketHistoryDomain, ICountryDomain countryDomain,
             ICompanyDomain companyDomain, IMapper mapper, ILogger logger, IReportingDownload reportingDownload, IMailFormatter mailFormatter, IEmailConfigurationDomain emailConfigurationDomain,
             IEmailApplication emailApplication, IUserLoginDomain userLoginDomain, IPersonDomain personDomain, ISubscriberDomain subscriberDomain, ICompanyApplication companyApplication,
-            IMailSender mailSender, IFileManager fileManager, IEmailHistoryDomain emailHistoryDomain)
+            IMailSender mailSender, IFileManager fileManager, IEmailHistoryDomain emailHistoryDomain  ,IOptions<TicketPath> path)
         {
+            _xmlApplication = xmlApplication;
+            _path = path.Value;
+            _personApplication = personApplication;
             _numerationDomain = numerationDomain;
             _companyApplication = companyApplication;
             _ticketDomain = ticketDomain;
@@ -102,17 +112,20 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             return response;
         }
-        public async Task<Response<GetFileDto>> DownloadFileByPath(string path)
+        public async Task<Response<GetFileDto>> DownloadFileById(int id)
         {
             var response = new Response<GetFileDto>();
             MemoryStream ms = new MemoryStream();
             try
             {
-                var file = await _ticketDomain.GetFileByPath(path);
+                using var context = new SqlCoreContext();
+                var file = await context.TicketFiles.Where(x => x.Id == id).FirstOrDefaultAsync();
+
+               
                 if (file != null)
                 {
                     ms.Position = 0;
-                    ms = await DescargarArchivo(path);
+                    ms = await DescargarArchivo(file.Path);
                     var documentDto = new GetFileDto();
                     documentDto.File = ms;
                     documentDto.ContentType = GetContentType(file.Extension);
@@ -127,7 +140,43 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             return response;
         }
+        public async Task<Response<GetFileDto>> DownloadZipByIdTicket(int idTicket)
+        {
+            var response = new Response<GetFileDto>();
+            MemoryStream ms = new MemoryStream();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var ticket = await context.Tickets.Where(x => x.Id == idTicket).FirstOrDefaultAsync();
+                if(ticket != null)
+                {
+                    var directoryPath = Path.Combine(_path.Path, "cupones", ticket.Number.ToString("D6"));
+                    var memoryStream = new MemoryStream();
+                    using (var archive = ZipArchive.Create())
+                    {
+                        archive.AddAllFromDirectory(directoryPath);
+                        archive.SaveTo(memoryStream, new WriterOptions(CompressionType.Deflate)
+                        {
+                            LeaveStreamOpen = true
+                        });
+                    }
+                    
+                    var documentDto = new GetFileDto();
+                    documentDto.File = memoryStream;
+                    documentDto.ContentType = GetContentType(".zip");
+                    documentDto.FileName = ticket.Number.ToString("D6");
+                    response.Data = documentDto;
+                    memoryStream.Position = 0;
 
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Data = null;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
         private string GetContentType(string extension)
         {
             switch (extension.ToLower())
@@ -161,18 +210,32 @@ namespace DRRCore.Application.Main.CoreApplication
         }
         private async Task<MemoryStream> DescargarArchivo(string? path)
         {
-            using (var ftpClient = new FtpClient(GetFtpClientConfiguration()))
+            if (string.IsNullOrEmpty(path))
             {
-                await ftpClient.LoginAsync();
+                throw new ArgumentException("The file path cannot be null or empty.", nameof(path));
+            }
 
-                using (var ftpReadStream = await ftpClient.OpenFileReadStreamAsync(path))
+            if (!File.Exists(path))
+            {
+                throw new FileNotFoundException("The specified file does not exist.", path);
+            }
+
+            MemoryStream memoryStream = new MemoryStream();
+
+            try
+            {
+                using (FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.Read))
                 {
-                    using (var stream = new MemoryStream())
-                    {
-                        await ftpReadStream.CopyToAsync(stream);
-                        return stream;
-                    }
+                    await fileStream.CopyToAsync(memoryStream);
                 }
+
+                memoryStream.Position = 0; // Reset the position to the beginning of the stream
+                return memoryStream;
+            }
+            catch (Exception ex)
+            {
+                memoryStream.Dispose(); // Dispose the MemoryStream in case of an error
+                throw new Exception($"An error occurred while downloading the file: {ex.Message}", ex);
             }
         }
 
@@ -184,6 +247,60 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 using var context = new SqlCoreContext();
 
+                var code = "CP_" + DateTime.Now.Month.ToString("D2") + "_" + DateTime.Now.Year;
+                var productionClosure = await context.ProductionClosures.Where(x => x.Code.Contains(code)).FirstOrDefaultAsync();
+                if (productionClosure == null)
+                {
+
+                    DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1).AddDays(-1);
+                    await context.ProductionClosures.AddAsync(new ProductionClosure
+                    {
+                        EndDate = lastDayOfCurrentMonth,
+                        Code = code,
+                        Title = "Cierre de Producción " + DateTime.Now.Month.ToString("D2") + " - " + DateTime.Now.Year,
+                        Observations = ""
+                    });
+                }
+                else
+                {
+                    if (productionClosure.EndDate > DateTime.Now)
+                    {
+                        if (DateTime.Now.Month == 12)
+                        {
+                            code = "CP_" + (1).ToString("D2") + "_" + (DateTime.Now.Year + 1);
+                            var nextProductionClosureExistent = await context.ProductionClosures.Where(x => x.Code.Contains(code)).FirstOrDefaultAsync();
+                            if (nextProductionClosureExistent == null)
+                            {
+                                DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year + 1, 1, 1).AddMonths(1).AddDays(-1);
+                                await context.ProductionClosures.AddAsync(new ProductionClosure
+                                {
+                                    EndDate = lastDayOfCurrentMonth,
+                                    Code = code,
+                                    Title = "Cierre de Producción " + (1).ToString("D2") + " - " + DateTime.Today.Year + 1,
+                                    Observations = ""
+                                });
+                            }
+                        }
+                        else
+                        {
+                            code = "CP_" + (DateTime.Now.Month + 1).ToString("D2") + "_" + DateTime.Now.Year;
+                            var nextProductionClosureExistent = await context.ProductionClosures.Where(x => x.Code.Contains(code)).FirstOrDefaultAsync();
+                            if (nextProductionClosureExistent == null)
+                            {
+                                DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1).AddDays(-1);
+                                await context.ProductionClosures.AddAsync(new ProductionClosure
+                                {
+                                    EndDate = lastDayOfCurrentMonth,
+                                    Code = code,
+                                    Title = "Cierre de Producción " + (DateTime.Now.Month + 1).ToString("D2") + " - " + DateTime.Now.Year,
+                                    Observations = ""
+                                });
+                            }
+
+                        }
+
+                    }
+                }
 
                 if (request == null && request.RequestedName.IsNullOrEmpty() == false)
                 {
@@ -201,7 +318,8 @@ namespace DRRCore.Application.Main.CoreApplication
                     newTicket.TicketHistories.Add(new TicketHistory
                     {
                         IdStatusTicket = (int?)TicketStatusEnum.Pendiente,
-                        UserFrom = request.UserFrom
+                        UserFrom = request.UserFrom,
+                        Cycle = code
                     });
                     var idEmployee = await GetReceptorDefault(request.IdCountry ?? 0, request.ReportType, request.IdSubscriber);
                     var userLogin = await context.UserLogins
@@ -217,8 +335,34 @@ namespace DRRCore.Application.Main.CoreApplication
                     {
                      
                         await _numerationDomain.UpdateTicketNumberAsync();
+                        var traduction = new List<Domain.Entities.SqlCoreContext.Traduction>();
                         if (request.About == "E" && newTicket.IdCompany == null)
                         {
+                            traduction.Add(new Domain.Entities.SqlCoreContext.Traduction
+                            {
+                                Identifier = "L_E_COMIDE",
+                                LargeValue = ""
+                            });
+                            traduction.Add(new Domain.Entities.SqlCoreContext.Traduction
+                            {
+                                Identifier = "S_E_DURATION",
+                                ShortValue = ""
+                            });
+                            traduction.Add(new Domain.Entities.SqlCoreContext.Traduction
+                            {
+                                Identifier = "L_E_REPUTATION",
+                                LargeValue = ""
+                            });
+                            traduction.Add(new Domain.Entities.SqlCoreContext.Traduction
+                            {
+                                Identifier = "L_E_NEW",
+                                LargeValue = ""
+                            });
+                            var financial = new List<CompanyFinancialInformation>();
+                            financial.Add(new CompanyFinancialInformation
+                            {
+                                IdFinancialSituacion = null
+                            });
                             var company = await _companyDomain.AddCompanyAsync(new Company
                             {
                                 Name = request.RequestedName ?? string.Empty,
@@ -230,20 +374,58 @@ namespace DRRCore.Application.Main.CoreApplication
                                 TaxTypeCode = request.TaxCode,
                                 Email = request.Email,
                                 Telephone = request.Telephone,
-                                Address = request.Address
+                                Address = request.Address,
+                                Traductions = traduction,
+                                CompanyFinancialInformations = financial
                             });
                             var ticket = await _ticketDomain.GetByIdAsync(newTicket.Id);
                             ticket.IdCompany = company;
                             await _ticketDomain.UpdateAsync(ticket);
-
-
                         }
                         if (request.About == "P" && newTicket.IdPerson == null)
                         {
-                            var person = await _personDomain.AddPersonAsync(new Person
+                            traduction.Add(new Domain.Entities.SqlCoreContext.Traduction
+                            {
+                                Identifier = "S_P_NACIONALITY",
+                                ShortValue = ""
+                            });
+                            traduction.Add(new Domain.Entities.SqlCoreContext.Traduction
+                            {
+                                Identifier = "S_P_BIRTHPLACE",
+                                ShortValue = ""
+                            });
+                            traduction.Add(new Domain.Entities.SqlCoreContext.Traduction
+                            {
+                                Identifier = "S_P_MARRIEDTO",
+                                ShortValue = ""
+                            });
+                            traduction.Add(new Domain.Entities.SqlCoreContext.Traduction
+                            {
+                                Identifier = "S_P_PROFESSION",
+                                ShortValue = ""
+                            });
+                            traduction.Add(new Domain.Entities.SqlCoreContext.Traduction
+                            {
+                                Identifier = "L_P_NEWSCOMM",
+                                LargeValue = ""
+                            });
+                            traduction.Add(new Domain.Entities.SqlCoreContext.Traduction
+                            {
+                                Identifier = "L_P_REPUTATION",
+                                LargeValue = ""
+                            });
+                            var person = await _personDomain.AddPersonAsync(new Domain.Entities.SqlCoreContext.Person
                             {
                                 Fullname = request.RequestedName ?? string.Empty,
-                                Language = request.Language
+                                Language = request.Language,
+                                IdCountry = request.IdCountry ?? 0,
+                                City = request.City,
+                                TaxTypeName = request.TaxType,
+                                TaxTypeCode = request.TaxCode,
+                                Email = request.Email,
+                                Cellphone = request.Telephone,
+                                Address = request.Address,
+                                Traductions = traduction
                             });
                             var ticket = await _ticketDomain.GetByIdAsync(newTicket.Id);
                             ticket.IdPerson = person;
@@ -256,6 +438,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 else
                 {
                     var existingTicket = await _ticketDomain.GetByIdAsync(request.Id);
+                    existingTicket.TicketAssignation.Commentary = request.Commentary;
                     if (existingTicket == null)
                     {
                         response.IsSuccess = false;
@@ -309,9 +492,9 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 using var context = new SqlCoreContext();
                 var ticket = await  context.Tickets.Where(x => x.Id == idTicket).FirstOrDefaultAsync();
-                if(ticket != null && ticket.ReportType != "OR")
+                if(ticket != null )
                 {
-                    var doc = await _companyApplication.DownloadF1(ticket.IdCompany ?? 0, "ESP", "pdf");
+                    var doc = ticket.About == "E" ? await _companyApplication.DownloadF1((int)ticket.IdCompany, "ESP", "pdf") : await _personApplication.DownloadF1((int)ticket.IdPerson, "ESP", "pdf");
                     if (doc != null && doc.Data != null)
                     {
                         var data = doc.Data;
@@ -596,49 +779,60 @@ namespace DRRCore.Application.Main.CoreApplication
                 ticket.RequestedName = ticket.RequestedName.Trim();
                 ticket.RequestedName = ticket.RequestedName.Replace("?", "");
                 ticket.RequestedName = ticket.RequestedName.Replace("¿", "");
-                var path = "/cupones/" + ticket.Number.ToString("D6") + "/"+ticket.ReportType+"_" + ticket.RequestedName + ".pdf";
-                using (var ftpClient = new FtpClient(GetFtpClientConfiguration()))
+                var ticketPath = _path.Path;
+                //var ticketPath = "G:\\ECORE_DOCUMENT"; 
+                var directoryPath = Path.Combine(ticketPath, "cupones", ticket.Number.ToString("D6"));
+                var filePath = Path.Combine(directoryPath, $"{ticket.ReportType}_{ticket.RequestedName}.pdf");
+
+                // Crear el directorio si no existe
+                if (!Directory.Exists(directoryPath))
                 {
-                    await ftpClient.LoginAsync();
-
-                    MemoryStream memoryStream = new MemoryStream(byteArray);
-                    memoryStream.Position = 0;
-
-                    using (var writeStream = await ftpClient.OpenFileWriteStreamAsync(path))
-                    {
-                        await memoryStream.CopyToAsync(writeStream);
-                    }
-
-
+                    Directory.CreateDirectory(directoryPath);
                 }
-                return path;
+
+                // Guardar el archivo localmente
+                await File.WriteAllBytesAsync(filePath, byteArray);
+
+                return filePath;
+                //using (var ftpClient = new FtpClient(GetFtpClientConfiguration()))
+                //{
+                //    await ftpClient.LoginAsync();
+
+                //    MemoryStream memoryStream = new MemoryStream(byteArray);
+                //    memoryStream.Position = 0;
+
+                //    using (var writeStream = await ftpClient.OpenFileWriteStreamAsync(path))
+                //    {
+                //        await memoryStream.CopyToAsync(writeStream);
+                //    }
+
+
+                //}
+                //return path;
             }
             catch (Exception ex)
             {
                 throw new Exception(string.Format(Messages.ExceptionMessage, ex.Message));
             }
         }
-        private async Task<string> UploadDispatchReport(int idTicket, string fileName, byte[] byteArray)
+        private async Task<string> UploadDispatchReport(int idTicket, string fileName, byte[] byteArray, string format)
         {
             try
             {
-                
+
                 var ticket = await _ticketDomain.GetByIdAsync(idTicket);
-                var path = "/cupones/" + ticket.Number.ToString("D6") + "/" + fileName + ".pdf";
-                    using (var ftpClient = new FtpClient(GetFtpClientConfiguration()))
-                    {
-                        await ftpClient.LoginAsync();
+                var directoryPath = _path.Path + "/cupones/" + ticket.Number.ToString("D6");
+                var filePath = Path.Combine(directoryPath, fileName + format);
 
-                        MemoryStream memoryStream = new MemoryStream(byteArray);
-                        memoryStream.Position = 0;
+                if (!Directory.Exists(directoryPath))
+                {
+                    Directory.CreateDirectory(directoryPath);
+                }
 
-                        using (var writeStream = await ftpClient.OpenFileWriteStreamAsync(path))
-                        {
-                            await memoryStream.CopyToAsync(writeStream);
-                        }
-                    }
-                    return path;
-                
+                await File.WriteAllBytesAsync(filePath, byteArray);
+
+                return filePath;
+
             }
             catch (Exception ex)
             {
@@ -956,7 +1150,8 @@ namespace DRRCore.Application.Main.CoreApplication
                             AsignedTo = assignetTo,
                             IdStatusTicket = ticket.IdStatusTicket,
                             NumberAssign=number,
-                            Flag=false
+                            Flag=false,
+                            AsignationType = "PA"
                         };
                         await _ticketHistoryDomain.AddAsync(newTicketHistory);
                         
@@ -1095,28 +1290,37 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 using var context = new SqlCoreContext();
                 var ticket = await context.Tickets.Where(x => x.Id == idTicket).FirstOrDefaultAsync();
-                using (var ftpClient = new FtpClient(GetFtpClientConfiguration()))
+
+                //string filePath = "/cupones/" + ticket.Number.ToString("D6") + "/" + file.FileName;
+
+                var ticketPath = _path.Path;
+
+                var directoryPath = Path.Combine(ticketPath, "cupones", ticket.Number.ToString("D6"));
+
+                var filePath = Path.Combine(directoryPath, file.FileName);
+
+                if (!Directory.Exists(directoryPath))
                 {
-                    await ftpClient.LoginAsync();
-                    string filePath = "/cupones/" + ticket.Number.ToString("D6") + "/" + file.FileName;
-                    using (var writeStream = await ftpClient.OpenFileWriteStreamAsync(filePath))
-                    {
-                        file.CopyTo(writeStream);
-                    }
-                    response.Data = true;
-                    string fileExtension = Path.GetExtension(file.FileName);
-                    if (response.Data == true)
-                    {
-                        await _ticketDomain.AddTicketFile(new TicketFile
-                        {
-                            Id = 0,
-                            IdTicket = idTicket,
-                            Name = file.FileName,
-                            Path = filePath,
-                            Extension = fileExtension
-                        });
-                    }
+                    Directory.CreateDirectory(directoryPath);
                 }
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+                response.Data = true;
+                string fileExtension = Path.GetExtension(file.FileName);
+                if (response.Data == true)
+                {
+                    await _ticketDomain.AddTicketFile(new TicketFile
+                    {
+                        Id = 0,
+                        IdTicket = idTicket,
+                        Name = file.FileName,
+                        Path = filePath,
+                        Extension = fileExtension
+                    });
+                }
+
             }
             catch (Exception ex)
             {
@@ -1132,8 +1336,22 @@ namespace DRRCore.Application.Main.CoreApplication
             var response = new Response<bool?>();
             try
             {
-                var ticketFile = await _ticketDomain.GetTicketFileById(id);
-                response.Data = await _ticketDomain.DeleteTicketFile(id);
+                using var context = new SqlCoreContext();
+                var ticketFile = await context.TicketFiles.Include(x => x.IdTicketNavigation).Where(x => x.Id == id).FirstOrDefaultAsync();
+                if(ticketFile != null)
+                {
+                    ticketFile.DeleteDate = DateTime.Now;
+                    ticketFile.Enable = false;
+                    var path = ticketFile.Path;
+
+                    if (File.Exists(path))
+                    {
+                        File.Delete(path);
+                    }
+
+                    context.TicketFiles.Update(ticketFile);
+                    await context.SaveChangesAsync();
+                }
             }
             catch (Exception ex)
             {
@@ -1293,7 +1511,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     }
                     if (request.About == "P" && newTicket.IdPerson == null)
                     {
-                        var person = await _personDomain.AddPersonAsync(new Person
+                        var person = await _personDomain.AddPersonAsync(new Domain.Entities.SqlCoreContext.Person
                         {
                             Fullname = request.RequestedName ?? string.Empty,
                             Language = request.Language
@@ -1315,7 +1533,7 @@ namespace DRRCore.Application.Main.CoreApplication
                             {
                                 IdTicket = ticket.Id,
                                 Path = path,
-                                Name = "RV_" + DateTime.Now.ToString("ddMMyy") + "_" + request.Number.ToString("D6"),
+                                Name = "RV_" + DateTime.Now.ToString("ddMMyy") + "_" + request.Number.ToString("D6") + ".pdf",
                                 Extension = ".pdf"
                             });
                             await context.SaveChangesAsync();
@@ -1346,6 +1564,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     _logger.LogError(response.Message);
                     return response;
                 }
+                var context = new SqlCoreContext();
 
                 var newTicket = _mapper.Map<Ticket>(request);
                 newTicket.Web = true;
@@ -1356,11 +1575,51 @@ namespace DRRCore.Application.Main.CoreApplication
                 }
                 var number = await _numerationDomain.GetTicketNumberAsync();
                 int currentNumber = number.Number + 1 ?? 0;
+
                 newTicket.Number = currentNumber;
                 newTicket.IdStatusTicket = (int?)TicketStatusEnum.Despachado;
                 newTicket.DispatchtDate = DateTime.Now;
 
                 response.Data = await _ticketDomain.AddAsync(newTicket);
+
+
+                var subscriber = await context.Subscribers.FindAsync(request.IdSubscriber);
+                if(subscriber != null & subscriber.FacturationType == "CC")
+                {
+                    var couponBilling = await context.CouponBillingSubscribers.Where(x => x.IdSubscriber == request.IdSubscriber).FirstOrDefaultAsync();
+                    var couponBillingHistory = new CouponBillingSubscriberHistory();
+                    couponBillingHistory.PurchaseDate = DateTime.Now;
+                    couponBillingHistory.Type = "E";
+                    var lastHistory = await context.CouponBillingSubscriberHistories.Where(x => x.IdCouponBilling == couponBilling.Id).FirstOrDefaultAsync();
+
+                    decimal? decimalDiscount = couponBilling.PriceT1;
+
+                    switch (request.ProcedureType)
+                    {
+                        case "T2":
+                            decimalDiscount = couponBilling.PriceT2;
+                            break;
+                        case "T3":
+                            decimalDiscount = couponBilling.PriceT3;
+                            break;
+                        default:
+                            decimalDiscount = couponBilling.PriceT1;
+                            break;
+                    }
+                    couponBilling.NumCoupon = couponBilling.NumCoupon - decimalDiscount;
+                    //Ese cuponAmount hay q convertir en decimal 
+                    //continua
+                    couponBillingHistory.CouponAmount = decimalDiscount;
+                    couponBillingHistory.CouponUnitPrice = lastHistory.CouponUnitPrice;
+                    couponBillingHistory.TotalPrice = couponBillingHistory.CouponAmount * couponBillingHistory.CouponUnitPrice;
+                    couponBillingHistory.IdTicket = newTicket.Id;
+                    couponBilling.CouponBillingSubscriberHistories.Add(couponBillingHistory);
+
+                    context.CouponBillingSubscribers.Update(couponBilling);
+                }
+
+
+                await context.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -1400,7 +1659,7 @@ namespace DRRCore.Application.Main.CoreApplication
         {
             var response = new Response<List<GetSearchSituationResponseDto>>();
             var listCompanies = new List<Company>();
-            var listPersons = new List<Person>();
+            var listPersons = new List<Domain.Entities.SqlCoreContext.Person>();
             try
             {
                 if (about == "E")
@@ -1514,9 +1773,9 @@ namespace DRRCore.Application.Main.CoreApplication
                         var assignedToName = "";
                         if (item.AsignedTo != null && item.AsignedTo.Contains("PA"))
                         {
-                            assignedToName = item.AsignedTo == "PA1" ? "KATIA BUSTAMANTE" : item.AsignedTo == "PA2" ? "MARIELA ACOSTA" : item.AsignedTo == "PA3" ? "MONICA YEPEZ" :
-                                item.AsignedTo == "PA4" ? "RAFAEL DEL RISCO" : item.AsignedTo == "PA5" ? "CECILIA RODRIGUEZ" : item.AsignedTo == "PA6" ? "JESSICA LIAU" :
-                                item.AsignedTo == "PA7" ? "CECILIA SAYAS" : "";
+                            assignedToName = item.AsignedTo.Trim() == "PA1" ? "KATIA BUSTAMANTE" : item.AsignedTo.Trim() == "PA2" ? "MARIELA ACOSTA" : item.AsignedTo.Trim() == "PA3" ? "MONICA YEPEZ" :
+                                item.AsignedTo.Trim() == "PA4" ? "RAFAEL DEL RISCO" : item.AsignedTo.Trim() == "PA5" ? "CECILIA RODRIGUEZ" : item.AsignedTo.Trim() == "PA6" ? "JESSICA LIAU" :
+                                item.AsignedTo.Trim() == "PA7" ? "CECILIA SAYAS" : "";
                         }
                         else if (item.AsignedTo != null && item.AsignedTo.Contains("CR"))
                         {
@@ -1653,7 +1912,62 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 using (var context = new SqlCoreContext())
                 {
-                    if(obj.OtherUserCode.Count > 0)
+                    var code = "CP_" + DateTime.Now.Month.ToString("D2") + "_" + DateTime.Now.Year;
+                    var productionClosure = await context.ProductionClosures.Where(x => x.Code.Contains(code)).FirstOrDefaultAsync();
+                    if (productionClosure == null)
+                    {
+
+                        DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1).AddDays(-1);
+                        await context.ProductionClosures.AddAsync(new ProductionClosure
+                        {
+                            EndDate = lastDayOfCurrentMonth,
+                            Code = code,
+                            Title = "Cierre de Producción " + DateTime.Now.Month.ToString("D2") + " - " + DateTime.Now.Year,
+                            Observations = ""
+                        });
+                    }
+                    else
+                    {
+                        if (productionClosure.EndDate < DateTime.Now)
+                        {
+                            if (DateTime.Now.Month == 12)
+                            {
+                                code = "CP_" + (1).ToString("D2") + "_" + (DateTime.Now.Year + 1);
+                                var nextProductionClosureExistent = await context.ProductionClosures.Where(x => x.Code.Contains(code)).FirstOrDefaultAsync();
+                                if(nextProductionClosureExistent == null)
+                                {
+                                    DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year + 1, 1, 1).AddMonths(1).AddDays(-1);
+                                    await context.ProductionClosures.AddAsync(new ProductionClosure
+                                    {
+                                        EndDate = lastDayOfCurrentMonth,
+                                        Code = code,
+                                        Title = "Cierre de Producción " + (1).ToString("D2") + " - " + DateTime.Today.Year + 1,
+                                        Observations = ""
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                code = "CP_" + (DateTime.Now.Month + 1).ToString("D2") + "_" + DateTime.Now.Year;
+                                var nextProductionClosureExistent = await context.ProductionClosures.Where(x => x.Code.Contains(code)).FirstOrDefaultAsync();
+                                if (nextProductionClosureExistent == null)
+                                {
+                                    DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year, (DateTime.Today.Month + 1), 1).AddMonths(1).AddDays(-1);
+                                    await context.ProductionClosures.AddAsync(new ProductionClosure
+                                    {
+                                        EndDate = lastDayOfCurrentMonth,
+                                        Code = code,
+                                        Title = "Cierre de Producción " + (DateTime.Now.Month + 1).ToString("D2") + " - " + DateTime.Now.Year,
+                                        Observations = ""
+                                    });
+                                }
+                                
+                            }
+
+                        }
+                    }
+
+                    if (obj.OtherUserCode.Count > 0)
                     {
                         var ticketHistory = await context.TicketHistories.Where(x => x.Id == obj.IdTicketHistory).FirstOrDefaultAsync();
                         if (ticketHistory != null)
@@ -1683,6 +1997,8 @@ namespace DRRCore.Application.Main.CoreApplication
                                     newTicketHistory.Observations = ticketHistory.Observations;
                                     newTicketHistory.StartDate = ticketHistory.StartDate;
                                     newTicketHistory.EndDate = ticketHistory.EndDate;
+                                    newTicketHistory.AsignationType = ticketHistory.AsignationType;
+                                    newTicketHistory.Cycle = code;
 
                                     await context.TicketHistories.AddAsync(newTicketHistory);
                                 }
@@ -1694,7 +2010,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         foreach (var item in obj.Asignacion)
                         {
                             var history = await context.TicketHistories.Where(x => x.IdTicket == item.IdTicket && x.AsignedTo == item.AssignedFromCode && x.NumberAssign==item.NumberAssign).FirstOrDefaultAsync();
-
+                            
                             if (history != null)
                             {
                                 var ticket = await context.Tickets.Include(x=>x.TicketHistories).Where(x => x.Id == history.IdTicket).FirstOrDefaultAsync();
@@ -1742,7 +2058,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                         ticket.UpdateDate = DateTime.Now;
                                         ticket.IdStatusTicket = (int)TicketStatusEnum.Pre_Asignacion;
                                         history.Flag = true;
-                                        history.ShippingDate = DateTime.Today;
+                                        history.ShippingDate = DateTime.Now;
                                         history.UpdateDate = DateTime.Now;
 
                                         context.Tickets.Update(ticket);
@@ -1762,7 +2078,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                             Observations=item.Observations,
                                             Balance=item.Balance,
                                             AsignationType = item.Type,
-
+                                            Cycle = code
                                         };
                                         await context.TicketHistories.AddAsync(newTicketHistory);
 
@@ -1796,7 +2112,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                         ticket.UpdateDate = DateTime.Now;
                                         ticket.IdStatusTicket = (int)TicketStatusEnum.Asig_Reportero;
                                         history.Flag = true;
-                                        history.ShippingDate = DateTime.Today;
+                                        history.ShippingDate = DateTime.Now;
                                         history.UpdateDate = DateTime.Now;
 
                                       
@@ -1818,8 +2134,63 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = item.Type,
+                                                Cycle = code
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
+                                            
+                                            var emailDataDto = new EmailDataDTO();
+                                            emailDataDto.Parameters = new List<string>();
+                                            //ENVIAR CORREO
+                                            var userFrom = await context.UserLogins
+                                                .Include(x => x.IdEmployeeNavigation)
+                                                .Where(x => x.Id == int.Parse(item.UserFrom)).FirstOrDefaultAsync();
+
+                                            if (item.Internal)
+                                            {
+                                                var user = await context.UserLogins.Include(x => x.IdEmployeeNavigation).Where(x => x.Id == int.Parse(item.UserTo)).FirstOrDefaultAsync();
+
+                                                if (userFrom != null && user != null)
+                                                {
+                                                    emailDataDto.EmailKey = "DRR_WORKFLOW_ESP_0061";
+                                                    emailDataDto.BeAuthenticated = true;
+                                                    emailDataDto.From = "diego.rodriguez@del-risco.com";//userFrom.IdEmployeeNavigation.Email;
+                                                    emailDataDto.UserName = "diego.rodriguez@del-risco.com"; //userFrom.IdEmployeeNavigation.Email;
+                                                    emailDataDto.Password = "w*@JHCr7mH";  // userFrom.EmailPassword;
+                                                    emailDataDto.To = new List<string>
+                                                {
+                                                    "jfernandez@del-risco.com",
+                                                    //user.IdEmployeeNavigation.Email
+                                                };
+                                                    emailDataDto.CC = new List<string>
+                                                {
+                                                    "diego.rodriguez@del-risco.com",
+                                                    //userFrom.IdEmployeeNavigation.Email,
+                                                    // "crc@del-risco.com"
+                                                };
+                                                    emailDataDto.Subject = ticket.ReportType + ": " + (numeration != null ? numeration.Number : 1) + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureType + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
+                                                    emailDataDto.IsBodyHTML = true;
+                                                    emailDataDto.Parameters.Add("Cecilia Sayas"); //userFrom.IdEmployeeNavigation.FirstName + " " + userFrom.IdEmployeeNavigation.LastName
+                                                    emailDataDto.Parameters.Add("crc@del-risco.com");//userFrom.IdEmployeeNavigation.Email;
+                                                    emailDataDto.BodyHTML = emailDataDto.IsBodyHTML ? await GetBodyHtml(emailDataDto) : emailDataDto.BodyHTML;
+                                                    _logger.LogInformation(JsonConvert.SerializeObject(emailDataDto));
+
+                                                    var file = DownloadAssignReporter((int)ticket.Id, item.AssignedToCode, item.StartDate, item.EndDate, numeration.Number ?? 1, item.Observations).Result.Data;
+                                                    var attachment = new AttachmentDto();
+                                                    attachment.FileName = file.Name + ".pdf";
+                                                    attachment.Content = Convert.ToBase64String(file.File);
+                                                    attachment.Path = await UploadFile(attachment);
+                                                    emailDataDto.Attachments.Add(attachment);
+                                                    
+
+
+                                                    var result = await _mailSender.SendMailAsync(_mapper.Map<EmailValues>(emailDataDto));
+
+                                                    var emailHistory = _mapper.Map<EmailHistory>(emailDataDto);
+                                                    emailHistory.Success = result;
+                                                    response.Data = await _emailHistoryDomain.AddAsync(emailHistory);
+                                                    _logger.LogInformation(Messages.MailSuccessSend);
+                                                }
+                                            }
                                         }
                                         else
                                         {
@@ -1838,6 +2209,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = item.Type,
+                                                Cycle = code
 
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
@@ -1878,6 +2250,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = item.Type,
+                                                Cycle = code
 
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
@@ -1894,16 +2267,16 @@ namespace DRRCore.Application.Main.CoreApplication
                                         int? number = 1;
                                         if (numeration == null)
                                         {
-                                            await context.Numerations.AddAsync(new Numeration
+                                            numeration = new Numeration
                                             {
                                                 Name = nameAssignedTo,
                                                 Description = descriptionAssignedTo,
                                                 Number = 1
-                                            });
+                                            };
+                                            await context.Numerations.AddAsync(numeration);
                                         }
                                         else
                                         {
-                                            number = numeration.Number + 1;
                                             numeration.Number++;
                                             numeration.UpdateDate = DateTime.Now;
                                             context.Numerations.Update(numeration);
@@ -1912,7 +2285,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                        
                                         ticket.UpdateDate = DateTime.Now;
                                         history.Flag = true;
-                                        history.ShippingDate = DateTime.Today;
+                                        history.ShippingDate = DateTime.Now;
                                         history.UpdateDate = DateTime.Now;
 
 
@@ -1933,12 +2306,13 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 AsignationType = item.Type,
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
-                                                References = item.References
+                                                References = item.References,
+                                                Cycle = code
 
                                             };
                                             ticket.UpdateDate = DateTime.Now;
                                             history.Flag = true;
-                                            history.ShippingDate = DateTime.Today;
+                                            history.ShippingDate = DateTime.Now;
                                             history.UpdateDate = DateTime.Now;
 
                                             await context.TicketHistories.AddAsync(newTicketHistory);
@@ -1961,9 +2335,128 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Balance = item.Balance,
                                                 References = item.References,
                                                 AsignationType = item.Type,
+                                                Cycle = code
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
                                         }
+
+                                        // Declara emailDataDto fuera de los bloques if/else
+                                        EmailDataDTO emailDataDto = null;
+
+                                        //ENVIAR CORREO
+                                        var userFrom = await context.UserLogins
+                                            .Include(x => x.IdEmployeeNavigation)
+                                            .Where(x => x.Id == int.Parse(item.UserFrom)).FirstOrDefaultAsync();
+
+                                        if (item.Internal)
+                                        {
+                                            emailDataDto = new EmailDataDTO();
+                                            var user = await context.UserLogins.Include(x => x.IdEmployeeNavigation).Where(x => x.Id == int.Parse(item.UserTo)).FirstOrDefaultAsync();
+                                            
+                                            if (userFrom != null && user != null)
+                                            {
+                                                emailDataDto.EmailKey = ticket.Language == "E" ? "DRR_WORKFLOW_ESP_0023" : "DRR_WORKFLOW_ENG_0023";
+                                                emailDataDto.BeAuthenticated = true;
+                                                emailDataDto.From = "diego.rodriguez@del-risco.com";//userFrom.IdEmployeeNavigation.Email;
+                                                emailDataDto.UserName = "diego.rodriguez@del-risco.com"; //userFrom.IdEmployeeNavigation.Email;
+                                                emailDataDto.Password = "w*@JHCr7mH";  // userFrom.EmailPassword;
+                                                emailDataDto.To = new List<string>
+                                                {
+                                                    "jfernandez@del-risco.com",
+                                                    //user.IdEmployeeNavigation.Email
+                                                };
+                                                emailDataDto.CC = new List<string>
+                                                {
+                                                    "diego.rodriguez@del-risco.com",
+                                                    //userFrom.IdEmployeeNavigation.Email,
+                                                    // "crc@del-risco.com"
+                                                };
+                                                emailDataDto.Subject = ticket.ReportType + ": " + (numeration != null ? numeration.Number : 1) + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureType + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
+                                                emailDataDto.IsBodyHTML = true;
+                                                emailDataDto.Parameters.Add("Cecilia Sayas"); //userFrom.IdEmployeeNavigation.FirstName + " " + userFrom.IdEmployeeNavigation.LastName
+                                                emailDataDto.Parameters.Add("crc@del-risco.com");//userFrom.IdEmployeeNavigation.Email;
+                                                emailDataDto.BodyHTML = emailDataDto.IsBodyHTML ? await GetBodyHtml(emailDataDto) : emailDataDto.BodyHTML;
+                                                _logger.LogInformation(JsonConvert.SerializeObject(emailDataDto));
+
+                                                var file = DownloadAssignAgent((int)ticket.Id, item.AssignedToCode,item.StartDate,item.EndDate, numeration.Number ?? 1, item.Observations).Result.Data;
+                                                var attachment = new AttachmentDto();
+                                                attachment.FileName = file.Name + ".pdf";
+                                                attachment.Content = Convert.ToBase64String(file.File);
+                                                attachment.Path = await UploadFile(attachment);
+                                                emailDataDto.Attachments.Add(attachment);
+                                                if (item.SendZip == true)
+                                                {
+                                                    var zip = DownloadZipByIdTicket((int)ticket.Id).Result.Data;
+                                                    var attachment2 = new AttachmentDto();
+                                                    attachment2.FileName = ticket.Number.ToString("D6") + ".zip";
+                                                    attachment2.Content = Convert.ToBase64String(zip.File.ToArray());
+                                                    emailDataDto.Attachments.Add(attachment2);
+                                                }
+
+
+                                                var result = await _mailSender.SendMailAsync(_mapper.Map<EmailValues>(emailDataDto));
+
+                                                var emailHistory = _mapper.Map<EmailHistory>(emailDataDto);
+                                                emailHistory.Success = result;
+                                                response.Data = await _emailHistoryDomain.AddAsync(emailHistory);
+                                                _logger.LogInformation(Messages.MailSuccessSend);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            var agent = await context.Agents.Where(x => x.Code.Contains(item.AssignedToCode)).FirstOrDefaultAsync();
+                                            var emailAgents = agent.Email.Split();
+                                            if (userFrom != null && agent != null)
+                                            {
+                                                emailDataDto = new EmailDataDTO();
+                                                emailDataDto.EmailKey = ticket.Language == "E" ? "DRR_WORKFLOW_ESP_0023" : "DRR_WORKFLOW_ENG_0023";
+                                                emailDataDto.BeAuthenticated = true;
+                                                emailDataDto.From = "diego.rodriguez@del-risco.com";//userFrom.IdEmployeeNavigation.Email;
+                                                emailDataDto.UserName = "diego.rodriguez@del-risco.com"; //userFrom.IdEmployeeNavigation.Email;
+                                                emailDataDto.Password = "w*@JHCr7mH";  // userFrom.EmailPassword;
+                                                emailDataDto.To = new List<string>
+                                                {
+                                                    "jfernandez@del-risco.com",
+                                                    // ticket.IdSubscriberNavigation.SendReportToEmail,
+                                                };
+                                                //foreach(var email in emailAgents)
+                                                //{
+                                                //    emailDataDto.To.Add(email);
+                                                //}
+                                                emailDataDto.CC = new List<string>
+                                                {
+                                                    "diego.rodriguez@del-risco.com"
+                                                    // "crc@del-risco.com"
+                                                };
+                                                emailDataDto.Subject = ticket.ReportType + ": " + (numeration != null ? numeration.Number : 1) + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureType + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
+                                                emailDataDto.IsBodyHTML = true;
+                                                emailDataDto.Parameters.Add("Cecilia Sayas"); //userFrom.IdEmployeeNavigation.FirstName + " " + userFrom.IdEmployeeNavigation.LastName
+                                                emailDataDto.Parameters.Add("crc@del-risco.com");//userFrom.IdEmployeeNavigation.Email;
+                                                emailDataDto.BodyHTML = emailDataDto.IsBodyHTML ? await GetBodyHtml(emailDataDto) : emailDataDto.BodyHTML;
+                                                //_logger.LogInformation(JsonConvert.SerializeObject(emailDataDto));
+
+                                                var file = DownloadAssignAgent((int)ticket.Id, item.AssignedToCode, item.StartDate, item.EndDate, numeration.Number ?? 1, item.Observations).Result.Data;
+                                                var attachment = new AttachmentDto();
+                                                attachment.FileName = file.Name + ".pdf";
+                                                attachment.Content = Convert.ToBase64String(file.File);
+                                                emailDataDto.Attachments.Add(attachment);
+                                                if (item.SendZip == true)
+                                                {
+                                                    var zip = DownloadZipByIdTicket((int)ticket.Id).Result.Data;
+                                                    var attachment2 = new AttachmentDto();
+                                                    attachment2.FileName = ticket.Number.ToString("D6") + ".zip";
+                                                    attachment2.Content = Convert.ToBase64String(zip.File.ToArray());
+                                                    emailDataDto.Attachments.Add(attachment2);
+                                                }
+                                                var result = await _mailSender.SendMailAsync(_mapper.Map<EmailValues>(emailDataDto));
+
+                                                var emailHistory = _mapper.Map<EmailHistory>(emailDataDto);
+                                                emailHistory.Success = result;
+                                                response.Data = await _emailHistoryDomain.AddAsync(emailHistory);
+                                                _logger.LogInformation(Messages.MailSuccessSend);
+                                            }
+                                        }
+
                                         if (item.References)
                                         {
                                             string nameAssignedToRef = "REFERENCIA_CR2";
@@ -2001,12 +2494,13 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Balance = item.Balance,
                                                 References = item.References,
                                                 AsignationType = item.Type,
+                                                Cycle = code
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
                                         }
                                         ticket.UpdateDate = DateTime.Now;
                                         history.Flag = true;
-                                        history.ShippingDate = DateTime.Today;
+                                        history.ShippingDate = DateTime.Now;
                                         history.UpdateDate = DateTime.Now;
 
                                         context.Tickets.Update(ticket);
@@ -2040,7 +2534,7 @@ namespace DRRCore.Application.Main.CoreApplication
 
                                         ticket.UpdateDate = DateTime.Now;
                                         history.Flag = true;
-                                        history.ShippingDate = DateTime.Today;
+                                        history.ShippingDate = DateTime.Now;
                                         history.UpdateDate = DateTime.Now;
 
 
@@ -2059,6 +2553,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = item.Type,
+                                                Cycle = code
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
                                         
@@ -2108,10 +2603,11 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = item.Type,
+                                                Cycle = code
                                             };
                                             ticket.UpdateDate = DateTime.Now;
                                             history.Flag = true;
-                                            history.ShippingDate = DateTime.Today;
+                                            history.ShippingDate = DateTime.Now;
                                             history.UpdateDate = DateTime.Now;
                                             await context.TicketHistories.AddAsync(newTicketHistory);
 
@@ -2142,7 +2638,7 @@ namespace DRRCore.Application.Main.CoreApplication
 
                                             ticket.UpdateDate = DateTime.Now;
                                             history.Flag = true;
-                                            history.ShippingDate = DateTime.Today;
+                                            history.ShippingDate = DateTime.Now;
                                             history.UpdateDate = DateTime.Now;
 
 
@@ -2161,6 +2657,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = item.Type,
+                                                Cycle = code
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
 
@@ -2210,11 +2707,12 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
-
+                                                AsignationType = item.Type,
+                                                Cycle = code
                                             };
                                             ticket.UpdateDate = DateTime.Now;
                                             history.Flag = true;
-                                            history.ShippingDate = DateTime.Today;
+                                            history.ShippingDate = DateTime.Now;
                                             history.UpdateDate = DateTime.Now;
                                             await context.TicketHistories.AddAsync(newTicketHistory);
 
@@ -2256,6 +2754,8 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
+                                                AsignationType = item.Type,
+                                                Cycle = code
 
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
@@ -2264,7 +2764,7 @@ namespace DRRCore.Application.Main.CoreApplication
 
                                         ticket.UpdateDate = DateTime.Now;
                                         history.Flag = true;
-                                        history.ShippingDate = DateTime.Today;
+                                        history.ShippingDate = DateTime.Now;
                                         history.UpdateDate = DateTime.Now;
 
                                         context.Tickets.Update(ticket);
@@ -2314,10 +2814,11 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = item.Type,
+                                                Cycle = code
                                             };
                                             ticket.UpdateDate = DateTime.Now;
                                             history.Flag = true;
-                                            history.ShippingDate = DateTime.Today;
+                                            history.ShippingDate = DateTime.Now;
                                             history.UpdateDate = DateTime.Now;
                                             await context.TicketHistories.AddAsync(newTicketHistory);
 
@@ -2347,7 +2848,7 @@ namespace DRRCore.Application.Main.CoreApplication
 
                                             ticket.UpdateDate = DateTime.Now;
                                             history.Flag = true;
-                                            history.ShippingDate = DateTime.Today;
+                                            history.ShippingDate = DateTime.Now;
                                             history.UpdateDate = DateTime.Now;  
 
                                             ticket.IdStatusTicket = (int)TicketStatusEnum.Asig_Supervisor;
@@ -2364,11 +2865,14 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
+                                                AsignationType = item.Type,
+                                                Cycle = code
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
 
                                         }
                                         context.Tickets.Update(ticket);
+                                        
                                         context.TicketHistories.Update(history);
                                         await context.SaveChangesAsync();
                                     }
@@ -2466,6 +2970,8 @@ namespace DRRCore.Application.Main.CoreApplication
                     emailDataDto.BodyHTML = emailDataDto.IsBodyHTML ? await GetBodyHtml(emailDataDto) : emailDataDto.BodyHTML;
                     _logger.LogInformation(JsonConvert.SerializeObject(emailDataDto));
 
+                    //ADJUNTOS
+
                     byte[] fileArray = DownloadF8((int)ticket.Id, ticket.Language, "pdf").Result.Data.File;
                     var attachment = new AttachmentDto();
                     attachment.FileName = emailDataDto.Subject+".pdf";
@@ -2473,7 +2979,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     attachment.Path = await UploadFile(attachment);
                     emailDataDto.Attachments.Add(attachment);
 
-                    string path = await UploadDispatchReport(idTicket, emailDataDto.Subject, fileArray);
+                    string path = await UploadDispatchReport(idTicket, emailDataDto.Subject, fileArray,".pdf");
                     await context.TicketFiles.AddAsync(new TicketFile
                     {
                         IdTicket = idTicket,
@@ -2482,14 +2988,63 @@ namespace DRRCore.Application.Main.CoreApplication
                         Extension = ".pdf"
                     });
 
-                   
+                    if (ticket.IdSubscriberNavigation.ReportInWord != null && ticket.IdSubscriberNavigation.ReportInWord == true)
+                    {
+                        byte[] fileArrayWord = DownloadF8((int)ticket.Id, ticket.Language, "word").Result.Data.File;
+                        
+                        var attachmentWord = new AttachmentDto();
+                        attachmentWord.FileName = emailDataDto.Subject + ".docx";
+                        attachmentWord.Content = Convert.ToBase64String(fileArrayWord);
+                        attachmentWord.Path = await UploadFile(attachmentWord);
+                        emailDataDto.Attachments.Add(attachmentWord);
 
-                    var result = await _mailSender.SendMailAsync(_mapper.Map<EmailValues>(emailDataDto));
+                        string pathWord = await UploadDispatchReport(idTicket, emailDataDto.Subject, fileArray, ".docx");
+                        await context.TicketFiles.AddAsync(new TicketFile
+                        {
+                            IdTicket = idTicket,
+                            Path = pathWord,
+                            Name = emailDataDto.Subject + ".docx",
+                            Extension = ".docx"
+                        });
+                    }
+                    if (ticket.IdSubscriberNavigation.ReportInXml != null && ticket.IdSubscriberNavigation.ReportInXml == true)
+                    {
+                        byte[] fileArrayXml = _xmlApplication.GetXmlAtradiusAsync(idTicket).Result.Data.File;
+                        var attachmentXml = new AttachmentDto();
+                        attachmentXml.FileName = emailDataDto.Subject + ".xml";
+                        attachmentXml.Content = Convert.ToBase64String(fileArrayXml);
+                        attachmentXml.Path = await UploadFile(attachmentXml);
+                        emailDataDto.Attachments.Add(attachmentXml);
 
-                    var emailHistory = _mapper.Map<EmailHistory>(emailDataDto);
-                    emailHistory.Success = result;
-                    response.Data = await _emailHistoryDomain.AddAsync(emailHistory);
-                    _logger.LogInformation(Messages.MailSuccessSend);
+                        string pathXml = await UploadDispatchReport(idTicket, emailDataDto.Subject, fileArray, ".xml");
+                        await context.TicketFiles.AddAsync(new TicketFile
+                        {
+                            IdTicket = idTicket,
+                            Path = pathXml,
+                            Name = emailDataDto.Subject + ".xml",
+                            Extension = ".xml"
+                        });
+                    }
+                    if (ticket.IdSubscriberNavigation.ReportInXmlCredendo != null && ticket.IdSubscriberNavigation.ReportInXmlCredendo == true)
+                    {
+                        byte[] fileArrayXmlCred = _xmlApplication.GetXmlCredendoAsync(idTicket).Result.Data.File;
+                        var attachmentXmlCred = new AttachmentDto();
+                        attachmentXmlCred.FileName = emailDataDto.Subject + "_Credendo.xml";
+                        attachmentXmlCred.Content = Convert.ToBase64String(fileArrayXmlCred);
+                        attachmentXmlCred.Path = await UploadFile(attachmentXmlCred);
+                        emailDataDto.Attachments.Add(attachmentXmlCred);
+
+                        string pathXmlCred = await UploadDispatchReport(idTicket, emailDataDto.Subject+ "_Credendo", fileArray, ".xml");
+                        await context.TicketFiles.AddAsync(new TicketFile
+                        {
+                            IdTicket = idTicket,
+                            Path = pathXmlCred,
+                            Name = emailDataDto.Subject + "_Credendo.xml" + ".xml",
+                            Extension = ".xml"
+                        });
+                    }
+
+                 
 
                     ticket.IdCompanyNavigation.LastSearched = DateTime.Now;
 
@@ -2497,7 +3052,52 @@ namespace DRRCore.Application.Main.CoreApplication
                     ticket.DispatchtDate = DateTime.Now;
                     ticket.DispatchedName = emailDataDto.Subject;
                     context.Tickets.Update(ticket);
-                    await context.SaveChangesAsync();
+
+                    if (ticket.IdSubscriberNavigation.FacturationType == "CC")
+                    {
+                        var couponBilling = await context.CouponBillingSubscribers.Where(x => x.IdSubscriber == ticket.IdSubscriber).FirstOrDefaultAsync();
+                        var couponBillingHistory = new CouponBillingSubscriberHistory();
+                        couponBillingHistory.PurchaseDate = DateTime.Now;
+                        couponBillingHistory.Type = "E";
+                        var lastHistory = await context.CouponBillingSubscriberHistories.Where(x => x.IdCouponBilling == couponBilling.Id).FirstOrDefaultAsync();
+                        if (lastHistory == null)
+                        {
+                            throw new Exception("El abonado no tiene historial de cupon. Por favor contactar con Sistemas.");
+                        }
+                        decimal? decimalDiscount = couponBilling.PriceT1;
+
+                        switch (ticket.ProcedureType)
+                        {
+                            case "T2":
+                                decimalDiscount = couponBilling.PriceT2;
+                                break;
+                            case "T3":
+                                decimalDiscount = couponBilling.PriceT3;
+                                break;
+                            default:
+                                decimalDiscount = couponBilling.PriceT1;
+                                break;
+                        }
+                        couponBilling.NumCoupon = couponBilling.NumCoupon - decimalDiscount;
+                        //Ese cuponAmount hay q convertir en decimal 
+                        //continua
+                        couponBillingHistory.CouponAmount = decimalDiscount;
+                        couponBillingHistory.CouponUnitPrice = lastHistory.CouponUnitPrice;
+                        couponBillingHistory.TotalPrice = couponBillingHistory.CouponAmount * couponBillingHistory.CouponUnitPrice;
+                        couponBillingHistory.IdTicket = ticket.Id;
+                        couponBilling.CouponBillingSubscriberHistories.Add(couponBillingHistory);
+
+                        context.CouponBillingSubscribers.Update(couponBilling);
+                    }
+
+                  
+                    var result = await _mailSender.SendMailAsync(_mapper.Map<EmailValues>(emailDataDto));
+
+                    var emailHistory = _mapper.Map<EmailHistory>(emailDataDto);
+                    emailHistory.Success = result;
+                    response.Data = await _emailHistoryDomain.AddAsync(emailHistory);
+                      await context.SaveChangesAsync();
+                    _logger.LogInformation(Messages.MailSuccessSend);
                     response.IsSuccess = true;
                     response.Data = result;
                 }
@@ -2529,6 +3129,543 @@ namespace DRRCore.Application.Main.CoreApplication
         {
             return await _fileManager.UploadFile(new MemoryStream(Convert.FromBase64String(attachmentDto.Content)), attachmentDto.FileName);
         }
+
+
+
+        public async Task<Response<GetFileResponseDto>> DownloadAssignAgent(int idTicket, string assignedTo, string startDate, string endDate, int number, string observations)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var ticket = await context.Tickets.Where(x => x.Id == idTicket).FirstOrDefaultAsync();
+                
+                if (ticket != null)
+                {
+                    string fileFormat = "{0}_{1}{2}";
+                    string report = "SOLICITUD_INFORME_AGENTE";
+                    var reportRenderType = StaticFunctions.GetReportRenderType("pdf");
+                    var extension = StaticFunctions.FileExtension(reportRenderType);
+                    var contentType = StaticFunctions.GetContentType(reportRenderType);
+                    var dictionary = new Dictionary<string, string>
+                        {
+                            { "idTicket", ticket.Id.ToString() },
+                            { "codeAgent", assignedTo },
+                            { "startDate", startDate },
+                            { "endDate", endDate },
+                            { "number", number.ToString() },
+                            { "observations", observations },
+                         };
+                    response.Data = new GetFileResponseDto
+                    {
+                        File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                        ContentType = contentType,
+                        Name = "PED_AGE_" + number
+                    };
+                }
+            }catch(Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+        public async Task<Response<GetFileResponseDto>> DownloadAssignReporter(int idTicket, string assignedTo, string startDate, string endDate, int number, string observations)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var ticket = await context.Tickets.Where(x => x.Id == idTicket).FirstOrDefaultAsync();
+
+                if (ticket != null)
+                {
+                    string fileFormat = "{0}_{1}{2}";
+                    string report = "SOLICITUD_INFORME_REPORTERO";
+                    var reportRenderType = StaticFunctions.GetReportRenderType("pdf");
+                    var extension = StaticFunctions.FileExtension(reportRenderType);
+                    var contentType = StaticFunctions.GetContentType(reportRenderType);
+                    var dictionary = new Dictionary<string, string>
+                        {
+                            { "idTicket", ticket.Id.ToString() },
+                            { "codeReporter", assignedTo },
+                            { "startDate", startDate },
+                            { "endDate", endDate },
+                            { "number", number.ToString() },
+                            { "observations", observations },
+                         };
+                    response.Data = new GetFileResponseDto
+                    {
+                        File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                        ContentType = contentType,
+                        Name = "PED_REP_" + number
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+        public string? GetReportName(string language, string about, string format)
+        {
+            string result = "";
+            if (language == "I")
+            {
+                if(about == "E")
+                {
+                    switch (format.ToLower())
+                    {
+                        case "pdf": result = "EMPRESAS/F8-EMPRESAS-EN"; break;
+                        case "word": result = "EMPRESAS/F8-EMPRESAS-WORD-EN"; break;
+                    }
+                }
+                else
+                {
+                    switch (format.ToLower())
+                    {
+                        case "pdf": result = "PERSONAS/F8-PERSONAS-EN"; break;
+                        case "word": result = "PERSONAS/F8-PERSONAS-WORD-EN"; break;
+                    }
+                }
+            }
+            else
+            {
+                if (about == "E")
+                {
+                    switch (format.ToLower())
+                    {
+                        case "pdf": result = "EMPRESAS/F8-EMPRESAS-ES"; break;
+                        case "word": result = "EMPRESAS/F8-EMPRESAS-WORD-ES"; break;
+                    }
+                }
+                else
+                {
+                    switch (format.ToLower())
+                    {
+                        case "pdf": result = "PERSONAS/F8-PERSONAS-ES"; break;
+                        case "word": result = "PERSONAS/F8-PERSONAS-WORD-ES"; break;
+                    }
+                }
+            }
+            return result;
+        }
+
+        public async Task<Response<GetFileDto>> GetExcel(int idTicket)
+        {
+            var response = new Response<GetFileDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var ticket = await context.Tickets.Where(x => x.Id == idTicket)
+                    .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.TraductionCompanies)
+                    .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.IdLegalPersonTypeNavigation)
+                    .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.IdLegalRegisterSituationNavigation)
+                    .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.IdPaymentPolicyNavigation)
+                    .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.CompanyBackgrounds)
+                    .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.CompanyBackgrounds).ThenInclude(x => x.CurrentPaidCapitalCurrencyNavigation)
+                    .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.CompanyBranches).ThenInclude(x => x.IdBranchSectorNavigation)
+                    .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.CompanyBranches).ThenInclude(x => x.IdBusinessBranchNavigation)
+                    .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.FinancialBalances)
+                    .FirstOrDefaultAsync();
+                if (ticket != null)
+                {
+                    var directoryPath = Path.Combine(_path.Path, "cupones", ticket.Number.ToString("D6")); // => "C:\\Debug_EIECORE\\cupones\\000162"
+                    if (!Directory.Exists(directoryPath))
+                    {
+                        Directory.CreateDirectory(directoryPath);
+                    }
+                    var filePath = Path.Combine(directoryPath, ticket.IdCompanyNavigation.Name + ".xlsx");
+                    SLDocument sLDocument = new SLDocument();
+                    
+                    sLDocument.SetCellValue("A1", "FIELD_NM");
+                    sLDocument.SetCellValue("B1", "DATA");
+
+                    sLDocument.SetCellValue("A2", "KSURE_REFERENCE");
+                    sLDocument.SetCellValue("B2", ticket.ReferenceNumber.PadLeft(10));
+
+                    sLDocument.SetCellValue("A3", "TRGTPSN_NM");
+                    sLDocument.SetCellValue("B3", ticket.IdCompanyNavigation.Name);
+
+                    sLDocument.SetCellValue("A4", "TRGTPSN_ABBR_NM");
+                    sLDocument.SetCellValue("B4", ticket.IdCompanyNavigation.SocialName ?? "");
+
+                    sLDocument.SetCellValue("A5", "TRGTPSN_ENG_NM");
+                    sLDocument.SetCellValue("B5", ticket.IdCompanyNavigation.Name);
+
+                    sLDocument.SetCellValue("A6", "TRGTPSN_ENG_ABBR_NM");
+                    sLDocument.SetCellValue("B6", ticket.IdCompanyNavigation.SocialName ?? "");
+
+                    sLDocument.SetCellValue("A7", "TRGTPSN_TELNO");
+                    sLDocument.SetCellValue("B7", ticket.IdCompanyNavigation.SubTelephone + " " + ticket.IdCompanyNavigation.Telephone);
+
+                    sLDocument.SetCellValue("A8", "TRGTPSN_FAX_NO");
+                    sLDocument.SetCellValue("B8", "-");
+
+                    sLDocument.SetCellValue("A9", "EMAIL_ADDR");
+                    sLDocument.SetCellValue("B9", ticket.IdCompanyNavigation.Email ?? "");
+
+                    sLDocument.SetCellValue("A10", "HMPG_ADDR");
+                    sLDocument.SetCellValue("B10", ticket.IdCompanyNavigation.WebPage ?? "");
+
+                    sLDocument.SetCellValue("A11", "EXPR_PRVD_TELNO");
+                    sLDocument.SetCellValue("B11", "");
+
+                    sLDocument.SetCellValue("A12", "EXPR_PRVD_FAX_NO");
+                    sLDocument.SetCellValue("B12", "");
+
+                    sLDocument.SetCellValue("A13", "EXPR_PRVD_EMAIL_ADDR");
+                    sLDocument.SetCellValue("B13", "");
+
+                    sLDocument.SetCellValue("A14", "TRGTPSN_1_ADDR");
+                    sLDocument.SetCellValue("B14", ticket.IdCompanyNavigation.Address ?? "");
+
+                    sLDocument.SetCellValue("A15", "TRGTPSN_2_ADDR");
+                    sLDocument.SetCellValue("B15", ticket.IdCompanyNavigation.TraductionCompanies.FirstOrDefault()?.TRotherLocals ?? "");
+
+                    sLDocument.SetCellValue("A16", "RPRSNT_1_DSCRM_NO");
+                    sLDocument.SetCellValue("B16", "");
+
+                    sLDocument.SetCellValue("A17", "RPRSNT_1_NM");
+                    sLDocument.SetCellValue("B17", "");
+
+                    sLDocument.SetCellValue("A18", "RPRSNT_1_DTL_CTNT");
+                    sLDocument.SetCellValue("B18", "");
+
+                    sLDocument.SetCellValue("A19", "RPRSNT_2_DSCRM_NO");
+                    sLDocument.SetCellValue("B19", "");
+
+                    sLDocument.SetCellValue("A20", "RPRSNT_2_NM");
+                    sLDocument.SetCellValue("B20", "");
+
+                    sLDocument.SetCellValue("A21", "RPRSNT_2_DTL_CTNT");
+                    sLDocument.SetCellValue("B21", "");
+
+                    sLDocument.SetCellValue("A22", "TRGTPSN_1_EMP_CNT");
+                    sLDocument.SetCellValue("B22", ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault()?.WorkerNumber.ToString() ?? "");
+
+                    sLDocument.SetCellValue("A23", "BIZTYP_1_NO");
+                    sLDocument.SetCellValue("B23", ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault()?.IdBranchSectorNavigation.OldCode ?? "");
+
+                    sLDocument.SetCellValue("A24", "BIZTYP_1_EXPL_CTNT");
+                    sLDocument.SetCellValue("B24", ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault()?.IdBranchSectorNavigation.EnglishName ?? "");
+
+                    sLDocument.SetCellValue("A25", "BIZTYP_2_NO");
+                    sLDocument.SetCellValue("B25", ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault()?.IdBusinessBranchNavigation.OldCode.ToString() ?? "");
+
+                    sLDocument.SetCellValue("A26", "BIZTYP_2_EXPL_CTNT");
+                    sLDocument.SetCellValue("B26", ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault()?.IdBusinessBranchNavigation.EnglishName ?? "");
+
+                    sLDocument.SetCellValue("A27", "RMK_CTNT");
+                    sLDocument.SetCellValue("B27", "");
+
+                    sLDocument.SetCellValue("A28", "STL_CND_CTNT");
+                    sLDocument.SetCellValue("B28", "");
+
+                    sLDocument.SetCellValue("A29", "ABRD_ENTPR_REG_NO");
+                    sLDocument.SetCellValue("B29", ticket.IdCompanyNavigation.CompanyBackgrounds.FirstOrDefault().PublicRegister ?? ""); //ticket.IdCompanyNavigation.TraductionCompanies.FirstOrDefault()?.TBpublicRegis ?? ""
+
+                    sLDocument.SetCellValue("A30", "TAXPAY_NO");
+                    sLDocument.SetCellValue("B30", ticket.IdCompanyNavigation.TaxTypeCode ?? "");
+
+                    sLDocument.SetCellValue("A31", "OVRS_CRD_RSRCH_ORG_ENTPR_NO");
+                    sLDocument.SetCellValue("B31", "");
+
+                    sLDocument.SetCellValue("A32", "FUND_DD");
+                    sLDocument.SetCellValue("B32", ticket.IdCompanyNavigation.CompanyBackgrounds.FirstOrDefault()?.ConstitutionDate?.ToString("yyyyMMdd") ?? "");
+
+                    sLDocument.SetCellValue("A33", "PROD_1_NM");
+                    sLDocument.SetCellValue("B33", "");
+
+                    sLDocument.SetCellValue("A34", "PROD_2_NM");
+                    sLDocument.SetCellValue("B34", "");
+
+                    sLDocument.SetCellValue("A35", "PROD_3_NM");
+                    sLDocument.SetCellValue("B35", "");
+
+                    sLDocument.SetCellValue("A36", "KOREAN_PRINCIPAL_YN");
+                    sLDocument.SetCellValue("B36", "");
+
+                    sLDocument.SetCellValue("A37", "STATUS");
+                    sLDocument.SetCellValue("B37", ticket.IdCompanyNavigation?.IdLegalRegisterSituationNavigation?.EnglishName ?? "");
+
+                    sLDocument.SetCellValue("A38", "BRANCH_YN");
+                    sLDocument.SetCellValue("B38", "");
+
+                    sLDocument.SetCellValue("A39", "EST_FS_YN");
+                    sLDocument.SetCellValue("B39", "");
+
+                    sLDocument.SetCellValue("A40", "LSTD_ENTPR_YN");
+                    sLDocument.SetCellValue("B40", ticket.IdCompanyNavigation.CompanyBackgrounds.FirstOrDefault()?.Traded != null && ticket.IdCompanyNavigation.CompanyBackgrounds.FirstOrDefault()?.Traded == "Si" ? "Y" : "N");
+
+                    sLDocument.SetCellValue("A41", "STLACC_YYMM");
+                    sLDocument.SetCellValue("B41", "");
+
+                    sLDocument.SetCellValue("A42", "RSRCH_ORG_GRD_NM");
+                    sLDocument.SetCellValue("B42", "");
+
+                    sLDocument.SetCellValue("A43", "PUBENTPR_YN");
+                    sLDocument.SetCellValue("B43", "");
+
+                    sLDocument.SetCellValue("A44", "INTRNT_ORG_YN");
+                    sLDocument.SetCellValue("B44", "");
+
+                    sLDocument.SetCellValue("A45", "STL_STAT_SPEC_CTNT");
+                    sLDocument.SetCellValue("B45", ticket.IdCompanyNavigation.IdPaymentPolicyNavigation?.EnglishName ?? "");
+
+                    string data = "";
+                    int i = 1;
+                    var companyRelations = await context.CompanyRelations
+                        .Include(x => x.IdCompanyRelationNavigation).ThenInclude(x => x.IdCountryNavigation)
+                        .Where(x => x.IdCompany == ticket.IdCompany)
+                        .OrderBy(x => x.IdCompanyRelationNavigation.Name)
+                        .ToListAsync();
+                    var companyShareholder = await context.CompanyShareHolders
+                        .Include(x => x.IdCompanyShareHolderNavigation).ThenInclude(x => x.IdCountryNavigation)
+                        .Where(x => x.IdCompany == ticket.IdCompany)
+                        .OrderBy(x => x.IdCompanyShareHolderNavigation.Name)
+                        .ToListAsync();
+                    foreach (var cr in companyRelations)
+                    {
+                        data = data + i + ". " + cr.IdCompanyRelationNavigation.Name + " (" + cr.IdCompanyRelationNavigation.IdCountryNavigation.Name + " / " + cr.IdCompanyRelationNavigation.TaxTypeCode + " / " + cr.RelationEng + " )   ";
+                        i++;
+                    }
+                    foreach (var cs in companyShareholder)
+                    {
+                        data = data + i + ". " + cs.IdCompanyShareHolderNavigation.Name + " (" + cs.IdCompanyShareHolderNavigation.IdCountryNavigation.Name + " / " + cs.IdCompanyShareHolderNavigation.TaxTypeCode + " / " + cs.RelationEng + " )   ";
+                        i++;
+                    }
+
+                    sLDocument.SetCellValue("A46", "RSRCH_ORG_GRD_NM");
+                    sLDocument.SetCellValue("B46", data);
+                    sLDocument.SetCellValue("A47", "DAL_BANK_NM");
+                    sLDocument.SetCellValue("B47", "");
+                    sLDocument.SetCellValue("A48", "PCLR_MTR_CTNT");
+                    sLDocument.SetCellValue("B48", ticket.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TFanalistCom ?? "");
+
+                    sLDocument.SetCellValue("A49", "ENTRST_NO");
+                    sLDocument.SetCellValue("B49", "");
+                    string dataPartners = "";
+                    i = 1;
+                    var partners = await context.CompanyPartners
+                        .Where(x => x.IdCompany == ticket.IdCompany && x.Enable == true)
+                        .Include(x => x.IdPersonNavigation).ThenInclude(x => x.TraductionPeople)
+                        .ToListAsync();
+                    foreach(var partner in partners)
+                    {
+                        dataPartners = dataPartners + i + ". " + partner.IdPersonNavigation.Fullname + " ( " + partner.ProfessionEng + " / " + partner.IdPersonNavigation.TraductionPeople.FirstOrDefault().TPnacionality + " )       ";
+                        i++;
+                    }
+                    sLDocument.SetCellValue("A50", "SHR_STCKHLDR_NM");
+                    sLDocument.SetCellValue("B50", dataPartners);
+
+                    string dataImports = "";
+                    var imports = await context.ImportsAndExports.Where(x => x.IdCompany == ticket.IdCompany && x.Type == "I" && x.Enable == true).ToListAsync();
+                    foreach (var import in imports)
+                    {
+                        if(dataImports == "")
+                        {
+                            if(ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault().CountriesImportEng.IsNullOrEmpty() == false)
+                            {
+                                dataImports = ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault().CountriesImportEng + " | " + import.Year + " US$ FOB " + import.Amount;
+                            }
+                            else
+                            {
+                                dataImports = import.Year + " US$ FOB " + import.Amount;
+                            }
+                        }
+                        else
+                        {
+                            dataImports = dataImports + " | " + import.Year + " US$ FOB " + import.Amount;
+                        }
+                    }
+
+                    string dataExports = "";
+                    var exports = await context.ImportsAndExports.Where(x => x.IdCompany == ticket.IdCompany && x.Type == "E" && x.Enable == true).ToListAsync();
+                    foreach (var export in exports)
+                    {
+                        if (dataExports == "")
+                        {
+                            if (ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault().CountriesExportEng.IsNullOrEmpty() == false)
+                            {
+                                dataExports = ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault().CountriesExportEng + " | " + export.Year + " US$ FOB " + export.Amount;
+                            }
+                            else
+                            {
+                                dataExports = export.Year + " US$ FOB " + export.Amount;
+                            }
+                        }
+                        else
+                        {
+                            dataExports = dataExports + " | " + export.Year + " US$ FOB " + export.Amount;
+                        }
+                    }
+                    string dataImportsAndExports = "";
+                    if(imports.Count > 0)
+                    {
+                        dataImportsAndExports = "Import : " + dataImports;
+                        if(exports.Count > 0)
+                        {
+                            dataImportsAndExports = " / Export : " + dataExports;
+                        }
+                    }if(exports.Count > 0)
+                    {
+                        dataImportsAndExports = "Export : " + dataExports;
+                    }
+
+                    sLDocument.SetCellValue("A51", "IMPEXP_DAL_CTNT");
+                    sLDocument.SetCellValue("B51", dataImportsAndExports);
+                    sLDocument.SetCellValue("A52", "LCL_RPUT_CTNT");
+                    sLDocument.SetCellValue("B52", ticket.IdCompanyNavigation?.TraductionCompanies?.FirstOrDefault().TEnew ?? "");
+
+                    sLDocument.SetCellValue("A53", "SKIL_ITM_CTNT");
+                    sLDocument.SetCellValue("B53", "");
+                    sLDocument.SetCellValue("A54", "INTVW_CNNT");
+                    sLDocument.SetCellValue("B54", ticket.IdCompanyNavigation?.TraductionCompanies?.FirstOrDefault().TFcomment ?? "");
+                    sLDocument.SetCellValue("A55", "FUND_HIST_CTNT");
+                    sLDocument.SetCellValue("B55", ticket.IdCompanyNavigation?.TraductionCompanies?.FirstOrDefault().TBlegalBack ?? "");
+                    sLDocument.SetCellValue("A56", "PBLC_INFO_CTNT");
+                    sLDocument.SetCellValue("B56", ticket.IdCompanyNavigation?.TraductionCompanies?.FirstOrDefault().TSlitig ?? "");
+
+                    var balance = await context.FinancialBalances
+                        .Where(x => x.IdCompany == ticket.IdCompany && x.BalanceType == "GENERAL" && x.Enable == true)
+                        .Include(x => x.IdCurrencyNavigation)
+                        .OrderByDescending(x => x.Date).Take(2)
+                        .ToListAsync();
+                    if(balance != null)
+                    {
+                        sLDocument.SetCellValue("A57", "CURR_NM");
+                        sLDocument.SetCellValue("B57", balance[0].IdCurrencyNavigation.Abreviation);
+                        sLDocument.SetCellValue("A58", "AL_AST_AMT");
+                        sLDocument.SetCellValue("B58", balance[0].TotalAssets ?? 0);
+                        sLDocument.SetCellValue("A59", "AL_LIAB_AMT");
+                        sLDocument.SetCellValue("B59", balance[0].TotalLliabilities ?? 0);
+                        sLDocument.SetCellValue("A60", "AL_LIAB_CPT_AMT");
+                        sLDocument.SetCellValue("B60", balance[0].TotalLiabilitiesPatrimony ?? 0);
+                        sLDocument.SetCellValue("A61", "BS_BASE_YYMM");
+                        sLDocument.SetCellValue("B61", balance[0].Date.Value.ToString("yyyyMM"));
+                        sLDocument.SetCellValue("A62", "PAYCPT_AMT_CURR_NM");
+                        sLDocument.SetCellValue("B62", balance[0].IdCurrencyNavigation.Abreviation);
+
+                        //string currentCapital = (ticket.IdCompanyNavigation?.CompanyBackgrounds?.FirstOrDefault().CurrentPaidCapitalCurrencyNavigation?.Abreviation ?? "" )+
+                        //    " | " + ticket.IdCompanyNavigation?.CompanyBackgrounds?.FirstOrDefault().CurrentPaidCapital + " | " + (ticket.IdCompanyNavigation?.TraductionCompanies?.FirstOrDefault().TBpaidCapital ?? "");
+                        string currentCapital = ticket.IdCompanyNavigation?.CompanyBackgrounds?.FirstOrDefault().CurrentPaidCapital.ToString();
+
+                        sLDocument.SetCellValue("A63", "PAYCPT_AMT");
+                        sLDocument.SetCellValue("B63", currentCapital);
+                        sLDocument.SetCellValue("A64", "DFR_AST_AMT");
+                        sLDocument.SetCellValue("B64", balance[0].AOtherCurrentAssets ?? 0);
+                        sLDocument.SetCellValue("A65", "ETC_LIAB_AMT");
+                        sLDocument.SetCellValue("B65", balance[0].LOtherCurrentLiabilities ?? 0);
+                        sLDocument.SetCellValue("A66", "FIX_AST_AMT");
+                        sLDocument.SetCellValue("B66", balance[0].AFixed ?? 0);
+                        sLDocument.SetCellValue("A67", "FIX_LIAB_AMT");
+                        sLDocument.SetCellValue("B67", balance[0].LLongTerm ?? 0);
+                        sLDocument.SetCellValue("A68", "INVNT_AST_AMT");
+                        sLDocument.SetCellValue("B68", balance[0].AInventory ?? 0);
+                        sLDocument.SetCellValue("A69", "INVST_ETC_AST_AMT");
+                        sLDocument.SetCellValue("B69", "");
+                        sLDocument.SetCellValue("A70", "LQID_AST_AMT");
+                        sLDocument.SetCellValue("B70", balance[0].TotalCurrentAssets ?? 0);
+                        sLDocument.SetCellValue("A71", "LQID_LIAB_AMT");
+                        sLDocument.SetCellValue("B71", balance[0].TotalCurrentLiabilities ?? 0);
+                        sLDocument.SetCellValue("A72", "NET_PRFT_AMT");
+                        sLDocument.SetCellValue("B72", balance[0].Utilities ?? 0);
+                        sLDocument.SetCellValue("A73", "NETAST_AMT");
+                        sLDocument.SetCellValue("B73", (balance[0].PCapital ?? 0) + (balance[0].PStockPile ?? 0) + (balance[0].PUtilities ?? 0) + (balance[0].POther ?? 0));
+                        sLDocument.SetCellValue("A74", "PRFLOS_BIL_BASE_YYMM");
+                        sLDocument.SetCellValue("B74", balance[0].Date.Value.ToString("yyyyMM"));
+                        sLDocument.SetCellValue("A75", "PRFT_SRPLS_AMT");
+                        sLDocument.SetCellValue("B75", balance[0].POther ?? 0);
+                        sLDocument.SetCellValue("A76", "PRVYY_AL_AST_AMT");
+                        sLDocument.SetCellValue("B76", balance[1].TotalAssets ?? 0);
+                        sLDocument.SetCellValue("A77", "PRVYY_BS_BASE_YYMM");
+                        sLDocument.SetCellValue("B77", balance[1].Date.Value.ToString("yyyyMM"));
+                        sLDocument.SetCellValue("A78", "PRVYY_NET_PRFT_AMT");
+                        sLDocument.SetCellValue("B78", balance[1].Utilities ?? 0);
+                        sLDocument.SetCellValue("A79", "PRVYY_PRFLOS_BIL_BASE_YYMM");
+                        sLDocument.SetCellValue("B79", balance[1].Date.Value.ToString("yyyyMM"));
+                        sLDocument.SetCellValue("A80", "PRVYY_SALE_AMT");
+                        sLDocument.SetCellValue("B80", balance[1].Sales ?? 0);
+                        sLDocument.SetCellValue("A81", "SALE_AMT");
+                        sLDocument.SetCellValue("B81", balance[0].Sales ?? 0);
+                    }
+                    else
+                    {
+                        sLDocument.SetCellValue("A57", "CURR_NM");
+                        sLDocument.SetCellValue("B57", "");
+                        sLDocument.SetCellValue("A58", "AL_AST_AMT");
+                        sLDocument.SetCellValue("B58", "");
+                        sLDocument.SetCellValue("A59", "AL_LIAB_AMT");
+                        sLDocument.SetCellValue("B59", "");
+                        sLDocument.SetCellValue("A60", "AL_LIAB_CPT_AMT");
+                        sLDocument.SetCellValue("B60", "");
+                        sLDocument.SetCellValue("A61", "BS_BASE_YYMM");
+                        sLDocument.SetCellValue("B61", "");
+                        sLDocument.SetCellValue("A62", "PAYCPT_AMT_CURR_NM");
+                        sLDocument.SetCellValue("B62", "");
+                        sLDocument.SetCellValue("A63", "PAYCPT_AMT");
+                        sLDocument.SetCellValue("B63", "");
+                        sLDocument.SetCellValue("A64", "DFR_AST_AMT");
+                        sLDocument.SetCellValue("B64", "");
+                        sLDocument.SetCellValue("A65", "ETC_LIAB_AMT");
+                        sLDocument.SetCellValue("B65", "");
+                        sLDocument.SetCellValue("A66", "FIX_AST_AMT");
+                        sLDocument.SetCellValue("B66", "");
+                        sLDocument.SetCellValue("A67", "FIX_LIAB_AMT");
+                        sLDocument.SetCellValue("B67", "");
+                        sLDocument.SetCellValue("A68", "INVNT_AST_AMT");
+                        sLDocument.SetCellValue("B68", "");
+                        sLDocument.SetCellValue("A69", "INVST_ETC_AST_AMT");
+                        sLDocument.SetCellValue("B69", "");
+                        sLDocument.SetCellValue("A70", "LQID_AST_AMT");
+                        sLDocument.SetCellValue("B70", "");
+                        sLDocument.SetCellValue("A71", "LQID_LIAB_AMT");
+                        sLDocument.SetCellValue("B71", "");
+                        sLDocument.SetCellValue("A72", "NET_PRFT_AMT");
+                        sLDocument.SetCellValue("B72", "");
+                        sLDocument.SetCellValue("A73", "NETAST_AMT");
+                        sLDocument.SetCellValue("B73", "");
+                        sLDocument.SetCellValue("A74", "PRFLOS_BIL_BASE_YYMM");
+                        sLDocument.SetCellValue("B74", "");
+                        sLDocument.SetCellValue("A75", "PRFT_SRPLS_AMT");
+                        sLDocument.SetCellValue("B75", "");
+                        sLDocument.SetCellValue("A76", "PRVYY_AL_AST_AMT");
+                        sLDocument.SetCellValue("B76", "");
+                        sLDocument.SetCellValue("A77", "PRVYY_BS_BASE_YYMM");
+                        sLDocument.SetCellValue("B77", "");
+                        sLDocument.SetCellValue("A78", "PRVYY_NET_PRFT_AMT");
+                        sLDocument.SetCellValue("B78", "");
+                        sLDocument.SetCellValue("A79", "PRVYY_PRFLOS_BIL_BASE_YYMM");
+                        sLDocument.SetCellValue("B79", "");
+                        sLDocument.SetCellValue("A80", "PRVYY_SALE_AMT");
+                        sLDocument.SetCellValue("B80", "");
+                        sLDocument.SetCellValue("A81", "SALE_AMT");
+                        sLDocument.SetCellValue("B81", "");
+                    }
+                    sLDocument.SetColumnWidth(1, 30);
+                    sLDocument.SetColumnWidth(2, 150);
+                    
+                    SLStyle style = new SLStyle();
+                    style.Alignment.Horizontal = DocumentFormat.OpenXml.Spreadsheet.HorizontalAlignmentValues.Left;
+                    
+                    sLDocument.SetColumnStyle(2, style);
+                    sLDocument.SaveAs(filePath);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
         public async Task<Response<GetFileResponseDto>> DownloadF8(int idTicket, string language, string format)
         {
             var response = new Response<GetFileResponseDto>();
@@ -2549,7 +3686,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         string companyCode = company.OldCode ?? "N" + company.Id.ToString("D6");
                         string languageFileName = language == "I" ? "ENG" : "ESP";
                         string fileFormat = "{0}_{1}{2}";
-                        string report = language == "E" ? "F8-EMPRESAS-ES" : "F8-EMPRESAS-EN";
+                        string report = GetReportName(language, ticket.About, format);
                         var reportRenderType = StaticFunctions.GetReportRenderType(format);
                         var extension = StaticFunctions.FileExtension(reportRenderType);
                         var contentType = StaticFunctions.GetContentType(reportRenderType);
@@ -2573,7 +3710,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         string personCode = person.OldCode ?? "N" + person.Id.ToString("D6");
                         string languageFileName = language == "I" ? "ENG" : "ESP";
                         string fileFormat = "{0}_{1}{2}";
-                        string report = language == "E" ? "F8-PERSONAS-ES" : "F8-PERSONAS-EN";
+                        string report = GetReportName(language, ticket.About, format);
                         var reportRenderType = StaticFunctions.GetReportRenderType(format);
                         var extension = StaticFunctions.FileExtension(reportRenderType);
                         var contentType = StaticFunctions.GetContentType(reportRenderType);
@@ -2666,6 +3803,61 @@ namespace DRRCore.Application.Main.CoreApplication
                     var history = await context.TicketHistories.Where(x => x.IdTicket == obj.IdTicket && x.AsignedTo == obj.AssignedFromCode && x.NumberAssign == obj.NumberAssign).FirstOrDefaultAsync();
                     if (history != null)
                     {
+                        var code = "CP_" + DateTime.Now.Month.ToString("D2") + "_" + DateTime.Now.Year;
+                        var productionClosure = await context.ProductionClosures.Where(x => x.Code.Contains(code)).FirstOrDefaultAsync();
+                        if (productionClosure == null)
+                        {
+
+                            DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1).AddDays(-1);
+                            await context.ProductionClosures.AddAsync(new ProductionClosure
+                            {
+                                EndDate = lastDayOfCurrentMonth,
+                                Code = code,
+                                Title = "Cierre de Producción " + DateTime.Now.Month.ToString("D2") + " - " + DateTime.Now.Year,
+                                Observations = ""
+                            });
+                        }
+                        else
+                        {
+                            if (productionClosure.EndDate > DateTime.Now)
+                            {
+                                if (DateTime.Now.Month == 12)
+                                {
+                                    code = "CP_" + (1).ToString("D2") + "_" + (DateTime.Now.Year + 1);
+                                    var nextProductionClosureExistent = await context.ProductionClosures.Where(x => x.Code.Contains(code)).FirstOrDefaultAsync();
+                                    if (nextProductionClosureExistent == null)
+                                    {
+                                        DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year + 1, 1, 1).AddMonths(1).AddDays(-1);
+                                        await context.ProductionClosures.AddAsync(new ProductionClosure
+                                        {
+                                            EndDate = lastDayOfCurrentMonth,
+                                            Code = code,
+                                            Title = "Cierre de Producción " + (1).ToString("D2") + " - " + DateTime.Today.Year + 1,
+                                            Observations = ""
+                                        });
+                                    }
+                                }
+                                else
+                                {
+                                    code = "CP_" + (DateTime.Now.Month + 1).ToString("D2") + "_" + DateTime.Now.Year;
+                                    var nextProductionClosureExistent = await context.ProductionClosures.Where(x => x.Code.Contains(code)).FirstOrDefaultAsync();
+                                    if (nextProductionClosureExistent == null)
+                                    {
+                                        DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1).AddDays(-1);
+                                        await context.ProductionClosures.AddAsync(new ProductionClosure
+                                        {
+                                            EndDate = lastDayOfCurrentMonth,
+                                            Code = code,
+                                            Title = "Cierre de Producción " + (DateTime.Now.Month + 1).ToString("D2") + " - " + DateTime.Now.Year,
+                                            Observations = ""
+                                        });
+                                    }
+
+                                }
+
+                            }
+                        }
+
                         var ticket = await context.Tickets.Include(x => x.TicketHistories).Where(x => x.Id == history.IdTicket).FirstOrDefaultAsync();
                         if (ticket != null)
                         {
@@ -2705,7 +3897,8 @@ namespace DRRCore.Application.Main.CoreApplication
                                         EndDate = StaticFunctions.VerifyDate(obj.EndDate),
                                         Observations = obj.Observations,
                                         Balance = obj.Balance,
-
+                                        AsignationType = obj.Type,
+                                        Cycle = code
                                     };
                                     await context.TicketHistories.AddAsync(newTicketHistory);
 
@@ -2759,8 +3952,8 @@ namespace DRRCore.Application.Main.CoreApplication
                                     EndDate = DateTime.Parse(obj.EndDate),
                                     Observations = obj.Observations,
                                     Balance = obj.Balance,
-
-
+                                    AsignationType = obj.Type,
+                                    Cycle = code
                                 };
                                 await context.TicketHistories.AddAsync(newTicketHistory);
 
@@ -2806,20 +3999,6 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 _logger.LogError(ex.Message);
                 response.Data = null;
-                response.IsSuccess = false;
-            }
-            return response;
-        }
-
-        public async Task<Response<bool>> TicketToDispacth(int idTicket)
-        {
-            var response = new Response<bool>();
-            try
-            {
-                using var context = new SqlCoreContext();
-            }catch(Exception ex)
-            {
-                _logger.LogError(ex.Message);
                 response.IsSuccess = false;
             }
             return response;
@@ -3113,7 +4292,86 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-       
+        public async Task<Response<string>> GetSupervisorTicket(int idTicket)
+        {
+            var response = new Response<string>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var ticketHistory = await context.TicketHistories.Where(x => x.IdTicket == idTicket && x.AsignationType == "SU" && x.AsignedTo.Contains("S")).FirstOrDefaultAsync();
+                if(ticketHistory != null)
+                {
+                    var user = await context.UserLogins.Where(x => x.Id == int.Parse(ticketHistory.UserTo)).Include(x => x.IdEmployeeNavigation).FirstOrDefaultAsync();
+                    if (user != null)
+                    {
+                        response.Data = ticketHistory.AsignedTo + " - " + user.IdEmployeeNavigation.FirstName + " " + user.IdEmployeeNavigation.LastName;
+                    }
+                }
+            }catch  (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                response.IsSuccess = false;
+            }
+            return response;
+        }
+
+        public async Task<Response<bool>> DeleteTicketHistoryById(int idTicketHistory)
+        {
+            var response = new Response<bool>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var ticketHistory = await context.TicketHistories.Where(x => x.Id == idTicketHistory).FirstOrDefaultAsync();
+                if(ticketHistory != null)
+                {
+                    ticketHistory.Flag = true;
+                    ticketHistory.ShippingDate = DateTime.Now;
+                    ticketHistory.UpdateDate = DateTime.Now;
+                    context.TicketHistories.Update(ticketHistory);
+                    await context.SaveChangesAsync();
+                }
+
+            }catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                response.IsSuccess = false;
+            }
+            return response;
+        }
+
+        public async Task<Response<List<GetShortProviderByTicket>>> GetProvidersHistoryByIdTicket(int idTicket)
+        {
+            var response = new Response<List<GetShortProviderByTicket>>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var ticket = await context.Tickets.FindAsync(idTicket);
+                if (ticket != null)
+                {
+                    var providers = new List<Domain.Entities.SqlCoreContext.Provider>();
+                    if (ticket.About == "E")
+                    {
+                        providers = await context.Providers
+                            .Include(x => x.IdCountryNavigation)
+                            .Where(x => x.IdCompany == ticket.IdCompany && x.IdTicket == ticket.Id && x.Qualification == "Dió referencia").ToListAsync();
+                    }
+                    else
+                    {
+                        providers = await context.Providers
+                            .Include(x => x.IdCountryNavigation)
+                            .Where(x => x.IdPerson == ticket.IdPerson && x.IdTicket == ticket.Id && x.Qualification == "Dió referencia").ToListAsync();
+                    }
+                    response.Data = _mapper.Map<List<GetShortProviderByTicket>>(providers);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                response.Data = null;
+                response.IsSuccess = false;
+            }
+            return response;
+        }
     }
 
 }

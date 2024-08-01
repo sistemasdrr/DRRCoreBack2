@@ -93,9 +93,11 @@ public partial class Ticket
 
     public string? WebPage { get; set; }
 
+    public string? QualityTranslator { get; set; }
+
     public string? QualityTypist { get; set; }
 
-    public string? QualityTranslator { get; set; }
+    public bool? HasBalance { get; set; }
 
     public virtual Company? IdCompanyNavigation { get; set; }
 

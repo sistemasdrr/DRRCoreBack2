@@ -471,4 +471,132 @@
         public string? Country { get; set; }
         public string? FlagCountry { get; set; }
     }
+
+    public class GetQuery5_1_1ResponseDto
+    {
+        public int? Id { get; set; }
+        public string? Name { get; set; }
+        public string? Code { get; set; }
+        public string? Country { get; set; }
+        public string? FlagCountry { get; set; }
+        public bool? Flag { get; set; }
+        public int? Quantity { get; set; }
+        public List<GetQueryTicket5_1_1ResponseDto>? Tickets { get; set; }
+    }
+    public class GetQueryTicket5_1_1ResponseDto
+    {
+
+        public int Id { get; set; }
+        public int? IdTicket { get; set; }
+        public string Number { get; set; }
+        public string? Language { get; set; }
+        public string About { get; set; } = null!;
+        public string? Status { get; set; }
+        public string? StatusColor { get; set; }
+        public string? Country { get; set; }
+        public string? FlagCountry { get; set; }
+
+
+        //ABONADO
+        public string? SubscriberCode { get; set; }
+        public string? SubscriberName { get; set; }
+        public string? SubscriberCountry { get; set; }
+        public string? SubscriberFlag { get; set; }
+        public string? QueryCredit { get; set; }
+        public string? TimeLimit { get; set; }
+        public bool? RevealName { get; set; }
+        public string? NameRevealed { get; set; }
+        public string? ReferenceNumber { get; set; }
+        public string? AditionalData { get; set; }
+        public string? SubscriberIndications { get; set; }
+
+        //EMPRESA
+        public string? BusineesName { get; set; }
+        public string? RequestedName { get; set; }
+        public string? TaxType { get; set; }
+        public string? TaxCode { get; set; }
+        public string? InvestigatedIsoCountry { get; set; }
+        public string? InvestigatedCountry { get; set; }
+        public string? InvestigatedFlag { get; set; }
+        public string? City { get; set; }
+        public string? Email { get; set; }
+        public string? Address { get; set; }
+        public string? Telephone { get; set; }
+        public string? WebPage { get; set; }
+
+        //INFORME
+        public string ReportType { get; set; } = null!;
+        public string ProcedureType { get; set; } = null!;
+        public string? OrderDate { get; set; }
+        public string? ExpireDate { get; set; }
+        public string? RealExpireDate { get; set; }
+
+        public int? Flag { get; set; }
+    }
+    public class GetQuery5_1_2ResponseDto
+    {
+        public int? Id { get; set; }
+        public string? Name { get; set; }
+        public string? Code { get; set; }
+        public string? Country { get; set; }
+        public string? FlagCountry { get; set; }
+        public bool? Flag { get; set; }
+        public int? Quantity { get; set; }
+        public List<GetQueryTicket5_1_2ResponseDto>? Tickets { get; set; }
+    }
+    public class GetQueryTicket5_1_2ResponseDto
+    {
+
+        public int Id { get; set; }
+        public int? IdTicket { get; set; }
+        public int? IdCompany { get; set; }
+        public int? IdPerson { get; set; }
+        public int? IdStatusTicket { get; set; }
+        public string? Quality { get; set; }
+
+        public string Number { get; set; }
+        public string? Language { get; set; }
+        public string About { get; set; } = null!;
+        public string? Status { get; set; }
+        public string? StatusColor { get; set; }
+        public string? Country { get; set; }
+        public string? FlagCountry { get; set; }
+
+
+        //ABONADO
+        public string? SubscriberCode { get; set; }
+        public string? SubscriberName { get; set; }
+        public string? SubscriberCountry { get; set; }
+        public string? SubscriberFlag { get; set; }
+        public string? QueryCredit { get; set; }
+        public string? TimeLimit { get; set; }
+        public bool? RevealName { get; set; }
+        public string? NameRevealed { get; set; }
+        public string? ReferenceNumber { get; set; }
+        public string? AditionalData { get; set; }
+        public string? SubscriberIndications { get; set; }
+
+        //EMPRESA
+        public string? BusineesName { get; set; }
+        public string? RequestedName { get; set; }
+        public string? TaxType { get; set; }
+        public string? TaxCode { get; set; }
+        public string? InvestigatedIsoCountry { get; set; }
+        public string? InvestigatedCountry { get; set; }
+        public string? InvestigatedFlag { get; set; }
+        public string? City { get; set; }
+        public string? Email { get; set; }
+        public string? Address { get; set; }
+        public string? Telephone { get; set; }
+        public string? WebPage { get; set; }
+
+        //INFORME
+        public string ReportType { get; set; } = null!;
+        public string ProcedureType { get; set; } = null!;
+        public string? OrderDate { get; set; }
+        public string? ExpireDate { get; set; }
+        public string? RealExpireDate { get; set; }
+
+        public int? Flag { get; set; }
+    }
 }

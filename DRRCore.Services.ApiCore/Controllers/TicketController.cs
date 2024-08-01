@@ -136,6 +136,12 @@ namespace DRRCore.Services.ApiCore.Controllers
         {
             return Ok(await _ticketApplication.DispatchTicket(idTicket, idUser));
         }
+        [HttpPost()]
+        [Route("GetExcel")]
+        public async Task<ActionResult> GetExcel(int idTicket)
+        {
+            return Ok(await _ticketApplication.GetExcel(idTicket));
+        }
         [HttpGet()]
         [Route("getListby")]
         public async Task<ActionResult> getListBy(string? ticket, string? name, string? subscriber, string? type, string? procedure)
@@ -251,10 +257,10 @@ namespace DRRCore.Services.ApiCore.Controllers
             return Ok(await _ticketApplication.GetTicketFilesByIdTicket(idTicket));
         }
         [HttpGet()]
-        [Route("getFileByPath")]
-        public async Task<ActionResult> getFileByPath(string path)
+        [Route("DownloadFileById")]
+        public async Task<ActionResult> getFileByPath(int id)
         {
-            var result = await _ticketApplication.DownloadFileByPath(path);
+            var result = await _ticketApplication.DownloadFileById(id);
 
             if (result != null && result.Data != null)
             {
@@ -265,9 +271,9 @@ namespace DRRCore.Services.ApiCore.Controllers
                 return NotFound();
             }
         }
-        [HttpPost()]
-        [Route("deleteFile")]
-        public async Task<ActionResult> deleteFile(int id)
+        [HttpGet()]
+        [Route("DeleteFile")]
+        public async Task<ActionResult> DeleteFile(int id)
         {
             return Ok(await _ticketApplication.DeleteFile(id));
         }
@@ -282,6 +288,12 @@ namespace DRRCore.Services.ApiCore.Controllers
         public async Task<ActionResult> providerByIdTicket(int idTicket)
         {
             return Ok(await _ticketApplication.GetProvidersByIdTicket(idTicket));
+        }
+        [HttpGet()]
+        [Route("providerHistoryByIdTicket")]
+        public async Task<ActionResult> providerHistoryByIdTicket(int idTicket)
+        {
+            return Ok(await _ticketApplication.GetProvidersHistoryByIdTicket(idTicket));
         }
         [HttpPost()]
         [Route("finishWork")]
@@ -316,13 +328,36 @@ namespace DRRCore.Services.ApiCore.Controllers
         {
             return Ok(await _ticketApplication.FinishTicketObservation(idTicketObservation,conclusion,dr,ag,cl));
         }
-        
+
         [HttpGet()]
         [Route("GetOtherUserCode")]
         public async Task<ActionResult> GetOtherUserCode(int idUser)
         {
             return Ok(await _ticketApplication.GetOtherUserCode(idUser));
         }
+        [HttpGet()]
+        [Route("GetSupervisorTicket")]
+        public async Task<ActionResult> GetSupervisorTicket(int idTicket)
+        {
+            return Ok(await _ticketApplication.GetSupervisorTicket(idTicket));
+        }
+        [HttpGet()]
+        [Route("DownloadZipByIdTicket")]
+        public async Task<ActionResult> DownloadZipByIdTicket(int idTicket)
+        {
+            var result = await _ticketApplication.DownloadZipByIdTicket(idTicket);
+
+            if (result != null && result.Data != null)
+            {
+                return File(result.Data.File?.ToArray(), result.Data.ContentType, result.Data.FileName);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
         
+
+
     }
 }

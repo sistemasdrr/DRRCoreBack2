@@ -37,6 +37,11 @@ namespace DRRCore.Domain.Main.CoreDomain
             throw new NotImplementedException();
         }
 
+        public async Task<List<Provider>> GetListProviderHistoryByIdTicket(int idTicket)
+        {
+            return  await _providerRepository.GetListProviderHistoryByIdTicket(idTicket);
+        }
+
         public async Task<List<Provider>> GetProviderByIdPerson(int idPerson)
         {
             return await _providerRepository.GetProviderByIdPerson(idPerson);

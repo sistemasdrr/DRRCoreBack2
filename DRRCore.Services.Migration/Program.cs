@@ -77,6 +77,7 @@ builder.Services.AddScoped<IMailSender, MailSender>();
 builder.Services.AddScoped<IFileManager, FileManager>();
 builder.Services.AddScoped<IMailFormatter, MailFormatter>();
 
+
 builder.Services.AddScoped<DRRCore.Transversal.Common.Interface.ILogger, LoggerManager>();
 var app = builder.Build();
 
@@ -91,5 +92,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+
 
 app.Run();

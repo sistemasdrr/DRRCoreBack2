@@ -152,6 +152,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                         obj.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TIgeneral = traductions.Where(x => x.Identifier == "L_I_GENERAL").FirstOrDefault().LargeValue;
                         obj.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().UploadDate = DateTime.Now;
                     }
+                    obj.IdCompanyNavigation.Traductions = null;
                     context.CompanyGeneralInformations.Update(obj);
 
                     //foreach (var item in traductions)

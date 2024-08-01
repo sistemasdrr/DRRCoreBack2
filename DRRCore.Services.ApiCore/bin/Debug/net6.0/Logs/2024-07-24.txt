@@ -1,0 +1,6 @@
+2024-07-24 09:44:12,129 [55] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-07-24 09:44:58,402 [55] ERROR App  
+ No se encontró datos en la entidad 
+ 

@@ -83,6 +83,8 @@ public partial class Company
 
     public int? Migra { get; set; }
 
+    public string? Since { get; set; }
+
     public virtual ICollection<Traduction> Traductions { get; set; } = new List<Traduction>();
     public virtual ICollection<BankDebt> BankDebts { get; set; } = new List<BankDebt>();
 

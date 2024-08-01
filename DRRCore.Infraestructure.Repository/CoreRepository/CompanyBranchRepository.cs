@@ -31,6 +31,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                         trad.TRotherLocals = traductions.Where(x => x.Identifier == "L_R_OTRHERLOCALS").FirstOrDefault().LargeValue;
                         trad.TRprincAct = traductions.Where(x => x.Identifier == "L_R_PRINCACT").FirstOrDefault().LargeValue;
                         trad.TRadiBus = traductions.Where(x => x.Identifier == "L_R_ADIBUS").FirstOrDefault().LargeValue;
+                        trad.TRmainAddress = traductions.Where(x => x.Identifier == "L_R_DESCADD").FirstOrDefault().LargeValue;
                         context.TraductionCompanies.Update(trad);
                     }
                     else
@@ -46,6 +47,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                         trad.TRotherLocals = traductions.Where(x => x.Identifier == "L_R_OTRHERLOCALS").FirstOrDefault().LargeValue;
                         trad.TRprincAct = traductions.Where(x => x.Identifier == "L_R_PRINCACT").FirstOrDefault().LargeValue;
                         trad.TRadiBus = traductions.Where(x => x.Identifier == "L_R_ADIBUS").FirstOrDefault().LargeValue;
+                        trad.TRmainAddress = traductions.Where(x => x.Identifier == "L_R_DESCADD").FirstOrDefault().LargeValue;
                         await context.TraductionCompanies.AddAsync(trad);
                     }
 
@@ -176,6 +178,11 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                         Identifier = "L_R_ADIBUS",
                         LargeValue = companyBranch.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TRadiBus ?? "",
                     });
+                    traductions.Add(new Traduction
+                    {
+                        Identifier = "L_R_DESCADD",
+                        LargeValue = companyBranch.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TRmainAddress?? "",
+                    });
                 }
                 else
                 {
@@ -224,9 +231,15 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                         Identifier = "L_R_PRINCACT",
                         LargeValue = "",
                     });
+
                     traductions.Add(new Traduction
                     {
                         Identifier = "L_R_ADIBUS",
+                        LargeValue = "",
+                    });
+                    traductions.Add(new Traduction
+                    {
+                        Identifier = "L_R_DESCADD",
                         LargeValue = "",
                     });
                 }
@@ -265,8 +278,10 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                         obj.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TRotherLocals = traductions.Where(x => x.Identifier == "L_R_OTRHERLOCALS").FirstOrDefault().LargeValue;
                         obj.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TRprincAct = traductions.Where(x => x.Identifier == "L_R_PRINCACT").FirstOrDefault().LargeValue;
                         obj.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TRadiBus = traductions.Where(x => x.Identifier == "L_R_ADIBUS").FirstOrDefault().LargeValue;
+                        obj.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TRmainAddress = traductions.Where(x => x.Identifier == "L_R_DESCADD").FirstOrDefault().LargeValue;
                         obj.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().UploadDate = DateTime.Now;
                     }
+                    obj.IdCompanyNavigation.Traductions = null;
                     context.CompanyBranches.Update(obj);
 
 

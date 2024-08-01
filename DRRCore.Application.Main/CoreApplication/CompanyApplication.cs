@@ -1,4 +1,7 @@
 ﻿using AutoMapper;
+using DocumentFormat.OpenXml.ExtendedProperties;
+using DocumentFormat.OpenXml.InkML;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using DRRCore.Application.DTO.Core.Request;
 using DRRCore.Application.DTO.Core.Response;
 using DRRCore.Application.Interfaces.CoreApplication;
@@ -12,7 +15,6 @@ using log4net.Config;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Org.BouncyCastle.Ocsp;
 using System.Security.Claims;
 
 namespace DRRCore.Application.Main.CoreApplication
@@ -110,13 +112,20 @@ namespace DRRCore.Application.Main.CoreApplication
                             LastUpdaterUser=1
                         });
                     }
-                    var newCompany = _mapper.Map<Company>(obj);
+                    var newCompany = _mapper.Map<Domain.Entities.SqlCoreContext.Company>(obj);
                     newCompany.Traductions = traductions;
                      response.Data = await _companyDomain.AddCompanyAsync(newCompany);
                 }
                 else
                 {
-                    var existingCompany = await _companyDomain.GetByIdAsync(obj.Id);
+                    using var context = new SqlCoreContext();
+                    var existingCompany = await context.Companies
+                    .Where(x => x.Id == obj.Id)
+                    .Include(x => x.CompanyFinancialInformations)
+                    .Include(x => x.TraductionCompanies)
+                   .FirstOrDefaultAsync();
+
+
                     if (existingCompany == null)
                     {
                         response.IsSuccess = false;
@@ -125,7 +134,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         return response;
                     }
                     existingCompany = _mapper.Map(obj, existingCompany);
-
+                    existingCompany.Since = obj.Since;
                     foreach (var item in obj.Traductions)
                     {
                         traductions.Add(new Traduction
@@ -183,7 +192,10 @@ namespace DRRCore.Application.Main.CoreApplication
                 }
                 else
                 {
-                    var existingCompany = await _companyBackgroundDomain.GetByIdAsync(obj.IdCompany);
+                    using var context = new SqlCoreContext();
+                    var existingCompany = await context.CompanyBackgrounds
+                    .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.TraductionCompanies)
+                    .Where(x => x.IdCompany == obj.IdCompany).FirstOrDefaultAsync();
                     if (existingCompany == null)
                     {
                         response.IsSuccess = false;
@@ -417,7 +429,10 @@ namespace DRRCore.Application.Main.CoreApplication
                 }
                 else
                 {
-                    var existingCompany = await _companyFinancialInformationDomain.GetByIdCompany((int)obj.IdCompany);
+                    using var context = new SqlCoreContext();
+                    var existingCompany = await context.CompanyFinancialInformations
+                    .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.TraductionCompanies)
+                    .Where(x => x.IdCompany == obj.IdCompany).FirstOrDefaultAsync();
                     if (existingCompany == null)
                     {
                         response.IsSuccess = false;
@@ -744,6 +759,7 @@ namespace DRRCore.Application.Main.CoreApplication
         public async Task<Response<List<GetListProviderResponseDto>>> GetListProvidersAsync(int idCompany)
         {
             var response = new Response<List<GetListProviderResponseDto>>();
+            response.Data = new List<GetListProviderResponseDto>();
             try
             {
                 var list = await _providerDomain.GetProvidersByIdCompany(idCompany);
@@ -754,7 +770,50 @@ namespace DRRCore.Application.Main.CoreApplication
                     _logger.LogError(response.Message);
                     return response;
                 }
-                response.Data = _mapper.Map<List<GetListProviderResponseDto>>(list);
+                using var context = new SqlCoreContext();
+                foreach (var item in list)
+                {
+                    var ticket = new Ticket();
+                    if (item.IdTicket != null)
+                    {
+                        ticket = await context.Tickets.Where(x => x.Id == item.IdTicket).FirstOrDefaultAsync();
+                    }
+                    response.Data.Add(new GetListProviderResponseDto
+                    {
+                        Id = item.Id,
+                        IdCompany = item.IdCompany,
+                        IdPerson = item.IdPerson,
+                        Name = item.Name,
+                        IdCountry = item.IdCountry,
+                        Country = item.IdCountryNavigation.Iso ?? "",
+                        FlagCountry = item.IdCountryNavigation.FlagIso ?? "",
+                        Date = StaticFunctions.DateTimeToString(item.Date),
+                        DateReferent = StaticFunctions.DateTimeToString(item.DateReferent),
+                        Qualification = item.Qualification,
+                        QualificationEng = item.QualificationEng,
+                        AdditionalCommentary = item.AdditionalCommentary,
+                        AdditionalCommentaryEng = item.AdditionalCommentaryEng,
+                        AttendedBy = item.AttendedBy,
+                        MaximumAmount = item.MaximumAmount,
+                        MaximumAmountEng = item.MaximumAmountEng,
+                        ClientSince = item.ClientSince,
+                        ClientSinceEng  = item.ClientSinceEng,
+                        Compliance = item.Compliance,
+                        ComplianceEng  = item.ComplianceEng,
+                        IdCurrency = item.IdCurrency,
+                        ReferentCommentary = item.ReferentCommentary,
+                        Telephone = item.Telephone,
+                        TimeLimitEng = item.TimeLimitEng,
+                        TimeLimit = item.TimeLimit,
+                        IdTicket = item.IdTicket,
+                        Ticket = item.Ticket == null ? ticket?.Number.ToString("D6") : item.Ticket,
+                        ProductsTheySell = item.ProductsTheySell,
+                        ProductsTheySellEng = item.ProductsTheySellEng,
+                        ReferentName = item.ReferentName,
+
+                    });
+                }
+                
             }
             catch (Exception ex)
             {
@@ -1063,7 +1122,10 @@ namespace DRRCore.Application.Main.CoreApplication
                 }
                 else
                 {
-                    var existingCompanySbs = await _companySBSDomain.GetByIdCompany((int)obj.IdCompany);
+                    using var context = new SqlCoreContext();
+                    var existingCompanySbs = await context.CompanySbs
+                    .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.TraductionCompanies)
+                    .Where(x => x.IdCompany == obj.IdCompany).FirstOrDefaultAsync();
                     if (existingCompanySbs == null)
                     {
                         response.IsSuccess = false;
@@ -1492,7 +1554,12 @@ namespace DRRCore.Application.Main.CoreApplication
                 }
                 else
                 {
-                    var existingCompanyBranch= await _companyBranchDomain.GetCompanyBranchByIdCompany((int)obj.IdCompany);
+                    using var context = new SqlCoreContext();
+                    var existingCompanyBranch = await context.CompanyBranches
+                    .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.TraductionCompanies)
+                    .Include(x => x.IdLandOwnershipNavigation)
+                    .Where(x => x.IdCompany == obj.IdCompany)
+                    .FirstOrDefaultAsync();
                     if (existingCompanyBranch == null)
                     {
                         response.IsSuccess = false;
@@ -2178,7 +2245,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 string languageFileName = language == "I" ? "ENG" : "ESP";
                 string fileFormat ="{0}_{1}{2}" ;
                 //string report = language == "I" ? "EIECORE-F1-EMPRESAS" : "EIECORE-F1-EMPRESAS_ES";
-                string report = "EIECORE-F1-EMPRESAS_ES";
+                string report = "EMPRESAS/F1-EMPRESAS-ES";
                 var reportRenderType = StaticFunctions.GetReportRenderType(format);
                 var extension = StaticFunctions.FileExtension(reportRenderType);
                 var contentType= StaticFunctions.GetContentType(reportRenderType);
@@ -2204,7 +2271,27 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             return response;
         }
-
+        public string? GetReportName(string language,string format)
+        {
+            string result = "";
+            if(language == "I")
+            {
+                switch(format.ToLower())
+                {
+                    case "pdf": result = "EMPRESAS/F8-EMPRESAS-EN"; break;
+                    case "word": result = "EMPRESAS/F8-EMPRESAS-WORD-EN"; break;
+                }
+            }
+            else
+            {
+                switch (format.ToLower())
+                {
+                    case "pdf": result =  "EMPRESAS/F8-EMPRESAS-ES"; break;
+                    case "word": result = "EMPRESAS/F8-EMPRESAS-WORD-ES"; break;
+                }
+            }
+            return result;
+        }
         public async Task<Response<GetFileResponseDto>> DownloadF8(int idCompany, string language, string format)
         {
             var response = new Response<GetFileResponseDto>();
@@ -2215,7 +2302,8 @@ namespace DRRCore.Application.Main.CoreApplication
                 string companyCode = company.OldCode ?? "N" + company.Id.ToString("D6");
                 string languageFileName = language == "I" ? "ENG" : "ESP";
                 string fileFormat = "{0}_{1}{2}";
-                string report = language == "I" ? "F8-EMPRESAS-EN" : "F8-EMPRESAS-ES";
+                //string report = language == "I" ? "EMPRESAS/F8-EMPRESAS-EN" : "EMPRESAS/F8-EMPRESAS-ES";
+                string report = GetReportName(language,format);
                 var reportRenderType = StaticFunctions.GetReportRenderType(format);
                 var extension = StaticFunctions.FileExtension(reportRenderType);
                 var contentType = StaticFunctions.GetContentType(reportRenderType);
@@ -2226,9 +2314,10 @@ namespace DRRCore.Application.Main.CoreApplication
                     { "language", language }
                  };
 
+                var file = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary);
                 response.Data = new GetFileResponseDto
                 {
-                    File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                    File = file,
                     ContentType = contentType,
                     Name = string.Format(fileFormat, companyCode, languageFileName, extension)
                 };
@@ -2256,7 +2345,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     status.Company = true;
                     var background = await _companyBackgroundDomain.GetByIdAsync(idCompany);
                     status.Background = background != null ? true : false;
-                    var branch = await _companyBranchDomain.GetByIdAsync(idCompany);
+                    var branch = await _companyBranchDomain.GetCompanyBranchByIdCompany(idCompany);
                     status.Branch = branch != null ? true : false;
                     var financial = await _companyFinancialInformationDomain.GetByIdCompany(idCompany);
                     status.Financial = financial != null ? true : false;
@@ -2424,37 +2513,37 @@ namespace DRRCore.Application.Main.CoreApplication
 
                 if(section == "IDENTIFICACION")
                 {
-                    subReport.Add(language == "I" ? "/admindrrreports-001/PDF/EMPRESA/ENG/F8-EMPRESAS-IDENTIFICACION" : "/admindrrreports-001/PDF/EMPRESA/ESP/F8-EMPRESAS-IDENTIFICACION");
+                    subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/IDENTIFICACION" : "EMPRESAS/PDF/ESP/IDENTIFICACION");
                 }else if(section == "ANTECEDENTES")
                 {
-                    subReport.Add(language == "I" ? "/admindrrreports-001/PDF/EMPRESA/ENG/F8-EMPRESAS-RESU-EJEC" : "/admindrrreports-001/PDF/EMPRESA/ESP/F8-EMPRESAS-RESU-EJEC"); 
-                    subReport.Add(language == "I" ? "/admindrrreports-001/PDF/EMPRESA/ENG/F8-EMPRESAS-EST-LEGAL" : "/admindrrreports-001/PDF/EMPRESA/ESP/F8-EMPRESAS-EST-LEGAL");
-                    subReport.Add(language == "I" ? "/admindrrreports-001/PDF/EMPRESA/ENG/F8-EMPRESAS-HISTORIA" : "/admindrrreports-001/PDF/EMPRESA/ESP/F8-EMPRESAS-HISTORIA");
-                    subReport.Add(language == "I" ? "/admindrrreports-001/PDF/EMPRESA/ENG/F8-EMPRESAS-EMP-REL" : "/admindrrreports-001/PDF/EMPRESA/ESP/F8-EMPRESAS-EMP-REL");
+                    subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/RESU-EJEC" : "EMPRESAS/PDF/ESP/RESU-EJEC");
+                    subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/EST-LEGAL" : "EMPRESAS/PDF/ESP/EST-LEGAL");
+                    subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/HISTORIA" : "EMPRESAS/PDF/ESP/HISTORIA");
+                    subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/EMP-REL" : "EMPRESAS/PDF/ESP/EMP-REL");
                 }
                 else if (section == "RAMO")
                 {
-                    subReport.Add(language == "I" ? "/admindrrreports-001/PDF/EMPRESA/ENG/F8-EMPRESAS-RAMO" : "/admindrrreports-001/PDF/EMPRESA/ESP/F8-EMPRESAS-RAMO");
+                    subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/RAMO" : "EMPRESAS/PDF/ESP/RAMO");
                 }
                 else if (section == "FINANZAS")
                 {
-                    subReport.Add(language == "I" ? "/admindrrreports-001/PDF/EMPRESA/ENG/F8-EMPRESAS-INFO-FINAN1" : "/admindrrreports-001/PDF/EMPRESA/ESP/F8-EMPRESAS-INFO-FINAN1");
+                    subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/INFO-FINAN" : "EMPRESAS/PDF/ESP/INFO-FINAN");
                 }
                 else if (section == "BALANCES")
                 {
-                    subReport.Add(language == "I" ? "/admindrrreports-001/PDF/EMPRESA/ENG/F8-EMPRESAS-INFO-FINAN1" : "/admindrrreports-001/PDF/EMPRESA/ESP/F8-EMPRESAS-INFO-FINAN1");
+                    subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/INFO-FINAN" : "EMPRESAS/PDF/ESP/INFO-FINAN");
                 }
                 else if (section == "SBS")
                 {
-                    subReport.Add(language == "I" ? "/admindrrreports-001/PDF/EMPRESA/ENG/F8-EMPRESAS-MOROSIDAD" : "/admindrrreports-001/PDF/EMPRESA/ESP/F8-EMPRESAS-MOROSIDAD");
+                    subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/MOROSIDAD" : "EMPRESAS/PDF/ESP/MOROSIDAD");
                 }
                 else if (section == "OPINION-CREDITO")
                 {
-                    subReport.Add(language == "I" ? "/admindrrreports-001/PDF/EMPRESA/ENG/F8-EMPRESAS-OPI-CRED" : "/admindrrreports-001/PDF/EMPRESA/ESP/F8-EMPRESAS-OPI-CRED");
+                    subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/OPI-CRED" : "EMPRESAS/PDF/ESP/OPI-CRED");
                 }
                 else if (section == "IMAGENES")
                 {
-                    subReport.Add(language == "I" ? "/admindrrreports-001/PDF/EMPRESA/ENG/F8-EMPRESAS-IMAGENES" : "/admindrrreports-001/PDF/EMPRESA/ESP/F8-EMPRESAS-IMAGENES");
+                    subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/IMAGENES" : "EMPRESAS/PDF/ESP/IMAGENES");
                 }
 
                 var reportRenderType = StaticFunctions.GetReportRenderType(format);
@@ -2476,6 +2565,36 @@ namespace DRRCore.Application.Main.CoreApplication
 
             }
             catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                response.IsSuccess = false;
+            }
+            return response;
+        }
+
+        public async Task<Response<List<GetListProviderResponseDto>>> GetListProviderHistoryByIdTicket(int idTicket)
+        {
+            var response = new Response<List<GetListProviderResponseDto>>();
+            response.Data = new List<GetListProviderResponseDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var list = await context.Providers
+                    .Where(x => x.IdTicket == idTicket && x.Qualification == "Dió referencia")
+                    .Include(x => x.IdCountryNavigation)
+                    .ToListAsync();
+                foreach (var item in list)
+                {
+                    response.Data.Add(new GetListProviderResponseDto
+                    {
+                        Name = item.Name,
+                        Country = item.IdCountryNavigation.Iso ?? "",
+                        FlagCountry = item.IdCountryNavigation.FlagIso ?? "",
+                        Telephone = item.Telephone
+                    });
+                }
+            }
+            catch(Exception ex) 
             {
                 _logger.LogError(ex.Message);
                 response.IsSuccess = false;

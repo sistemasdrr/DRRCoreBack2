@@ -24,11 +24,11 @@ namespace DRRCore.Application.Main.CoreApplication
 
         }
 
-        public async Task<Response<GetQuery5_1_1ResponseDto>> GetQuery5_1_1(string startDate, string endDate)
+        public async Task<Response<GetChart5_1_1ResponseDto>> GetChart5_1_1(string startDate, string endDate)
         {
-            var response = new Response<GetQuery5_1_1ResponseDto>();
-            response.Data.SubscribersList = new List<GetQuery5_1_1_Subscribers>();
-            response.Data.CountriesList = new List<GetQuery5_1_1_Countries>();
+            var response = new Response<GetChart5_1_1ResponseDto>();
+            response.Data.SubscribersList = new List<GetChart5_1_1_Subscribers>();
+            response.Data.CountriesList = new List<GetChart5_1_1_Countries>();
             try
             {
                 using var context = new SqlCoreContext();
@@ -44,7 +44,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 var idSubscribers = tickets.DistinctBy(x => x.IdSubscriber);
                 foreach (var item in idSubscribers)
                 {
-                    response.Data.SubscribersList.Add(new GetQuery5_1_1_Subscribers
+                    response.Data.SubscribersList.Add(new GetChart5_1_1_Subscribers
                     {
                         Code = item.IdSubscriberNavigation.Code ?? "",
                         Name = item.IdSubscriberNavigation.Name ?? "",
@@ -58,7 +58,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 var idCountries = tickets.DistinctBy(x => x.IdCountry);
                 foreach (var item in idCountries)
                 {
-                    response.Data.CountriesList.Add(new GetQuery5_1_1_Countries
+                    response.Data.CountriesList.Add(new GetChart5_1_1_Countries
                     {
                         Country = item.IdCountryNavigation.Iso ?? "",
                         FlagCountry = item.IdCountryNavigation.FlagIso ?? "",
@@ -67,21 +67,21 @@ namespace DRRCore.Application.Main.CoreApplication
                 }
 
                 //3
-                response.Data.ProcedureType = new GetQuery5_1_1Procedure
+                response.Data.ProcedureType = new GetChart5_1_1Procedure
                 {
                     T1 = tickets.Where(x => x.ProcedureType.Contains("T1")).Count(),
                     T2 = tickets.Where(x => x.ProcedureType.Contains("T2")).Count(),
                     T3 = tickets.Where(x => x.ProcedureType.Contains("T3")).Count(),
                 };
                 //4
-                response.Data.ReportType = new GetQuery5_1_1Report
+                response.Data.ReportType = new GetChart5_1_1Report
                 {
                     OR = tickets.Where(x => x.ReportType.Contains("OR")).Count(),
                     RV = tickets.Where(x => x.ReportType.Contains("RV")).Count(),
                     EF = tickets.Where(x => x.ReportType.Contains("EF")).Count(),
                 };
                 //5
-                response.Data.Currency = new GetQuery5_1_1Currency
+                response.Data.Currency = new GetChart5_1_1Currency
                 {
                     USD = tickets.Where(x => x.IdSubscriberNavigation.IdCurrency == 1).Count(),
                     PEN = tickets.Where(x => x.IdSubscriberNavigation.IdCurrency == 31).Count(),
@@ -96,11 +96,11 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<GetQuery5_1_2ResponseDto>> GetQuery5_1_2(string startDate, string endDate)
+        public async Task<Response<GetChart5_1_2ResponseDto>> GetChart5_1_2(string startDate, string endDate)
         {
-            var response = new Response<GetQuery5_1_2ResponseDto>();
-            response.Data.SubscribersList = new List<GetQuery5_1_2_Subscribers>();
-            response.Data.CountriesList = new List<GetQuery5_1_2_Countries>();
+            var response = new Response<GetChart5_1_2ResponseDto>();
+            response.Data.SubscribersList = new List<GetChart5_1_2_Subscribers>();
+            response.Data.CountriesList = new List<GetChart5_1_2_Countries>();
             try
             {
                 using var context = new SqlCoreContext();
@@ -115,7 +115,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 var idSubscribers = tickets.DistinctBy(x => x.IdSubscriber);
                 foreach (var item in idSubscribers)
                 {
-                    response.Data.SubscribersList.Add(new GetQuery5_1_2_Subscribers
+                    response.Data.SubscribersList.Add(new GetChart5_1_2_Subscribers
                     {
                         Code = item.IdSubscriberNavigation.Code ?? "",
                         Name = item.IdSubscriberNavigation.Name ?? "",
@@ -129,7 +129,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 var idCountries = tickets.DistinctBy(x => x.IdCountry);
                 foreach (var item in idCountries)
                 {
-                    response.Data.CountriesList.Add(new GetQuery5_1_2_Countries
+                    response.Data.CountriesList.Add(new GetChart5_1_2_Countries
                     {
                         Country = item.IdCountryNavigation.Iso ?? "",
                         FlagCountry = item.IdCountryNavigation.FlagIso ?? "",
@@ -138,21 +138,21 @@ namespace DRRCore.Application.Main.CoreApplication
                 }
 
                 //3
-                response.Data.ProcedureType = new GetQuery5_1_2Procedure
+                response.Data.ProcedureType = new GetChart5_1_2Procedure
                 {
                     T1 = tickets.Where(x => x.ProcedureType.Contains("T1")).Count(),
                     T2 = tickets.Where(x => x.ProcedureType.Contains("T2")).Count(),
                     T3 = tickets.Where(x => x.ProcedureType.Contains("T3")).Count(),
                 };
                 //4
-                response.Data.ReportType = new GetQuery5_1_2Report
+                response.Data.ReportType = new GetChart5_1_2Report
                 {
                     OR = tickets.Where(x => x.ReportType.Contains("OR")).Count(),
                     RV = tickets.Where(x => x.ReportType.Contains("RV")).Count(),
                     EF = tickets.Where(x => x.ReportType.Contains("EF")).Count(),
                 };
                 //5
-                response.Data.Currency = new GetQuery5_1_2Currency
+                response.Data.Currency = new GetChart5_1_2Currency
                 {
                     USD = tickets.Where(x => x.IdSubscriberNavigation.IdCurrency == 1).Count(),
                     PEN = tickets.Where(x => x.IdSubscriberNavigation.IdCurrency == 31).Count(),
@@ -167,10 +167,10 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<List<GetQuery5_1_3ResponseDto>>> GetQuery5_1_3(int month, int year)
+        public async Task<Response<List<GetChart5_1_3ResponseDto>>> GetChart5_1_3(int month, int year)
         {
-            var response = new Response<List<GetQuery5_1_3ResponseDto>>();
-            response.Data = new List<GetQuery5_1_3ResponseDto>();
+            var response = new Response<List<GetChart5_1_3ResponseDto>>();
+            response.Data = new List<GetChart5_1_3ResponseDto>();
             try
             {
                 using var context = new SqlCoreContext();
@@ -181,7 +181,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 var idSubscribers = tickets.DistinctBy(x => x.IdSubscriber);
                 foreach (var item in idSubscribers)
                 {
-                    response.Data.Add(new GetQuery5_1_3ResponseDto
+                    response.Data.Add(new GetChart5_1_3ResponseDto
                     {
                         Code = item.IdSubscriberNavigation.Code ?? "",
                         Name = item.IdSubscriberNavigation.Name ?? "",
@@ -231,10 +231,10 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<List<GetQuery5_1_4ResponseDto>>> GetQuery5_1_4(int month, int year)
+        public async Task<Response<List<GetChart5_1_4ResponseDto>>> GetChart5_1_4(int month, int year)
         {
-            var response = new Response<List<GetQuery5_1_4ResponseDto>>();
-            response.Data = new List<GetQuery5_1_4ResponseDto>();
+            var response = new Response<List<GetChart5_1_4ResponseDto>>();
+            response.Data = new List<GetChart5_1_4ResponseDto>();
             try
             {
                 using var context = new SqlCoreContext();
@@ -246,7 +246,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 tickets.OrderBy(x => x.DispatchtDate);
                 foreach (var item in tickets)
                 {
-                    response.Data.Add(new GetQuery5_1_4ResponseDto
+                    response.Data.Add(new GetChart5_1_4ResponseDto
                     {
                         Id = item.Id,
                         Ticket = item.Number.ToString("D6"),
@@ -271,17 +271,17 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<List<GetQuery5_1_5ResponseDto>>> GetQuery5_1_5()
+        public async Task<Response<List<GetChart5_1_5ResponseDto>>> GetChart5_1_5()
         {
-            var response = new Response<List<GetQuery5_1_5ResponseDto>>();
-            response.Data = new List<GetQuery5_1_5ResponseDto>();
+            var response = new Response<List<GetChart5_1_5ResponseDto>>();
+            response.Data = new List<GetChart5_1_5ResponseDto>();
             try
             {
                 using var context = new SqlCoreContext();
                 var subscribers = await context.Subscribers.OrderBy(x => x.Code).Include(x => x.IdCountryNavigation).ToListAsync();
                 foreach (var item in subscribers)
                 {
-                    response.Data.Add(new GetQuery5_1_5ResponseDto
+                    response.Data.Add(new GetChart5_1_5ResponseDto
                     {
                         Code = item.Code,
                         Name = item.Name,
@@ -329,10 +329,10 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             return response;
         }
-        public async Task<Response<List<GetQuery5_1_6ResponseDto>>> GetQuery5_1_6(int month, int year)
+        public async Task<Response<List<GetChart5_1_6ResponseDto>>> GetChart5_1_6(int month, int year)
         {
-            var response = new Response<List<GetQuery5_1_6ResponseDto>>();
-            response.Data = new List<GetQuery5_1_6ResponseDto>();
+            var response = new Response<List<GetChart5_1_6ResponseDto>>();
+            response.Data = new List<GetChart5_1_6ResponseDto>();
             try
             {
                 using var context = new SqlCoreContext();
@@ -344,7 +344,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 var idSubscribers = tickets.DistinctBy(x => x.IdSubscriber);
                 foreach (var item in idSubscribers)
                 {
-                    response.Data.Add(new GetQuery5_1_6ResponseDto
+                    response.Data.Add(new GetChart5_1_6ResponseDto
                     {
                         Name = item.IdSubscriberNavigation.Name ?? "",
                         Code = item.IdSubscriberNavigation.Code ?? "",
@@ -428,10 +428,10 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<List<GetQuery5_1_15ResponseDto>>> GetQuery5_1_15(int idCountry)
+        public async Task<Response<List<GetChart5_1_15ResponseDto>>> GetChart5_1_15(int idCountry)
         {
-            var response = new Response<List<GetQuery5_1_15ResponseDto>>();
-            response.Data = new List<GetQuery5_1_15ResponseDto>();
+            var response = new Response<List<GetChart5_1_15ResponseDto>>();
+            response.Data = new List<GetChart5_1_15ResponseDto>();
             try
             {
                 using var context = new SqlCoreContext();
@@ -442,7 +442,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 var idCountries = subscribers.DistinctBy(x => x.IdCountry);
                 foreach (var item in idCountries)
                 {
-                    response.Data.Add(new GetQuery5_1_15ResponseDto
+                    response.Data.Add(new GetChart5_1_15ResponseDto
                     {
                         Country = item.IdCountryNavigation.Name ?? "",
                         FlagCountry = item.IdCountryNavigation.FlagIso ?? "",
@@ -458,9 +458,9 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<List<GetQuery5_1_18ResponseDto>>> GetQuery5_1_18(int idCountry, int year)
+        public async Task<Response<List<GetChart5_1_18ResponseDto>>> GetChart5_1_18(int idCountry, int year)
         {
-            var response = new Response<List<GetQuery5_1_18ResponseDto>>();
+            var response = new Response<List<GetChart5_1_18ResponseDto>>();
             try
             {
                 using var context = new SqlCoreContext();
@@ -472,7 +472,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 var idSubscribers = tickets.DistinctBy(x => x.IdSubscriber);
                 foreach (var item in idSubscribers)
                 {
-                    response.Data.Add(new GetQuery5_1_18ResponseDto
+                    response.Data.Add(new GetChart5_1_18ResponseDto
                     {
                         Code = item.IdSubscriberNavigation.Code ?? "",
                         Name = item.IdSubscriberNavigation.Name ?? "",
@@ -502,10 +502,10 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<GetQuery5_1_19_1ResponseDto>> GetQuery5_1_19Subscriber(int month, int year)
+        public async Task<Response<GetChart5_1_19_1ResponseDto>> GetChart5_1_19Subscriber(int month, int year)
         {
-            var response = new Response<GetQuery5_1_19_1ResponseDto>();
-            response.Data.Subscribers = new List<GetQuery5_1_19SubscribersResponseDto>();
+            var response = new Response<GetChart5_1_19_1ResponseDto>();
+            response.Data.Subscribers = new List<GetChart5_1_19SubscribersResponseDto>();
             try
             {
                 using var context = new SqlCoreContext();
@@ -517,7 +517,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 foreach (var item in idSubscribers)
                 {
                     //1
-                    response.Data.Subscribers.Add(new GetQuery5_1_19SubscribersResponseDto
+                    response.Data.Subscribers.Add(new GetChart5_1_19SubscribersResponseDto
                     {
                         IdSubcsriber = item.IdSubscriber,
                         Code = item.IdSubscriberNavigation.Code ?? "",
@@ -557,14 +557,14 @@ namespace DRRCore.Application.Main.CoreApplication
                     });
                 }
                 //2
-                response.Data.ProcedureType = new GetQueryProcedureType
+                response.Data.ProcedureType = new GetChartProcedureType
                 {
                     T1 = tickets.Where(x => x.ProcedureType == "T1").Count(),
                     T2 = tickets.Where(x => x.ProcedureType == "T2").Count(),
                     T3 = tickets.Where(x => x.ProcedureType == "T3").Count(),
                 };
                 //3
-                response.Data.ReportType = new GetQueryReportType
+                response.Data.ReportType = new GetChartReportType
                 {
                     OR = tickets.Where(x => x.ReportType == "OR").Count(),
                     RV = tickets.Where(x => x.ReportType == "RV").Count(),
@@ -572,7 +572,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     DF = tickets.Where(x => x.ReportType == "DF").Count(),
                 };
                 //4
-                response.Data.Language = new GetQueryLanguage
+                response.Data.Language = new GetChartLanguage
                 {
                     English = tickets.Where(x => x.Language == "I").Count(),
                     Spanish = tickets.Where(x => x.Language == "E").Count(),
@@ -586,10 +586,10 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             return response;
         }
-        public async Task<Response<GetQuery5_1_19_2ResponseDto>> GetQuery5_1_19Countries(int month, int year)
+        public async Task<Response<GetChart5_1_19_2ResponseDto>> GetChart5_1_19Countries(int month, int year)
         {
-            var response = new Response<GetQuery5_1_19_2ResponseDto>();
-            response.Data.Countries = new List<GetQuery5_1_19CountriesResponseDto>();
+            var response = new Response<GetChart5_1_19_2ResponseDto>();
+            response.Data.Countries = new List<GetChart5_1_19CountriesResponseDto>();
             try
             {
                 using var context = new SqlCoreContext();
@@ -601,7 +601,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 foreach (var item in idCountries)
                 {
                     //1
-                    response.Data.Countries.Add(new GetQuery5_1_19CountriesResponseDto
+                    response.Data.Countries.Add(new GetChart5_1_19CountriesResponseDto
                     {
                         IdCountry = item.IdCountry,
                         Country = item.IdCountryNavigation.Iso ?? "",
@@ -641,14 +641,14 @@ namespace DRRCore.Application.Main.CoreApplication
                     });
                 }
                 //2
-                response.Data.ProcedureType = new GetQueryProcedureType
+                response.Data.ProcedureType = new GetChartProcedureType
                 {
                     T1 = tickets.Where(x => x.ProcedureType == "T1").Count(),
                     T2 = tickets.Where(x => x.ProcedureType == "T2").Count(),
                     T3 = tickets.Where(x => x.ProcedureType == "T3").Count(),
                 };
                 //3
-                response.Data.ReportType = new GetQueryReportType
+                response.Data.ReportType = new GetChartReportType
                 {
                     OR = tickets.Where(x => x.ReportType == "OR").Count(),
                     RV = tickets.Where(x => x.ReportType == "RV").Count(),
@@ -656,7 +656,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     DF = tickets.Where(x => x.ReportType == "DF").Count(),
                 };
                 //4
-                response.Data.Language = new GetQueryLanguage
+                response.Data.Language = new GetChartLanguage
                 {
                     English = tickets.Where(x => x.Language == "I").Count(),
                     Spanish = tickets.Where(x => x.Language == "E").Count(),
@@ -671,10 +671,10 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<GetQuery5_1_20ResponseDto>> GetQuery5_1_20Countries(int month, int year)
+        public async Task<Response<GetChart5_1_20ResponseDto>> GetChart5_1_20Countries(int month, int year)
         {
-            var response = new Response<GetQuery5_1_20ResponseDto>();
-            response.Data.Subscribers = new List<GetQuery5_1_20SubscribersResponseDto>();
+            var response = new Response<GetChart5_1_20ResponseDto>();
+            response.Data.Subscribers = new List<GetChart5_1_20SubscribersResponseDto>();
             try
             {
                 using var context = new SqlCoreContext();
@@ -686,7 +686,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 foreach (var item in idSubscribers)
                 {
                     //1
-                    response.Data.Subscribers.Add(new GetQuery5_1_20SubscribersResponseDto
+                    response.Data.Subscribers.Add(new GetChart5_1_20SubscribersResponseDto
                     {
                         IdSubcsriber = item.IdSubscriber,
                         Code = item.IdSubscriberNavigation.Code ?? "",
@@ -726,14 +726,14 @@ namespace DRRCore.Application.Main.CoreApplication
                     });
                 }
                 //2
-                response.Data.ProcedureType = new GetQueryProcedureType
+                response.Data.ProcedureType = new GetChartProcedureType
                 {
                     T1 = tickets.Where(x => x.ProcedureType == "T1").Count(),
                     T2 = tickets.Where(x => x.ProcedureType == "T2").Count(),
                     T3 = tickets.Where(x => x.ProcedureType == "T3").Count(),
                 };
                 //3
-                response.Data.ReportType = new GetQueryReportType
+                response.Data.ReportType = new GetChartReportType
                 {
                     OR = tickets.Where(x => x.ReportType == "OR").Count(),
                     RV = tickets.Where(x => x.ReportType == "RV").Count(),
@@ -741,7 +741,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     DF = tickets.Where(x => x.ReportType == "DF").Count(),
                 };
                 //4
-                response.Data.Language = new GetQueryLanguage
+                response.Data.Language = new GetChartLanguage
                 {
                     English = tickets.Where(x => x.Language == "I").Count(),
                     Spanish = tickets.Where(x => x.Language == "E").Count(),
@@ -756,10 +756,10 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<List<GetQuery5_1_21ResponseDto>>> GetQuery5_1_21(int month, int year)
+        public async Task<Response<List<GetChart5_1_21ResponseDto>>> GetChart5_1_21(int month, int year)
         {
-            var response = new Response<List<GetQuery5_1_21ResponseDto>>();
-            response.Data = new List<GetQuery5_1_21ResponseDto>();
+            var response = new Response<List<GetChart5_1_21ResponseDto>>();
+            response.Data = new List<GetChart5_1_21ResponseDto>();
             try
             {
                 using var context = new SqlCoreContext();
@@ -770,7 +770,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 var idSubscribers = tickets.DistinctBy(x => x.IdSubscriber);
                 foreach (var item in idSubscribers)
                 {
-                    response.Data.Add(new GetQuery5_1_21ResponseDto
+                    response.Data.Add(new GetChart5_1_21ResponseDto
                     {
                         IdSubcsriber = item.IdSubscriber,
                         Name = item.IdSubscriberNavigation.Name ?? "",
@@ -802,10 +802,10 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<List<GetQuery5_1_26ResponseDto>>> GetQuery5_1_26(int idCountry)
+        public async Task<Response<List<GetChart5_1_26ResponseDto>>> GetChart5_1_26(int idCountry)
         {
-            var response = new Response<List<GetQuery5_1_26ResponseDto>>();
-            response.Data = new List<GetQuery5_1_26ResponseDto>();
+            var response = new Response<List<GetChart5_1_26ResponseDto>>();
+            response.Data = new List<GetChart5_1_26ResponseDto>();
             try
             {
                 using var context = new SqlCoreContext();
@@ -817,7 +817,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 }
                 foreach (var item in years.Distinct())
                 {
-                    response.Data.Add(new GetQuery5_1_26ResponseDto
+                    response.Data.Add(new GetChart5_1_26ResponseDto
                     {
                         Year = item,
                         QualityA = tickets.Where(x => x.DispatchtDate.Value.Year == item && x.Quality.Contains("A")).Count(),
@@ -836,10 +836,10 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<List<GetQuery5_1_27ResponseDto>>> GetQuery5_1_27(int year)
+        public async Task<Response<List<GetChart5_1_27ResponseDto>>> GetChart5_1_27(int year)
         {
-            var response = new Response<List<GetQuery5_1_27ResponseDto>>();
-            response.Data = new List<GetQuery5_1_27ResponseDto>();
+            var response = new Response<List<GetChart5_1_27ResponseDto>>();
+            response.Data = new List<GetChart5_1_27ResponseDto>();
             try
             {
                 using var context = new SqlCoreContext();
@@ -851,7 +851,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 var idSubscriber = tickets.DistinctBy(x => x.IdSubscriber);
                 foreach (var item in idSubscriber)
                 {
-                    response.Data.Add(new GetQuery5_1_27ResponseDto
+                    response.Data.Add(new GetChart5_1_27ResponseDto
                     {
                         IdSubscriber = item.IdSubscriber,
                         Code = item.IdSubscriberNavigation.Code ?? "",
@@ -883,10 +883,10 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<List<GetQuery5_2_1ResponseDto>>> GetQuery5_2_1(string startDate, string endDate, string reporter)
+        public async Task<Response<List<GetChart5_2_1ResponseDto>>> GetChart5_2_1(string startDate, string endDate, string reporter)
         {
-            var response = new Response<List<GetQuery5_2_1ResponseDto>>();
-            response.Data = new List<GetQuery5_2_1ResponseDto>();
+            var response = new Response<List<GetChart5_2_1ResponseDto>>();
+            response.Data = new List<GetChart5_2_1ResponseDto>();
             try
             {
                 using var context = new SqlCoreContext();
@@ -900,7 +900,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     .ToListAsync();
                 foreach (var item in asignations)
                 {
-                    response.Data.Add(new GetQuery5_2_1ResponseDto
+                    response.Data.Add(new GetChart5_2_1ResponseDto
                     {
                         IdTicket = item.IdTicket,
                         Ticket = item.IdTicketNavigation.Number.ToString("D6"),
@@ -926,10 +926,10 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<List<GetQuery5_2_2ResponseDto>>> GetQuery5_2_2(string reporter)
+        public async Task<Response<List<GetChart5_2_2ResponseDto>>> GetChart5_2_2(string reporter)
         {
-            var response = new Response<List<GetQuery5_2_2ResponseDto>>();
-            response.Data = new List<GetQuery5_2_2ResponseDto>();
+            var response = new Response<List<GetChart5_2_2ResponseDto>>();
+            response.Data = new List<GetChart5_2_2ResponseDto>();
             try
             {
                 using var context = new SqlCoreContext();
@@ -939,7 +939,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     .ToListAsync();
                 foreach (var item in asignations)
                 {
-                    response.Data.Add(new GetQuery5_2_2ResponseDto
+                    response.Data.Add(new GetChart5_2_2ResponseDto
                     {
                         IdTicket = item.IdTicket,
                         RequestedName = item.IdTicketNavigation.RequestedName ?? "",
@@ -962,10 +962,10 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<List<GetQuery5_2_3ResponseDto>>> GetQuery5_2_3(string startDate, string endDate, string reporter)
+        public async Task<Response<List<GetChart5_2_3ResponseDto>>> GetChart5_2_3(string startDate, string endDate, string reporter)
         {
-            var response = new Response<List<GetQuery5_2_3ResponseDto>>();
-            response.Data = new List<GetQuery5_2_3ResponseDto>();
+            var response = new Response<List<GetChart5_2_3ResponseDto>>();
+            response.Data = new List<GetChart5_2_3ResponseDto>();
             try
             {
                 using var context = new SqlCoreContext();
@@ -975,7 +975,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     .ToListAsync();
                 foreach (var item in asignations)
                 {
-                    response.Data.Add(new GetQuery5_2_3ResponseDto
+                    response.Data.Add(new GetChart5_2_3ResponseDto
                     {
                         IdTicket = item.IdTicket,
                         IdTicketHistory = item.Id,
@@ -1000,10 +1000,10 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<List<GetQuery5_2_4ResponseDto>>> GetQuery5_2_4(int month, int year)
+        public async Task<Response<List<GetChart5_2_4ResponseDto>>> GetChart5_2_4(int month, int year)
         {
-            var response = new Response<List<GetQuery5_2_4ResponseDto>>();
-            response.Data = new List<GetQuery5_2_4ResponseDto>();
+            var response = new Response<List<GetChart5_2_4ResponseDto>>();
+            response.Data = new List<GetChart5_2_4ResponseDto>();
             try
             {
                 using var context = new SqlCoreContext();
@@ -1017,7 +1017,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     var personal = await context.Personals.Where(x => x.Code.Contains(item.AsignedTo))
                         .Include(x => x.IdEmployeeNavigation)
                         .FirstOrDefaultAsync();
-                    response.Data.Add(new GetQuery5_2_4ResponseDto
+                    response.Data.Add(new GetChart5_2_4ResponseDto
                     {
                         AsignedTo = item.AsignedTo,
                         Name = personal != null ? personal.IdEmployeeNavigation.FirstName : "",
@@ -1044,10 +1044,10 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<List<GetQuery5_3_2ResponseDto>>> GetQuery5_3_2(string agent, string startDate, string endDate)
+        public async Task<Response<List<GetChart5_3_2ResponseDto>>> GetChart5_3_2(string agent, string startDate, string endDate)
         {
-            var response = new Response<List<GetQuery5_3_2ResponseDto>>();
-            response.Data = new List<GetQuery5_3_2ResponseDto>();
+            var response = new Response<List<GetChart5_3_2ResponseDto>>();
+            response.Data = new List<GetChart5_3_2ResponseDto>();
             try
             {
                 using var context = new SqlCoreContext();
@@ -1062,7 +1062,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     .ToListAsync();
                 foreach (var item in ticketHistory)
                 {
-                    response.Data.Add(new GetQuery5_3_2ResponseDto
+                    response.Data.Add(new GetChart5_3_2ResponseDto
                     {
                         Id = item.Id,
                         OrderDate = StaticFunctions.DateTimeToString(item.StartDate),

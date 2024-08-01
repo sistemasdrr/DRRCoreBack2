@@ -91,5 +91,7 @@ public partial class TraductionCompany
 
     public bool? Enable { get; set; }
 
+    public string? TRmainAddress { get; set; }
+
     public virtual Company? IdCompanyNavigation { get; set; }
 }

@@ -258,6 +258,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                     {
 
                     }
+                    companySb.IdCompanyNavigation.Traductions = null;
                     context.CompanySbs.Update(companySb);
 
                     //var listTraductions = await context.Traductions.Where(x => x.IdCompany == companySb.IdCompany && x.Identifier.Contains("_S_")).ToListAsync();

@@ -115,6 +115,8 @@ public partial class SqlCoreContext : DbContext
 
     public virtual DbSet<Numeration> Numerations { get; set; }
 
+    public virtual DbSet<Occupation> Occupations { get; set; }
+
     public virtual DbSet<OldTicket> OldTickets { get; set; }
 
     public virtual DbSet<OpcionalCommentarySb> OpcionalCommentarySbs { get; set; }
@@ -152,6 +154,8 @@ public partial class SqlCoreContext : DbContext
     public virtual DbSet<Probando> Probandos { get; set; }
 
     public virtual DbSet<Process> Processes { get; set; }
+
+    public virtual DbSet<ProductionClosure> ProductionClosures { get; set; }
 
     public virtual DbSet<Profession> Professions { get; set; }
 
@@ -205,7 +209,8 @@ public partial class SqlCoreContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=200.58.123.184,14330;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
+    => optionsBuilder.UseSqlServer("Data Source=200.58.123.184,14330;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
+    //=> optionsBuilder.UseSqlServer("Data Source=SD-4154134-W;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -466,6 +471,10 @@ public partial class SqlCoreContext : DbContext
             entity.ToTable("Anniversary");
 
             entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.ClassName)
+                .HasMaxLength(20)
+                .IsUnicode(false)
+                .HasColumnName("className");
             entity.Property(e => e.CreationDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime")
@@ -483,9 +492,17 @@ public partial class SqlCoreContext : DbContext
                 .HasMaxLength(200)
                 .IsUnicode(false)
                 .HasColumnName("name");
+            entity.Property(e => e.Observations)
+                .IsUnicode(false)
+                .HasColumnName("observations");
             entity.Property(e => e.StartDate)
                 .HasColumnType("datetime")
                 .HasColumnName("startDate");
+            entity.Property(e => e.Type)
+                .HasMaxLength(2)
+                .IsUnicode(false)
+                .IsFixedLength()
+                .HasColumnName("type");
             entity.Property(e => e.UpdateDate)
                 .HasColumnType("datetime")
                 .HasColumnName("updateDate");
@@ -688,6 +705,7 @@ public partial class SqlCoreContext : DbContext
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("name");
+            entity.Property(e => e.OldCode).HasColumnName("oldCode");
             entity.Property(e => e.UpdateDate)
                 .HasColumnType("datetime")
                 .HasColumnName("updateDate");
@@ -907,6 +925,10 @@ public partial class SqlCoreContext : DbContext
             entity.Property(e => e.ReputationComentary)
                 .IsUnicode(false)
                 .HasColumnName("reputationComentary");
+            entity.Property(e => e.Since)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("since");
             entity.Property(e => e.SocialName)
                 .IsUnicode(false)
                 .HasColumnName("socialName");
@@ -1146,6 +1168,9 @@ public partial class SqlCoreContext : DbContext
             entity.Property(e => e.InternationalPurchasesPercentage)
                 .HasColumnType("decimal(10, 2)")
                 .HasColumnName("internationalPurchasesPercentage");
+            entity.Property(e => e.MainAddress)
+                .IsUnicode(false)
+                .HasColumnName("mainAddress");
             entity.Property(e => e.NationalPurchasesComentary)
                 .HasMaxLength(50)
                 .IsUnicode(false)
@@ -1827,7 +1852,9 @@ public partial class SqlCoreContext : DbContext
             entity.ToTable("CouponBillingSubscriberHistory");
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.CouponAmount).HasColumnName("couponAmount");
+            entity.Property(e => e.CouponAmount)
+                .HasColumnType("decimal(5, 1)")
+                .HasColumnName("couponAmount");
             entity.Property(e => e.CouponUnitPrice)
                 .HasColumnType("decimal(10, 2)")
                 .HasColumnName("couponUnitPrice");
@@ -1843,6 +1870,7 @@ public partial class SqlCoreContext : DbContext
                 .HasColumnName("enable");
             entity.Property(e => e.IdCouponBilling).HasColumnName("idCouponBilling");
             entity.Property(e => e.IdEmployee).HasColumnName("idEmployee");
+            entity.Property(e => e.IdTicket).HasColumnName("idTicket");
             entity.Property(e => e.LastUpdateUser).HasColumnName("lastUpdateUser");
             entity.Property(e => e.PurchaseDate)
                 .HasColumnType("datetime")
@@ -1850,6 +1878,11 @@ public partial class SqlCoreContext : DbContext
             entity.Property(e => e.TotalPrice)
                 .HasColumnType("decimal(10, 2)")
                 .HasColumnName("totalPrice");
+            entity.Property(e => e.Type)
+                .HasMaxLength(1)
+                .IsUnicode(false)
+                .IsFixedLength()
+                .HasColumnName("type");
             entity.Property(e => e.UpdateDate)
                 .HasColumnType("datetime")
                 .HasColumnName("updateDate");
@@ -2789,6 +2822,7 @@ public partial class SqlCoreContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("name");
+            entity.Property(e => e.Since).HasColumnName("since");
             entity.Property(e => e.UpdateDate)
                 .HasColumnType("datetime")
                 .HasColumnName("updateDate");
@@ -2823,6 +2857,41 @@ public partial class SqlCoreContext : DbContext
             entity.Property(e => e.Number).HasColumnName("number");
             entity.Property(e => e.Number2).HasColumnName("number2");
             entity.Property(e => e.Number3).HasColumnName("number3");
+            entity.Property(e => e.UpdateDate)
+                .HasColumnType("datetime")
+                .HasColumnName("updateDate");
+        });
+
+        modelBuilder.Entity<Occupation>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Occupati__3213E83FD67977F6");
+
+            entity.ToTable("Occupation");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Code)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("code");
+            entity.Property(e => e.CreationDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("creationDate");
+            entity.Property(e => e.DeleteDate)
+                .HasColumnType("datetime")
+                .HasColumnName("deleteDate");
+            entity.Property(e => e.Enable)
+                .HasDefaultValueSql("((1))")
+                .HasColumnName("enable");
+            entity.Property(e => e.EnglishName)
+                .HasMaxLength(200)
+                .IsUnicode(false)
+                .HasColumnName("englishName");
+            entity.Property(e => e.LastUpdateUser).HasColumnName("lastUpdateUser");
+            entity.Property(e => e.Name)
+                .HasMaxLength(200)
+                .IsUnicode(false)
+                .HasColumnName("name");
             entity.Property(e => e.UpdateDate)
                 .HasColumnType("datetime")
                 .HasColumnName("updateDate");
@@ -3871,6 +3940,43 @@ public partial class SqlCoreContext : DbContext
                 .HasConstraintName("FK__Process__father__705EA0EB");
         });
 
+        modelBuilder.Entity<ProductionClosure>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Producti__3213E83F7FC7F356");
+
+            entity.ToTable("ProductionClosure");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Code)
+                .HasMaxLength(10)
+                .IsUnicode(false)
+                .HasColumnName("code");
+            entity.Property(e => e.CreationDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("creationDate");
+            entity.Property(e => e.DeleteDate)
+                .HasColumnType("datetime")
+                .HasColumnName("deleteDate");
+            entity.Property(e => e.Enable)
+                .HasDefaultValueSql("((1))")
+                .HasColumnName("enable");
+            entity.Property(e => e.EndDate)
+                .HasColumnType("datetime")
+                .HasColumnName("endDate");
+            entity.Property(e => e.LastUpdateUser).HasColumnName("lastUpdateUser");
+            entity.Property(e => e.Observations)
+                .IsUnicode(false)
+                .HasColumnName("observations");
+            entity.Property(e => e.Title)
+                .HasMaxLength(200)
+                .IsUnicode(false)
+                .HasColumnName("title");
+            entity.Property(e => e.UpdateDate)
+                .HasColumnType("datetime")
+                .HasColumnName("updateDate");
+        });
+
         modelBuilder.Entity<Profession>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Professi__3213E83FE0D980BE");
@@ -4330,21 +4436,11 @@ public partial class SqlCoreContext : DbContext
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("psw");
-            entity.Property(e => e.ReportInExcel)
-                .HasDefaultValueSql("((0))")
-                .HasColumnName("reportInExcel");
-            entity.Property(e => e.ReportInPdf)
-                .HasDefaultValueSql("((1))")
-                .HasColumnName("reportInPDF");
-            entity.Property(e => e.ReportInWord)
-                .HasDefaultValueSql("((0))")
-                .HasColumnName("reportInWord");
-            entity.Property(e => e.ReportInXml)
-                .HasDefaultValueSql("((0))")
-                .HasColumnName("reportInXml");
-            entity.Property(e => e.ReportInXmlCredendo)
-                .HasDefaultValueSql("((0))")
-                .HasColumnName("reportInXmlCredendo");
+            entity.Property(e => e.ReportInExcel).HasColumnName("reportInExcel");
+            entity.Property(e => e.ReportInPdf).HasColumnName("reportInPDF");
+            entity.Property(e => e.ReportInWord).HasColumnName("reportInWord");
+            entity.Property(e => e.ReportInXml).HasColumnName("reportInXml");
+            entity.Property(e => e.ReportInXmlCredendo).HasColumnName("reportInXmlCredendo");
             entity.Property(e => e.RevealName).HasColumnName("revealName");
             entity.Property(e => e.SendInvoiceToEmail)
                 .HasMaxLength(100)
@@ -4668,6 +4764,7 @@ public partial class SqlCoreContext : DbContext
             entity.Property(e => e.ExpireDate)
                 .HasColumnType("datetime")
                 .HasColumnName("expireDate");
+            entity.Property(e => e.HasBalance).HasColumnName("hasBalance");
             entity.Property(e => e.IdCompany).HasColumnName("idCompany");
             entity.Property(e => e.IdContinent).HasColumnName("idContinent");
             entity.Property(e => e.IdCountry).HasColumnName("idCountry");
@@ -4706,11 +4803,13 @@ public partial class SqlCoreContext : DbContext
             entity.Property(e => e.QualityTranslator)
                 .HasMaxLength(1)
                 .IsUnicode(false)
-                .IsFixedLength();
+                .IsFixedLength()
+                .HasColumnName("qualityTranslator");
             entity.Property(e => e.QualityTypist)
                 .HasMaxLength(1)
                 .IsUnicode(false)
-                .IsFixedLength();
+                .IsFixedLength()
+                .HasColumnName("qualityTypist");
             entity.Property(e => e.QueryCredit)
                 .HasMaxLength(50)
                 .IsUnicode(false)
@@ -4890,9 +4989,14 @@ public partial class SqlCoreContext : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime")
                 .HasColumnName("creationDate");
+            entity.Property(e => e.Cycle)
+                .HasMaxLength(10)
+                .IsUnicode(false)
+                .HasColumnName("cycle");
             entity.Property(e => e.DeleteDate)
                 .HasColumnType("datetime")
                 .HasColumnName("deleteDate");
+            entity.Property(e => e.DirectTranslation).HasColumnName("directTranslation");
             entity.Property(e => e.Enable)
                 .HasDefaultValueSql("((1))")
                 .HasColumnName("enable");
@@ -5213,6 +5317,9 @@ public partial class SqlCoreContext : DbContext
             entity.Property(e => e.TRinterBuy)
                 .IsUnicode(false)
                 .HasColumnName("tRInterBuy");
+            entity.Property(e => e.TRmainAddress)
+                .IsUnicode(false)
+                .HasColumnName("tRMainAddress");
             entity.Property(e => e.TRnatiBuy)
                 .IsUnicode(false)
                 .HasColumnName("tRNatiBuy");

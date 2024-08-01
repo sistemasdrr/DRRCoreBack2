@@ -48,6 +48,8 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<List<GetQuery3_1ByYearResponseDto>>> GetQuery3_1ByYear(int year); 
         Task<Response<List<GetQuery3_1ByMonthResponseDto>>> GetQuery3_1ByMonth(string asignedTo, int year, int month);
 
+
+        //FACTURACION
         Task<Response<List<GetQuery4_1_1ResponseDto>>> GetQuery4_1_1();
         Task<Response<GetFileResponseDto>> DownloadQuery_Fact_4_1_1(string format);
         Task<Response<bool>> SendMailQuery4_1_1_Fact_ByBill(string to, int idSubscriber, int idUser);
@@ -63,5 +65,12 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<List<GetQuery4_2_2ResponseDto>>> GetQuery4_2_2(string startDate, string endDate);
         Task<Response<GetFileResponseDto>> DownloadQuery_Fact_4_2_2(string format, string startDate, string endDate);
 
+
+        //INFORMES
+        Task<Response<List<GetQuery5_1_1ResponseDto>>> GetQuery5_1_1();
+        Task<Response<bool>> SendTicketAlert(int idTicket, int idUser);
+        Task<Response<List<GetQuery5_1_2ResponseDto>>> GetQuery5_1_2(string idUser);
+        Task<Response<List<GetQuery5_1_2ResponseDto>>> GetQuery5_1_2Daily(string idUser);
+        Task<Response<List<GetQuery5_1_2ResponseDto>>> GetQuery5_1_2Monthly(string idUser, int month);
     }
 }

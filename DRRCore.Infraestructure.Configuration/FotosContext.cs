@@ -78,6 +78,7 @@ public partial class FotoContext : DbContext
             entity.Property(e => e.EmCodigo)
                 .HasMaxLength(11)
                 .HasColumnName("Em_Codigo");
+            entity.Property(e => e.Migra).HasColumnType("int(11)");
         });
 
         modelBuilder.Entity<RPerVsFoto>(entity =>

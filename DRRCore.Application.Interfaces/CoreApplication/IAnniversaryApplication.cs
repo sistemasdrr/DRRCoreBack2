@@ -8,9 +8,11 @@ namespace DRRCore.Application.Interfaces.CoreApplication
     {
         Task<Response<GetAnniversaryResponseDto>> GetByIdAsync(int id);
         Task<Response<List<GetAnniversaryResponseDto>>> GetAllAsync();
+        Task<Response<List<GetListAnniversaryResponseDto>>> GetCalendarAniversary();
         Task<Response<List<GetAnniversaryResponseDto>>> GetCurrentAnniversary();
         Task<Response<bool>> AddOrUpdateAsync(AddOrUpdateAnniversaryRequestDto obj);
         Task<Response<bool>> DeleteAsync(int id);
         Task<Response<bool>> ActiveAsync(int id);
+        Task<Response<bool>> AddOrUpdateAsync(AddOrUpdateAnniversaryDto obj);
     }
 }

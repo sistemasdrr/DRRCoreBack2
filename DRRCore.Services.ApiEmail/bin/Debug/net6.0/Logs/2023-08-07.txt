@@ -1,0 +1,144 @@
+2023-08-07 11:27:01,897 [12] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-07 11:27:11,717 [12] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-07 11:30:48,092 [3] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-07 11:30:54,933 [3] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-07 11:33:44,768 [23] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-07 11:33:49,300 [23] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-07 11:34:22,213 [3] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-07 11:34:27,502 [3] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-07 11:38:31,771 [5] INFO  App  
+ Hubo un error al enviar el correo : Failure sending mail. 
+ 
+2023-08-07 11:54:05,797 [30] INFO  App  
+ Hubo un error al enviar el correo : Failure sending mail. 
+ 
+2023-08-07 12:01:15,182 [30] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-07 12:17:08,117 [20] ERROR App  
+ Se produjo el siguiente error en el sistema :  Failure sending mail. 
+ 
+2023-08-07 12:23:24,383 [3] INFO  App  
+ Hubo un error al enviar el correo : Failure sending mail. 
+ 
+2023-08-07 12:23:26,644 [3] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-07 12:23:51,777 [5] INFO  App  
+ Hubo un error al enviar el correo : Failure sending mail. 
+ 
+2023-08-07 12:23:51,980 [5] INFO  App  
+ Email ha sido enviado con �xito 
+ 
+2023-08-07 12:26:02,606 [17] INFO  App  
+ Hubo un error al enviar el correo : Failure sending mail. 
+ 
+2023-08-07 12:36:17,203 [5] INFO  App  
+ Hubo un error al enviar el correo : Failure sending mail. 
+ 
+2023-08-07 12:36:48,694 [5] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-07 12:50:44,899 [23] INFO  App  
+ Hubo un error al enviar el correo : Failure sending mail. 
+ 
+2023-08-07 13:00:44,532 [3] INFO  App  
+ Hubo un error al enviar el correo : Failure sending mail. 
+ 
+2023-08-07 13:01:21,317 [3] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-07 13:03:30,928 [3] INFO  App  
+ Hubo un error al enviar el correo : Failure sending mail. 
+ 
+2023-08-07 13:05:15,345 [3] INFO  App  
+ Email ha sido enviado con �xito 
+ 
+2023-08-07 13:06:24,427 [3] INFO  App  
+ Hubo un error al enviar el correo : Failure sending mail. 
+ 
+2023-08-07 13:10:48,476 [5] INFO  App  
+ Hubo un error al enviar el correo : Failure sending mail. 
+ 
+2023-08-07 13:11:27,804 [5] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-07 13:14:46,899 [8] ERROR App  
+ Se produjo el siguiente error en el sistema :  Failure sending mail. 
+ 
+2023-08-07 13:15:45,918 [8] ERROR App  
+ Se produjo el siguiente error en el sistema :  Failure sending mail. 
+ 
+2023-08-07 13:16:16,779 [8] ERROR App  
+ Se produjo el siguiente error en el sistema :  Failure sending mail. 
+ 
+2023-08-07 13:23:15,160 [5] ERROR App  
+ Se produjo el siguiente error en el sistema :  Failure sending mail. 
+ 
+2023-08-07 13:23:33,749 [37] ERROR App  
+ Se produjo el siguiente error en el sistema :  Failure sending mail. 
+ 
+2023-08-07 13:25:15,284 [5] ERROR App  
+ Se produjo el siguiente error en el sistema :  Failure sending mail. 
+ 
+2023-08-07 13:29:34,992 [5] INFO  App  
+ Hubo un error al enviar el correo : Failure sending mail. 
+ 
+2023-08-07 13:32:21,553 [8] INFO  App  
+ Hubo un error al enviar el correo : Failure sending mail. 
+ 
+2023-08-07 13:34:34,313 [8] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-07 13:46:08,667 [26] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-07 13:46:12,111 [3] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-07 13:46:14,245 [3] ERROR App  
+ Se produjo el siguiente error en el sistema :  Can't open 2.pdf: No such file or directory 
+ 
+2023-08-07 13:46:16,138 [3] ERROR App  
+ Se produjo el siguiente error en el sistema :  Can't open 2.pdf: No such file or directory 
+ 
+2023-08-07 13:46:18,030 [26] ERROR App  
+ Se produjo el siguiente error en el sistema :  Can't open 2.pdf: No such file or directory 
+ 
+2023-08-07 13:53:21,539 [5] ERROR App  
+ Se produjo el siguiente error en el sistema :  Can't open atajo.pdf: No such file or directory 
+ 
+2023-08-07 13:55:01,496 [3] ERROR App  
+ Se produjo el siguiente error en el sistema :  Can't open atajo.pdf: No such file or directory 
+ 
+2023-08-07 14:02:57,371 [3] ERROR App  
+ Se produjo el siguiente error en el sistema :  Can't open atajo.pdf: No such file or directory 
+ 
+2023-08-07 14:04:46,063 [11] INFO  App  
+ Hubo un error al enviar el correo : Failure sending mail. 
+ 
+2023-08-07 14:30:24,007 [5] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-07 14:35:03,043 [3] INFO  App  
+ Email ha sido enviado con éxito 
+ 
+2023-08-07 14:41:01,196 [13] INFO  App  
+ Email ha sido enviado con éxito 
+ 

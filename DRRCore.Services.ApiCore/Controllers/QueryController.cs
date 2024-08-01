@@ -246,5 +246,36 @@ namespace DRRCore.Services.ApiCore.Controllers
 
             return File(result.Data.File, result.Data.ContentType, result.Data.Name);
         }
+        [HttpGet]
+        [Route("GetQuery5_1_1")]
+        public async Task<ActionResult> GetQuery5_1_1()
+        {
+            return Ok(await _queryApplication.GetQuery5_1_1());
+        }
+
+        [HttpGet]
+        [Route("SendTicketAlert")]
+        public async Task<ActionResult> SendTicketAlert(int idTicket, int idUser)
+        {
+            return Ok(await _queryApplication.SendTicketAlert(idTicket, idUser));
+        }
+        [HttpGet]
+        [Route("GetQuery5_1_2")]
+        public async Task<ActionResult> GetQuery5_1_2(string idUser)
+        {
+            return Ok(await _queryApplication.GetQuery5_1_2(idUser));
+        }
+        [HttpGet]
+        [Route("GetQuery5_1_2Daily")]
+        public async Task<ActionResult> GetQuery5_1_2Daily(string idUser)
+        {
+            return Ok(await _queryApplication.GetQuery5_1_2Daily(idUser));
+        }
+        [HttpGet]
+        [Route("GetQuery5_1_2Monthly")]
+        public async Task<ActionResult> GetQuery5_1_2Monthly(string idUser, int month)
+        {
+            return Ok(await _queryApplication.GetQuery5_1_2Monthly(idUser, month));
+        }
     }
 }

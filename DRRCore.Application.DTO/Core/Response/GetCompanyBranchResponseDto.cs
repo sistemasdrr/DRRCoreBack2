@@ -66,6 +66,7 @@ namespace DRRCore.Application.DTO.Core.Response
 
         public string? SpecificActivities { get; set; }
         public string? SpecificActivitiesEng { get; set; }
+        public string? DescPrincipalAddress { get; set; }
         public List<TraductionDto> Traductions { get; set; } = new List<TraductionDto>();
     }
 }
