@@ -2,9 +2,11 @@
 using DRRCore.Application.DTO;
 using DRRCore.Application.DTO.API;
 using DRRCore.Application.Interfaces;
+using DRRCore.Domain.Entities.SqlCoreContext;
 using DRRCore.Domain.Interfaces;
 using DRRCore.Transversal.Common;
 using DRRCore.Transversal.Common.Interface;
+using System.Data.Entity;
 
 namespace DRRCore.Application.Main
 {
@@ -40,7 +42,7 @@ namespace DRRCore.Application.Main
                 return response;
             }
             
-            var data = await ApiDummy.Report(1); 
+            var data = await ApiDummy.Report(request); 
             
             response.Data= data;
            
@@ -51,7 +53,7 @@ namespace DRRCore.Application.Main
             var response = new Response<ReportDto>();
             try
             {
-                response.Data = await ApiDummy.Report(1);
+                response.Data = await ApiDummy.Report(null);
             }
             catch (Exception ex)
             {
@@ -82,7 +84,7 @@ namespace DRRCore.Application.Main
                 }
                 if (!string.IsNullOrEmpty(request.IsoCountry))
                 {
-                    if(request.IsoCountry.Length != 3)
+                    if (request.IsoCountry.Length != 3)
                     {
                         response.IsSuccess = false;
                         response.Message = Messages.ParameterIsNotTooLonger;
@@ -90,17 +92,17 @@ namespace DRRCore.Application.Main
                     }
                     else
                     {
-                        var data = await _webDataDomain.GetByParamAndCountryAsync(request.SearchText,request.IsoCountry);
+                        var data = await _webDataDomain.GetByParamAndCountryAsync(request.SearchText, request.IsoCountry);
                         if (data != null)
-                        {                          
+                        {
                             var reportData = _mapper.Map<List<ReportDataDto>>(data);
-                            
+
                             response.Data = new SearchResponseDto
                             {
                                 Data = reportData,
                                 RequestClient = requestClient
                             };
-                            
+
                         }
                         else
                         {
@@ -112,6 +114,7 @@ namespace DRRCore.Application.Main
                 }
                 else
                 {
+                    using var context = new SqlCoreContext();                
                     var data = await _webDataDomain.GetByParamAsync(request.SearchText, 1);
                     if (data != null)
                     {

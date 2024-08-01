@@ -1,4 +1,5 @@
 ﻿using DRRCore.Application.DTO.API;
+using DRRCore.Domain.Entities.SqlContext;
 using DRRCore.Domain.Entities.SqlCoreContext;
 using DRRCore.Domain.Interfaces.CoreDomain;
 using DRRCore.Transversal.Common;
@@ -19,81 +20,61 @@ namespace DRRCore.Application.DTO
             _companyDomain = companyDomain;
             _companyBackgroundDomain = companyBackgroundDomain;
         }
-        public static async Task<ReportDto> Report(int idTicket)
+        public static async Task<ReportDto> Report(GetRequestDto request)
         {
             try
             {
                 using var context = new SqlCoreContext();
-                var ticket = await context.Tickets
-                    .Where(x => x.Id == idTicket)
-                    .Include(x => x.IdCompanyNavigation)
-                    .Include(x => x.IdCompanyNavigation).ThenInclude(c => c.Traductions)
+              
+               
+                var company = await context.Companies
+                    .Where(x => x.OldCode == request.Code.Substring(0,11))
+                    .Include(c => c.TraductionCompanies)
                     .FirstOrDefaultAsync();
 
-                var company = await _companyDomain.GetByIdAsync((int)ticket.IdCompany);
-                var companyBackground = await _companyBackgroundDomain.GetByIdAsync((int)ticket.IdCompany);
-                /*
-                    .Include(x => x.IdCompanyNavigation).ThenInclude(c => c.IdLegalRegisterSituationNavigation)
-                    .Include(x => x.IdCompanyNavigation).ThenInclude(c => c.IdCountryNavigation)
-                    .Include(x => x.IdCompanyNavigation).ThenInclude(c => c.IdLegalPersonTypeNavigation)
-                    .Include(x => x.IdCompanyNavigation).ThenInclude(c => c.IdPaymentPolicyNavigation)
-                    .Include(x => x.IdCompanyNavigation).ThenInclude(c => c.IdCreditRiskNavigation)
-                    .Include(x => x.IdCompanyNavigation).ThenInclude(c => c.CompanyBackgrounds)
-                    .Include(x => x.IdCompanyNavigation).ThenInclude(c => c.CompanyBackgrounds).ThenInclude(cb => cb.CurrentPaidCapitalCurrencyNavigation)
-                    .Include(x => x.IdCompanyNavigation).ThenInclude(c => c.CompanyBranches)
-                    .Include(x => x.IdCompanyNavigation).ThenInclude(c => c.CompanyBranches).ThenInclude(cb => cb.IdBranchSectorNavigation)
-                    .Include(x => x.IdCompanyNavigation).ThenInclude(c => c.CompanyFinancialInformations)
-                    .Include(x => x.IdCompanyNavigation).ThenInclude(c => c.CompanyFinancialInformations).ThenInclude(cb => cb.IdCollaborationDegreeNavigation)
-                    .Include(x => x.IdCompanyNavigation).ThenInclude(c => c.CompanyFinancialInformations).ThenInclude(cb => cb.IdFinancialSituacionNavigation)
-                    .Include(x => x.IdCompanyNavigation).ThenInclude(c => c.FinancialBalances)
-                    .Include(x => x.IdCompanyNavigation).ThenInclude(c => c.FinancialBalances).ThenInclude(cb => cb.IdCurrencyNavigation)
-                    .Include(x => x.IdCompanyNavigation).ThenInclude(c => c.CompanyPartners)
-                    .Include(x => x.IdCompanyNavigation).ThenInclude(c => c.CompanyPartners).ThenInclude(cb => cb.IdPersonNavigation)
-                    .Include(x => x.IdCompanyNavigation).ThenInclude(c => c.CompanyPartners).ThenInclude(cb => cb.IdPersonNavigation).ThenInclude(x => x.Traductions)
-                    .Include(x => x.IdCompanyNavigation).ThenInclude(c => c.CompanyPartners).ThenInclude(cb => cb.IdPersonNavigation).ThenInclude(x => x.IdDocumentTypeNavigation)
-                    .Include(x => x.IdCompanyNavigation).ThenInclude(c => c.CompanyPartners).ThenInclude(cb => cb.IdPersonNavigation).ThenInclude(x => x.IdCivilStatusNavigation)
-                    .Include(x => x.IdCompanyNavigation).ThenInclude(c => c.CompanyPartners).ThenInclude(cb => cb.IdPersonNavigation).ThenInclude(x => x.IdPaymentPolicyNavigation)
-                    .Include(x => x.IdCompanyNavigation).ThenInclude(c => c.CompanyPartners).ThenInclude(cb => cb.IdPersonNavigation).ThenInclude(cba => cba.CompanyPartners)
-                    .Include(x => x.IdCompanyNavigation).ThenInclude(c => c.CompanyPartners).ThenInclude(cb => cb.IdPersonNavigation).ThenInclude(cba => cba.CompanyPartners).ThenInclude(x => x.IdCompanyNavigation)
-                    .Include(x => x.IdCompanyNavigation).ThenInclude(c => c.CompanyRelationIdCompanyNavigations)
-                    */
-
-                return new ReportDto
+                if (company != null)
                 {
-                    RequestClient = await RequestClient(ticket),
-                    Information = await Information(ticket.IdCompany),
-                    Summary = await Summary(ticket.IdCompany),
-                    LegalBackground = await LegalBackground(ticket.IdCompany),
-                    Executives = await ExecutiveShareholders(ticket.IdCompany),
-                    WhoIsWho = await WhoIsWhos(ticket.IdCompany),
-                    Placeholders = await Placeholders(ticket.IdCompany),
-                    BussinessHistory = companyBackground.IdCompanyNavigation.Traductions.Where(x => x.Identifier == "L_B_HISTORY").FirstOrDefault().LargeValue,//"Alicorp S.A.A. was incorporated in 1956 as Anderson Clayton & Company......",
-                    RelatedCompanies = await RelatedCompanies(ticket.IdCompany),
-                    Business = await Business(ticket.IdCompany),
-                    PaymentRecords = await PaymentRecords(ticket.IdCompany),
-                    BankingInformation = await BankingInformation(ticket.IdCompany),
-                    FinancialInformation = await FinancialInformation(ticket.IdCompany),
-                    News = company.Traductions.Where(x => x.Identifier == "L_E_NEW").FirstOrDefault().LargeValue//"Alicorp: ventas en negocio de consumo masivo crecieron 4,7% en primer trimestre de 2023\r\n\r\nas ventas consolidadas de la empresa alcanzaron los S/3.326 millones, que, comparado al mismo periodo del 2022, decrece ligeramente en un 0,6%.\r\n\r\nAlicorp presentó sus resultados financieros del primer trimestre del año, periodo en el que la inflación se mantuvo a niveles elevados. En este escenario, la compañía informó que mantiene resiliencia gracias al soporte que le brindan ventajas competitivas como el valor marca, innovación y diversificación de sus negocios.\r\n\r\nAl cierre del primer trimestre, se observó un menor volumen de ventas, explicado por una reducción del consumo privado debido a los conflictos internos del país y al desempeño del negocio de Molienda, que vio afectada su abastecimiento de insumos por el bloqueo en la frontera con Bolivia, originado por los conflictos en el sur. Así las ventas consolidadas de Alicorp alcanzaron los S/3.326 millones, que, comparado al mismo periodo del 2022, decrece ligeramente en un 0,6%."
+                    return new ReportDto
+                    {
+                        RequestClient = await RequestClient(request),
+                        Information = await Information(company.Id),
+                        Summary = await Summary(company.Id),
+                        LegalBackground = await LegalBackground(company.Id),
+                        Executives = await ExecutiveShareholders(company.Id),
+                        WhoIsWho = await WhoIsWhos(company.Id),
+                        Placeholders = await Placeholders(company.Id),
+                        BussinessHistory = company.TraductionCompanies.FirstOrDefault().TBhistory,
+                        RelatedCompanies = await RelatedCompanies(company.Id),
+                        Business = await Business(company.Id),
+                        PaymentRecords = await PaymentRecords(company.Id),
+                        BankingInformation = await BankingInformation(company.Id),
+                        FinancialInformation = await FinancialInformation(company.Id),
+                        News = company.TraductionCompanies.FirstOrDefault().TEnew
 
-                };
+                    };
+                }
+                else
+                {
+                    throw new Exception("No se encontró la información de la empresa");
+                }
             }
             catch(Exception ex)
             {
                 throw new Exception(ex.Message);
-                return null;
+                
             }
            
         }
-        private static async Task<RequestClientDto> RequestClient(Ticket ticket)
+        private static async Task<RequestClientDto> RequestClient(GetRequestDto request)
         {
             try
             {
                
                 var client = new RequestClientDto
                 {
-                    RequestDate = ticket.OrderDate.ToString("MM/dd/yyyy"),
+                    RequestDate = request.RequestClient.RequestDate,
                     Priority = "T1",
-                    Request = ticket.RequestedName == null ? "" : ticket.RequestedName,
+                    Request = request.RequestClient.Request == null ? "" : request.RequestClient.Request,
                     Environment = "Develop"
                 };
                 return client;
@@ -614,51 +595,55 @@ namespace DRRCore.Application.DTO
                 var balancesSit = company.FinancialBalances.Where(x => x.BalanceType == "SITUACIONAL").OrderByDescending(x => x.Date).FirstOrDefault();
                 var listBalGen = new List<BalanceSheetDto>();
                 var listBalSit = new List<BalanceSheetDto>();
-                var ratio = new RatioSituationDto
-                {
-                    LiquidityRatio = (double)balancesGen.FirstOrDefault().LiquidityRatio,
-                    DebtToEquityRatio = (double)balancesGen.FirstOrDefault().DebtRatio,
-                    ProfitabilityMargin = (double)balancesGen.FirstOrDefault().ProfitabilityRatio,
-                    WorkingCapital = (double)balancesGen.FirstOrDefault().WorkingCapital
-                };
-                if (balancesSit != null)
-                {
-                    listBalSit.Add(new BalanceSheetDto
+
+               
+                    var ratio = new RatioSituationDto
                     {
-                        Date = StaticFunctions.DateTimeToString(balancesSit.Date),
-                        TypeBalanceSheet = "Interim",
-                        Period = balancesSit.DurationEng,
-                        IsoCurrency = balancesSit.IdCurrencyNavigation.Abreviation,
-                        ExchangeRate = balancesSit.ExchangeRate.ToString(),
-                        Assets = new AssetsDto
+                        LiquidityRatio = balancesGen.Count > 0?(double)balancesGen.FirstOrDefault().LiquidityRatio:0,
+                        DebtToEquityRatio = balancesGen.Count > 0 ? (double)balancesGen.FirstOrDefault().DebtRatio:0,
+                        ProfitabilityMargin = balancesGen.Count > 0 ? (double)balancesGen.FirstOrDefault().ProfitabilityRatio:0,
+                        WorkingCapital = balancesGen.Count > 0 ? (double)balancesGen.FirstOrDefault().WorkingCapital:0
+                    };
+
+                    if (balancesSit != null)
+                    {
+                        listBalSit.Add(new BalanceSheetDto
                         {
-                            CashBanks = (double)balancesSit.ACashBoxBank,
-                            Receivables = (double)balancesSit.AToCollect,
-                            Inventory = (double)balancesSit.AInventory,
-                            OthersAssets = (double)balancesSit.AOtherCurrentAssets,
-                            CurrentAssets = (double)balancesSit.TotalCurrentAssets,
-                            Fixed = (double)balancesSit.AFixed,
-                            OthersCurrentAssets = (double)balancesSit.AOtherNonCurrentAssets,
-                            TotalAssets = (double)balancesSit.TotalAssets
-                        },
-                        Liabilities = new LiabilitiesDto
-                        {
-                            BankSuppliers = (double)balancesSit.LCashBoxBank,
-                            OthersLiabilities = (double)balancesSit.LOtherCurrentLiabilities,
-                            CurrentLiabilities = (double)balancesSit.TotalCurrentLiabilities,
-                            OthersCurrentLiabilities = (double)balancesSit.LOtherNonCurrentLiabilities
-                        },
-                        ShareholdersEquity = new ShareholdersEquityDto
-                        {
-                            Capital = (double)balancesSit.PCapital,
-                            Reserves = (double)balancesSit.PStockPile,
-                            ProfitsLoots = (double)balancesSit.PUtilities,
-                            TotalLiabilitiesShareholderEquity = (double)balancesSit.TotalLiabilitiesPatrimony,
-                            TotalShareholderEquity = (double)balancesSit.TotalPatrimony
-                        },
-                        Sales = (double)balancesSit.Sales,
-                        ProfitLoss = (double)balancesSit.Utilities
-                    });
+                            Date = StaticFunctions.DateTimeToString(balancesSit.Date),
+                            TypeBalanceSheet = "Interim",
+                            Period = balancesSit.DurationEng,
+                            IsoCurrency = balancesSit.IdCurrencyNavigation.Abreviation,
+                            ExchangeRate = balancesSit.ExchangeRate.ToString(),
+                            Assets = new AssetsDto
+                            {
+                                CashBanks = (double)balancesSit.ACashBoxBank,
+                                Receivables = (double)balancesSit.AToCollect,
+                                Inventory = (double)balancesSit.AInventory,
+                                OthersAssets = (double)balancesSit.AOtherCurrentAssets,
+                                CurrentAssets = (double)balancesSit.TotalCurrentAssets,
+                                Fixed = (double)balancesSit.AFixed,
+                                OthersCurrentAssets = (double)balancesSit.AOtherNonCurrentAssets,
+                                TotalAssets = (double)balancesSit.TotalAssets
+                            },
+                            Liabilities = new LiabilitiesDto
+                            {
+                                BankSuppliers = (double)balancesSit.LCashBoxBank,
+                                OthersLiabilities = (double)balancesSit.LOtherCurrentLiabilities,
+                                CurrentLiabilities = (double)balancesSit.TotalCurrentLiabilities,
+                                OthersCurrentLiabilities = (double)balancesSit.LOtherNonCurrentLiabilities
+                            },
+                            ShareholdersEquity = new ShareholdersEquityDto
+                            {
+                                Capital = (double)balancesSit.PCapital,
+                                Reserves = (double)balancesSit.PStockPile,
+                                ProfitsLoots = (double)balancesSit.PUtilities,
+                                TotalLiabilitiesShareholderEquity = (double)balancesSit.TotalLiabilitiesPatrimony,
+                                TotalShareholderEquity = (double)balancesSit.TotalPatrimony
+                            },
+                            Sales = (double)balancesSit.Sales,
+                            ProfitLoss = (double)balancesSit.Utilities
+                        });
+                    
 
                 }
                 foreach (var balance in balancesGen)
@@ -704,19 +689,19 @@ namespace DRRCore.Application.DTO
                 {
                     Disposition = new ValueDetailDto
                     {
-                        Code = company.CompanyFinancialInformations.FirstOrDefault().IdCollaborationDegreeNavigation.ApiCode,//"DI13",
-                        Description = company.CompanyFinancialInformations.FirstOrDefault().IdCollaborationDegreeNavigation.EnglishName//"Report prepared exclusively from outside sources."
+                        Code = company.CompanyFinancialInformations.Count<=0?string.Empty: company.CompanyFinancialInformations?.FirstOrDefault().IdCollaborationDegreeNavigation.ApiCode,//"DI13",
+                        Description = company.CompanyFinancialInformations.Count <= 0 ? string.Empty : company.CompanyFinancialInformations?.FirstOrDefault().IdCollaborationDegreeNavigation.EnglishName//"Report prepared exclusively from outside sources."
                     },
-                    InformationProvided = company.TraductionCompanies.FirstOrDefault().TFcomment ?? "",//"Directly personnel did not allow the coordination of an interview....",
+                    InformationProvided = company.TraductionCompanies?.FirstOrDefault().TFcomment ?? "",//"Directly personnel did not allow the coordination of an interview....",
                     InterimBalanceSheets = listBalSit,
                     RatioSituation = ratio,
                     SituationalFinancial = new ValueDetailDto
                     {
-                        Code = company.CompanyFinancialInformations.FirstOrDefault().IdFinancialSituacionNavigation.ApiCode,//"SF3",
-                        Description = company.CompanyFinancialInformations.FirstOrDefault().IdFinancialSituacionNavigation.EnglishName//"ACCEPTABLE Financial Situation"
+                        Code = company.CompanyFinancialInformations.Count <= 0 ? string.Empty : company.CompanyFinancialInformations?.FirstOrDefault().IdFinancialSituacionNavigation.ApiCode,//"SF3",
+                        Description = company.CompanyFinancialInformations.Count <= 0 ? string.Empty : company.CompanyFinancialInformations?.FirstOrDefault().IdFinancialSituacionNavigation.EnglishName//"ACCEPTABLE Financial Situation"
                     },
-                    Comments = company.TraductionCompanies.FirstOrDefault().TFprincActiv?? "",//"Land\r\nBuildings, plants and other constructions\r\nMachinery and equipment...",
-                    AnalystComments = company.TraductionCompanies.FirstOrDefault().TFanalistCom ?? "",//"Alicorp S.A.A. was incorporated in Peru on July 16, 1956....",
+                    Comments = company.TraductionCompanies?.FirstOrDefault().TFprincActiv?? "",//"Land\r\nBuildings, plants and other constructions\r\nMachinery and equipment...",
+                    AnalystComments = company.TraductionCompanies?.FirstOrDefault().TFanalistCom ?? "",//"Alicorp S.A.A. was incorporated in Peru on July 16, 1956....",
                     Insurances = new List<InsuranceCompaniesDto>(),
                     BalanceSheets = listBalGen
                 };
