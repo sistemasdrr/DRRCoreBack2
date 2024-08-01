@@ -1,0 +1,13 @@
+﻿################################################################################
+# Este archivo .gitignore ha sido creado automáticamente por Microsoft(R) Visual Studio.
+################################################################################
+
+*.v2
+/.vs/DRRCore/FileContentIndex/96c791cf-e165-48b9-a410-5a10ffd544f6.vsidx
+*.vsidx
+*.bin
+/.vs/DRRCore/v17/.suo
+/.vs/DRRCoreBack2024/v17/.wsuo
+*.json
+/DRRCore.Services.ApiEmail/obj/Debug/net6.0/DRRCore.Services.ApiEmail.csproj.AssemblyReference.cache
+/DRRCore.Services.ApiWeb/obj/Debug/net6.0/DRRCore.Services.ApiWeb.csproj.AssemblyReference.cache
