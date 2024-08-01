@@ -4352,16 +4352,18 @@ namespace DRRCore.Application.Main.CoreApplication
                     if (ticket.About == "E")
                     {
                         providers = await context.Providers
+                            .Where(x => x.IdTicket == idTicket && x.IdCompany == ticket.IdCompany && x.Qualification == "Dió referencia")
                             .Include(x => x.IdCountryNavigation)
-                            .Where(x => x.IdCompany == ticket.IdCompany && x.IdTicket == ticket.Id && x.Qualification == "Dió referencia").ToListAsync();
+                            .ToListAsync();
                     }
                     else
                     {
                         providers = await context.Providers
+                            .Where(x => x.IdTicket == idTicket && x.IdPerson == ticket.IdPerson && x.Qualification == "Dió referencia")
                             .Include(x => x.IdCountryNavigation)
-                            .Where(x => x.IdPerson == ticket.IdPerson && x.IdTicket == ticket.Id && x.Qualification == "Dió referencia").ToListAsync();
+                            .ToListAsync();
                     }
-                    response.Data = _mapper.Map<List<GetShortProviderByTicket>>(providers);
+                    response.Data = _mapper.Map<List<GetShortProviderByTicket>>(providers.DistinctBy(x => x.Name));
                 }
             }
             catch (Exception ex)

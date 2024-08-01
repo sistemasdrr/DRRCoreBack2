@@ -120,6 +120,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                     .Include(x => x.IdStatusTicketNavigation)
                     .Include(x => x.TicketAssignation).ThenInclude(x => x.IdEmployeeNavigation)
                     .Include(x => x.TicketQuery)
+                    .Include(x => x.TicketFiles)
                     .Include(x => x.TicketHistories.OrderByDescending(x=>x.Id)).Where(x => x.Enable == true)
                     .Where(x => (x.IdStatusTicket == (int?)TicketStatusEnum.Pendiente ||
                     x.IdStatusTicket == (int?)TicketStatusEnum.En_Consulta) && x.Enable == true)

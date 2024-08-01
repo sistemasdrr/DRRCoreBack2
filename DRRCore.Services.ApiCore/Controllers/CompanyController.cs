@@ -191,9 +191,9 @@ namespace DRRCore.Services.ApiCore.Controllers
         }
         [HttpPost()]
         [Route("addListProvider")]
-        public async Task<ActionResult> addListProvider(List<GetListProviderResponseDto> obj, int idCompany, string user)
+        public async Task<ActionResult> addListProvider(List<GetListProviderResponseDto> obj, int idCompany, string user, int idTicket)
         {
-            return Ok(await _companyApplication.AddOrUpdateProviderListAsync(obj, idCompany, user));
+            return Ok(await _companyApplication.AddOrUpdateProviderListAsync(obj, idCompany, user, idTicket));
         }
         [HttpGet()]
         [Route("getProviderHistory")]
