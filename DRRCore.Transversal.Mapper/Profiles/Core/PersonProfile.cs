@@ -3,6 +3,7 @@ using DRRCore.Application.DTO.Core.Request;
 using DRRCore.Application.DTO.Core.Response;
 using DRRCore.Domain.Entities.SqlCoreContext;
 using DRRCore.Transversal.Common;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DRRCore.Transversal.Mapper.Profiles.Core
 {
@@ -46,7 +47,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                  .ForMember(dest => dest.FlagCountry, opt => opt?.MapFrom(src => src.IdCountryNavigation.FlagIso))
                  .ForMember(dest => dest.DocumentType, opt => opt?.MapFrom(src => src.IdDocumentTypeNavigation.Abreviation))
                  .ForMember(dest => dest.Cellphone, opt => opt?.MapFrom(src => src.Cellphone))
-                 .ForMember(dest => dest.TraductionPercentage, opt => opt?.MapFrom(src => GetTraductionPercentage(src.Traductions)))
+                 .ForMember(dest => dest.TraductionPercentage, opt => opt?.MapFrom(src => GetTraductionPersonPercentage(src.TraductionPeople.FirstOrDefault())))
                  .ForMember(dest => dest.Profession, opt => opt?.MapFrom(src => src.Profession))
                  .ForMember(dest => dest.LastSearched, opt => opt?.MapFrom(src => StaticFunctions.DateTimeToString(src.LastSearched)))
                  .ForMember(dest => dest.BirthDate, opt => opt?.MapFrom(src => src.BirthDate))
@@ -143,17 +144,36 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
               .ReverseMap();
 
         }
-        private int GetTraductionPercentage(ICollection<Traduction> traductions)
+        private int GetTraductionPersonPercentage(TraductionPerson traductions)
         {
-            int total = traductions.Count;
+            int total = 22;
             int existTraduction = 0;
-            foreach (var item in traductions)
+            if (traductions != null)
             {
-                if (!string.IsNullOrEmpty(item.ShortValue) || !string.IsNullOrEmpty(item.LargeValue))
-                {
-                    existTraduction++;
-                }
+                if (traductions.TPnacionality.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TPbirthPlace.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TPmarriedTo.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TPprofession.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TPnewcomm.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TPreputation.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TDvalue.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TDresidence.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TCcurjob.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TCstartDate.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TCenddt.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TCincome.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TCdetails.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TAotherAct.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TPrdetails.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TSbsantecedente.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TSbsrickCnt.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TSbscommentSbs.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TSbscommentBank.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TSbslitig.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.THdetails.IsNullOrEmpty() == false) existTraduction++;
+                if (traductions.TIgdetails.IsNullOrEmpty() == false) existTraduction++;
             }
+           
             if (total == 0) return 0;
 
             return existTraduction * 100 / total;

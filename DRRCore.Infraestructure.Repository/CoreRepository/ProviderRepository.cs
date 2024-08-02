@@ -160,6 +160,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                     .Where(x => x.IdCompany == idCompany)
                     .Select(x => new GetProviderHistoryResponseDto
                     {
+                        IdTicket = x.IdTicket,
                         Ticket = x.Ticket,
                         NumReferences = context.Providers.Count(p => p.IdTicket == x.IdTicket && p.IdCompany == idCompany && p.Flag == true && p.Qualification == "Dió referencia"),
                         ReferentName = x.ReferentName,
@@ -195,6 +196,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                     .Where(x => x.IdPerson == idPerson)
                     .Select(x => new GetProviderHistoryResponseDto
                     {
+                        IdTicket = x.IdTicket,
                         Ticket = x.Ticket,
                         NumReferences = context.Providers.Count(p => p.IdTicket == x.IdTicket),
                         ReferentName = x.ReferentName,

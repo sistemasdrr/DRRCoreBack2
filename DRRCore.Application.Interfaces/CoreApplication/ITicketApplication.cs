@@ -63,7 +63,8 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<string>> GetSupervisorTicket(int idTicket);
         Task<Response<bool>> DeleteTicketHistoryById(int idTicket);
         Task<Response<GetFileDto>> DownloadZipByIdTicket(int idTicket);
-        Task<Response<GetFileDto>> GetExcel(int idTicket);
+        Task<Response<GetFileResponseDto>> GetExcel(int idTicket);
+        Task<Response<bool>> SendComplement(int idTicket, int idUser, bool digited, bool file, string observations);
 
     }
 }

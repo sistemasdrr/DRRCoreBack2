@@ -99,6 +99,12 @@ public partial class Ticket
 
     public bool? HasBalance { get; set; }
 
+    public bool? IsComplement { get; set; }
+
+    public string? IdTicketComplement { get; set; }
+
+    public string? NumberTicketComplement { get; set; }
+
     public virtual Company? IdCompanyNavigation { get; set; }
 
     public virtual Continent? IdContinentNavigation { get; set; }

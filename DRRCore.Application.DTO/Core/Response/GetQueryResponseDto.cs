@@ -554,6 +554,8 @@
         public int? IdStatusTicket { get; set; }
         public string? Quality { get; set; }
 
+        public bool? HasFiles { get; set; }
+        public List<TicketFileResponseDto>? Files { get; set; } = new List<TicketFileResponseDto>();
         public string Number { get; set; }
         public string? Language { get; set; }
         public string About { get; set; } = null!;

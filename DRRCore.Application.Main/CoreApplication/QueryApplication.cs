@@ -1868,6 +1868,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdPersonNavigation).ThenInclude(x => x.IdCountryNavigation)
                     .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdStatusTicketNavigation)
                     .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdSubscriberNavigation).ThenInclude(x => x.IdCountryNavigation)
+                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.TicketFiles)
                     .ToListAsync();
                 var accc = ticketHistories.DistinctBy(x => x.IdTicket);
                 var idSubscribers = accc.DistinctBy(x => x.IdTicketNavigation.IdSubscriber); 
@@ -1915,8 +1916,8 @@ namespace DRRCore.Application.Main.CoreApplication
                             Address = item1.IdTicketNavigation.About == "E" ? item1.IdTicketNavigation.IdCompanyNavigation.Address : item1.IdTicketNavigation.IdPersonNavigation.Address,
                             Telephone = item1.IdTicketNavigation.About == "E" ? item1.IdTicketNavigation.IdCompanyNavigation.Telephone : item1.IdTicketNavigation.IdPersonNavigation.Cellphone,
                             WebPage = item1.IdTicketNavigation.About == "E" ? item1.IdTicketNavigation.IdCompanyNavigation.WebPage : "",
-
-
+                            Files = _mapper.Map<List<TicketFileResponseDto>>(item1.IdTicketNavigation.TicketFiles),
+                            HasFiles = item1.IdTicketNavigation.TicketFiles.Count > 0,
                             OrderDate = StaticFunctions.DateTimeToString(item1.IdTicketNavigation.OrderDate),
                             ExpireDate = StaticFunctions.DateTimeToString(item1.IdTicketNavigation.ExpireDate),
                             RealExpireDate = StaticFunctions.DateTimeToString(item1.IdTicketNavigation.RealExpireDate),

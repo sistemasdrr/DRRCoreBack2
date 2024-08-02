@@ -31,7 +31,7 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<GetFinancialBalanceResponseDto>> GetFinancialBalanceById(int id);
         Task<Response<bool>> DeleteFinancialBalance(int id);
         Task<Response<bool>> AddOrUpdateProviderAsync(AddOrUpdateProviderRequestDto obj);
-        Task<Response<bool>> AddOrUpdateProviderListAsync(List<GetListProviderResponseDto> obj, int idCompany, string user);
+        Task<Response<bool>> AddOrUpdateProviderListAsync(List<GetListProviderResponseDto> obj, int idCompany, string user, int idTicket);
         Task<Response<List<GetListProviderResponseDto>>> GetListProvidersAsync(int idCompany);
         Task<Response<GetProviderResponseDto>> GetProviderById(int id);
         Task<Response<bool>> DeleteProvider(int id);

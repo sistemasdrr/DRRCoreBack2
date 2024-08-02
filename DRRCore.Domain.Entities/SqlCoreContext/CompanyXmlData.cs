@@ -150,7 +150,7 @@ namespace DRRCore.Domain.Entities.SqlCoreContext
     {
         public string? Name { get; set; }
         public string? Title{ get; set; }
-        public int? Participation{ get; set; }
+        public decimal? Participation{ get; set; }
         public int? ExecPrinc { get; set; }
         public string? StartDate { get; set; }
     }

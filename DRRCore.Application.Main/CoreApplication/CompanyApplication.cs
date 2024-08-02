@@ -2394,11 +2394,26 @@ namespace DRRCore.Application.Main.CoreApplication
         public async Task<Response<List<GetProviderHistoryResponseDto>>> GetProviderHistory(string type, int id)
         {
             var response = new Response<List<GetProviderHistoryResponseDto>>();
+            response.Data = new List<GetProviderHistoryResponseDto>();
             try
             {
+                using var context = new SqlCoreContext();
                 if(type == "E")
                 {
-                    response.Data = await _providerDomain.GetProvidersHistoryByIdCompany(id);
+                    var list = await context.Providers.Where(x => x.IdCompany == id).ToListAsync();
+                    var distIdTicket = list.DistinctBy(x => x.IdTicket).Where(x => x.Qualification == "Dió referencia");
+                    foreach (var item in distIdTicket)
+                    {
+                        var distProvider = list.DistinctBy(x => x.Name).Where(x => x.IdTicket == item.IdTicket && x.Qualification == "Dió referencia");
+                        response.Data.Add(new GetProviderHistoryResponseDto
+                        {
+                            IdTicket = item.IdTicket,
+                            Ticket = item.Ticket,
+                            Date = StaticFunctions.DateTimeToString(item.Date),
+                            NumReferences = distProvider.Count(),
+                            ReferentName = item.ReferentName,
+                        });
+                    }
                 }else if(type == "P")
                 {
                     response.Data = await _providerDomain.GetProvidersHistoryByIdPerson(id);
@@ -2411,15 +2426,19 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<bool>> AddOrUpdateProviderListAsync(List<GetListProviderResponseDto> obj, int idCompany,string user)
+        public async Task<Response<bool>> AddOrUpdateProviderListAsync(List<GetListProviderResponseDto> obj, int idCompany,string user, int idTicket)
         {
             var response = new Response<bool>();
             try
             {
-                int? idTicket = 0;
                 using var context = new SqlCoreContext();
-
+                var ticket = await context.Tickets.Where(x => x.Id == idTicket).FirstOrDefaultAsync();
                 var currentUser =await context.UserLogins.Include(x=>x.IdEmployeeNavigation).Where(x => x.Id == int.Parse(user)).FirstOrDefaultAsync();
+
+                if(ticket == null || currentUser == null)
+                {
+                    throw new Exception("ticket o usuario no encontrado.");
+                }
 
                 var list = await context.Providers.Where(x => x.Enable == true && x.IdCompany == idCompany && x.Flag == true).ToListAsync();
                 foreach (var item in list)
@@ -2430,7 +2449,6 @@ namespace DRRCore.Application.Main.CoreApplication
                 
                 foreach (var item1 in obj)
                 {
-                    idTicket = item1.IdTicket;
                     await context.Providers.AddAsync(new Provider
                     {
                         Id = 0,
@@ -2457,10 +2475,10 @@ namespace DRRCore.Application.Main.CoreApplication
                         AdditionalCommentaryEng = item1.AdditionalCommentaryEng,
                         ReferentCommentary = item1.ReferentCommentary,
                         IdPerson = item1.IdPerson == 0 || item1.IdPerson == null ? null : item1.IdPerson,
-                        IdTicket = item1.IdTicket,
+                        IdTicket = ticket.Id,
                         ReferentName = currentUser.IdEmployeeNavigation.FirstName+" "+ currentUser.IdEmployeeNavigation.LastName,
                         Flag = true,
-                        Ticket = item1.Ticket,
+                        Ticket = ticket.Number.ToString("D6"),
                         DateReferent =DateTime.Now
                     });
 
@@ -2582,6 +2600,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 var list = await context.Providers
                     .Where(x => x.IdTicket == idTicket && x.Qualification == "Dió referencia")
                     .Include(x => x.IdCountryNavigation)
+                    .DistinctBy(x => x.Name)
                     .ToListAsync();
                 foreach (var item in list)
                 {

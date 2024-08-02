@@ -1,4 +1,5 @@
-﻿using DRRCore.Application.DTO.Core.Request;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using DRRCore.Application.DTO.Core.Request;
 using DRRCore.Application.DTO.Core.Response;
 using DRRCore.Application.Interfaces.CoreApplication;
 using DRRCore.Application.Main.CoreApplication;
@@ -140,7 +141,16 @@ namespace DRRCore.Services.ApiCore.Controllers
         [Route("GetExcel")]
         public async Task<ActionResult> GetExcel(int idTicket)
         {
-            return Ok(await _ticketApplication.GetExcel(idTicket));
+            var result = await _ticketApplication.GetExcel(idTicket);
+
+            if (result != null && result.Data != null)
+            {
+                return File(result.Data.File?.ToArray(), result.Data.ContentType, result.Data.Name);
+            }
+            else
+            {
+                return NotFound();
+            }
         }
         [HttpGet()]
         [Route("getListby")]
@@ -356,7 +366,12 @@ namespace DRRCore.Services.ApiCore.Controllers
                 return NotFound();
             }
         }
-        
+        [HttpGet()]
+        [Route("SendComplement")]
+        public async Task<ActionResult> SendComplement(int idTicket, int idUser, bool digited, bool file, string observations)
+        {
+            return Ok(await _ticketApplication.SendComplement(idTicket, idUser , digited, file, observations));
+        }
 
 
     }
