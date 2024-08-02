@@ -637,6 +637,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                 using var context = new SqlCoreContext();
                 var ticketHistory = await context.TicketHistories
                     .Include(x => x.IdStatusTicketNavigation)
+                    .Include(x => x.IdTicketNavigation)
                     .Where(x => x.IdTicket == idTicket && x.Enable == true)
                     .ToListAsync();
                 return ticketHistory;

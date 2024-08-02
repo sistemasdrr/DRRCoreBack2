@@ -21,7 +21,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
-using Pomelo.EntityFrameworkCore.MySql.Query.Internal;
 using SharpCompress.Archives;
 using SharpCompress.Archives.Zip;
 using SharpCompress.Common;
@@ -780,35 +779,16 @@ namespace DRRCore.Application.Main.CoreApplication
                 ticket.RequestedName = ticket.RequestedName.Replace("?", "");
                 ticket.RequestedName = ticket.RequestedName.Replace("¿", "");
                 var ticketPath = _path.Path;
-                //var ticketPath = "G:\\ECORE_DOCUMENT"; 
                 var directoryPath = Path.Combine(ticketPath, "cupones", ticket.Number.ToString("D6"));
                 var filePath = Path.Combine(directoryPath, $"{ticket.ReportType}_{ticket.RequestedName}.pdf");
 
-                // Crear el directorio si no existe
                 if (!Directory.Exists(directoryPath))
                 {
                     Directory.CreateDirectory(directoryPath);
                 }
-
-                // Guardar el archivo localmente
                 await File.WriteAllBytesAsync(filePath, byteArray);
 
                 return filePath;
-                //using (var ftpClient = new FtpClient(GetFtpClientConfiguration()))
-                //{
-                //    await ftpClient.LoginAsync();
-
-                //    MemoryStream memoryStream = new MemoryStream(byteArray);
-                //    memoryStream.Position = 0;
-
-                //    using (var writeStream = await ftpClient.OpenFileWriteStreamAsync(path))
-                //    {
-                //        await memoryStream.CopyToAsync(writeStream);
-                //    }
-
-
-                //}
-                //return path;
             }
             catch (Exception ex)
             {
@@ -1765,9 +1745,71 @@ namespace DRRCore.Application.Main.CoreApplication
             response.Data = new List<GetTimeLineTicketHistoryResponseDto>();
             try
             {
-                var ticketHistory = await _ticketDomain.GetTicketHistoryByIdTicket(idTicket);
+                using var context = new SqlCoreContext();
+                
+                var ticketHistory = await context.TicketHistories
+                    .Include(x => x.IdStatusTicketNavigation)
+                    .Include(x => x.IdTicketNavigation)
+                    .Where(x => x.IdTicket == idTicket && x.Enable == true)
+                    .ToListAsync();
+                if(ticketHistory.Count > 0 && ticketHistory.First().IdTicketNavigation.IsComplement == true && ticketHistory.First().IdTicketNavigation.IdTicketComplement != null)
+                {
+                    var ticketHistoryFirst = await context.TicketHistories
+                    .Include(x => x.IdStatusTicketNavigation)
+                    .Include(x => x.IdTicketNavigation)
+                    .Where(x => x.IdTicket == int.Parse(ticketHistory.First().IdTicketNavigation.IdTicketComplement) && x.Enable == true)
+                    .ToListAsync();
+                    foreach (var item in ticketHistoryFirst)
+                    {
+                        var assignedToName = "";
+                        if (item.AsignedTo != null && item.AsignedTo.Contains("PA"))
+                        {
+                            assignedToName = item.AsignedTo.Trim() == "PA1" ? "KATIA BUSTAMANTE" : item.AsignedTo.Trim() == "PA2" ? "MARIELA ACOSTA" : item.AsignedTo.Trim() == "PA3" ? "MONICA YEPEZ" :
+                                item.AsignedTo.Trim() == "PA4" ? "RAFAEL DEL RISCO" : item.AsignedTo.Trim() == "PA5" ? "CECILIA RODRIGUEZ" : item.AsignedTo.Trim() == "PA6" ? "JESSICA LIAU" :
+                                item.AsignedTo.Trim() == "PA7" ? "CECILIA SAYAS" : "";
+                        }
+                        else if (item.AsignedTo != null && item.AsignedTo.Contains("CR"))
+                        {
+                            assignedToName = "CECILIA RODRIGUEZ";
+                        }
+                        else if (item.AsignedTo != null && item.AsignedTo.Contains("D") || item.AsignedTo != null && item.AsignedTo.Contains("T")
+                            || item.AsignedTo != null && item.AsignedTo.Contains("R") || item.AsignedTo != null && item.AsignedTo.Contains("RC") || item.AsignedTo != null && item.AsignedTo.Contains("S"))
+                        {
+                            var employee = await _employeeDomain.FindByPersonalCode(item.AsignedTo);
+                            assignedToName = employee != null ? employee.FirstName + " " + employee.LastName : string.Empty;
+                        }
+
+                        else if (item.AsignedTo == null)
+                        {
+                            var user = await context.UserLogins
+                                .Include(x => x.IdEmployeeNavigation)
+                                .Where(x => x.Id == int.Parse(item.UserFrom)).FirstOrDefaultAsync();
+                            assignedToName = user.IdEmployeeNavigation != null ? user.IdEmployeeNavigation.FirstName + " " + user.IdEmployeeNavigation.LastName : "";
+                        }
+                        else
+                        {
+                            var agent = await context.Agents.Where(x => x.Code == item.AsignedTo).FirstOrDefaultAsync();
+                            assignedToName = agent != null ? agent.Name : "";
+                        }
+
+
+                        var newTimeLine = new GetTimeLineTicketHistoryResponseDto();
+
+                        newTimeLine.Id = item.Id;
+                        newTimeLine.AssignedTo = item.AsignedTo;
+                        newTimeLine.AssignedToName = assignedToName;
+                        newTimeLine.Date = StaticFunctions.DateTimeToString(item.CreationDate);
+                        newTimeLine.Time = item.CreationDate.Hour.ToString("00") + ":" + item.CreationDate.Minute.ToString("00");
+                        newTimeLine.IdStatusTicket = item.IdStatusTicket;
+                        newTimeLine.Status = item.IdStatusTicket == 1 && item.UserTo == null && item.AsignedTo == null ? "Creación del Pedido" : item.IdStatusTicketNavigation.Description;
+                        newTimeLine.Color = item.IdStatusTicket == 1 && item.UserTo == null && item.AsignedTo == null ? "label-success" : item.IdStatusTicketNavigation.Color;
+
+                        response.Data.Add(newTimeLine);
+                    }
+                }
                 if (ticketHistory != null)
                 {
+
                     foreach (var item in ticketHistory)
                     {
                         var assignedToName = "";
@@ -1790,7 +1832,6 @@ namespace DRRCore.Application.Main.CoreApplication
                         
                         else if (item.AsignedTo == null)
                         {
-                            using var context = new SqlCoreContext();
                             var user = await context.UserLogins
                                 .Include(x => x.IdEmployeeNavigation)
                                 .Where(x => x.Id == int.Parse(item.UserFrom)).FirstOrDefaultAsync();
@@ -1798,7 +1839,6 @@ namespace DRRCore.Application.Main.CoreApplication
                         }
                         else
                         {
-                            using var context = new SqlCoreContext();
                             var agent = await context.Agents.Where(x => x.Code == item.AsignedTo).FirstOrDefaultAsync();
                             assignedToName = agent != null ? agent.Name : "";
                         }
@@ -2976,7 +3016,6 @@ namespace DRRCore.Application.Main.CoreApplication
                     var attachment = new AttachmentDto();
                     attachment.FileName = emailDataDto.Subject+".pdf";
                     attachment.Content = Convert.ToBase64String(fileArray);
-                    attachment.Path = await UploadFile(attachment);
                     emailDataDto.Attachments.Add(attachment);
 
                     string path = await UploadDispatchReport(idTicket, emailDataDto.Subject, fileArray,".pdf");
@@ -2995,10 +3034,9 @@ namespace DRRCore.Application.Main.CoreApplication
                         var attachmentWord = new AttachmentDto();
                         attachmentWord.FileName = emailDataDto.Subject + ".docx";
                         attachmentWord.Content = Convert.ToBase64String(fileArrayWord);
-                        attachmentWord.Path = await UploadFile(attachmentWord);
                         emailDataDto.Attachments.Add(attachmentWord);
 
-                        string pathWord = await UploadDispatchReport(idTicket, emailDataDto.Subject, fileArray, ".docx");
+                        string pathWord = await UploadDispatchReport(idTicket, emailDataDto.Subject, fileArrayWord, ".docx");
                         await context.TicketFiles.AddAsync(new TicketFile
                         {
                             IdTicket = idTicket,
@@ -3013,10 +3051,9 @@ namespace DRRCore.Application.Main.CoreApplication
                         var attachmentXml = new AttachmentDto();
                         attachmentXml.FileName = emailDataDto.Subject + ".xml";
                         attachmentXml.Content = Convert.ToBase64String(fileArrayXml);
-                        attachmentXml.Path = await UploadFile(attachmentXml);
                         emailDataDto.Attachments.Add(attachmentXml);
 
-                        string pathXml = await UploadDispatchReport(idTicket, emailDataDto.Subject, fileArray, ".xml");
+                        string pathXml = await UploadDispatchReport(idTicket, emailDataDto.Subject, fileArrayXml, ".xml");
                         await context.TicketFiles.AddAsync(new TicketFile
                         {
                             IdTicket = idTicket,
@@ -3031,20 +3068,35 @@ namespace DRRCore.Application.Main.CoreApplication
                         var attachmentXmlCred = new AttachmentDto();
                         attachmentXmlCred.FileName = emailDataDto.Subject + "_Credendo.xml";
                         attachmentXmlCred.Content = Convert.ToBase64String(fileArrayXmlCred);
-                        attachmentXmlCred.Path = await UploadFile(attachmentXmlCred);
                         emailDataDto.Attachments.Add(attachmentXmlCred);
 
-                        string pathXmlCred = await UploadDispatchReport(idTicket, emailDataDto.Subject+ "_Credendo", fileArray, ".xml");
+                        string pathXmlCred = await UploadDispatchReport(idTicket, emailDataDto.Subject+ "_Credendo", fileArrayXmlCred, ".xml");
                         await context.TicketFiles.AddAsync(new TicketFile
                         {
                             IdTicket = idTicket,
                             Path = pathXmlCred,
-                            Name = emailDataDto.Subject + "_Credendo.xml" + ".xml",
+                            Name = emailDataDto.Subject + "_Credendo.xml",
                             Extension = ".xml"
                         });
                     }
+                    if (ticket.IdSubscriberNavigation.ReportInExcel != null && ticket.IdSubscriberNavigation.ReportInExcel == true)
+                    {
+                        byte[] fileArrayExcel = GetExcel(idTicket).Result.Data.File;
+                        var attachmentExcel = new AttachmentDto();
+                        attachmentExcel.FileName = emailDataDto.Subject + ".xlsx";
+                        attachmentExcel.Content = Convert.ToBase64String(fileArrayExcel);
+                        emailDataDto.Attachments.Add(attachmentExcel);
 
-                 
+                        string pathXmlCred = await UploadDispatchReport(idTicket, emailDataDto.Subject, fileArrayExcel, ".xlsx");
+                        await context.TicketFiles.AddAsync(new TicketFile
+                        {
+                            IdTicket = idTicket,
+                            Path = pathXmlCred,
+                            Name = emailDataDto.Subject + ".xlsx",
+                            Extension = ".xlsx"
+                        });
+                    }
+
 
                     ticket.IdCompanyNavigation.LastSearched = DateTime.Now;
 
@@ -3128,6 +3180,28 @@ namespace DRRCore.Application.Main.CoreApplication
         private async Task<string> UploadFile(AttachmentDto attachmentDto)
         {
             return await _fileManager.UploadFile(new MemoryStream(Convert.FromBase64String(attachmentDto.Content)), attachmentDto.FileName);
+        }
+        private async Task<string> UploadFileToTicket(int idTicket, string fileName, byte[] byteArray)
+        {
+            try
+            {
+                var ticket = await _ticketDomain.GetByIdAsync(idTicket);
+                var ticketPath = _path.Path;
+                var directoryPath = Path.Combine(ticketPath, "cupones", ticket.Number.ToString("D6"));
+                var filePath = Path.Combine(directoryPath, fileName);
+
+                if (!Directory.Exists(directoryPath))
+                {
+                    Directory.CreateDirectory(directoryPath);
+                }
+                await File.WriteAllBytesAsync(filePath, byteArray);
+
+                return filePath;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(string.Format(Messages.ExceptionMessage, ex.Message));
+            }
         }
 
 
@@ -3255,9 +3329,9 @@ namespace DRRCore.Application.Main.CoreApplication
             return result;
         }
 
-        public async Task<Response<GetFileDto>> GetExcel(int idTicket)
+        public async Task<Response<GetFileResponseDto>> GetExcel(int idTicket)
         {
-            var response = new Response<GetFileDto>();
+            var response = new Response<GetFileResponseDto>();
             try
             {
                 using var context = new SqlCoreContext();
@@ -3280,381 +3354,393 @@ namespace DRRCore.Application.Main.CoreApplication
                         Directory.CreateDirectory(directoryPath);
                     }
                     var filePath = Path.Combine(directoryPath, ticket.IdCompanyNavigation.Name + ".xlsx");
-                    SLDocument sLDocument = new SLDocument();
+                    using var memoryStream = new MemoryStream();
+                    using var sLDocument = new SLDocument();
                     
-                    sLDocument.SetCellValue("A1", "FIELD_NM");
-                    sLDocument.SetCellValue("B1", "DATA");
 
-                    sLDocument.SetCellValue("A2", "KSURE_REFERENCE");
-                    sLDocument.SetCellValue("B2", ticket.ReferenceNumber.PadLeft(10));
+                        sLDocument.SetCellValue("A1", "FIELD_NM");
+                        sLDocument.SetCellValue("B1", "DATA");
 
-                    sLDocument.SetCellValue("A3", "TRGTPSN_NM");
-                    sLDocument.SetCellValue("B3", ticket.IdCompanyNavigation.Name);
+                        sLDocument.SetCellValue("A2", "KSURE_REFERENCE");
+                        sLDocument.SetCellValue("B2", ticket.ReferenceNumber.PadLeft(10));
 
-                    sLDocument.SetCellValue("A4", "TRGTPSN_ABBR_NM");
-                    sLDocument.SetCellValue("B4", ticket.IdCompanyNavigation.SocialName ?? "");
+                        sLDocument.SetCellValue("A3", "TRGTPSN_NM");
+                        sLDocument.SetCellValue("B3", ticket.IdCompanyNavigation.Name);
 
-                    sLDocument.SetCellValue("A5", "TRGTPSN_ENG_NM");
-                    sLDocument.SetCellValue("B5", ticket.IdCompanyNavigation.Name);
+                        sLDocument.SetCellValue("A4", "TRGTPSN_ABBR_NM");
+                        sLDocument.SetCellValue("B4", ticket.IdCompanyNavigation.SocialName ?? "");
 
-                    sLDocument.SetCellValue("A6", "TRGTPSN_ENG_ABBR_NM");
-                    sLDocument.SetCellValue("B6", ticket.IdCompanyNavigation.SocialName ?? "");
+                        sLDocument.SetCellValue("A5", "TRGTPSN_ENG_NM");
+                        sLDocument.SetCellValue("B5", ticket.IdCompanyNavigation.Name);
 
-                    sLDocument.SetCellValue("A7", "TRGTPSN_TELNO");
-                    sLDocument.SetCellValue("B7", ticket.IdCompanyNavigation.SubTelephone + " " + ticket.IdCompanyNavigation.Telephone);
+                        sLDocument.SetCellValue("A6", "TRGTPSN_ENG_ABBR_NM");
+                        sLDocument.SetCellValue("B6", ticket.IdCompanyNavigation.SocialName ?? "");
 
-                    sLDocument.SetCellValue("A8", "TRGTPSN_FAX_NO");
-                    sLDocument.SetCellValue("B8", "-");
+                        sLDocument.SetCellValue("A7", "TRGTPSN_TELNO");
+                        sLDocument.SetCellValue("B7", ticket.IdCompanyNavigation.SubTelephone + " " + ticket.IdCompanyNavigation.Telephone);
 
-                    sLDocument.SetCellValue("A9", "EMAIL_ADDR");
-                    sLDocument.SetCellValue("B9", ticket.IdCompanyNavigation.Email ?? "");
+                        sLDocument.SetCellValue("A8", "TRGTPSN_FAX_NO");
+                        sLDocument.SetCellValue("B8", "-");
 
-                    sLDocument.SetCellValue("A10", "HMPG_ADDR");
-                    sLDocument.SetCellValue("B10", ticket.IdCompanyNavigation.WebPage ?? "");
+                        sLDocument.SetCellValue("A9", "EMAIL_ADDR");
+                        sLDocument.SetCellValue("B9", ticket.IdCompanyNavigation.Email ?? "");
 
-                    sLDocument.SetCellValue("A11", "EXPR_PRVD_TELNO");
-                    sLDocument.SetCellValue("B11", "");
+                        sLDocument.SetCellValue("A10", "HMPG_ADDR");
+                        sLDocument.SetCellValue("B10", ticket.IdCompanyNavigation.WebPage ?? "");
 
-                    sLDocument.SetCellValue("A12", "EXPR_PRVD_FAX_NO");
-                    sLDocument.SetCellValue("B12", "");
+                        sLDocument.SetCellValue("A11", "EXPR_PRVD_TELNO");
+                        sLDocument.SetCellValue("B11", "");
 
-                    sLDocument.SetCellValue("A13", "EXPR_PRVD_EMAIL_ADDR");
-                    sLDocument.SetCellValue("B13", "");
+                        sLDocument.SetCellValue("A12", "EXPR_PRVD_FAX_NO");
+                        sLDocument.SetCellValue("B12", "");
 
-                    sLDocument.SetCellValue("A14", "TRGTPSN_1_ADDR");
-                    sLDocument.SetCellValue("B14", ticket.IdCompanyNavigation.Address ?? "");
+                        sLDocument.SetCellValue("A13", "EXPR_PRVD_EMAIL_ADDR");
+                        sLDocument.SetCellValue("B13", "");
 
-                    sLDocument.SetCellValue("A15", "TRGTPSN_2_ADDR");
-                    sLDocument.SetCellValue("B15", ticket.IdCompanyNavigation.TraductionCompanies.FirstOrDefault()?.TRotherLocals ?? "");
+                        sLDocument.SetCellValue("A14", "TRGTPSN_1_ADDR");
+                        sLDocument.SetCellValue("B14", ticket.IdCompanyNavigation.Address ?? "");
 
-                    sLDocument.SetCellValue("A16", "RPRSNT_1_DSCRM_NO");
-                    sLDocument.SetCellValue("B16", "");
+                        sLDocument.SetCellValue("A15", "TRGTPSN_2_ADDR");
+                        sLDocument.SetCellValue("B15", ticket.IdCompanyNavigation.TraductionCompanies.FirstOrDefault()?.TRotherLocals ?? "");
 
-                    sLDocument.SetCellValue("A17", "RPRSNT_1_NM");
-                    sLDocument.SetCellValue("B17", "");
+                        sLDocument.SetCellValue("A16", "RPRSNT_1_DSCRM_NO");
+                        sLDocument.SetCellValue("B16", "");
 
-                    sLDocument.SetCellValue("A18", "RPRSNT_1_DTL_CTNT");
-                    sLDocument.SetCellValue("B18", "");
+                        sLDocument.SetCellValue("A17", "RPRSNT_1_NM");
+                        sLDocument.SetCellValue("B17", "");
 
-                    sLDocument.SetCellValue("A19", "RPRSNT_2_DSCRM_NO");
-                    sLDocument.SetCellValue("B19", "");
+                        sLDocument.SetCellValue("A18", "RPRSNT_1_DTL_CTNT");
+                        sLDocument.SetCellValue("B18", "");
 
-                    sLDocument.SetCellValue("A20", "RPRSNT_2_NM");
-                    sLDocument.SetCellValue("B20", "");
+                        sLDocument.SetCellValue("A19", "RPRSNT_2_DSCRM_NO");
+                        sLDocument.SetCellValue("B19", "");
 
-                    sLDocument.SetCellValue("A21", "RPRSNT_2_DTL_CTNT");
-                    sLDocument.SetCellValue("B21", "");
+                        sLDocument.SetCellValue("A20", "RPRSNT_2_NM");
+                        sLDocument.SetCellValue("B20", "");
 
-                    sLDocument.SetCellValue("A22", "TRGTPSN_1_EMP_CNT");
-                    sLDocument.SetCellValue("B22", ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault()?.WorkerNumber.ToString() ?? "");
+                        sLDocument.SetCellValue("A21", "RPRSNT_2_DTL_CTNT");
+                        sLDocument.SetCellValue("B21", "");
 
-                    sLDocument.SetCellValue("A23", "BIZTYP_1_NO");
-                    sLDocument.SetCellValue("B23", ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault()?.IdBranchSectorNavigation.OldCode ?? "");
+                        sLDocument.SetCellValue("A22", "TRGTPSN_1_EMP_CNT");
+                        sLDocument.SetCellValue("B22", ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault()?.WorkerNumber.ToString() ?? "");
 
-                    sLDocument.SetCellValue("A24", "BIZTYP_1_EXPL_CTNT");
-                    sLDocument.SetCellValue("B24", ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault()?.IdBranchSectorNavigation.EnglishName ?? "");
+                        sLDocument.SetCellValue("A23", "BIZTYP_1_NO");
+                        sLDocument.SetCellValue("B23", ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault()?.IdBranchSectorNavigation.OldCode ?? "");
 
-                    sLDocument.SetCellValue("A25", "BIZTYP_2_NO");
-                    sLDocument.SetCellValue("B25", ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault()?.IdBusinessBranchNavigation.OldCode.ToString() ?? "");
+                        sLDocument.SetCellValue("A24", "BIZTYP_1_EXPL_CTNT");
+                        sLDocument.SetCellValue("B24", ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault()?.IdBranchSectorNavigation.EnglishName ?? "");
 
-                    sLDocument.SetCellValue("A26", "BIZTYP_2_EXPL_CTNT");
-                    sLDocument.SetCellValue("B26", ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault()?.IdBusinessBranchNavigation.EnglishName ?? "");
+                        sLDocument.SetCellValue("A25", "BIZTYP_2_NO");
+                        sLDocument.SetCellValue("B25", ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault()?.IdBusinessBranchNavigation.OldCode.ToString() ?? "");
 
-                    sLDocument.SetCellValue("A27", "RMK_CTNT");
-                    sLDocument.SetCellValue("B27", "");
+                        sLDocument.SetCellValue("A26", "BIZTYP_2_EXPL_CTNT");
+                        sLDocument.SetCellValue("B26", ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault()?.IdBusinessBranchNavigation.EnglishName ?? "");
 
-                    sLDocument.SetCellValue("A28", "STL_CND_CTNT");
-                    sLDocument.SetCellValue("B28", "");
+                        sLDocument.SetCellValue("A27", "RMK_CTNT");
+                        sLDocument.SetCellValue("B27", "");
 
-                    sLDocument.SetCellValue("A29", "ABRD_ENTPR_REG_NO");
-                    sLDocument.SetCellValue("B29", ticket.IdCompanyNavigation.CompanyBackgrounds.FirstOrDefault().PublicRegister ?? ""); //ticket.IdCompanyNavigation.TraductionCompanies.FirstOrDefault()?.TBpublicRegis ?? ""
+                        sLDocument.SetCellValue("A28", "STL_CND_CTNT");
+                        sLDocument.SetCellValue("B28", "");
 
-                    sLDocument.SetCellValue("A30", "TAXPAY_NO");
-                    sLDocument.SetCellValue("B30", ticket.IdCompanyNavigation.TaxTypeCode ?? "");
+                        sLDocument.SetCellValue("A29", "ABRD_ENTPR_REG_NO");
+                        sLDocument.SetCellValue("B29", ticket.IdCompanyNavigation.CompanyBackgrounds.FirstOrDefault().PublicRegister ?? ""); //ticket.IdCompanyNavigation.TraductionCompanies.FirstOrDefault()?.TBpublicRegis ?? ""
 
-                    sLDocument.SetCellValue("A31", "OVRS_CRD_RSRCH_ORG_ENTPR_NO");
-                    sLDocument.SetCellValue("B31", "");
+                        sLDocument.SetCellValue("A30", "TAXPAY_NO");
+                        sLDocument.SetCellValue("B30", ticket.IdCompanyNavigation.TaxTypeCode ?? "");
 
-                    sLDocument.SetCellValue("A32", "FUND_DD");
-                    sLDocument.SetCellValue("B32", ticket.IdCompanyNavigation.CompanyBackgrounds.FirstOrDefault()?.ConstitutionDate?.ToString("yyyyMMdd") ?? "");
+                        sLDocument.SetCellValue("A31", "OVRS_CRD_RSRCH_ORG_ENTPR_NO");
+                        sLDocument.SetCellValue("B31", "");
 
-                    sLDocument.SetCellValue("A33", "PROD_1_NM");
-                    sLDocument.SetCellValue("B33", "");
+                        sLDocument.SetCellValue("A32", "FUND_DD");
+                        sLDocument.SetCellValue("B32", ticket.IdCompanyNavigation.CompanyBackgrounds.FirstOrDefault()?.ConstitutionDate?.ToString("yyyyMMdd") ?? "");
 
-                    sLDocument.SetCellValue("A34", "PROD_2_NM");
-                    sLDocument.SetCellValue("B34", "");
+                        sLDocument.SetCellValue("A33", "PROD_1_NM");
+                        sLDocument.SetCellValue("B33", "");
 
-                    sLDocument.SetCellValue("A35", "PROD_3_NM");
-                    sLDocument.SetCellValue("B35", "");
+                        sLDocument.SetCellValue("A34", "PROD_2_NM");
+                        sLDocument.SetCellValue("B34", "");
 
-                    sLDocument.SetCellValue("A36", "KOREAN_PRINCIPAL_YN");
-                    sLDocument.SetCellValue("B36", "");
+                        sLDocument.SetCellValue("A35", "PROD_3_NM");
+                        sLDocument.SetCellValue("B35", "");
 
-                    sLDocument.SetCellValue("A37", "STATUS");
-                    sLDocument.SetCellValue("B37", ticket.IdCompanyNavigation?.IdLegalRegisterSituationNavigation?.EnglishName ?? "");
+                        sLDocument.SetCellValue("A36", "KOREAN_PRINCIPAL_YN");
+                        sLDocument.SetCellValue("B36", "");
 
-                    sLDocument.SetCellValue("A38", "BRANCH_YN");
-                    sLDocument.SetCellValue("B38", "");
+                        sLDocument.SetCellValue("A37", "STATUS");
+                        sLDocument.SetCellValue("B37", ticket.IdCompanyNavigation?.IdLegalRegisterSituationNavigation?.EnglishName ?? "");
 
-                    sLDocument.SetCellValue("A39", "EST_FS_YN");
-                    sLDocument.SetCellValue("B39", "");
+                        sLDocument.SetCellValue("A38", "BRANCH_YN");
+                        sLDocument.SetCellValue("B38", "");
 
-                    sLDocument.SetCellValue("A40", "LSTD_ENTPR_YN");
-                    sLDocument.SetCellValue("B40", ticket.IdCompanyNavigation.CompanyBackgrounds.FirstOrDefault()?.Traded != null && ticket.IdCompanyNavigation.CompanyBackgrounds.FirstOrDefault()?.Traded == "Si" ? "Y" : "N");
+                        sLDocument.SetCellValue("A39", "EST_FS_YN");
+                        sLDocument.SetCellValue("B39", "");
 
-                    sLDocument.SetCellValue("A41", "STLACC_YYMM");
-                    sLDocument.SetCellValue("B41", "");
+                        sLDocument.SetCellValue("A40", "LSTD_ENTPR_YN");
+                        sLDocument.SetCellValue("B40", ticket.IdCompanyNavigation.CompanyBackgrounds.FirstOrDefault()?.Traded != null && ticket.IdCompanyNavigation.CompanyBackgrounds.FirstOrDefault()?.Traded == "Si" ? "Y" : "N");
 
-                    sLDocument.SetCellValue("A42", "RSRCH_ORG_GRD_NM");
-                    sLDocument.SetCellValue("B42", "");
+                        sLDocument.SetCellValue("A41", "STLACC_YYMM");
+                        sLDocument.SetCellValue("B41", "");
 
-                    sLDocument.SetCellValue("A43", "PUBENTPR_YN");
-                    sLDocument.SetCellValue("B43", "");
+                        sLDocument.SetCellValue("A42", "RSRCH_ORG_GRD_NM");
+                        sLDocument.SetCellValue("B42", "");
 
-                    sLDocument.SetCellValue("A44", "INTRNT_ORG_YN");
-                    sLDocument.SetCellValue("B44", "");
+                        sLDocument.SetCellValue("A43", "PUBENTPR_YN");
+                        sLDocument.SetCellValue("B43", "");
 
-                    sLDocument.SetCellValue("A45", "STL_STAT_SPEC_CTNT");
-                    sLDocument.SetCellValue("B45", ticket.IdCompanyNavigation.IdPaymentPolicyNavigation?.EnglishName ?? "");
+                        sLDocument.SetCellValue("A44", "INTRNT_ORG_YN");
+                        sLDocument.SetCellValue("B44", "");
 
-                    string data = "";
-                    int i = 1;
-                    var companyRelations = await context.CompanyRelations
-                        .Include(x => x.IdCompanyRelationNavigation).ThenInclude(x => x.IdCountryNavigation)
-                        .Where(x => x.IdCompany == ticket.IdCompany)
-                        .OrderBy(x => x.IdCompanyRelationNavigation.Name)
-                        .ToListAsync();
-                    var companyShareholder = await context.CompanyShareHolders
-                        .Include(x => x.IdCompanyShareHolderNavigation).ThenInclude(x => x.IdCountryNavigation)
-                        .Where(x => x.IdCompany == ticket.IdCompany)
-                        .OrderBy(x => x.IdCompanyShareHolderNavigation.Name)
-                        .ToListAsync();
-                    foreach (var cr in companyRelations)
-                    {
-                        data = data + i + ". " + cr.IdCompanyRelationNavigation.Name + " (" + cr.IdCompanyRelationNavigation.IdCountryNavigation.Name + " / " + cr.IdCompanyRelationNavigation.TaxTypeCode + " / " + cr.RelationEng + " )   ";
-                        i++;
-                    }
-                    foreach (var cs in companyShareholder)
-                    {
-                        data = data + i + ". " + cs.IdCompanyShareHolderNavigation.Name + " (" + cs.IdCompanyShareHolderNavigation.IdCountryNavigation.Name + " / " + cs.IdCompanyShareHolderNavigation.TaxTypeCode + " / " + cs.RelationEng + " )   ";
-                        i++;
-                    }
+                        sLDocument.SetCellValue("A45", "STL_STAT_SPEC_CTNT");
+                        sLDocument.SetCellValue("B45", ticket.IdCompanyNavigation.IdPaymentPolicyNavigation?.EnglishName ?? "");
 
-                    sLDocument.SetCellValue("A46", "RSRCH_ORG_GRD_NM");
-                    sLDocument.SetCellValue("B46", data);
-                    sLDocument.SetCellValue("A47", "DAL_BANK_NM");
-                    sLDocument.SetCellValue("B47", "");
-                    sLDocument.SetCellValue("A48", "PCLR_MTR_CTNT");
-                    sLDocument.SetCellValue("B48", ticket.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TFanalistCom ?? "");
-
-                    sLDocument.SetCellValue("A49", "ENTRST_NO");
-                    sLDocument.SetCellValue("B49", "");
-                    string dataPartners = "";
-                    i = 1;
-                    var partners = await context.CompanyPartners
-                        .Where(x => x.IdCompany == ticket.IdCompany && x.Enable == true)
-                        .Include(x => x.IdPersonNavigation).ThenInclude(x => x.TraductionPeople)
-                        .ToListAsync();
-                    foreach(var partner in partners)
-                    {
-                        dataPartners = dataPartners + i + ". " + partner.IdPersonNavigation.Fullname + " ( " + partner.ProfessionEng + " / " + partner.IdPersonNavigation.TraductionPeople.FirstOrDefault().TPnacionality + " )       ";
-                        i++;
-                    }
-                    sLDocument.SetCellValue("A50", "SHR_STCKHLDR_NM");
-                    sLDocument.SetCellValue("B50", dataPartners);
-
-                    string dataImports = "";
-                    var imports = await context.ImportsAndExports.Where(x => x.IdCompany == ticket.IdCompany && x.Type == "I" && x.Enable == true).ToListAsync();
-                    foreach (var import in imports)
-                    {
-                        if(dataImports == "")
+                        string data = "";
+                        int i = 1;
+                        var companyRelations = await context.CompanyRelations
+                            .Include(x => x.IdCompanyRelationNavigation).ThenInclude(x => x.IdCountryNavigation)
+                            .Where(x => x.IdCompany == ticket.IdCompany)
+                            .OrderBy(x => x.IdCompanyRelationNavigation.Name)
+                            .ToListAsync();
+                        var companyShareholder = await context.CompanyShareHolders
+                            .Include(x => x.IdCompanyShareHolderNavigation).ThenInclude(x => x.IdCountryNavigation)
+                            .Where(x => x.IdCompany == ticket.IdCompany)
+                            .OrderBy(x => x.IdCompanyShareHolderNavigation.Name)
+                            .ToListAsync();
+                        foreach (var cr in companyRelations)
                         {
-                            if(ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault().CountriesImportEng.IsNullOrEmpty() == false)
+                            data = data + i + ". " + cr.IdCompanyRelationNavigation.Name + " (" + cr.IdCompanyRelationNavigation.IdCountryNavigation.Name + " / " + cr.IdCompanyRelationNavigation.TaxTypeCode + " / " + cr.RelationEng + " )   ";
+                            i++;
+                        }
+                        foreach (var cs in companyShareholder)
+                        {
+                            data = data + i + ". " + cs.IdCompanyShareHolderNavigation.Name + " (" + cs.IdCompanyShareHolderNavigation.IdCountryNavigation.Name + " / " + cs.IdCompanyShareHolderNavigation.TaxTypeCode + " / " + cs.RelationEng + " )   ";
+                            i++;
+                        }
+
+                        sLDocument.SetCellValue("A46", "RSRCH_ORG_GRD_NM");
+                        sLDocument.SetCellValue("B46", data);
+                        sLDocument.SetCellValue("A47", "DAL_BANK_NM");
+                        sLDocument.SetCellValue("B47", "");
+                        sLDocument.SetCellValue("A48", "PCLR_MTR_CTNT");
+                        sLDocument.SetCellValue("B48", ticket.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TFanalistCom ?? "");
+
+                        sLDocument.SetCellValue("A49", "ENTRST_NO");
+                        sLDocument.SetCellValue("B49", "");
+                        string dataPartners = "";
+                        i = 1;
+                        var partners = await context.CompanyPartners
+                            .Where(x => x.IdCompany == ticket.IdCompany && x.Enable == true)
+                            .Include(x => x.IdPersonNavigation).ThenInclude(x => x.TraductionPeople)
+                            .ToListAsync();
+                        foreach (var partner in partners)
+                        {
+                            dataPartners = dataPartners + i + ". " + partner.IdPersonNavigation.Fullname + " ( " + partner.ProfessionEng + " / " + partner.IdPersonNavigation.TraductionPeople.FirstOrDefault().TPnacionality + " )       ";
+                            i++;
+                        }
+                        sLDocument.SetCellValue("A50", "SHR_STCKHLDR_NM");
+                        sLDocument.SetCellValue("B50", dataPartners);
+
+                        string dataImports = "";
+                        var imports = await context.ImportsAndExports.Where(x => x.IdCompany == ticket.IdCompany && x.Type == "I" && x.Enable == true).ToListAsync();
+                        foreach (var import in imports)
+                        {
+                            if (dataImports == "")
                             {
-                                dataImports = ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault().CountriesImportEng + " | " + import.Year + " US$ FOB " + import.Amount;
+                                if (ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault().CountriesImportEng.IsNullOrEmpty() == false)
+                                {
+                                    dataImports = ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault().CountriesImportEng + " | " + import.Year + " US$ FOB " + import.Amount;
+                                }
+                                else
+                                {
+                                    dataImports = import.Year + " US$ FOB " + import.Amount;
+                                }
                             }
                             else
                             {
-                                dataImports = import.Year + " US$ FOB " + import.Amount;
+                                dataImports = dataImports + " | " + import.Year + " US$ FOB " + import.Amount;
                             }
                         }
-                        else
-                        {
-                            dataImports = dataImports + " | " + import.Year + " US$ FOB " + import.Amount;
-                        }
-                    }
 
-                    string dataExports = "";
-                    var exports = await context.ImportsAndExports.Where(x => x.IdCompany == ticket.IdCompany && x.Type == "E" && x.Enable == true).ToListAsync();
-                    foreach (var export in exports)
-                    {
-                        if (dataExports == "")
+                        string dataExports = "";
+                        var exports = await context.ImportsAndExports.Where(x => x.IdCompany == ticket.IdCompany && x.Type == "E" && x.Enable == true).ToListAsync();
+                        foreach (var export in exports)
                         {
-                            if (ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault().CountriesExportEng.IsNullOrEmpty() == false)
+                            if (dataExports == "")
                             {
-                                dataExports = ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault().CountriesExportEng + " | " + export.Year + " US$ FOB " + export.Amount;
+                                if (ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault().CountriesExportEng.IsNullOrEmpty() == false)
+                                {
+                                    dataExports = ticket.IdCompanyNavigation.CompanyBranches.FirstOrDefault().CountriesExportEng + " | " + export.Year + " US$ FOB " + export.Amount;
+                                }
+                                else
+                                {
+                                    dataExports = export.Year + " US$ FOB " + export.Amount;
+                                }
                             }
                             else
                             {
-                                dataExports = export.Year + " US$ FOB " + export.Amount;
+                                dataExports = dataExports + " | " + export.Year + " US$ FOB " + export.Amount;
                             }
+                        }
+                        string dataImportsAndExports = "";
+                        if (imports.Count > 0)
+                        {
+                            dataImportsAndExports = "Import : " + dataImports;
+                            if (exports.Count > 0)
+                            {
+                                dataImportsAndExports = " / Export : " + dataExports;
+                            }
+                        }
+                        if (exports.Count > 0)
+                        {
+                            dataImportsAndExports = "Export : " + dataExports;
+                        }
+
+                        sLDocument.SetCellValue("A51", "IMPEXP_DAL_CTNT");
+                        sLDocument.SetCellValue("B51", dataImportsAndExports);
+                        sLDocument.SetCellValue("A52", "LCL_RPUT_CTNT");
+                        sLDocument.SetCellValue("B52", ticket.IdCompanyNavigation?.TraductionCompanies?.FirstOrDefault().TEnew ?? "");
+
+                        sLDocument.SetCellValue("A53", "SKIL_ITM_CTNT");
+                        sLDocument.SetCellValue("B53", "");
+                        sLDocument.SetCellValue("A54", "INTVW_CNNT");
+                        sLDocument.SetCellValue("B54", ticket.IdCompanyNavigation?.TraductionCompanies?.FirstOrDefault().TFcomment ?? "");
+                        sLDocument.SetCellValue("A55", "FUND_HIST_CTNT");
+                        sLDocument.SetCellValue("B55", ticket.IdCompanyNavigation?.TraductionCompanies?.FirstOrDefault().TBlegalBack ?? "");
+                        sLDocument.SetCellValue("A56", "PBLC_INFO_CTNT");
+                        sLDocument.SetCellValue("B56", ticket.IdCompanyNavigation?.TraductionCompanies?.FirstOrDefault().TSlitig ?? "");
+
+                        var balance = await context.FinancialBalances
+                            .Where(x => x.IdCompany == ticket.IdCompany && x.BalanceType == "GENERAL" && x.Enable == true)
+                            .Include(x => x.IdCurrencyNavigation)
+                            .OrderByDescending(x => x.Date).Take(2)
+                            .ToListAsync();
+                        if (balance != null)
+                        {
+                            sLDocument.SetCellValue("A57", "CURR_NM");
+                            sLDocument.SetCellValue("B57", balance[0].IdCurrencyNavigation.Abreviation);
+                            sLDocument.SetCellValue("A58", "AL_AST_AMT");
+                            sLDocument.SetCellValue("B58", balance[0].TotalAssets ?? 0);
+                            sLDocument.SetCellValue("A59", "AL_LIAB_AMT");
+                            sLDocument.SetCellValue("B59", balance[0].TotalLliabilities ?? 0);
+                            sLDocument.SetCellValue("A60", "AL_LIAB_CPT_AMT");
+                            sLDocument.SetCellValue("B60", balance[0].TotalLiabilitiesPatrimony ?? 0);
+                            sLDocument.SetCellValue("A61", "BS_BASE_YYMM");
+                            sLDocument.SetCellValue("B61", balance[0].Date.Value.ToString("yyyyMM"));
+                            sLDocument.SetCellValue("A62", "PAYCPT_AMT_CURR_NM");
+                            sLDocument.SetCellValue("B62", balance[0].IdCurrencyNavigation.Abreviation);
+
+                            //string currentCapital = (ticket.IdCompanyNavigation?.CompanyBackgrounds?.FirstOrDefault().CurrentPaidCapitalCurrencyNavigation?.Abreviation ?? "" )+
+                            //    " | " + ticket.IdCompanyNavigation?.CompanyBackgrounds?.FirstOrDefault().CurrentPaidCapital + " | " + (ticket.IdCompanyNavigation?.TraductionCompanies?.FirstOrDefault().TBpaidCapital ?? "");
+                            string currentCapital = ticket.IdCompanyNavigation?.CompanyBackgrounds?.FirstOrDefault().CurrentPaidCapital.ToString();
+
+                            sLDocument.SetCellValue("A63", "PAYCPT_AMT");
+                            sLDocument.SetCellValue("B63", currentCapital);
+                            sLDocument.SetCellValue("A64", "DFR_AST_AMT");
+                            sLDocument.SetCellValue("B64", balance[0].AOtherCurrentAssets ?? 0);
+                            sLDocument.SetCellValue("A65", "ETC_LIAB_AMT");
+                            sLDocument.SetCellValue("B65", balance[0].LOtherCurrentLiabilities ?? 0);
+                            sLDocument.SetCellValue("A66", "FIX_AST_AMT");
+                            sLDocument.SetCellValue("B66", balance[0].AFixed ?? 0);
+                            sLDocument.SetCellValue("A67", "FIX_LIAB_AMT");
+                            sLDocument.SetCellValue("B67", balance[0].LLongTerm ?? 0);
+                            sLDocument.SetCellValue("A68", "INVNT_AST_AMT");
+                            sLDocument.SetCellValue("B68", balance[0].AInventory ?? 0);
+                            sLDocument.SetCellValue("A69", "INVST_ETC_AST_AMT");
+                            sLDocument.SetCellValue("B69", "");
+                            sLDocument.SetCellValue("A70", "LQID_AST_AMT");
+                            sLDocument.SetCellValue("B70", balance[0].TotalCurrentAssets ?? 0);
+                            sLDocument.SetCellValue("A71", "LQID_LIAB_AMT");
+                            sLDocument.SetCellValue("B71", balance[0].TotalCurrentLiabilities ?? 0);
+                            sLDocument.SetCellValue("A72", "NET_PRFT_AMT");
+                            sLDocument.SetCellValue("B72", balance[0].Utilities ?? 0);
+                            sLDocument.SetCellValue("A73", "NETAST_AMT");
+                            sLDocument.SetCellValue("B73", (balance[0].PCapital ?? 0) + (balance[0].PStockPile ?? 0) + (balance[0].PUtilities ?? 0) + (balance[0].POther ?? 0));
+                            sLDocument.SetCellValue("A74", "PRFLOS_BIL_BASE_YYMM");
+                            sLDocument.SetCellValue("B74", balance[0].Date.Value.ToString("yyyyMM"));
+                            sLDocument.SetCellValue("A75", "PRFT_SRPLS_AMT");
+                            sLDocument.SetCellValue("B75", balance[0].POther ?? 0);
+                            sLDocument.SetCellValue("A76", "PRVYY_AL_AST_AMT");
+                            sLDocument.SetCellValue("B76", balance[1].TotalAssets ?? 0);
+                            sLDocument.SetCellValue("A77", "PRVYY_BS_BASE_YYMM");
+                            sLDocument.SetCellValue("B77", balance[1].Date.Value.ToString("yyyyMM"));
+                            sLDocument.SetCellValue("A78", "PRVYY_NET_PRFT_AMT");
+                            sLDocument.SetCellValue("B78", balance[1].Utilities ?? 0);
+                            sLDocument.SetCellValue("A79", "PRVYY_PRFLOS_BIL_BASE_YYMM");
+                            sLDocument.SetCellValue("B79", balance[1].Date.Value.ToString("yyyyMM"));
+                            sLDocument.SetCellValue("A80", "PRVYY_SALE_AMT");
+                            sLDocument.SetCellValue("B80", balance[1].Sales ?? 0);
+                            sLDocument.SetCellValue("A81", "SALE_AMT");
+                            sLDocument.SetCellValue("B81", balance[0].Sales ?? 0);
                         }
                         else
                         {
-                            dataExports = dataExports + " | " + export.Year + " US$ FOB " + export.Amount;
+                            sLDocument.SetCellValue("A57", "CURR_NM");
+                            sLDocument.SetCellValue("B57", "");
+                            sLDocument.SetCellValue("A58", "AL_AST_AMT");
+                            sLDocument.SetCellValue("B58", "");
+                            sLDocument.SetCellValue("A59", "AL_LIAB_AMT");
+                            sLDocument.SetCellValue("B59", "");
+                            sLDocument.SetCellValue("A60", "AL_LIAB_CPT_AMT");
+                            sLDocument.SetCellValue("B60", "");
+                            sLDocument.SetCellValue("A61", "BS_BASE_YYMM");
+                            sLDocument.SetCellValue("B61", "");
+                            sLDocument.SetCellValue("A62", "PAYCPT_AMT_CURR_NM");
+                            sLDocument.SetCellValue("B62", "");
+                            sLDocument.SetCellValue("A63", "PAYCPT_AMT");
+                            sLDocument.SetCellValue("B63", "");
+                            sLDocument.SetCellValue("A64", "DFR_AST_AMT");
+                            sLDocument.SetCellValue("B64", "");
+                            sLDocument.SetCellValue("A65", "ETC_LIAB_AMT");
+                            sLDocument.SetCellValue("B65", "");
+                            sLDocument.SetCellValue("A66", "FIX_AST_AMT");
+                            sLDocument.SetCellValue("B66", "");
+                            sLDocument.SetCellValue("A67", "FIX_LIAB_AMT");
+                            sLDocument.SetCellValue("B67", "");
+                            sLDocument.SetCellValue("A68", "INVNT_AST_AMT");
+                            sLDocument.SetCellValue("B68", "");
+                            sLDocument.SetCellValue("A69", "INVST_ETC_AST_AMT");
+                            sLDocument.SetCellValue("B69", "");
+                            sLDocument.SetCellValue("A70", "LQID_AST_AMT");
+                            sLDocument.SetCellValue("B70", "");
+                            sLDocument.SetCellValue("A71", "LQID_LIAB_AMT");
+                            sLDocument.SetCellValue("B71", "");
+                            sLDocument.SetCellValue("A72", "NET_PRFT_AMT");
+                            sLDocument.SetCellValue("B72", "");
+                            sLDocument.SetCellValue("A73", "NETAST_AMT");
+                            sLDocument.SetCellValue("B73", "");
+                            sLDocument.SetCellValue("A74", "PRFLOS_BIL_BASE_YYMM");
+                            sLDocument.SetCellValue("B74", "");
+                            sLDocument.SetCellValue("A75", "PRFT_SRPLS_AMT");
+                            sLDocument.SetCellValue("B75", "");
+                            sLDocument.SetCellValue("A76", "PRVYY_AL_AST_AMT");
+                            sLDocument.SetCellValue("B76", "");
+                            sLDocument.SetCellValue("A77", "PRVYY_BS_BASE_YYMM");
+                            sLDocument.SetCellValue("B77", "");
+                            sLDocument.SetCellValue("A78", "PRVYY_NET_PRFT_AMT");
+                            sLDocument.SetCellValue("B78", "");
+                            sLDocument.SetCellValue("A79", "PRVYY_PRFLOS_BIL_BASE_YYMM");
+                            sLDocument.SetCellValue("B79", "");
+                            sLDocument.SetCellValue("A80", "PRVYY_SALE_AMT");
+                            sLDocument.SetCellValue("B80", "");
+                            sLDocument.SetCellValue("A81", "SALE_AMT");
+                            sLDocument.SetCellValue("B81", "");
                         }
-                    }
-                    string dataImportsAndExports = "";
-                    if(imports.Count > 0)
+                        sLDocument.SetColumnWidth(1, 30);
+                        sLDocument.SetColumnWidth(2, 150);
+
+                        SLStyle style = new SLStyle();
+                        style.Alignment.Horizontal = DocumentFormat.OpenXml.Spreadsheet.HorizontalAlignmentValues.Left;
+
+                        sLDocument.SetColumnStyle(2, style);
+                    memoryStream.Position = 0;
+                        sLDocument.SaveAs(memoryStream);
+
+                    byte[] fileBytes = memoryStream.ToArray();
+                    response.Data = new GetFileResponseDto
                     {
-                        dataImportsAndExports = "Import : " + dataImports;
-                        if(exports.Count > 0)
-                        {
-                            dataImportsAndExports = " / Export : " + dataExports;
-                        }
-                    }if(exports.Count > 0)
-                    {
-                        dataImportsAndExports = "Export : " + dataExports;
-                    }
-
-                    sLDocument.SetCellValue("A51", "IMPEXP_DAL_CTNT");
-                    sLDocument.SetCellValue("B51", dataImportsAndExports);
-                    sLDocument.SetCellValue("A52", "LCL_RPUT_CTNT");
-                    sLDocument.SetCellValue("B52", ticket.IdCompanyNavigation?.TraductionCompanies?.FirstOrDefault().TEnew ?? "");
-
-                    sLDocument.SetCellValue("A53", "SKIL_ITM_CTNT");
-                    sLDocument.SetCellValue("B53", "");
-                    sLDocument.SetCellValue("A54", "INTVW_CNNT");
-                    sLDocument.SetCellValue("B54", ticket.IdCompanyNavigation?.TraductionCompanies?.FirstOrDefault().TFcomment ?? "");
-                    sLDocument.SetCellValue("A55", "FUND_HIST_CTNT");
-                    sLDocument.SetCellValue("B55", ticket.IdCompanyNavigation?.TraductionCompanies?.FirstOrDefault().TBlegalBack ?? "");
-                    sLDocument.SetCellValue("A56", "PBLC_INFO_CTNT");
-                    sLDocument.SetCellValue("B56", ticket.IdCompanyNavigation?.TraductionCompanies?.FirstOrDefault().TSlitig ?? "");
-
-                    var balance = await context.FinancialBalances
-                        .Where(x => x.IdCompany == ticket.IdCompany && x.BalanceType == "GENERAL" && x.Enable == true)
-                        .Include(x => x.IdCurrencyNavigation)
-                        .OrderByDescending(x => x.Date).Take(2)
-                        .ToListAsync();
-                    if(balance != null)
-                    {
-                        sLDocument.SetCellValue("A57", "CURR_NM");
-                        sLDocument.SetCellValue("B57", balance[0].IdCurrencyNavigation.Abreviation);
-                        sLDocument.SetCellValue("A58", "AL_AST_AMT");
-                        sLDocument.SetCellValue("B58", balance[0].TotalAssets ?? 0);
-                        sLDocument.SetCellValue("A59", "AL_LIAB_AMT");
-                        sLDocument.SetCellValue("B59", balance[0].TotalLliabilities ?? 0);
-                        sLDocument.SetCellValue("A60", "AL_LIAB_CPT_AMT");
-                        sLDocument.SetCellValue("B60", balance[0].TotalLiabilitiesPatrimony ?? 0);
-                        sLDocument.SetCellValue("A61", "BS_BASE_YYMM");
-                        sLDocument.SetCellValue("B61", balance[0].Date.Value.ToString("yyyyMM"));
-                        sLDocument.SetCellValue("A62", "PAYCPT_AMT_CURR_NM");
-                        sLDocument.SetCellValue("B62", balance[0].IdCurrencyNavigation.Abreviation);
-
-                        //string currentCapital = (ticket.IdCompanyNavigation?.CompanyBackgrounds?.FirstOrDefault().CurrentPaidCapitalCurrencyNavigation?.Abreviation ?? "" )+
-                        //    " | " + ticket.IdCompanyNavigation?.CompanyBackgrounds?.FirstOrDefault().CurrentPaidCapital + " | " + (ticket.IdCompanyNavigation?.TraductionCompanies?.FirstOrDefault().TBpaidCapital ?? "");
-                        string currentCapital = ticket.IdCompanyNavigation?.CompanyBackgrounds?.FirstOrDefault().CurrentPaidCapital.ToString();
-
-                        sLDocument.SetCellValue("A63", "PAYCPT_AMT");
-                        sLDocument.SetCellValue("B63", currentCapital);
-                        sLDocument.SetCellValue("A64", "DFR_AST_AMT");
-                        sLDocument.SetCellValue("B64", balance[0].AOtherCurrentAssets ?? 0);
-                        sLDocument.SetCellValue("A65", "ETC_LIAB_AMT");
-                        sLDocument.SetCellValue("B65", balance[0].LOtherCurrentLiabilities ?? 0);
-                        sLDocument.SetCellValue("A66", "FIX_AST_AMT");
-                        sLDocument.SetCellValue("B66", balance[0].AFixed ?? 0);
-                        sLDocument.SetCellValue("A67", "FIX_LIAB_AMT");
-                        sLDocument.SetCellValue("B67", balance[0].LLongTerm ?? 0);
-                        sLDocument.SetCellValue("A68", "INVNT_AST_AMT");
-                        sLDocument.SetCellValue("B68", balance[0].AInventory ?? 0);
-                        sLDocument.SetCellValue("A69", "INVST_ETC_AST_AMT");
-                        sLDocument.SetCellValue("B69", "");
-                        sLDocument.SetCellValue("A70", "LQID_AST_AMT");
-                        sLDocument.SetCellValue("B70", balance[0].TotalCurrentAssets ?? 0);
-                        sLDocument.SetCellValue("A71", "LQID_LIAB_AMT");
-                        sLDocument.SetCellValue("B71", balance[0].TotalCurrentLiabilities ?? 0);
-                        sLDocument.SetCellValue("A72", "NET_PRFT_AMT");
-                        sLDocument.SetCellValue("B72", balance[0].Utilities ?? 0);
-                        sLDocument.SetCellValue("A73", "NETAST_AMT");
-                        sLDocument.SetCellValue("B73", (balance[0].PCapital ?? 0) + (balance[0].PStockPile ?? 0) + (balance[0].PUtilities ?? 0) + (balance[0].POther ?? 0));
-                        sLDocument.SetCellValue("A74", "PRFLOS_BIL_BASE_YYMM");
-                        sLDocument.SetCellValue("B74", balance[0].Date.Value.ToString("yyyyMM"));
-                        sLDocument.SetCellValue("A75", "PRFT_SRPLS_AMT");
-                        sLDocument.SetCellValue("B75", balance[0].POther ?? 0);
-                        sLDocument.SetCellValue("A76", "PRVYY_AL_AST_AMT");
-                        sLDocument.SetCellValue("B76", balance[1].TotalAssets ?? 0);
-                        sLDocument.SetCellValue("A77", "PRVYY_BS_BASE_YYMM");
-                        sLDocument.SetCellValue("B77", balance[1].Date.Value.ToString("yyyyMM"));
-                        sLDocument.SetCellValue("A78", "PRVYY_NET_PRFT_AMT");
-                        sLDocument.SetCellValue("B78", balance[1].Utilities ?? 0);
-                        sLDocument.SetCellValue("A79", "PRVYY_PRFLOS_BIL_BASE_YYMM");
-                        sLDocument.SetCellValue("B79", balance[1].Date.Value.ToString("yyyyMM"));
-                        sLDocument.SetCellValue("A80", "PRVYY_SALE_AMT");
-                        sLDocument.SetCellValue("B80", balance[1].Sales ?? 0);
-                        sLDocument.SetCellValue("A81", "SALE_AMT");
-                        sLDocument.SetCellValue("B81", balance[0].Sales ?? 0);
-                    }
-                    else
-                    {
-                        sLDocument.SetCellValue("A57", "CURR_NM");
-                        sLDocument.SetCellValue("B57", "");
-                        sLDocument.SetCellValue("A58", "AL_AST_AMT");
-                        sLDocument.SetCellValue("B58", "");
-                        sLDocument.SetCellValue("A59", "AL_LIAB_AMT");
-                        sLDocument.SetCellValue("B59", "");
-                        sLDocument.SetCellValue("A60", "AL_LIAB_CPT_AMT");
-                        sLDocument.SetCellValue("B60", "");
-                        sLDocument.SetCellValue("A61", "BS_BASE_YYMM");
-                        sLDocument.SetCellValue("B61", "");
-                        sLDocument.SetCellValue("A62", "PAYCPT_AMT_CURR_NM");
-                        sLDocument.SetCellValue("B62", "");
-                        sLDocument.SetCellValue("A63", "PAYCPT_AMT");
-                        sLDocument.SetCellValue("B63", "");
-                        sLDocument.SetCellValue("A64", "DFR_AST_AMT");
-                        sLDocument.SetCellValue("B64", "");
-                        sLDocument.SetCellValue("A65", "ETC_LIAB_AMT");
-                        sLDocument.SetCellValue("B65", "");
-                        sLDocument.SetCellValue("A66", "FIX_AST_AMT");
-                        sLDocument.SetCellValue("B66", "");
-                        sLDocument.SetCellValue("A67", "FIX_LIAB_AMT");
-                        sLDocument.SetCellValue("B67", "");
-                        sLDocument.SetCellValue("A68", "INVNT_AST_AMT");
-                        sLDocument.SetCellValue("B68", "");
-                        sLDocument.SetCellValue("A69", "INVST_ETC_AST_AMT");
-                        sLDocument.SetCellValue("B69", "");
-                        sLDocument.SetCellValue("A70", "LQID_AST_AMT");
-                        sLDocument.SetCellValue("B70", "");
-                        sLDocument.SetCellValue("A71", "LQID_LIAB_AMT");
-                        sLDocument.SetCellValue("B71", "");
-                        sLDocument.SetCellValue("A72", "NET_PRFT_AMT");
-                        sLDocument.SetCellValue("B72", "");
-                        sLDocument.SetCellValue("A73", "NETAST_AMT");
-                        sLDocument.SetCellValue("B73", "");
-                        sLDocument.SetCellValue("A74", "PRFLOS_BIL_BASE_YYMM");
-                        sLDocument.SetCellValue("B74", "");
-                        sLDocument.SetCellValue("A75", "PRFT_SRPLS_AMT");
-                        sLDocument.SetCellValue("B75", "");
-                        sLDocument.SetCellValue("A76", "PRVYY_AL_AST_AMT");
-                        sLDocument.SetCellValue("B76", "");
-                        sLDocument.SetCellValue("A77", "PRVYY_BS_BASE_YYMM");
-                        sLDocument.SetCellValue("B77", "");
-                        sLDocument.SetCellValue("A78", "PRVYY_NET_PRFT_AMT");
-                        sLDocument.SetCellValue("B78", "");
-                        sLDocument.SetCellValue("A79", "PRVYY_PRFLOS_BIL_BASE_YYMM");
-                        sLDocument.SetCellValue("B79", "");
-                        sLDocument.SetCellValue("A80", "PRVYY_SALE_AMT");
-                        sLDocument.SetCellValue("B80", "");
-                        sLDocument.SetCellValue("A81", "SALE_AMT");
-                        sLDocument.SetCellValue("B81", "");
-                    }
-                    sLDocument.SetColumnWidth(1, 30);
-                    sLDocument.SetColumnWidth(2, 150);
-                    
-                    SLStyle style = new SLStyle();
-                    style.Alignment.Horizontal = DocumentFormat.OpenXml.Spreadsheet.HorizontalAlignmentValues.Left;
-                    
-                    sLDocument.SetColumnStyle(2, style);
-                    sLDocument.SaveAs(filePath);
+                        Name = $"{ticket.IdCompanyNavigation.Name}.xlsx",
+                        File = fileBytes,
+                        ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    };
                 }
             }
             catch (Exception ex)
@@ -4370,6 +4456,106 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 _logger.LogError(ex.Message);
                 response.Data = null;
+                response.IsSuccess = false;
+            }
+            return response;
+        }
+
+        public async Task<Response<bool>> SendComplement(int idTicket, int idUser, bool digited, bool file, string observations)
+        {
+            var response = new Response<bool>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var ticket = await context.Tickets.Where(x => x.Id == idTicket)
+                    .Include(x => x.TicketFiles)
+                    .FirstOrDefaultAsync();
+                var user = await context.UserLogins.Where(x => x.Id == idUser)
+                    .Include(x => x.IdEmployeeNavigation).ThenInclude(x => x.Personals)
+                    .FirstOrDefaultAsync();
+                var ticketHistory = await context.TicketHistories
+                    .Where(x => x.IdTicket == idTicket && x.AsignationType == "SU" && x.AsignedTo.Contains("S"))
+                    .FirstOrDefaultAsync();
+
+                if (ticket == null || user == null || ticketHistory == null) 
+                {
+                    throw new Exception("Ticket, Usuario o Supervisor no encontrados");
+                }
+                var ticketFiles = new List<TicketFile>();
+                foreach(var ticketFile in ticket.TicketFiles)
+                {
+                    ticketFile.IdTicket = null;
+                    ticketFiles.Add(ticketFile);
+                }
+                var newTicket = new Ticket{ 
+                    Number = ticket.Number,
+                    IdSubscriber = ticket.IdSubscriber,
+                    IdCompany = ticket.IdCompany,
+                    IdPerson = ticket.IdPerson,
+                    RevealName = ticket.RevealName,
+                    NameRevealed = ticket.NameRevealed,
+                    ReferenceNumber = ticket.ReferenceNumber,
+                    Language = ticket.Language,
+                    QueryCredit = ticket.QueryCredit,
+                    TimeLimit = ticket.TimeLimit,
+                    AditionalData = ticket.AditionalData,
+                    About = ticket.About,
+                    OrderDate = ticket.OrderDate,
+                    ExpireDate = ticket.ExpireDate,
+                    RealExpireDate = ticket.RealExpireDate,
+                    Address = ticket.Address,
+                    Price = ticket.Price,
+                    City = ticket.City,
+                    BusineesName = ticket.BusineesName,
+                    ComercialName = ticket.ComercialName,
+                    Email = ticket.Email,
+                    IdContinent = ticket.IdContinent,
+                    IdCountry = ticket.IdCountry,
+                    IdStatusTicket = (int)TicketStatusEnum.Pre_Asignacion,
+                    ProcedureType = ticket.ProcedureType,
+                    ReportType = ticket.ReportType,
+                    RequestedName = ticket.RequestedName,
+                    SubscriberIndications = ticket.SubscriberIndications,
+                    TaxCode = ticket.TaxCode,
+                    TaxType = ticket.TaxType,
+                    Telephone = ticket.Telephone,
+                    WebPage = ticket.WebPage,
+                    TicketFiles = ticketFiles,
+
+
+                    IsComplement = true,
+                    IdTicketComplement = ticket.Id.ToString(),
+                    NumberTicketComplement = ticket.Number.ToString("D6") + "*"
+                };
+                
+                var ticketHistory1 = new TicketHistory { 
+                    IdTicket = newTicket.Id,
+                    UserFrom = user.Id.ToString(),
+                    UserTo = user.Id.ToString(),
+                    IdStatusTicket = (int)TicketStatusEnum.Pendiente,
+                    Flag = true
+                };
+                var ticketHistory2 = new TicketHistory
+                {
+                    IdTicket = newTicket.Id,
+                    UserFrom = user.Id.ToString(),
+                    UserTo = ticketHistory.UserTo,
+                    AsignedTo = ticketHistory.AsignedTo,
+                    AsignationType = ticketHistory.AsignationType,
+                    IdStatusTicket = (int)TicketStatusEnum.Asig_Supervisor,
+                    Flag = false,
+                    Observations = observations,
+                    StartDate = DateTime.Now,
+                };
+                newTicket.TicketHistories.Add(ticketHistory1);
+                newTicket.TicketHistories.Add(ticketHistory2);
+                await context.Tickets.AddAsync(newTicket);
+                await context.SaveChangesAsync();
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                response.Data = false;
                 response.IsSuccess = false;
             }
             return response;

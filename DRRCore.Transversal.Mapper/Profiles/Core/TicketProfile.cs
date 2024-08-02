@@ -206,7 +206,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                 .ForMember(dest => dest.IdCountry, opt => opt.MapFrom(src => src.IdTicketNavigation.IdCountry ?? 0))
                 .ForMember(dest => dest.IdCompany, opt => opt.MapFrom(src => src.IdTicketNavigation.IdCompany ?? 0))
                 .ForMember(dest => dest.IdPerson, opt => opt.MapFrom(src => src.IdTicketNavigation.IdPerson ?? 0))
-                .ForMember(dest => dest.Number, opt => opt.MapFrom(src => src.IdTicketNavigation.About + " - " + src.IdTicketNavigation.Number.ToString("D6")))
+                .ForMember(dest => dest.Number, opt => opt.MapFrom(src => src.IdTicketNavigation.IsComplement == true ? src.IdTicketNavigation.About + " - " + src.IdTicketNavigation.Number.ToString("D6") + " * " : src.IdTicketNavigation.About + " - " + src.IdTicketNavigation.Number.ToString("D6")))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.IdStatusTicketNavigation.Abrev ?? string.Empty))
                 .ForMember(dest => dest.StatusColor, opt => opt.MapFrom(src => src.IdStatusTicketNavigation.Color ?? string.Empty))
                 .ForMember(dest => dest.Language, opt => opt.MapFrom(src => src.IdTicketNavigation.Language ?? string.Empty))

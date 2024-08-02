@@ -209,7 +209,7 @@ public partial class SqlCoreContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-    => optionsBuilder.UseSqlServer("Data Source=200.58.123.184,14330;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
+     => optionsBuilder.UseSqlServer("Data Source=200.58.123.184,14330;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
     //=> optionsBuilder.UseSqlServer("Data Source=SD-4154134-W;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -4774,6 +4774,13 @@ public partial class SqlCoreContext : DbContext
             entity.Property(e => e.IdPerson).HasColumnName("idPerson");
             entity.Property(e => e.IdStatusTicket).HasColumnName("idStatusTicket");
             entity.Property(e => e.IdSubscriber).HasColumnName("idSubscriber");
+            entity.Property(e => e.IdTicketComplement)
+                .HasMaxLength(10)
+                .IsUnicode(false)
+                .HasColumnName("idTicketComplement");
+            entity.Property(e => e.IsComplement)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("isComplement");
             entity.Property(e => e.Language)
                 .HasMaxLength(1)
                 .IsUnicode(false)
@@ -4784,6 +4791,10 @@ public partial class SqlCoreContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("nameRevealed");
             entity.Property(e => e.Number).HasColumnName("number");
+            entity.Property(e => e.NumberTicketComplement)
+                .HasMaxLength(10)
+                .IsUnicode(false)
+                .HasColumnName("numberTicketComplement");
             entity.Property(e => e.OrderDate)
                 .HasColumnType("datetime")
                 .HasColumnName("orderDate");

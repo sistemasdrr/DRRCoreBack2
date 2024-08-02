@@ -200,6 +200,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                             .Include(x => x.IdCreditRiskNavigation)
                             .Include(x => x.IdDocumentTypeNavigation)
                             .Include(x => x.IdCountryNavigation)
+                            .Include(x => x.TraductionPeople)
                             .Where(x => (idCountry == 0 || x.IdCountry == idCountry)
                             && (form == "C" ? x.Fullname.Contains(fullname) : form == "I" ? x.Fullname.StartsWith(fullname) : false))
                             .Take(100).ToListAsync();
@@ -210,6 +211,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                             .Include(x => x.IdCreditRiskNavigation)
                             .Include(x => x.IdDocumentTypeNavigation)
                             .Include(x => x.IdCountryNavigation)
+                            .Include(x => x.TraductionPeople)
                             .Where(x => (idCountry == 0 || x.IdCountry == idCountry)
                             && (form == "C" ? x.Address.Contains(fullname) : form == "I" ? x.Address.StartsWith(fullname) : false)).Take(100).ToListAsync();
                     }
@@ -219,6 +221,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                             .Include(x => x.IdCreditRiskNavigation)
                             .Include(x => x.IdDocumentTypeNavigation)
                             .Include(x => x.IdCountryNavigation)
+                            .Include(x => x.TraductionPeople)
                             .Where(x => (idCountry == 0 || x.IdCountry == idCountry)
                             && (form == "C" ? x.TaxTypeCode.Contains(fullname) : form == "I" ? x.TaxTypeCode.StartsWith(fullname) : false)).Take(100).ToListAsync();
                     }
@@ -228,6 +231,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                             .Include(x => x.IdCreditRiskNavigation)
                             .Include(x => x.IdDocumentTypeNavigation)
                             .Include(x => x.IdCountryNavigation)
+                            .Include(x => x.TraductionPeople)
                             .Where(x => (idCountry == 0 || x.IdCountry == idCountry)
                             && (form == "C" ? x.Cellphone.Contains(fullname) : form == "I" ? x.Cellphone.StartsWith(fullname) : false)).Take(100).ToListAsync();
                     }
