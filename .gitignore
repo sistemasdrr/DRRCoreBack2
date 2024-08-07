@@ -341,3 +341,7 @@
 /DRRCore.Infraestructure.Repository/obj/Debug/net6.0/DRRCore.Infraestructure.Repository.csproj.CoreCompileInputs.cache
 /DRRCore.Infraestructure.Repository/obj/Debug/net6.0/DRRCore.Infraestructure.Repository.dll
 /DRRCore.Infraestructure.Repository/obj/Debug/net6.0/DRRCore.Infraestructure.Repository.pdb
+/DRRCore.Services.Migration/obj/Debug/net6.0/apphost.exe
+/DRRCore.Services.ApiWeb/obj/Debug/net6.0/apphost.exe
+/.vs/DRRCore/v17/fileList.bin
+/DRRCore.Services.ApiEmail/obj/Debug/net6.0/apphost.exe
