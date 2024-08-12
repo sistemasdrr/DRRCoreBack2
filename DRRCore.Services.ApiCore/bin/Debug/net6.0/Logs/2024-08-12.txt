@@ -1,0 +1,24 @@
+2024-08-12 09:01:15,793 [30] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-12 09:01:15,808 [30] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-08-12 09:01:16,338 [30] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-12 09:01:16,338 [30] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-08-12 09:01:43,401 [38] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-12 09:01:43,402 [38] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-08-12 09:01:43,939 [30] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-12 09:01:43,940 [30] ERROR App  
+ No se encontró datos en la entidad 
+ 

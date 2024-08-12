@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using DRRCore.Domain.Entities.MySqlContextFotos;
 using Microsoft.IdentityModel.Tokens;
 using DRRCore.Domain.Entities.SqlContext;
+using DocumentFormat.OpenXml.InkML;
 
 namespace DRRCore.Application.Main.MigrationApplication
 {
@@ -178,9 +179,14 @@ namespace DRRCore.Application.Main.MigrationApplication
         }
         public async Task<bool> MigrateCompanyOthers(int migra)
         {
-            for (int i = 0; i < 600; i++)
+            using var contextMysql = new MySqlContext();
+            using var context = new SqlCoreContext();
+            for (int i = 0; i < 1400; i++)
             {
-                var empresas = await _mempresaDomain.GetNotMigratedEmpresa(migra);
+
+                var empresas = await contextMysql.MEmpresas
+                        .Where(x => x.Migra == migra && x.EmNombre != null).Take(100)
+                        .ToListAsync();
 
                 foreach (var empresa in empresas)
                 {
@@ -188,7 +194,6 @@ namespace DRRCore.Application.Main.MigrationApplication
                     ramo = new REmpVsRamNeg();
                     aval = new TCabEmpAval();
                     antecedentes = new REmpVsAspLeg();
-                    using var context = new SqlCoreContext();
                     
                     try
                     {
@@ -246,7 +251,7 @@ namespace DRRCore.Application.Main.MigrationApplication
                             ComercialLatePayments = await GetComercialLatePayments(empresa.EmCodigo),
                             BankDebts = await GetBankDebts(empresa.EmCodigo),
                             WorkersHistories = await GetWorkersHistories(empresa),
-                            //CompanyImages = await GetCompanyImage(empresa.EmCodigo),
+                            CompanyImages = await GetCompanyImage(empresa.EmCodigo),
                             TraductionCompanies = await GetAllTraductions(empresa),
                             
                         };
@@ -639,22 +644,6 @@ namespace DRRCore.Application.Main.MigrationApplication
                         });
                     }
                 }
-                //    var endBancario = await _mempresaDomain.GetmEmpresaEndBancByCodigoAsync(emCodigo);
-
-                //foreach (var item in endBancario)
-                //{
-                //    var objeto = new BankDebt
-                //    {
-                //        BankName = item.SbdNombre,
-                //        Qualification = item.SbdCalifi,
-                //        QualificationEng = item.SbdCalifiIng,
-                //        DebtNc = (decimal)item.SbdMonto,
-                //        DebtFc = (decimal)item.SbdMonMe,
-                //        Memo = item.SbdMemo,
-                //        MemoEng = item.SbdMemoIng,
-                //    };
-                //    lista.Add(objeto);
-                //}
                 return lista;
             }
             catch (Exception ex)
@@ -2343,7 +2332,12 @@ namespace DRRCore.Application.Main.MigrationApplication
 
                         MaximumCredit = item.AboCremax == "1" ? true : false,
                         RevealName = item.AboRevnom == "1" ? true : false,
-                        NormalPrice = item.AboPnonli == "Si" ? true : false
+                        NormalPrice = item.AboPnonli == "Si" ? true : false,
+                        ReportInPdf = true,
+                        ReportInExcel = false,
+                        ReportInWord = false,
+                        ReportInXml = false,
+                        ReportInXmlCredendo = false
                     };
                     await sqlContext.Subscribers.AddAsync(newSubscriber);
                     await sqlContext.SaveChangesAsync();
@@ -2805,9 +2799,32 @@ namespace DRRCore.Application.Main.MigrationApplication
                
         
 
-        public Task<bool> MigrateAgent()
+        public async Task<bool> MigrateAgent()
         {
-            throw new NotImplementedException();
+            using var mysqlcontext = new MySqlContext();
+            using var context = new SqlCoreContext();
+            try
+            {
+                var agentes = await mysqlcontext.MAgentes.ToListAsync();
+                var newAgent = new Agent();
+                var newAgentPrice = new List<AgentPrice>();
+                foreach (var agente in agentes)
+                {
+                    var agentePrecios = await mysqlcontext.TPrecioAgentes.Where(x => x.AgeCodigo == agente.AgeCodigo).ToListAsync();
+                    foreach (var item in agentePrecios)
+                    {
+                        newAgentPrice.Add(new AgentPrice
+                        {
+                            
+                        });
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                throw new Exception("Error: " + ex.Message);
+            }
+            return true;
         }
 
         public async Task<bool> CorrecPersona(int migra)

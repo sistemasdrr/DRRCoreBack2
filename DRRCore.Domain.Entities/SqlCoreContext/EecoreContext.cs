@@ -123,6 +123,8 @@ public partial class EecoreContext : DbContext
 
     public virtual DbSet<Order> Orders { get; set; }
 
+    public virtual DbSet<Parameter> Parameters { get; set; }
+
     public virtual DbSet<PaymentPolicy> PaymentPolicies { get; set; }
 
     public virtual DbSet<Person> People { get; set; }
@@ -183,6 +185,8 @@ public partial class EecoreContext : DbContext
 
     public virtual DbSet<SubscriberPrice> SubscriberPrices { get; set; }
 
+    public virtual DbSet<Supervisor> Supervisors { get; set; }
+
     public virtual DbSet<Ticket> Tickets { get; set; }
 
     public virtual DbSet<TicketAssignation> TicketAssignations { get; set; }
@@ -208,10 +212,16 @@ public partial class EecoreContext : DbContext
     public virtual DbSet<WorkersHistory> WorkersHistories { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-     => optionsBuilder.UseSqlServer("Data Source=200.58.123.184,14330;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
-    //=> optionsBuilder.UseSqlServer("Data Source=SD-4154134-W;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
-
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseSqlServer(
+                "Data Source=200.58.123.184,14330;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True",
+                //"Data Source=SD-4154134-W;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True",
+                sqlServerOptions => sqlServerOptions.EnableRetryOnFailure()
+            );
+        }
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<CompanyXmlData>().ToSqlQuery("EXEC DataCompanyCredendo").HasNoKey();
@@ -3059,6 +3069,38 @@ public partial class EecoreContext : DbContext
                 .HasConstraintName("FK__Order__idSubscri__3E3D3572");
         });
 
+        modelBuilder.Entity<Parameter>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Paramete__3213E83F35DA736A");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.CreationDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("creationDate");
+            entity.Property(e => e.DeleteDate)
+                .HasColumnType("datetime")
+                .HasColumnName("deleteDate");
+            entity.Property(e => e.Description)
+                .IsUnicode(false)
+                .HasColumnName("description");
+            entity.Property(e => e.Enable)
+                .HasDefaultValueSql("((1))")
+                .HasColumnName("enable");
+            entity.Property(e => e.Flag).HasColumnName("flag");
+            entity.Property(e => e.Key)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("key");
+            entity.Property(e => e.UpdateDate)
+                .HasColumnType("datetime")
+                .HasColumnName("updateDate");
+            entity.Property(e => e.Value)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("value");
+        });
+
         modelBuilder.Entity<PaymentPolicy>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__PaymentP__3213E83F0926C101");
@@ -4707,6 +4749,37 @@ public partial class EecoreContext : DbContext
             entity.HasOne(d => d.IdSubscriberNavigation).WithMany(p => p.SubscriberPrices)
                 .HasForeignKey(d => d.IdSubscriber)
                 .HasConstraintName("FK__Subscribe__idSub__515009E6");
+        });
+
+        modelBuilder.Entity<Supervisor>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Supervis__3213E83FC6ED58FB");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.AsignedTo)
+                .HasMaxLength(10)
+                .IsUnicode(false)
+                .HasColumnName("asignedTo");
+            entity.Property(e => e.CreationDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("creationDate");
+            entity.Property(e => e.DeleteDate)
+                .HasColumnType("datetime")
+                .HasColumnName("deleteDate");
+            entity.Property(e => e.Enable).HasColumnName("enable");
+            entity.Property(e => e.IdUserLogin).HasColumnName("idUserLogin");
+            entity.Property(e => e.Type)
+                .HasMaxLength(2)
+                .IsUnicode(false)
+                .HasColumnName("type");
+            entity.Property(e => e.UpdateDate)
+                .HasColumnType("datetime")
+                .HasColumnName("updateDate");
+
+            entity.HasOne(d => d.IdUserLoginNavigation).WithMany(p => p.Supervisors)
+                .HasForeignKey(d => d.IdUserLogin)
+                .HasConstraintName("FK__Superviso__enabl__2374309D");
         });
 
         modelBuilder.Entity<Ticket>(entity =>

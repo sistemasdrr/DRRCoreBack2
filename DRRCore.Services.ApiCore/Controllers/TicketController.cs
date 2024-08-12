@@ -372,7 +372,12 @@ namespace DRRCore.Services.ApiCore.Controllers
         {
             return Ok(await _ticketApplication.SendComplement(idTicket, idUser , digited, file, observations));
         }
-
+        [HttpPost()]
+        [Route("SaveTicketCommentary")]
+        public async Task<ActionResult> SaveTicketCommentary(int idTicket, string commentary)
+        {
+            return Ok(await _ticketApplication.SaveTicketCommentary(idTicket, commentary));
+        }
 
     }
 }

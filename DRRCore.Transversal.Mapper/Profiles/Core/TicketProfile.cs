@@ -98,7 +98,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                  .ForMember(dest => dest.SubscriberIndications, opt => opt?.MapFrom(src => src.IdSubscriberNavigation.Indications))
 
                  .ForMember(dest => dest.InvestigatedContinent, opt => opt?.MapFrom(src => src.About == "E" ? (src.IdCompanyNavigation.IdCountryNavigation.IdContinentNavigation != null ? src.IdCompanyNavigation.IdCountryNavigation.IdContinentNavigation.Name : "") : (src.IdPersonNavigation.IdCountryNavigation.IdContinentNavigation != null ? src.IdPersonNavigation.IdCountryNavigation.IdContinentNavigation.Name : "")))
-                 .ForMember(dest => dest.InvestigatedCountry, opt => opt?.MapFrom(src => src.About == "E" ? (src.IdCompanyNavigation.IdCountryNavigation != null ? src.IdCompanyNavigation.IdCountryNavigation.Name : "") : (src.IdPersonNavigation.IdCountryNavigation != null ? src.IdPersonNavigation.IdCountryNavigation.Name : "")))
+                 .ForMember(dest => dest.InvestigatedCountry, opt => opt?.MapFrom(src => src.About == "E" ? (src.IdCompanyNavigation.IdCountryNavigation != null ? src.IdCompanyNavigation.IdCountryNavigation.Iso : "") : (src.IdPersonNavigation.IdCountryNavigation != null ? src.IdPersonNavigation.IdCountryNavigation.Iso : "")))
                  .ForMember(dest => dest.InvestigatedIsoCountry, opt => opt?.MapFrom(src => src.About == "E" ? (src.IdCompanyNavigation.IdCountryNavigation != null ? src.IdCompanyNavigation.IdCountryNavigation.Iso : "") : (src.IdPersonNavigation.IdCountryNavigation != null ? src.IdPersonNavigation.IdCountryNavigation.Iso : "")))
                  .ForMember(dest => dest.InvestigatedFlag, opt => opt?.MapFrom(src => src.About == "E" ? (src.IdCompanyNavigation.IdCountryNavigation != null ? src.IdCompanyNavigation.IdCountryNavigation.FlagIso : "") : (src.IdPersonNavigation.IdCountryNavigation != null ? src.IdPersonNavigation.IdCountryNavigation.FlagIso : "")))
 
@@ -169,7 +169,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                  .ForMember(dest => dest.InvestigatedContinent, opt => opt.MapFrom(src => src.IdTicketNavigation.About == "E" ? src.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation.IdContinentNavigation.Name : src.IdTicketNavigation.IdPersonNavigation.IdCountryNavigation.IdContinentNavigation.Name))
 
                 .ForMember(dest => dest.InvestigatedIsoCountry, opt => opt.MapFrom(src => src.IdTicketNavigation.About == "E" ? src.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation.Iso : src.IdTicketNavigation.IdPersonNavigation.IdCountryNavigation.Iso))
-                .ForMember(dest => dest.InvestigatedCountry, opt => opt.MapFrom(src => src.IdTicketNavigation.About == "E" ? src.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation.Name : src.IdTicketNavigation.IdPersonNavigation.IdCountryNavigation.Name))
+                .ForMember(dest => dest.InvestigatedCountry, opt => opt.MapFrom(src => src.IdTicketNavigation.About == "E" ? src.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation.Iso : src.IdTicketNavigation.IdPersonNavigation.IdCountryNavigation.Iso))
                 .ForMember(dest => dest.InvestigatedFlag, opt => opt.MapFrom(src => src.IdTicketNavigation.About == "E" ? src.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation.FlagIso : src.IdTicketNavigation.IdPersonNavigation.IdCountryNavigation.FlagIso))
 
 
@@ -206,7 +206,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                 .ForMember(dest => dest.IdCountry, opt => opt.MapFrom(src => src.IdTicketNavigation.IdCountry ?? 0))
                 .ForMember(dest => dest.IdCompany, opt => opt.MapFrom(src => src.IdTicketNavigation.IdCompany ?? 0))
                 .ForMember(dest => dest.IdPerson, opt => opt.MapFrom(src => src.IdTicketNavigation.IdPerson ?? 0))
-                .ForMember(dest => dest.Number, opt => opt.MapFrom(src => src.IdTicketNavigation.IsComplement == true ? src.IdTicketNavigation.About + " - " + src.IdTicketNavigation.Number.ToString("D6") + " * " : src.IdTicketNavigation.About + " - " + src.IdTicketNavigation.Number.ToString("D6")))
+                .ForMember(dest => dest.Number, opt => opt.MapFrom(src => src.IdTicketNavigation.IsComplement == true ? src.IdTicketNavigation.About + " - " + src.IdTicketNavigation.Number.ToString("D6") + " (C) " : src.IdTicketNavigation.About + " - " + src.IdTicketNavigation.Number.ToString("D6")))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.IdStatusTicketNavigation.Abrev ?? string.Empty))
                 .ForMember(dest => dest.StatusColor, opt => opt.MapFrom(src => src.IdStatusTicketNavigation.Color ?? string.Empty))
                 .ForMember(dest => dest.Language, opt => opt.MapFrom(src => src.IdTicketNavigation.Language ?? string.Empty))
@@ -318,7 +318,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                .ReverseMap();
             CreateMap<Ticket, GetTicketsByCompanyOrPersonResponseDto>()
               .ForMember(dest => dest.Id, opt => opt?.MapFrom(src => src.Id == null ? 0 : src.Id))
-              .ForMember(dest => dest.Ticket, opt => opt?.MapFrom(src => "N-" + src.Number.ToString("D6")))
+              .ForMember(dest => dest.Ticket, opt => opt?.MapFrom(src => src.IsComplement == true ? "N - " + src.Number.ToString("D6") + " (C) " : "N - " + src.Number.ToString("D6")))
               .ForMember(dest => dest.IdStatusTicket, opt => opt?.MapFrom(src => src.IdStatusTicket == null ? 0 : src.IdStatusTicket))
               .ForMember(dest => dest.Status, opt => opt?.MapFrom(src => src.IdStatusTicketNavigation.Abrev))
               .ForMember(dest => dest.Color, opt => opt?.MapFrom(src => src.IdStatusTicketNavigation.Color))

@@ -54,18 +54,18 @@ namespace DRRCore.Services.Migration.Controllers
         {
             return Ok(await _migraUser.MigratePersonByOldCode(oldCode));
         }
-        //[HttpPost()]
-        //[Route("abonados")]
-        //public async Task<ActionResult> MigrarAbonados()
-        //{
-        //    return Ok(await _migraUser.MigrateSubscriber());
-        //}
-        //[HttpPost()]
-        //[Route("agentes")]
-        //public async Task<ActionResult> MigrarAgentes()
-        //{
-        //    return Ok(await _migraUser.MigrateAgent());
-        //}
+        [HttpPost()]
+        [Route("abonados")]
+        public async Task<ActionResult> MigrarAbonados()
+        {
+            return Ok(await _migraUser.MigrateSubscriber());
+        }
+        [HttpPost()]
+        [Route("agentes")]
+        public async Task<ActionResult> MigrarAgentes()
+        {
+            return Ok(await _migraUser.MigrateAgent());
+        }
         //[HttpPost()]
         //[Route("oldTicket")]
         //public async Task<ActionResult> MigrarOldTicket()
@@ -102,12 +102,12 @@ namespace DRRCore.Services.Migration.Controllers
         //{
         //    return Ok(await _migraUser.ModificarCompanyOthers(migra,nivel));
         //}
-        //[HttpPost()]
-        //[Route("subscriberCategory")]
-        //public async Task<ActionResult> MigrateSubscriberCategory()
-        //{
-        //    return Ok(await _migraUser.MigrateSubscriberCategory());
-        //}
+        [HttpPost()]
+        [Route("subscriberCategory")]
+        public async Task<ActionResult> MigrateSubscriberCategory()
+        {
+            return Ok(await _migraUser.MigrateSubscriberCategory());
+        }
         //[HttpPost()]
         //[Route("Personal")]
         //public async Task<ActionResult> MigratePersonal()

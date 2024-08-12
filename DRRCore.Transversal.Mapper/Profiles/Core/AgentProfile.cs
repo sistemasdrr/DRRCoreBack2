@@ -13,6 +13,8 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
             CreateMap<AddOrUpdateAgentResponseDto, Agent>()
            .ForMember(dest => dest.StartDate, opt => opt?.MapFrom(src => StaticFunctions.VerifyDate(src.StartDate)))
            .ForMember(dest => dest.IdCountry, opt => opt?.MapFrom(src => src.IdCountry == 0 ? null : src.IdCountry))
+            .ForMember(dest => dest.State, opt => opt?.MapFrom(src => src.Status))
+
        .ReverseMap();
             CreateMap<Agent, GetListAgentResponseDto>()
            .ForMember(dest => dest.Country, opt => opt?.MapFrom(src => src.IdCountryNavigation.Iso))

@@ -43,5 +43,12 @@ namespace DRRCore.Services.ApiCore.Controllers
         {
             return Ok(await _dashboardApplication.TicketsInCurrentMonth());
         }
+        [HttpGet()]
+        [Route("GetPendingTaskByUser")]
+        public async Task<ActionResult> GetPendingTaskByUser(string userTo)
+        {
+            return Ok(await _dashboardApplication.GetPendingTaskByUser(userTo));
+        }
+        
     }
 }

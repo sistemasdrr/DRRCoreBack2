@@ -48,4 +48,32 @@
         public int? IdTicket { get; set; }
         public string? Ticket { get; set; }
     }
+    public class PendingTaskSupervisorResponseDto
+    {
+        public string? Name { get; set; }
+        public string? Code { get; set; }
+        public List<PendingTaskPersonalResponseDto>? Details { get; set; }
+    }
+    public class PendingTaskPersonalResponseDto
+    {
+        public string? AsignedTo { get; set; }
+        public string? Type { get; set; }
+        public string? Name { get; set; }
+        public string? Country { get; set; }
+        public string? FlagCountry { get; set; }
+        public List<PendingTaskPersonalDetailsResponseDto>? Details { get; set; }
+    }
+    public class PendingTaskPersonalDetailsResponseDto
+    {
+        public int? Id { get; set; }
+        public string? Number { get; set; }
+        public string? RequestedName { get; set; }
+        public string? Country { get; set; }
+        public string? FlagCountry { get; set; }
+        public string? ExpireDate { get; set; }
+        public int? Flag { get; set; }
+
+    }
+
+
 }

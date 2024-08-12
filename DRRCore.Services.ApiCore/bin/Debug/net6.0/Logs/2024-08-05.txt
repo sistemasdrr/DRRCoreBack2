@@ -1,0 +1,3 @@
+2024-08-05 17:24:11,410 [3] ERROR App  
+ An exception was thrown while attempting to evaluate a LINQ query parameter expression. See the inner exception for more information. To show additional information call 'DbContextOptionsBuilder.EnableSensitiveDataLogging'. 
+ 

@@ -1,0 +1,12 @@
+2024-08-07 20:04:25,247 [5] ERROR App  
+ Error empresa :E0000931127 : An exception has been raised that is likely due to a transient failure. Consider enabling transient error resiliency by adding 'EnableRetryOnFailure' to the 'UseSqlServer' call. 
+ 
+2024-08-07 20:04:25,427 [19] ERROR App  
+ Error empresa :E0000645181 : Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding. 
+ 
+2024-08-07 20:04:25,700 [51] ERROR App  
+ Error empresa :E0000477378 : Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding. 
+ 
+2024-08-07 20:04:25,787 [31] ERROR App  
+ Error empresa :E0000014466 : Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding. 
+ 

@@ -1886,7 +1886,7 @@ namespace DRRCore.Application.Main.CoreApplication
                             IdPerson = item1.IdTicketNavigation.IdPerson,
                             IdStatusTicket = item1.IdTicketNavigation.IdStatusTicket,
                             Quality  = item1.IdTicketNavigation.Quality,
-                            Number = item1.IdTicketNavigation.Number.ToString("D6"),
+                            Number = item1.IdTicketNavigation.IsComplement == true ? item1.IdTicketNavigation.About + " - " + item1.IdTicketNavigation.Number.ToString("D6") + " (C) " : item1.IdTicketNavigation.About + " - " + item1.IdTicketNavigation.Number.ToString("D6"),
                             Language = item1.IdTicketNavigation.Language,
                             About = item1.IdTicketNavigation.About,
                             Status = item1.IdTicketNavigation.IdStatusTicketNavigation.Abrev,

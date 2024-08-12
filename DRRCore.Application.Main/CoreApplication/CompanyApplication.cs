@@ -2495,7 +2495,8 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             catch(Exception ex)
             {
-
+                _logger.LogError(ex.Message);
+                response.IsSuccess = false;
             }
             return response;
         }
