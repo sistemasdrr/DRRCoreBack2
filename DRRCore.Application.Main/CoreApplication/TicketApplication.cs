@@ -3,6 +3,7 @@ using AspNetCore.ReportingServices.ReportProcessing.ReportObjectModel;
 using AutoMapper;
 using CoreFtp;
 using DocumentFormat.OpenXml.Bibliography;
+using DocumentFormat.OpenXml.ExtendedProperties;
 using DocumentFormat.OpenXml.InkML;
 using DRRCore.Application.DTO.Core.Request;
 using DRRCore.Application.DTO.Core.Response;
@@ -364,7 +365,7 @@ namespace DRRCore.Application.Main.CoreApplication
                             {
                                 IdFinancialSituacion = null
                             });
-                            var company = await _companyDomain.AddCompanyAsync(new Company
+                            var company = await _companyDomain.AddCompanyAsync(new Domain.Entities.SqlCoreContext.Company
                             {
                                 Name = request.RequestedName ?? string.Empty,
                                 LastSearched = DateTime.Now,
@@ -1285,8 +1286,16 @@ namespace DRRCore.Application.Main.CoreApplication
                 var ticketPath = _path.Path;
 
                 var directoryPath = Path.Combine(ticketPath, "cupones", ticket.Number.ToString("D6"));
+                string name = file.FileName;
+                foreach (char c in Path.GetInvalidFileNameChars())
+                {
+                    if (name.Contains(c))
+                    {
+                        name = name.Replace(c, ' ');
+                    }
+                }
 
-                var filePath = Path.Combine(directoryPath, file.FileName);
+                var filePath = Path.Combine(directoryPath, name);
 
                 if (!Directory.Exists(directoryPath))
                 {
@@ -1481,7 +1490,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     await _numerationDomain.UpdateTicketNumberAsync();
                     if (request.About == "E" && newTicket.IdCompany == null)
                     {
-                        var company = await _companyDomain.AddCompanyAsync(new Company
+                        var company = await _companyDomain.AddCompanyAsync(new Domain.Entities.SqlCoreContext.Company
                         {
                             Name = request.RequestedName ?? string.Empty,
                             LastSearched = DateTime.Now,
@@ -1647,7 +1656,7 @@ namespace DRRCore.Application.Main.CoreApplication
         public async Task<Response<List<GetSearchSituationResponseDto>>> GetSearchSituation(string about, string typeSearch, string? search, int? idCountry)
         {
             var response = new Response<List<GetSearchSituationResponseDto>>();
-            var listCompanies = new List<Company>();
+            var listCompanies = new List<Domain.Entities.SqlCoreContext.Company> ();
             var listPersons = new List<Domain.Entities.SqlCoreContext.Person>();
             try
             {
@@ -2280,9 +2289,17 @@ namespace DRRCore.Application.Main.CoreApplication
                                                     var attachment = new AttachmentDto();
                                                     attachment.FileName = file.Name + ".pdf";
                                                     attachment.Content = Convert.ToBase64String(file.File);
-                                                    attachment.Path = await UploadFile(attachment);
+                                                    string path = await UploadDispatchReport(ticket.Id, file.Name, file.File, ".pdf");
                                                     emailDataDto.Attachments.Add(attachment);
-                                                    
+
+
+                                                    await context.TicketFiles.AddAsync(new TicketFile
+                                                    {
+                                                        IdTicket = ticket.Id,
+                                                        Path = path,
+                                                        Name = emailDataDto.Subject,
+                                                        Extension = ".pdf"
+                                                    });
 
 
                                                     var result = await _mailSender.SendMailAsync(_mapper.Map<EmailValues>(emailDataDto));
@@ -2314,7 +2331,92 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Cycle = code
 
                                             };
+
                                             await context.TicketHistories.AddAsync(newTicketHistory);
+
+                                            var emailDataDto = new EmailDataDTO();
+                                            emailDataDto.Parameters = new List<string>();
+                                            //ENVIAR CORREO
+                                            var userFrom = await context.UserLogins
+                                                .Include(x => x.IdEmployeeNavigation)
+                                                .Where(x => x.Id == int.Parse(item.UserFrom)).FirstOrDefaultAsync();
+
+                                                var user = await context.Agents.Where(x => x.Code.Contains(item.AssignedToCode.Trim())).FirstOrDefaultAsync();
+
+                                                if (userFrom != null && user != null)
+                                                {
+                                                    emailDataDto.EmailKey = "DRR_WORKFLOW_ESP_0061";
+                                                    emailDataDto.BeAuthenticated = true;
+                                                    var debug = await context.Parameters.Where(x => x.Key == "DEBUG").FirstOrDefaultAsync();
+                                                    if (debug != null && debug.Flag == true)
+                                                    {
+                                                        emailDataDto.From = userFrom.IdEmployeeNavigation.Email;
+                                                        emailDataDto.UserName = userFrom.IdEmployeeNavigation.Email;
+                                                        emailDataDto.Password = userFrom.EmailPassword;
+                                                        emailDataDto.To = new List<string>
+                                                        {
+                                                            "jfernandez@del-risco.com",
+                                                            //user.Email
+                                                        };
+                                                        emailDataDto.CC = new List<string>
+                                                        {
+                                                            "diego.rodriguez@del-risco.com",
+                                                            userFrom.IdEmployeeNavigation.Email,
+                                                            // "crc@del-risco.com"
+                                                        };
+                                                        emailDataDto.Subject = "PRUEBA_" + ticket.ReportType + ": " + (numeration != null ? numeration.Number : 1) + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureType + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
+                                                    }
+                                                    else
+                                                    {
+                                                        emailDataDto.From = userFrom.IdEmployeeNavigation.Email;
+                                                        emailDataDto.UserName = userFrom.IdEmployeeNavigation.Email;
+                                                        emailDataDto.Password = userFrom.EmailPassword;
+                                                        emailDataDto.To = new List<string>
+                                                        {
+
+                                                            "jfernandez@del-risco.com",
+                                                            //user.Email
+                                                        };
+                                                        emailDataDto.CC = new List<string>
+                                                        {
+                                                            "diego.rodriguez@del-risco.com",
+                                                            userFrom.IdEmployeeNavigation.Email,
+                                                            "crc@del-risco.com"
+                                                        };
+                                                        emailDataDto.Subject = ticket.ReportType + ": " + (numeration != null ? numeration.Number : 1) + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureType + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
+                                                    }
+
+                                                    emailDataDto.IsBodyHTML = true;
+                                                    emailDataDto.Parameters.Add("Cecilia Sayas"); //userFrom.IdEmployeeNavigation.FirstName + " " + userFrom.IdEmployeeNavigation.LastName
+                                                    emailDataDto.Parameters.Add("crc@del-risco.com");//userFrom.IdEmployeeNavigation.Email;
+                                                    emailDataDto.BodyHTML = emailDataDto.IsBodyHTML ? await GetBodyHtml(emailDataDto) : emailDataDto.BodyHTML;
+                                                    _logger.LogInformation(JsonConvert.SerializeObject(emailDataDto));
+
+                                                    var file = DownloadAssignReporter((int)ticket.Id, item.AssignedToCode, item.StartDate, item.EndDate, numeration.Number ?? 1, item.Observations).Result.Data;
+                                                    var attachment = new AttachmentDto();
+                                                    attachment.FileName = file.Name + ".pdf";
+                                                    attachment.Content = Convert.ToBase64String(file.File);
+                                                    string path = await UploadDispatchReport(ticket.Id, file.Name, file.File, ".pdf");
+                                                    emailDataDto.Attachments.Add(attachment);
+
+
+                                                    await context.TicketFiles.AddAsync(new TicketFile
+                                                    {
+                                                        IdTicket = ticket.Id,
+                                                        Path = path,
+                                                        Name = emailDataDto.Subject,
+                                                        Extension = ".pdf"
+                                                    });
+
+
+                                                    var result = await _mailSender.SendMailAsync(_mapper.Map<EmailValues>(emailDataDto));
+
+                                                    var emailHistory = _mapper.Map<EmailHistory>(emailDataDto);
+                                                    emailHistory.Success = result;
+                                                    response.Data = await _emailHistoryDomain.AddAsync(emailHistory);
+                                                    _logger.LogInformation(Messages.MailSuccessSend);
+                                                }
+                                            
                                         }
                                         if (item.References)
                                         {
@@ -2510,7 +2612,15 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 var attachment = new AttachmentDto();
                                                 attachment.FileName = file.Name + ".pdf";
                                                 attachment.Content = Convert.ToBase64String(file.File);
-                                                attachment.Path = await UploadFile(attachment);
+                                                string path = await UploadDispatchReport(ticket.Id, file.Name, file.File, ".pdf");
+
+                                                await context.TicketFiles.AddAsync(new TicketFile
+                                                {
+                                                    IdTicket = ticket.Id,
+                                                    Path = path,
+                                                    Name = file.Name,
+                                                    Extension = ".pdf"
+                                                });
                                                 emailDataDto.Attachments.Add(attachment);
                                                 if (item.SendZip == true)
                                                 {
@@ -2586,6 +2696,14 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 var attachment = new AttachmentDto();
                                                 attachment.FileName = file.Name + ".pdf";
                                                 attachment.Content = Convert.ToBase64String(file.File);
+                                                string path = await UploadDispatchReport(ticket.Id, file.Name, file.File, ".pdf");
+                                                await context.TicketFiles.AddAsync(new TicketFile
+                                                {
+                                                    IdTicket = ticket.Id,
+                                                    Path = path,
+                                                    Name = file.Name,
+                                                    Extension = ".pdf"
+                                                });
                                                 emailDataDto.Attachments.Add(attachment);
                                                 if (item.SendZip == true)
                                                 {
@@ -3914,6 +4032,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         var dictionary = new Dictionary<string, string>
                         {
                             { "idCompany", ticket.IdCompany.ToString() },
+                            { "idTicket", ticket.Id.ToString() },
                             { "language", language },
                          };
 
@@ -3938,6 +4057,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         var dictionary = new Dictionary<string, string>
                         {
                             { "idPerson", ticket.IdPerson.ToString() },
+                            { "idTicket", ticket.Id.ToString() },
                             { "language", language },
                          };
 
@@ -4720,6 +4840,89 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             return response;
         }
+
+        public async Task<Response<GetFileResponseDto>> DownloadF8ByIdTicket(int idTicket, string language, string format)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var ticket = await context.Tickets
+                    .Where(x => x.Id == idTicket)
+                    .Include(x => x.IdCompanyNavigation)
+                    .Include(x => x.IdPersonNavigation)
+                    .FirstOrDefaultAsync();
+                if(ticket != null)
+                {
+                    if(ticket.About == "E")
+                    {
+                        var company = await context.Companies.Where(x => x.Id == ticket.IdCompany).FirstOrDefaultAsync();
+
+                        string companyCode = company.OldCode ?? "N" + company.Id.ToString("D6");
+                        string languageFileName = language == "I" ? "ENG" : "ESP";
+                        string fileFormat = "{0}_{1}{2}";
+                        //string report = language == "I" ? "EMPRESAS/F8-EMPRESAS-EN" : "EMPRESAS/F8-EMPRESAS-ES";
+                        string report = GetReportName(language, ticket.About, format);
+                        var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                        var extension = StaticFunctions.FileExtension(reportRenderType);
+                        var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                        var dictionary = new Dictionary<string, string>
+                        {
+                            { "idCompany", ticket.IdCompany.ToString() },
+                            { "idTicket", ticket.Id.ToString() },
+                            { "language", language }
+                         };
+
+                        var file = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary);
+                        response.Data = new GetFileResponseDto
+                        {
+                            File = file,
+                            ContentType = contentType,
+                            Name = string.Format(fileFormat, companyCode, languageFileName, extension)
+                        };
+                    }
+                    else
+                    {
+                        var person = await context.People.Where(x => x.Id == ticket.IdPerson).FirstOrDefaultAsync();
+
+                        string companyCode = person.OldCode ?? "N" + person.Id.ToString("D6");
+                        string languageFileName = language == "I" ? "ENG" : "ESP";
+                        string fileFormat = "{0}_{1}{2}";
+                        //string report = language == "I" ? "EMPRESAS/F8-EMPRESAS-EN" : "EMPRESAS/F8-EMPRESAS-ES";
+                        string report = GetReportName( language, ticket.About, format);
+                        var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                        var extension = StaticFunctions.FileExtension(reportRenderType);
+                        var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                        var dictionary = new Dictionary<string, string>
+                        {
+                            { "idPerson", ticket.IdPerson.ToString() },
+                            { "idTicket", ticket.Id.ToString() },
+                            { "language", language }
+                         };
+
+                        var file = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary);
+                        response.Data = new GetFileResponseDto
+                        {
+                            File = file,
+                            ContentType = contentType,
+                            Name = string.Format(fileFormat, companyCode, languageFileName, extension)
+                        };
+                    }
+                }
+               
+
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+        
     }
 
 }

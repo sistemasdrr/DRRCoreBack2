@@ -378,6 +378,14 @@ namespace DRRCore.Services.ApiCore.Controllers
         {
             return Ok(await _ticketApplication.SaveTicketCommentary(idTicket, commentary));
         }
+        [HttpGet()]
+        [Route("DownloadF8ByIdTicket")]
+        public async Task<IActionResult> DownloadF8ByIdTicket(int idTicket, string language, string format)
+        {
+            var result = await _ticketApplication.DownloadF8ByIdTicket(idTicket, language, format);
+
+            return File(result.Data.File, result.Data.ContentType, result.Data.Name);
+        }
 
     }
 }

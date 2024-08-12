@@ -2311,6 +2311,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 var dictionary = new Dictionary<string, string>
                 {
                     { "idCompany", idCompany.ToString() },
+                    { "idTicket", "" },
                     { "language", language }
                  };
 
@@ -2572,6 +2573,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 var dictionary = new Dictionary<string, string>
                 {
                     { "idCompany", idCompany.ToString() },
+                    { "idTicket", ""},
                     { "language", language }
                  };
 

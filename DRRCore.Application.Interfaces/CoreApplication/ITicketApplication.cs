@@ -8,6 +8,7 @@ namespace DRRCore.Application.Interfaces.CoreApplication
 {
     public interface ITicketApplication
     {
+        Task<Response<GetFileResponseDto>> DownloadF8ByIdTicket(int idTicket, string language, string format);
         Task<Response<List<GetTicketFileResponseDto>>> GetTicketFilesByIdTicket(int idTicket);
         Task<Response<int?>> AddTicketAsync(AddOrUpdateTicketRequestDto request);
         Task<Response<bool>> DownloadAndUploadF1(int idTicket);
