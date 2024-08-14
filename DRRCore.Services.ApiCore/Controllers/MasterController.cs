@@ -10,9 +10,11 @@ namespace DRRCore.Services.ApiCore.Controllers
     {
         private readonly IEmployeeApplication _employeeApplication;
         private readonly IAnniversaryApplication _anniversaryApplication;
-        public MasterController(IEmployeeApplication employeeApplication, IAnniversaryApplication anniversaryApplication) {
+        private readonly IBillingPersonalApplication _billingPersonalApplication;
+        public MasterController(IEmployeeApplication employeeApplication, IAnniversaryApplication anniversaryApplication, IBillingPersonalApplication billingPersonalApplication) {
            _employeeApplication = employeeApplication;
             _anniversaryApplication= anniversaryApplication;
+            _billingPersonalApplication= billingPersonalApplication;
         }
 
         [HttpPost()]
@@ -44,6 +46,12 @@ namespace DRRCore.Services.ApiCore.Controllers
         public async Task<ActionResult> GetEmployees()
         {
             return Ok(await _employeeApplication.GetAllAsync());
+        }
+        [HttpGet()]
+        [Route("GetUserCodeById")]
+        public async Task<ActionResult> GetUserCodeById(int id)
+        {
+            return Ok(await _employeeApplication.GetUserCodeById(id));
         }
         [HttpGet()]
         [Route("getEmployeesByName")]
@@ -86,6 +94,43 @@ namespace DRRCore.Services.ApiCore.Controllers
         public async Task<ActionResult> GetCurrentAnniversary()
         {
             return Ok(await _anniversaryApplication.GetCurrentAnniversary());
+        }
+
+        [HttpPost()]
+        [Route("AddOrUpdateBillingPersonal")]
+        public async Task<ActionResult> AddOrUpdateBillingPersonal(AddOrUpdateBillingPersonal request)
+        {
+            return Ok(await _billingPersonalApplication.AddOrUpdateBillingPersonal(request));
+        }
+        [HttpPost()]
+        [Route("DeleteBillingPersonal")]
+        public async Task<ActionResult> DeleteBillingPersonal(int id)
+        {
+            return Ok(await _billingPersonalApplication.DeleteBillingPersonal(id));
+        }
+        [HttpGet()]
+        [Route("GetBillingPersonalById")]
+        public async Task<ActionResult> GetBillingPersonalById(int id)
+        {
+            return Ok(await _billingPersonalApplication.GetBillingPersonalById(id));
+        }
+        [HttpGet()]
+        [Route("GetBillingPersonalsByCode")]
+        public async Task<ActionResult> GetBillingPersonalsByCode(string code)
+        {
+            return Ok(await _billingPersonalApplication.GetBillingPersonalsByCode(code));
+        }
+        [HttpGet()]
+        [Route("GetBillingPersonalsByIdEmployee")]
+        public async Task<ActionResult> GetBillingPersonalsByIdEmployee(int idEmployee)
+        {
+            return Ok(await _billingPersonalApplication.GetBillingPersonalsByIdEmployee(idEmployee));
+        }
+        [HttpGet()]
+        [Route("GetOtherUserCode")]
+        public async Task<ActionResult> GetOtherUserCode(int idEmployee)
+        {
+            return Ok(await _billingPersonalApplication.GetOtherUserCode(idEmployee));
         }
     }
 }

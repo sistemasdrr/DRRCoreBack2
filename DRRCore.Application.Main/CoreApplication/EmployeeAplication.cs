@@ -6,6 +6,7 @@ using DRRCore.Domain.Entities.SqlCoreContext;
 using DRRCore.Domain.Interfaces.CoreDomain;
 using DRRCore.Transversal.Common;
 using DRRCore.Transversal.Common.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace DRRCore.Application.Main.CoreApplication
 {
@@ -173,6 +174,29 @@ namespace DRRCore.Application.Main.CoreApplication
                 response.IsSuccess = false;
                 response.Message = Messages.BadQuery;
                 _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
+        public async Task<Response<List<string>>> GetUserCodeById(int id)
+        {
+            var response = new Response<List<string>>();
+            response.Data = new List<string>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var billinPersonal = await context.BillinPersonals
+                    .Where(x => x.IdEmployee == id).ToListAsync();
+                foreach (var item in billinPersonal)
+                {
+                    response.Data.Add(item.Code);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                response.IsSuccess = false;
             }
             return response;
         }

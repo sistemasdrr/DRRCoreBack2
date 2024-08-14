@@ -502,11 +502,20 @@ namespace DRRCore.Application.Main.CoreApplication
                         var data = doc.Data;
                         var path = await UploadF1(ticket.Id, data.File);
 
+                        var fileName = ticket.RequestedName;
+                        foreach (char c in Path.GetInvalidFileNameChars())
+                        {
+                            if (fileName.Contains(c))
+                            {
+                                fileName = fileName.Replace(c, ' ');
+                            }
+                        }
+
                         await context.TicketFiles.AddAsync(new TicketFile
                         {
                             IdTicket = ticket.Id,
                             Path = path,
-                            Name = ticket.ReportType + "_" + ticket.RequestedName + ".pdf",
+                            Name = ticket.ReportType + "_" + fileName + ".pdf",
                             Extension = ".pdf"
                         });
                         await context.SaveChangesAsync();
@@ -778,12 +787,17 @@ namespace DRRCore.Application.Main.CoreApplication
             try
             {
                 var ticket = await _ticketDomain.GetByIdAsync(idTicket);
-                ticket.RequestedName = ticket.RequestedName.Trim();
-                ticket.RequestedName = ticket.RequestedName.Replace("?", "");
-                ticket.RequestedName = ticket.RequestedName.Replace("¿", "");
+                var fileName = ticket.RequestedName;
+                foreach (char c in Path.GetInvalidFileNameChars())
+                {
+                    if (fileName.Contains(c))
+                    {
+                        fileName = fileName.Replace(c, ' ');
+                    }
+                }
                 var ticketPath = _path.Path;
                 var directoryPath = Path.Combine(ticketPath, "cupones", ticket.Number.ToString("D6"));
-                var filePath = Path.Combine(directoryPath, $"{ticket.ReportType}_{ticket.RequestedName}.pdf");
+                var filePath = Path.Combine(directoryPath, $"{ticket.ReportType}_{fileName}.pdf");
 
                 if (!Directory.Exists(directoryPath))
                 {

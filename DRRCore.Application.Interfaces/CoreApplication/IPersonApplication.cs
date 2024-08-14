@@ -54,6 +54,7 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<List<GetPersonPhotoResponseDto>>> GetListPhotoAsync(int idPerson);
         Task<Response<GetPersonPhotoResponseDto>> GetPhotoById(int id);
         Task<Response<bool>> DeletePhoto(int id);
-      
+
+        Task<Response<GetFileResponseDto>> DownloadF8(int idPerson, string language, string format);
     }
 }

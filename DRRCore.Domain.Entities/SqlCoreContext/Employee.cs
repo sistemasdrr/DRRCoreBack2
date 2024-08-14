@@ -75,6 +75,8 @@ public partial class Employee
 
     public bool? Enable { get; set; }
 
+    public virtual ICollection<BillinPersonal> BillinPersonals { get; set; } = new List<BillinPersonal>();
+
     public virtual ICollection<HealthInsurance> HealthInsurances { get; set; } = new List<HealthInsurance>();
 
     public virtual DocumentType? IdDocumentTypeNavigation { get; set; }

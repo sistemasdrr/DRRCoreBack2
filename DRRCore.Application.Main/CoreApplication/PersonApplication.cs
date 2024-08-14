@@ -998,6 +998,67 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             return response;
         }
+        public string? GetReportName(string language, string format)
+        {
+            string result = "";
+            if (language == "I")
+            {
+                switch (format.ToLower())
+                {
+                    case "pdf": result = "PERSONAS/F8-PERSONAS-EN"; break;
+                    case "word": result = "PERSONAS/F8-PERSONAS-WORD-EN"; break;
+                }
+            }
+            else
+            {
+                switch (format.ToLower())
+                {
+                    case "pdf": result = "PERSONAS/F8-PERSONAS-ES"; break;
+                    case "word": result = "PERSONAS/F8-PERSONAS-WORD-ES"; break;
+                }
+            }
+            return result;
+        }
+        public async Task<Response<GetFileResponseDto>> DownloadF8(int idPerson, string language, string format)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var person = await context.People.Where(x => x.Id == idPerson).FirstOrDefaultAsync();
+
+                string personCode = person.OldCode ?? "N" + person.Id.ToString("D6");
+                string languageFileName = language == "I" ? "ENG" : "ESP";
+                string fileFormat = "{0}_{1}{2}";
+                string report = GetReportName(language, format);
+                var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                var extension = StaticFunctions.FileExtension(reportRenderType);
+                var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                var dictionary = new Dictionary<string, string>
+                {
+                    { "idPerson", idPerson.ToString() },
+                    { "idTicket", "" },
+                    { "language", language }
+                 };
+
+                var file = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary);
+                response.Data = new GetFileResponseDto
+                {
+                    File = file,
+                    ContentType = contentType,
+                    Name = string.Format(fileFormat, personCode, languageFileName, extension)
+                };
+
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
 
         public async Task<Response<GetBankDebtResponseDto>> GetBankDebtById(int id)
         {

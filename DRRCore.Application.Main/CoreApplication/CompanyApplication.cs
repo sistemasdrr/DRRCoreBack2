@@ -2524,66 +2524,94 @@ namespace DRRCore.Application.Main.CoreApplication
             try
             {
                 var company = await _companyDomain.GetByIdAsync((int)idCompany);
+                if(section == "ALL")
+                {
+                    string companyCode = company.OldCode ?? "N" + company.Id.ToString("D6");
+                    string languageFileName = language == "I" ? "ENG" : "ESP";
+                    string fileFormat = "{0}_{1}{2}";
+                    //string report = language == "I" ? "EMPRESAS/F8-EMPRESAS-EN" : "EMPRESAS/F8-EMPRESAS-ES";
+                    string report = GetReportName(language, "pdf");
+                    var reportRenderType = StaticFunctions.GetReportRenderType("pdf");
+                    var extension = StaticFunctions.FileExtension(reportRenderType);
+                    var contentType = StaticFunctions.GetContentType(reportRenderType);
 
-                string companyCode = company.OldCode ?? "N" + company.Id.ToString("D6");
-                string languageFileName = language == "I" ? "ENG" : "ESP";
-                string fileFormat = "{0}_{1}{2}";
-                string format = "pdf";
-                List<string> subReport = new List<string>(); ;
+                    var dictionary = new Dictionary<string, string>
+                {
+                    { "idCompany", idCompany.ToString() },
+                    { "idTicket", "" },
+                    { "language", language }
+                 };
 
-                if(section == "IDENTIFICACION")
-                {
-                    subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/IDENTIFICACION" : "EMPRESAS/PDF/ESP/IDENTIFICACION");
-                }else if(section == "ANTECEDENTES")
-                {
-                    subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/RESU-EJEC" : "EMPRESAS/PDF/ESP/RESU-EJEC");
-                    subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/EST-LEGAL" : "EMPRESAS/PDF/ESP/EST-LEGAL");
-                    subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/HISTORIA" : "EMPRESAS/PDF/ESP/HISTORIA");
-                    subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/EMP-REL" : "EMPRESAS/PDF/ESP/EMP-REL");
+                    var file = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary);
+                    response.Data = new GetFileResponseDto
+                    {
+                        File = file,
+                        ContentType = contentType,
+                        Name = string.Format(fileFormat, companyCode, languageFileName, extension)
+                    };
                 }
-                else if (section == "RAMO")
+                else
                 {
-                    subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/RAMO" : "EMPRESAS/PDF/ESP/RAMO");
-                }
-                else if (section == "FINANZAS")
-                {
-                    subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/INFO-FINAN" : "EMPRESAS/PDF/ESP/INFO-FINAN");
-                }
-                else if (section == "BALANCES")
-                {
-                    subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/INFO-FINAN" : "EMPRESAS/PDF/ESP/INFO-FINAN");
-                }
-                else if (section == "SBS")
-                {
-                    subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/MOROSIDAD" : "EMPRESAS/PDF/ESP/MOROSIDAD");
-                }
-                else if (section == "OPINION-CREDITO")
-                {
-                    subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/OPI-CRED" : "EMPRESAS/PDF/ESP/OPI-CRED");
-                }
-                else if (section == "IMAGENES")
-                {
-                    subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/IMAGENES" : "EMPRESAS/PDF/ESP/IMAGENES");
-                }
+                    string companyCode = company.OldCode ?? "N" + company.Id.ToString("D6");
+                    string languageFileName = language == "I" ? "ENG" : "ESP";
+                    string fileFormat = "{0}_{1}{2}";
+                    string format = "pdf";
+                    List<string> subReport = new List<string>(); ;
 
-                var reportRenderType = StaticFunctions.GetReportRenderType(format);
-                var extension = StaticFunctions.FileExtension(reportRenderType);
-                var contentType = StaticFunctions.GetContentType(reportRenderType);
+                    if (section == "IDENTIFICACION")
+                    {
+                        subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/IDENTIFICACION" : "EMPRESAS/PDF/ESP/IDENTIFICACION");
+                    }
+                    else if (section == "ANTECEDENTES")
+                    {
+                        subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/RESU-EJEC" : "EMPRESAS/PDF/ESP/RESU-EJEC");
+                        subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/EST-LEGAL" : "EMPRESAS/PDF/ESP/EST-LEGAL");
+                        subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/HISTORIA" : "EMPRESAS/PDF/ESP/HISTORIA");
+                        subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/EMP-REL" : "EMPRESAS/PDF/ESP/EMP-REL");
+                    }
+                    else if (section == "RAMO")
+                    {
+                        subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/RAMO" : "EMPRESAS/PDF/ESP/RAMO");
+                    }
+                    else if (section == "FINANZAS")
+                    {
+                        subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/INFO-FINAN" : "EMPRESAS/PDF/ESP/INFO-FINAN");
+                    }
+                    else if (section == "BALANCES")
+                    {
+                        subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/INFO-FINAN" : "EMPRESAS/PDF/ESP/INFO-FINAN");
+                    }
+                    else if (section == "SBS")
+                    {
+                        subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/MOROSIDAD" : "EMPRESAS/PDF/ESP/MOROSIDAD");
+                    }
+                    else if (section == "OPINION-CREDITO")
+                    {
+                        subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/OPI-CRED" : "EMPRESAS/PDF/ESP/OPI-CRED");
+                    }
+                    else if (section == "IMAGENES")
+                    {
+                        subReport.Add(language == "I" ? "EMPRESAS/PDF/ENG/IMAGENES" : "EMPRESAS/PDF/ESP/IMAGENES");
+                    }
 
-                var dictionary = new Dictionary<string, string>
+                    var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                    var extension = StaticFunctions.FileExtension(reportRenderType);
+                    var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                    var dictionary = new Dictionary<string, string>
                 {
                     { "idCompany", idCompany.ToString() },
                     { "idTicket", ""},
                     { "language", language }
                  };
 
-                response.Data = new GetFileResponseDto
-                {
-                    File = await _reportingDownload.GenerateCombinedReportAsync(subReport, reportRenderType, dictionary),
-                    ContentType = contentType,
-                    Name = string.Format(fileFormat, companyCode, languageFileName, extension)
-                };
-
+                    response.Data = new GetFileResponseDto
+                    {
+                        File = await _reportingDownload.GenerateCombinedReportAsync(subReport, reportRenderType, dictionary),
+                        ContentType = contentType,
+                        Name = string.Format(fileFormat, companyCode, languageFileName, extension)
+                    };
+                }
             }
             catch(Exception ex)
             {

@@ -1,0 +1,37 @@
+2024-08-14 10:32:36,582 [18] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-08-14 10:52:39,720 [88] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-08-14 10:52:58,306 [80] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-08-14 11:56:12,790 [107] ERROR App  
+ No se pudo realizar la consulta 
+ 
+AutoMapper.AutoMapperMappingException: Missing type map configuration or unsupported mapping.
+
+Mapping types:
+AddOrUpdateBillingPersonal -> BillinPersonal
+DRRCore.Application.DTO.Core.Request.AddOrUpdateBillingPersonal -> DRRCore.Domain.Entities.SqlCoreContext.BillinPersonal
+   at lambda_method1188(Closure , Object , BillinPersonal , ResolutionContext )
+   at DRRCore.Application.Main.CoreApplication.BillingPersonalApplication.AddOrUpdateBillingPersonal(AddOrUpdateBillingPersonal obj) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\BillingPersonalApplication.cs:line 30
+2024-08-14 15:00:59,448 [79] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-08-14 15:14:18,543 [11] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-08-14 15:14:21,359 [11] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-08-14 15:14:30,543 [3] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-08-14 15:14:31,357 [11] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-08-14 15:14:48,371 [11] ERROR App  
+ No se encontró datos en la entidad 
+ 

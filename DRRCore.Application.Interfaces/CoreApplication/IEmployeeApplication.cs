@@ -12,5 +12,6 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<bool>> AddOrUpdateAsync(AddOrUpdateEmployeeRequestDto obj);       
         Task<Response<bool>> DeleteAsync(int id);
         Task<Response<bool>> ActiveAsync(int id);
+        Task<Response<List<string>>> GetUserCodeById(int id);
     }
 }

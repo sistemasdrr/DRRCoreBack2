@@ -29,6 +29,8 @@ public partial class SqlCoreContext : DbContext
 
     public virtual DbSet<BankDebt> BankDebts { get; set; }
 
+    public virtual DbSet<BillinPersonal> BillinPersonals { get; set; }
+
     public virtual DbSet<BranchSector> BranchSectors { get; set; }
 
     public virtual DbSet<BusineesActivity> BusineesActivities { get; set; }
@@ -606,6 +608,51 @@ public partial class SqlCoreContext : DbContext
             entity.HasOne(d => d.IdPersonNavigation).WithMany(p => p.BankDebts)
                 .HasForeignKey(d => d.IdPerson)
                 .HasConstraintName("FK_BankDebt_Person");
+        });
+
+        modelBuilder.Entity<BillinPersonal>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__BillinPe__3213E83F4EFF2BED");
+
+            entity.ToTable("BillinPersonal");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Amount)
+                .HasColumnType("decimal(8, 2)")
+                .HasColumnName("amount");
+            entity.Property(e => e.Code)
+                .HasMaxLength(10)
+                .IsUnicode(false)
+                .HasColumnName("code");
+            entity.Property(e => e.Commission).HasColumnName("commission");
+            entity.Property(e => e.CreationDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("creationDate");
+            entity.Property(e => e.DeleteDate)
+                .HasColumnType("datetime")
+                .HasColumnName("deleteDate");
+            entity.Property(e => e.Enable)
+                .HasDefaultValueSql("((1))")
+                .HasColumnName("enable");
+            entity.Property(e => e.IdEmployee).HasColumnName("idEmployee");
+            entity.Property(e => e.IsComplement).HasColumnName("isComplement");
+            entity.Property(e => e.Quality)
+                .HasMaxLength(1)
+                .IsUnicode(false)
+                .IsFixedLength()
+                .HasColumnName("quality");
+            entity.Property(e => e.ReportType)
+                .HasMaxLength(2)
+                .IsUnicode(false)
+                .HasColumnName("reportType");
+            entity.Property(e => e.UpdateDate)
+                .HasColumnType("datetime")
+                .HasColumnName("updateDate");
+
+            entity.HasOne(d => d.IdEmployeeNavigation).WithMany(p => p.BillinPersonals)
+                .HasForeignKey(d => d.IdEmployee)
+                .HasConstraintName("FK__BillinPer__enabl__2DF1BF10");
         });
 
         modelBuilder.Entity<BranchSector>(entity =>

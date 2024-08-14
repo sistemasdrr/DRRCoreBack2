@@ -303,5 +303,13 @@ namespace DRRCore.Services.ApiCore.Controllers
         {
             return Ok(await _personApplication.GetStatusPerson(idPerson));
         }
+        [HttpGet()]
+        [Route("getf8")]
+        public async Task<IActionResult> GetF8(int idPerson, string language, string format)
+        {
+            var result = await _personApplication.DownloadF8(idPerson, language, format);
+
+            return File(result.Data.File, result.Data.ContentType, result.Data.Name);
+        }
     }
 }

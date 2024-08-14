@@ -1,0 +1,90 @@
+2024-08-13 09:54:21,773 [3] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-13 09:56:18,103 [13] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-13 09:57:01,572 [11] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-13 09:57:39,402 [5] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-13 09:58:04,220 [21] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-13 09:58:29,587 [23] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-13 09:58:35,487 [11] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-13 09:58:39,654 [3] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-13 09:59:02,266 [11] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-13 10:01:46,134 [56] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-13 10:02:02,233 [20] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-13 10:41:35,159 [157] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-13 10:41:40,443 [149] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-13 10:41:40,443 [148] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-13 10:41:40,444 [148] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-08-13 10:41:40,468 [149] ERROR App  
+ Object reference not set to an instance of an object. 
+ 
+2024-08-13 10:49:53,645 [8] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-13 11:08:17,308 [11] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-13 11:11:04,350 [38] ERROR App  
+ Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding. 
+ 
+2024-08-13 11:11:04,351 [38] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-08-13 11:11:07,027 [22] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-13 11:11:08,351 [39] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-13 11:14:25,286 [77] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-13 11:15:33,214 [71] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-13 11:35:23,766 [77] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-08-13 11:40:52,816 [57] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-13 11:42:30,855 [77] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-13 15:50:25,752 [24] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-08-13 15:52:54,062 [7] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-08-13 15:53:10,696 [3] ERROR App  
+ No se encontró datos en la entidad 
+ 
