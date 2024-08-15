@@ -544,9 +544,33 @@
         public int? Quantity { get; set; }
         public List<GetQueryTicket5_1_2ResponseDto>? Tickets { get; set; }
     }
+    public class GetCyclesResponseDto
+    {
+        public string? Value { get; set; }
+        public string? Code { get; set; }
+    }
+        public class GetQuery5_1_2ByCycleResponseDto
+    {
+        public int? Id { get; set; }
+        public string? Name { get; set; }
+        public string? Code { get; set; }
+        public string? Country { get; set; }
+        public string? FlagCountry { get; set; }
+        public string? AsignedTo { get; set; }
+        public string? AsignationType { get; set; }
+        public string? Cycle { get; set; }
+        public decimal? Price { get; set; }
+        public bool? Flag { get; set; }
+        public int? Quantity { get; set; }
+        public List<GetQueryTicket5_1_2ResponseDto>? Tickets { get; set; }
+    }
     public class GetQueryTicket5_1_2ResponseDto
     {
 
+        public string? AsignedTo { get; set; }
+        public string? AsignationType { get; set; }
+        public string? Cycle { get; set; }
+        public decimal? Price { get; set; }
         public int Id { get; set; }
         public int? IdTicket { get; set; }
         public int? IdCompany { get; set; }

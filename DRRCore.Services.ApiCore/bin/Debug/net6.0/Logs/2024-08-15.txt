@@ -1,0 +1,39 @@
+2024-08-15 13:38:55,862 [40] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-15 13:39:01,796 [8] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-15 13:41:35,586 [3] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-15 13:42:26,504 [8] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-15 13:43:06,582 [37] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-15 13:43:21,305 [37] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-15 13:43:44,705 [3] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-15 13:43:48,721 [37] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-15 13:44:01,849 [3] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-15 13:44:20,119 [60] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-15 13:44:34,783 [3] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-15 13:45:02,281 [3] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-15 14:10:04,774 [143] ERROR App  
+ No existe la empresa solicitada 
+ 

@@ -29,7 +29,7 @@ namespace DRRCore.Services.ApiCore.Controllers
         [Route("MonthlyProduction")]
         public async Task<ActionResult> MonthlyProduction(string userTo)
         {
-            return Ok(await _dashboardApplication.DailyProduction(userTo));
+            return Ok(await _dashboardApplication.MonthlyProduction(userTo));
         }
         [HttpGet()]
         [Route("ObservedTickets")]

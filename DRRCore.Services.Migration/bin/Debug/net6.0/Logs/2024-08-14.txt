@@ -1,0 +1,12 @@
+2024-08-14 21:57:31,050 [25] ERROR App  
+ Error Person CommercialLatePayment:P0000470313 
+ 
+2024-08-14 22:38:52,544 [3] ERROR App  
+ An error occurred while saving the entity changes. See the inner exception for details. 
+ 
+2024-08-14 22:40:13,094 [5] ERROR App  
+ An error occurred while saving the entity changes. See the inner exception for details. 
+ 
+2024-08-14 23:10:50,522 [3] ERROR App  
+ An error occurred while saving the entity changes. See the inner exception for details. 
+ 

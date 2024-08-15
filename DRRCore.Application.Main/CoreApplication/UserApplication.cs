@@ -20,7 +20,7 @@ namespace DRRCore.Application.Main.CoreApplication
 {
     public class UserApplication : IUserApplication
     {
-        private readonly IProcessDomain _processDomain; 
+        private readonly IProcessDomain _processDomain;
         private readonly IConfiguration _configuration;
         private readonly IUserLoginDomain _userLoginDomain;
         private readonly IUserProcessDomain _userProcessDomain;
@@ -47,7 +47,7 @@ namespace DRRCore.Application.Main.CoreApplication
             try
             {
                 var list = await _processDomain.GetAllAsync();
-                if(list != null)
+                if (list != null)
                 {
                     response.Data = _mapper.Map<List<GetProcessResponseDto>>(list);
                 }
@@ -55,7 +55,8 @@ namespace DRRCore.Application.Main.CoreApplication
                 {
                     response.IsSuccess = false;
                 }
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 response.IsSuccess = false;
                 response.Message = Messages.BadQuery;
@@ -77,7 +78,7 @@ namespace DRRCore.Application.Main.CoreApplication
             try
             {
                 var idUser = await _userLoginDomain.GetIdUserByIdEmployee(idEmployee);
-                if(idUser != 0 && idUser != null)
+                if (idUser != 0 && idUser != null)
                 {
                     var permissions = await _userProcessDomain.GetProcessByIdUser((int)idUser);
                     if (permissions != null && permissions.Count != 0)
@@ -247,7 +248,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     else
                     {
                         var addProcess = await _userProcessDomain.AddAllProcess((int)idUser);
-                        if(addProcess == true)
+                        if (addProcess == true)
                         {
                             permissions = await _userProcessDomain.GetProcessByIdUser((int)idUser);
                             if (permissions != null && permissions.Count != 0)
@@ -440,7 +441,7 @@ namespace DRRCore.Application.Main.CoreApplication
             try
             {
                 var user = await _userLoginDomain.GetByIdAsync(id);
-                if(user != null)
+                if (user != null)
                 {
                     response.Data = _mapper.Map<GetUserResponseDto>(user);
                 }
@@ -448,7 +449,8 @@ namespace DRRCore.Application.Main.CoreApplication
                 {
                     response.Data = null;
                 }
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 response.IsSuccess = false;
                 _logger.LogError(ex.Message, ex);
@@ -472,7 +474,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 else
                 {
                     response.Data = await GenerateToken(user);
-                }            
+                }
             }
             catch (Exception ex)
             {
@@ -489,7 +491,7 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 foreach (var item in obj.Gerencia)
                 {
-                    if(item.SubLevel.Count > 0)
+                    if (item.SubLevel.Count > 0)
                     {
                         foreach (var item1 in item.SubLevel)
                         {
@@ -652,7 +654,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         await _userProcessDomain.UpdateAsync(process);
                     }
                 }
-                foreach (var item in obj.Reportes   )
+                foreach (var item in obj.Reportes)
                 {
                     if (item.SubLevel.Count > 0)
                     {
@@ -687,7 +689,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 }
                 response.Data = true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message, ex);
                 response.Data = false;
@@ -714,10 +716,10 @@ namespace DRRCore.Application.Main.CoreApplication
                         foreach (var item in process)
                         {
                             var process2 = userProcess.Where(x => x.IdProcess == item.Id).FirstOrDefault();
-                            if(process2 == null)
+                            if (process2 == null)
                             {
-                                await context.UserProcesses.AddAsync(new UserProcess 
-                                { 
+                                await context.UserProcesses.AddAsync(new UserProcess
+                                {
                                     IdProcess = item.Id,
                                     IdUser = item1.IdUser
                                 });
@@ -725,9 +727,9 @@ namespace DRRCore.Application.Main.CoreApplication
                         }
                     }
                 }
-               await context.SaveChangesAsync();
+                await context.SaveChangesAsync();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError($"{ex.Message}", ex);
                 response.IsSuccess = false;

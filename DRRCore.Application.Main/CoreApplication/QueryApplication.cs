@@ -1,5 +1,6 @@
 ﻿using AspNetCore.ReportingServices.ReportProcessing.ReportObjectModel;
 using AutoMapper;
+using DocumentFormat.OpenXml.Bibliography;
 using DRRCore.Application.DTO.Core.Response;
 using DRRCore.Application.DTO.Email;
 using DRRCore.Application.DTO.Enum;
@@ -2134,6 +2135,170 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
+        public async Task<Response<List<GetQuery5_1_2ByCycleResponseDto>>> GetQuery5_1_2MonthlyByCycle(string idUser, string cycle)
+        {
+            var response = new Response<List<GetQuery5_1_2ByCycleResponseDto>>();
+            response.Data = new List<GetQuery5_1_2ByCycleResponseDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var ticketHistories = await context.TicketHistories
+                    .Where(x => x.UserTo == idUser && x.ShippingDate != null && x.Cycle.Contains(cycle) && (x.AsignationType == "RP" || x.AsignationType == "DI" || x.AsignationType == "TR"))
+                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCountryNavigation)
+                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCompanyNavigation).ThenInclude(x => x.IdCountryNavigation)
+                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdPersonNavigation).ThenInclude(x => x.IdCountryNavigation)
+                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdStatusTicketNavigation)
+                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdSubscriberNavigation).ThenInclude(x => x.IdCountryNavigation)
+                    .ToListAsync();
+                var accc = ticketHistories.DistinctBy(x => x.IdTicket);
+                var idSubscribers = accc.DistinctBy(x => x.IdTicketNavigation.IdSubscriber);
+                var subscriberTickets = new List<GetQueryTicket5_1_2ResponseDto>();
+                foreach (var item in idSubscribers)
+                {
+                    subscriberTickets = new List<GetQueryTicket5_1_2ResponseDto>();
+                    foreach (var item1 in ticketHistories.Where(x => x.IdTicketNavigation.IdSubscriber == item.IdTicketNavigation.IdSubscriber).DistinctBy(x => x.IdTicket))
+                    {
+                        decimal amount = 0;
 
+                        if(item1.AsignationType == "RP")
+                        {
+                            var billingPersonal = await context.BillinPersonals.Where(x => x.Code.Trim() == item1.AsignedTo.Trim() && x.Quality.Contains((item1.IdTicketNavigation.Quality.IsNullOrEmpty() == false ? item1.IdTicketNavigation.Quality.Trim() : "")) && x.ReportType == item1.IdTicketNavigation.ReportType.Trim()).FirstOrDefaultAsync();
+                            if(billingPersonal != null && billingPersonal.Commission == false && billingPersonal.Amount != null)
+                            {
+                                amount = (decimal)billingPersonal.Amount;
+                            }
+                        }
+                        else if(item1.AsignationType == "DI")
+                        {
+
+                        }else if(item1.AsignationType == "TR")
+                        {
+
+                        }
+
+
+                        subscriberTickets.Add(new GetQueryTicket5_1_2ResponseDto
+                        {
+                            AsignedTo = item1.AsignedTo,
+                            AsignationType = item1.AsignationType,
+                            Cycle = item1.Cycle,
+                            Price = amount,
+                            Id = item1.Id,
+                            IdTicket = item1.IdTicket,
+                            IdCompany = item1.IdTicketNavigation.IdCompany,
+                            IdPerson = item1.IdTicketNavigation.IdPerson,
+                            IdStatusTicket = item1.IdTicketNavigation.IdStatusTicket,
+                            Quality = item1.IdTicketNavigation.Quality,
+                            Number = item1.IdTicketNavigation.Number.ToString("D6"),
+                            Language = item1.IdTicketNavigation.Language,
+                            About = item1.IdTicketNavigation.About,
+                            Status = item1.IdTicketNavigation.IdStatusTicketNavigation.Abrev,
+                            StatusColor = item1.IdTicketNavigation.IdStatusTicketNavigation.Color,
+                            Country = item1.IdTicketNavigation.IdCountryNavigation.Iso,
+                            FlagCountry = item1.IdTicketNavigation.IdCountryNavigation.FlagIso,
+                            SubscriberCode = item1.IdTicketNavigation.IdSubscriberNavigation.Code,
+                            SubscriberName = item1.IdTicketNavigation.IdSubscriberNavigation.Name,
+                            SubscriberCountry = item1.IdTicketNavigation.IdSubscriberNavigation.IdCountryNavigation.Name,
+                            SubscriberFlag = item1.IdTicketNavigation.IdSubscriberNavigation.IdCountryNavigation.FlagIso,
+                            SubscriberIndications = item1.IdTicketNavigation.IdSubscriberNavigation.Indications,
+                            QueryCredit = item1.IdTicketNavigation.QueryCredit,
+                            TimeLimit = item1.IdTicketNavigation.TimeLimit,
+                            ReferenceNumber = item1.IdTicketNavigation.ReferenceNumber,
+                            RevealName = item1.IdTicketNavigation.IdSubscriberNavigation.RevealName,
+                            NameRevealed = item1.IdTicketNavigation.IdSubscriberNavigation.RevealName == true ? item1.IdTicketNavigation.IdSubscriberNavigation.Name : "",
+                            AditionalData = item1.IdTicketNavigation.AditionalData,
+                            BusineesName = item1.IdTicketNavigation.About == "E" ? item1.IdTicketNavigation.IdCompanyNavigation.Name : item1.IdTicketNavigation.IdPersonNavigation.Fullname,
+                            RequestedName = item1.IdTicketNavigation.RequestedName,
+                            TaxType = item1.IdTicketNavigation.About == "E" ? item1.IdTicketNavigation.IdCompanyNavigation.TaxTypeName : item1.IdTicketNavigation.IdPersonNavigation.TaxTypeName,
+                            TaxCode = item1.IdTicketNavigation.About == "E" ? item1.IdTicketNavigation.IdCompanyNavigation.TaxTypeCode : item1.IdTicketNavigation.IdPersonNavigation.TaxTypeCode,
+                            InvestigatedIsoCountry = item1.IdTicketNavigation.About == "E" ? item1.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation.FlagIso : item1.IdTicketNavigation.IdPersonNavigation.IdCountryNavigation.FlagIso,
+                            InvestigatedCountry = item1.IdTicketNavigation.About == "E" ? item1.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation.Name : item1.IdTicketNavigation.IdPersonNavigation.IdCountryNavigation.Name,
+                            InvestigatedFlag = item1.IdTicketNavigation.About == "E" ? item1.IdTicketNavigation.IdCompanyNavigation.IdCountryNavigation.FlagIso : item1.IdTicketNavigation.IdPersonNavigation.IdCountryNavigation.FlagIso,
+                            City = item1.IdTicketNavigation.About == "E" ? item1.IdTicketNavigation.IdCompanyNavigation.Place : item1.IdTicketNavigation.IdPersonNavigation.City,
+                            Email = item1.IdTicketNavigation.About == "E" ? item1.IdTicketNavigation.IdCompanyNavigation.Email : item1.IdTicketNavigation.IdPersonNavigation.Email,
+                            Address = item1.IdTicketNavigation.About == "E" ? item1.IdTicketNavigation.IdCompanyNavigation.Address : item1.IdTicketNavigation.IdPersonNavigation.Address,
+                            Telephone = item1.IdTicketNavigation.About == "E" ? item1.IdTicketNavigation.IdCompanyNavigation.Telephone : item1.IdTicketNavigation.IdPersonNavigation.Cellphone,
+                            WebPage = item1.IdTicketNavigation.About == "E" ? item1.IdTicketNavigation.IdCompanyNavigation.WebPage : "",
+
+
+                            OrderDate = StaticFunctions.DateTimeToString(item1.IdTicketNavigation.OrderDate),
+                            ExpireDate = StaticFunctions.DateTimeToString(item1.IdTicketNavigation.ExpireDate),
+                            RealExpireDate = StaticFunctions.DateTimeToString(item1.IdTicketNavigation.RealExpireDate),
+                            ProcedureType = item1.IdTicketNavigation.ProcedureType,
+                            ReportType = item1.IdTicketNavigation.ReportType,
+                            Flag = GetFlagDate(item1.IdTicketNavigation.ExpireDate)
+                        });
+                    }
+                    response.Data.Add(new GetQuery5_1_2ByCycleResponseDto
+                    {
+                        Id = item.IdTicketNavigation.IdSubscriberNavigation.Id,
+                        Name = item.IdTicketNavigation.IdSubscriberNavigation.Name,
+                        Code = item.IdTicketNavigation.IdSubscriberNavigation.Code,
+                        Country = item.IdTicketNavigation.IdSubscriberNavigation.IdCountryNavigation.Iso ?? "",
+                        FlagCountry = item.IdTicketNavigation.IdSubscriberNavigation.IdCountryNavigation.FlagIso ?? "",
+                        Flag = true,
+                        AsignedTo = item.AsignedTo,
+                        AsignationType = item.AsignationType,
+                        Cycle = item.Cycle,
+                        Quantity = subscriberTickets.Count,
+                        Tickets = subscriberTickets
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                //response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+        public async Task<Response<List<GetCyclesResponseDto>>> GetCycles()
+        {
+            var response = new Response<List<GetCyclesResponseDto>>();
+            response.Data = new List<GetCyclesResponseDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var cycles = await context.ProductionClosures.OrderByDescending(x => x.EndDate).ToListAsync();
+                foreach (var cycle in cycles)
+                {
+                    response.Data.Add(new GetCyclesResponseDto
+                    {
+                        Code = cycle.Code,
+                        Value = cycle.Code + " - del " + StaticFunctions.DateTimeToString(cycle.EndDate),
+                    });
+                }
+            }catch(Exception ex)
+            {
+                response.IsSuccess = false;
+                //response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+        public async Task<Response<List<string>>> GetUserCode(int idUser)
+        {
+            var response = new Response<List<string>>();
+            response.Data = new List<string>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var userLogin = await context.UserLogins
+                    .Where(x => x.Id == idUser)
+                    .Include(x => x.IdEmployeeNavigation)
+                    .ThenInclude(x => x.Personals.Where(x => x.Type == "RP" || x.Type == "DI" || x.Type == "TR")).FirstOrDefaultAsync();
+                foreach(var item in userLogin.IdEmployeeNavigation.Personals)
+                {
+                    response.Data.Add(item.Code.Trim());
+                }
+            }catch(Exception ex)
+            {
+                response.IsSuccess = false;
+                //response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
     }
 }
