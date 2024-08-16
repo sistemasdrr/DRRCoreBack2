@@ -9,9 +9,9 @@ public partial class TicketFile
 
     public int? IdTicket { get; set; }
 
-    public string Name { get; set; } = null!;
+    public string? Name { get; set; }
 
-    public string Path { get; set; } = null!;
+    public string? Path { get; set; }
 
     public string Extension { get; set; } = null!;
 

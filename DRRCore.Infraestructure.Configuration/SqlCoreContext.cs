@@ -218,7 +218,7 @@ public partial class SqlCoreContext : DbContext
         if (!optionsBuilder.IsConfigured)
         {
             optionsBuilder.UseSqlServer(
-                "Data Source=200.58.123.184,14330;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
+            "Data Source=200.58.123.184,14330;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
             //"Data Source=SD-4154134-W;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
 
             );
@@ -5084,11 +5084,9 @@ public partial class SqlCoreContext : DbContext
                 .HasColumnName("extension");
             entity.Property(e => e.IdTicket).HasColumnName("idTicket");
             entity.Property(e => e.Name)
-                .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("name");
             entity.Property(e => e.Path)
-                .HasMaxLength(250)
                 .IsUnicode(false)
                 .HasColumnName("path");
             entity.Property(e => e.UpdateDate)

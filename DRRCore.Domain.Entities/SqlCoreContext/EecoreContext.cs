@@ -5084,11 +5084,9 @@ public partial class EecoreContext : DbContext
                 .HasColumnName("extension");
             entity.Property(e => e.IdTicket).HasColumnName("idTicket");
             entity.Property(e => e.Name)
-                .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("name");
             entity.Property(e => e.Path)
-                .HasMaxLength(250)
                 .IsUnicode(false)
                 .HasColumnName("path");
             entity.Property(e => e.UpdateDate)

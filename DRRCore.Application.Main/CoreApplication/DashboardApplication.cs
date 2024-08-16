@@ -94,12 +94,19 @@ namespace DRRCore.Application.Main.CoreApplication
             var response = new Response<int?>();
             try
             {
+                var num = 0;
                 var today = DateTime.Today;
                 using var context = new SqlCoreContext();
-                var ticketHistory = await context.TicketHistories
-                    .Where(x => x.UserTo.Contains(userTo) && x.Flag == true && x.ShippingDate.HasValue && x.ShippingDate.Value.Month == today.Month)
+                var cycle = await context.ProductionClosures.Where(x => x.EndDate.Value.Month == today.Month && x.EndDate.Value.Year == today.Year).FirstOrDefaultAsync();
+                if(cycle != null)
+                {
+                    var ticketHistory = await context.TicketHistories
+                    .Where(x => x.UserTo.Contains(userTo) && x.Flag == true && x.AsignedTo.Contains("CR") == false && x.Cycle == cycle.Code && x.ShippingDate.HasValue && (x.AsignationType == "RP" || x.AsignationType == "DI" || x.AsignationType == "TR"))
                     .ToListAsync();
-                response.Data = ticketHistory?.Count();
+                    num = ticketHistory.Count();
+                }
+
+                response.Data = num;
             }
             catch (Exception ex)
             {
@@ -208,7 +215,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 var subordinates = new List<Supervisor>();
                 if (supervisor != null && supervisor.IdEmployeeNavigation.Personals.FirstOrDefault() != null)
                 {
-                    if(supervisor.Id == 31) //GERENCIA
+                    if(supervisor.Id == 31 || supervisor.Id == 38 || supervisor.Id == 42) //GERENCIA
                     {
                         subordinates = await context.Supervisors
                             .Include(x => x.IdUserLoginNavigation).ThenInclude(x => x.IdEmployeeNavigation).ThenInclude(x => x.Personals)
@@ -308,106 +315,102 @@ namespace DRRCore.Application.Main.CoreApplication
                                 }
                                 pendingTaskSupervisor.Details.Add(pendingTaskPersonal);
                             }
-                            
-                            //var typists = await context.TicketHistories
-                            //    .Where(x => x.AsignationType == "DI" && x.AsignedTo.Contains("D") && x.IdTicketNavigation.IdStatusTicket != (int?)TicketStatusEnum.Despachado
-                            //        && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Observado
-                            //        && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Rechazado
-                            //        && x.Flag == false)
-                            //    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCountryNavigation)
-                            //    .ToListAsync();
-                            //var distinctTypistCode = typists.DistinctBy(x => x.AsignedTo).ToList();
-                            //foreach (var item1 in distinctTypistCode)
-                            //{
-                            //    var pendingTaskTypist = new PendingTaskPersonalResponseDto();
-                            //    pendingTaskTypist.Details = new List<PendingTaskPersonalDetailsResponseDto>();
-                            //    string name = "";
-                            //    string isoCountry = "";
-                            //    string flagCountry = "";
-                            //    var user = await context.Personals.Where(x => x.Code.Trim() == item1.AsignedTo.Trim()).Include(x => x.IdEmployeeNavigation).FirstOrDefaultAsync();
-                            //    if(user != null)
-                            //    {
-                            //        name = user.IdEmployeeNavigation.FirstName + " " + user.IdEmployeeNavigation.LastName;
-                            //        if (user.IdEmployeeNavigation.IdCountry != null)
-                            //        {
-                            //            var country = await context.Countries.Where(x => x.Id == user.IdEmployeeNavigation.IdCountry).FirstOrDefaultAsync();
-                            //            if(country != null)
-                            //            {
-                            //                isoCountry = country.Iso;
-                            //                flagCountry = country.FlagIso;
-                            //            }
-                            //        }
-                            //    }
-                            //    pendingTaskTypist.AsignedTo = item1.AsignedTo;
-                            //    pendingTaskTypist.Name = name;
-                            //    pendingTaskTypist.Country = isoCountry;
-                            //    pendingTaskTypist.FlagCountry = flagCountry;
-                            //    var ticketHistory = typists.Where(x => x.AsignedTo.Trim() == item1.AsignedTo.Trim()).ToList();
-                            //    foreach (var ticket in ticketHistory)
-                            //    {
-                            //        var details = new PendingTaskPersonalDetailsResponseDto();
-                            //        details.Id = ticket.IdTicket;
-                            //        details.RequestedName = ticket.IdTicketNavigation.RequestedName;
-                            //        details.Number = ticket.IdTicketNavigation.IsComplement != null && ticket.IdTicketNavigation.IsComplement == true ? ticket.IdTicketNavigation.About + " - " + ticket.IdTicketNavigation.Number.ToString("D6") + " (C) " : ticket.IdTicketNavigation.About + " - " + ticket.IdTicketNavigation.Number.ToString("D6");
-                            //        details.Country = ticket.IdTicketNavigation.IdCountryNavigation.Iso ?? "";
-                            //        details.FlagCountry = ticket.IdTicketNavigation.IdCountryNavigation.FlagIso ?? "";
-                            //        details.ExpireDate = StaticFunctions.DateTimeToString(ticket.IdTicketNavigation.ExpireDate);
-                            //        details.Flag = GetFlagDate(ticket.IdTicketNavigation.ExpireDate);
-                            //        pendingTaskTypist.Details.Add(details);
-                            //    }
-                            //    pendingTaskSupervisor.Details.Add(pendingTaskTypist);
-                            //}
-                            //response.Data.Add(pendingTaskSupervisor);
+
+                            var typists = await context.Personals.Where(x => x.Type == "DI" && x.Enable == true).Include(x => x.IdEmployeeNavigation).ToListAsync();
+                            foreach (var item1 in typists)
+                            {
+                                var pendingTaskTypist = new PendingTaskPersonalResponseDto();
+                                pendingTaskTypist.Details = new List<PendingTaskPersonalDetailsResponseDto>();
+                                var c = "";
+                                var fc = "";
+                                pendingTaskTypist.Name = item1.IdEmployeeNavigation.FirstName + " " + item1.IdEmployeeNavigation.LastName;
+                                if (item1.IdEmployeeNavigation.IdCountry != null && item1.IdEmployeeNavigation.IdCountry != 0)
+                                {
+                                    var country1 = await context.Countries.Where(x => x.Id == item1.IdEmployeeNavigation.IdCountry).FirstOrDefaultAsync();
+                                    if (country1 != null)
+                                    {
+                                        c = country1.Iso;
+                                        fc = country1.FlagIso;
+                                    }
+                                }
+                                pendingTaskTypist.FlagCountry = fc;
+                                pendingTaskTypist.Country = c;
+                                pendingTaskTypist.Type = "DI";
+                                pendingTaskTypist.AsignedTo = item1.Code.Trim();
+
+                                var ticketHistoryTypist = await context.TicketHistories
+                                .Where(x => x.AsignedTo.Contains(item1.Code.Trim())
+                                && x.IdTicketNavigation.IdStatusTicket != (int?)TicketStatusEnum.Despachado
+                                && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Observado
+                                && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Rechazado
+                                && x.Flag == false)
+                                .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCountryNavigation)
+                                .ToListAsync();
+                                foreach (var ticket in ticketHistoryTypist)
+                                {
+                                    var details = new PendingTaskPersonalDetailsResponseDto();
+                                    details.Id = ticket.IdTicket;
+                                    details.RequestedName = ticket.IdTicketNavigation.RequestedName;
+                                    details.Number = ticket.IdTicketNavigation.IsComplement != null && ticket.IdTicketNavigation.IsComplement == true ? ticket.IdTicketNavigation.About + " - " + ticket.IdTicketNavigation.Number.ToString("D6") + " (C) " : ticket.IdTicketNavigation.About + " - " + ticket.IdTicketNavigation.Number.ToString("D6");
+                                    details.Country = ticket.IdTicketNavigation.IdCountryNavigation.Iso ?? "";
+                                    details.FlagCountry = ticket.IdTicketNavigation.IdCountryNavigation.FlagIso ?? "";
+                                    details.ExpireDate = StaticFunctions.DateTimeToString(ticket.IdTicketNavigation.ExpireDate);
+                                    details.Flag = GetFlagDate(ticket.IdTicketNavigation.ExpireDate);
+                                    pendingTaskTypist.Details.Add(details);
+                                }
 
 
-                            //var translator = await context.TicketHistories
-                            //    .Where(x => x.AsignationType == "TR" && x.AsignedTo.Contains("T") && x.IdTicketNavigation.IdStatusTicket != (int?)TicketStatusEnum.Despachado
-                            //        && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Observado
-                            //        && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Rechazado
-                            //        && x.Flag == false)
-                            //    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCountryNavigation)
-                            //    .ToListAsync();
-                            //var distinctTranslatorCode = translator.DistinctBy(x => x.AsignedTo).ToList();
-                            //foreach (var item1 in distinctTranslatorCode)
-                            //{
-                            //    var pendingTaskTranslator= new PendingTaskPersonalResponseDto();
-                            //    pendingTaskTranslator.Details = new List<PendingTaskPersonalDetailsResponseDto>();
-                            //    string name = "";
-                            //    string isoCountry = "";
-                            //    string flagCountry = "";
-                            //    var user = await context.Personals.Where(x => x.Code.Trim() == item1.AsignedTo.Trim()).Include(x => x.IdEmployeeNavigation).FirstOrDefaultAsync();
-                            //    if (user != null)
-                            //    {
-                            //        name = user.IdEmployeeNavigation.FirstName + " " + user.IdEmployeeNavigation.LastName;
-                            //        if (user.IdEmployeeNavigation.IdCountry != null)
-                            //        {
-                            //            var country = await context.Countries.Where(x => x.Id == user.IdEmployeeNavigation.IdCountry).FirstOrDefaultAsync();
-                            //            if (country != null)
-                            //            {
-                            //                isoCountry = country.Iso;
-                            //                flagCountry = country.FlagIso;
-                            //            }
-                            //        }
-                            //    }
-                            //    pendingTaskTranslator.AsignedTo = item1.AsignedTo;
-                            //    pendingTaskTranslator.Name = name;
-                            //    pendingTaskTranslator.Country = isoCountry;
-                            //    pendingTaskTranslator.FlagCountry = flagCountry;
-                            //    var ticketHistory = translator.Where(x => x.AsignedTo.Trim() == item1.AsignedTo.Trim()).ToList();
-                            //    foreach (var ticket in ticketHistory)
-                            //    {
-                            //        var details = new PendingTaskPersonalDetailsResponseDto();
-                            //        details.Id = ticket.IdTicket;
-                            //        details.RequestedName = ticket.IdTicketNavigation.RequestedName;
-                            //        details.Number = ticket.IdTicketNavigation.IsComplement != null && ticket.IdTicketNavigation.IsComplement == true ? ticket.IdTicketNavigation.About + " - " + ticket.IdTicketNavigation.Number.ToString("D6") + " (C) " : ticket.IdTicketNavigation.About + " - " + ticket.IdTicketNavigation.Number.ToString("D6");
-                            //        details.Country = ticket.IdTicketNavigation.IdCountryNavigation.Iso ?? "";
-                            //        details.FlagCountry = ticket.IdTicketNavigation.IdCountryNavigation.FlagIso ?? "";
-                            //        details.ExpireDate = StaticFunctions.DateTimeToString(ticket.IdTicketNavigation.ExpireDate);
-                            //        details.Flag = GetFlagDate(ticket.IdTicketNavigation.ExpireDate);
-                            //        pendingTaskTranslator.Details.Add(details);
-                            //    }
-                            //    pendingTaskSupervisor.Details.Add(pendingTaskTranslator);
-                            //}
+                                pendingTaskSupervisor.Details.Add(pendingTaskTypist);
+                            }
+
+                            var translators = await context.Personals.Where(x => x.Type == "TR" && x.Enable == true).Include(x => x.IdEmployeeNavigation).ToListAsync();
+                            foreach (var item1 in translators)
+                            {
+                                var pendingTaskTranslator = new PendingTaskPersonalResponseDto();
+                                pendingTaskTranslator.Details = new List<PendingTaskPersonalDetailsResponseDto>();
+                                var c = "";
+                                var fc = "";
+                                pendingTaskTranslator.Name = item1.IdEmployeeNavigation.FirstName + " " + item1.IdEmployeeNavigation.LastName;
+                                if (item1.IdEmployeeNavigation.IdCountry != null && item1.IdEmployeeNavigation.IdCountry != 0)
+                                {
+                                    var country1 = await context.Countries.Where(x => x.Id == item1.IdEmployeeNavigation.IdCountry).FirstOrDefaultAsync();
+                                    if (country1 != null)
+                                    {
+                                        c = country1.Iso;
+                                        fc = country1.FlagIso;
+                                    }
+                                }
+                                pendingTaskTranslator.FlagCountry = fc;
+                                pendingTaskTranslator.Country = c;
+                                pendingTaskTranslator.Type = "TR";
+                                pendingTaskTranslator.AsignedTo = item1.Code.Trim();
+
+                                var ticketHistoryTranslator = await context.TicketHistories
+                                .Where(x => x.AsignedTo.Contains(item1.Code.Trim())
+                                && x.IdTicketNavigation.IdStatusTicket != (int?)TicketStatusEnum.Despachado
+                                && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Observado
+                                && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Rechazado
+                                && x.Flag == false)
+                                .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCountryNavigation)
+                                .ToListAsync();
+                                foreach (var ticket in ticketHistoryTranslator)
+                                {
+                                    var details = new PendingTaskPersonalDetailsResponseDto();
+                                    details.Id = ticket.IdTicket;
+                                    details.RequestedName = ticket.IdTicketNavigation.RequestedName;
+                                    details.Number = ticket.IdTicketNavigation.IsComplement != null && ticket.IdTicketNavigation.IsComplement == true ? ticket.IdTicketNavigation.About + " - " + ticket.IdTicketNavigation.Number.ToString("D6") + " (C) " : ticket.IdTicketNavigation.About + " - " + ticket.IdTicketNavigation.Number.ToString("D6");
+                                    details.Country = ticket.IdTicketNavigation.IdCountryNavigation.Iso ?? "";
+                                    details.FlagCountry = ticket.IdTicketNavigation.IdCountryNavigation.FlagIso ?? "";
+                                    details.ExpireDate = StaticFunctions.DateTimeToString(ticket.IdTicketNavigation.ExpireDate);
+                                    details.Flag = GetFlagDate(ticket.IdTicketNavigation.ExpireDate);
+                                    pendingTaskTranslator.Details.Add(details);
+                                }
+
+
+                                pendingTaskSupervisor.Details.Add(pendingTaskTranslator);
+                            }
+
+                           
                             response.Data.Add(pendingTaskSupervisor);
                         }
                     }
