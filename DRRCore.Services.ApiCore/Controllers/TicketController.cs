@@ -133,9 +133,9 @@ namespace DRRCore.Services.ApiCore.Controllers
         }
         [HttpPost()]
         [Route("DispatchTicket")]
-        public async Task<ActionResult> DispatchTicekt(int idTicket, int idUser)
+        public async Task<ActionResult> DispatchTicekt(int idTicket, int idUser, List<int> idTicketFiles)
         {
-            return Ok(await _ticketApplication.DispatchTicket(idTicket, idUser));
+            return Ok(await _ticketApplication.DispatchTicket(idTicket, idUser, idTicketFiles));
         }
         [HttpPost()]
         [Route("GetExcel")]
@@ -311,7 +311,12 @@ namespace DRRCore.Services.ApiCore.Controllers
         {
             return Ok(await _ticketApplication.FinishWork(obj));
         }
-        
+        [HttpPost()]
+        [Route("FinishWorkById")]
+        public async Task<ActionResult> FinishWorkById(int idTicketHistory)
+        {
+            return Ok(await _ticketApplication.FinishWorkById(idTicketHistory));
+        }
         [HttpGet()]
         [Route("GetEmployeesAssignated")]
         public async Task<ActionResult> GetEmployeesAssignatedToTicket(int idTicket)

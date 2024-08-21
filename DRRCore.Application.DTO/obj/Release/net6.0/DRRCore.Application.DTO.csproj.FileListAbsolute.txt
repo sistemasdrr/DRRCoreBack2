@@ -25,10 +25,11 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.DTO\obj\Rele
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.DTO\obj\Release\net6.0\DRRCore.Application.DTO.AssemblyInfoInputs.cache
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.DTO\obj\Release\net6.0\DRRCore.Application.DTO.AssemblyInfo.cs
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.DTO\obj\Release\net6.0\DRRCore.Application.DTO.csproj.CoreCompileInputs.cache
-C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.DTO\obj\Release\net6.0\DRRCore.Application.DTO.csproj.CopyComplete
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.DTO\obj\Release\net6.0\DRRCore.Application.DTO.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.DTO\obj\Release\net6.0\refint\DRRCore.Application.DTO.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.DTO\obj\Release\net6.0\DRRCore.Application.DTO.pdb
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.DTO\obj\Release\net6.0\ref\DRRCore.Application.DTO.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.DTO\bin\Release\net6.0\DRRCore.Infraestructure.Configuration.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.DTO\bin\Release\net6.0\DRRCore.Infraestructure.Configuration.pdb
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.DTO\obj\Release\net6.0\DRRCore.Application.DTO.sourcelink.json
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.DTO\obj\Release\net6.0\DRRCore..23305BF5.Up2Date

@@ -2405,19 +2405,32 @@ namespace DRRCore.Application.Main.CoreApplication
                     var distIdTicket = list.DistinctBy(x => x.IdTicket).Where(x => x.Qualification == "Dió referencia");
                     foreach (var item in distIdTicket)
                     {
-                        var distProvider = list.DistinctBy(x => x.Name).Where(x => x.IdTicket == item.IdTicket && x.Qualification == "Dió referencia");
+                        var distProvider = list.Where(x => x.IdTicket == item.IdTicket && x.Qualification == "Dió referencia" && x.Flag == true);
                         response.Data.Add(new GetProviderHistoryResponseDto
                         {
                             IdTicket = item.IdTicket,
                             Ticket = item.Ticket,
-                            Date = StaticFunctions.DateTimeToString(item.Date),
+                            Date = StaticFunctions.DateTimeToString(item.DateReferent),
                             NumReferences = distProvider.Count(),
                             ReferentName = item.ReferentName,
                         });
                     }
                 }else if(type == "P")
                 {
-                    response.Data = await _providerDomain.GetProvidersHistoryByIdPerson(id);
+                    var list = await context.Providers.Where(x => x.IdPerson == id).ToListAsync();
+                    var distIdTicket = list.DistinctBy(x => x.IdTicket).Where(x => x.Qualification == "Dió referencia");
+                    foreach (var item in distIdTicket)
+                    {
+                        var distProvider = list.Where(x => x.IdTicket == item.IdTicket && x.Qualification == "Dió referencia" && x.Flag == true);
+                        response.Data.Add(new GetProviderHistoryResponseDto
+                        {
+                            IdTicket = item.IdTicket,
+                            Ticket = item.Ticket,
+                            Date = StaticFunctions.DateTimeToString(item.DateReferent),
+                            NumReferences = distProvider.Count(),
+                            ReferentName = item.ReferentName,
+                        });
+                    }
                 }
             }catch(Exception ex)
             {
@@ -2427,12 +2440,70 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<bool>> AddOrUpdateProviderListAsync(List<GetListProviderResponseDto> obj, int idCompany,string user, int idTicket)
+        public async Task<Response<bool>> AddOrUpdateProviderListAsync(List<GetListProviderResponseDto> obj, int idCompany,string user, string asignedTo, int idTicket, bool isComplement)
         {
             var response = new Response<bool>();
             try
             {
                 using var context = new SqlCoreContext();
+
+                var cycle = "CP_" + DateTime.Now.Month.ToString("D2") + "_" + DateTime.Now.Year;
+                var productionClosure = await context.ProductionClosures.Where(x => x.Code.Contains(cycle)).FirstOrDefaultAsync();
+                if (productionClosure == null)
+                {
+
+                    DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1).AddDays(-1);
+                    await context.ProductionClosures.AddAsync(new ProductionClosure
+                    {
+                        EndDate = lastDayOfCurrentMonth,
+                        Code = cycle,
+                        Title = "Cierre de Producción " + DateTime.Now.Month.ToString("D2") + " - " + DateTime.Now.Year,
+                        Observations = ""
+                    });
+                }
+                else
+                {
+                    if (productionClosure.EndDate > DateTime.Now)
+                    {
+                        if (DateTime.Now.Month == 12)
+                        {
+                            cycle = "CP_" + (1).ToString("D2") + "_" + (DateTime.Now.Year + 1);
+                            var nextProductionClosureExistent = await context.ProductionClosures.Where(x => x.Code.Contains(cycle)).FirstOrDefaultAsync();
+                            if (nextProductionClosureExistent == null)
+                            {
+                                DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year + 1, 1, 1).AddMonths(1).AddDays(-1);
+                                await context.ProductionClosures.AddAsync(new ProductionClosure
+                                {
+                                    EndDate = lastDayOfCurrentMonth,
+                                    Code = cycle,
+                                    Title = "Cierre de Producción " + (1).ToString("D2") + " - " + DateTime.Today.Year + 1,
+                                    Observations = ""
+                                });
+                            }
+                        }
+                        else
+                        {
+                            cycle = "CP_" + (DateTime.Now.Month + 1).ToString("D2") + "_" + DateTime.Now.Year;
+                            var nextProductionClosureExistent = await context.ProductionClosures.Where(x => x.Code.Contains(cycle)).FirstOrDefaultAsync();
+                            if (nextProductionClosureExistent == null)
+                            {
+                                DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year, (DateTime.Today.Month + 1), 1).AddMonths(1).AddDays(-1);
+                                await context.ProductionClosures.AddAsync(new ProductionClosure
+                                {
+                                    EndDate = lastDayOfCurrentMonth,
+                                    Code = cycle,
+                                    Title = "Cierre de Producción " + (DateTime.Now.Month + 1).ToString("D2") + " - " + DateTime.Now.Year,
+                                    Observations = ""
+                                });
+                            }
+
+                        }
+
+                    }
+                }
+
+
+
                 var ticket = await context.Tickets.Where(x => x.Id == idTicket).FirstOrDefaultAsync();
                 var currentUser =await context.UserLogins.Include(x=>x.IdEmployeeNavigation).Where(x => x.Id == int.Parse(user)).FirstOrDefaultAsync();
 
@@ -2440,8 +2511,15 @@ namespace DRRCore.Application.Main.CoreApplication
                 {
                     throw new Exception("ticket o usuario no encontrado.");
                 }
-
-                var list = await context.Providers.Where(x => x.Enable == true && x.IdCompany == idCompany && x.Flag == true).ToListAsync();
+                var list = new List<Provider>();
+                if(ticket.About == "E")
+                {
+                    list = await context.Providers.Where(x => x.Enable == true && x.IdCompany == idCompany && x.Flag == true).ToListAsync();
+                }
+                else
+                {
+                    list = await context.Providers.Where(x => x.Enable == true && x.IdPerson== idCompany && x.Flag == true).ToListAsync();
+                }
                 foreach (var item in list)
                 {
                     item.Flag = false;
@@ -2453,7 +2531,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     await context.Providers.AddAsync(new Provider
                     {
                         Id = 0,
-                        IdCompany = item1.IdCompany == 0 || item1.IdCompany == null ? null : item1.IdCompany,
+                        IdCompany = ticket.About == "E" ? idCompany : null,
                         Name = item1.Name,
                         IdCountry = item1.IdCountry,
                         Qualification = item1.Qualification,
@@ -2475,22 +2553,24 @@ namespace DRRCore.Application.Main.CoreApplication
                         AdditionalCommentary = item1.AdditionalCommentary,
                         AdditionalCommentaryEng = item1.AdditionalCommentaryEng,
                         ReferentCommentary = item1.ReferentCommentary,
-                        IdPerson = item1.IdPerson == 0 || item1.IdPerson == null ? null : item1.IdPerson,
+                        IdPerson = ticket.About == "P" ? idCompany : null,
                         IdTicket = ticket.Id,
                         ReferentName = currentUser.IdEmployeeNavigation.FirstName+" "+ currentUser.IdEmployeeNavigation.LastName,
                         Flag = true,
                         Ticket = ticket.Number.ToString("D6"),
                         DateReferent =DateTime.Now
                     });
-
+                    await context.ReferencesHistories.AddAsync(new ReferencesHistory
+                    {
+                        IdUser = currentUser.Id,
+                        Code = asignedTo,
+                        IdTicket = ticket.Id,
+                        IsComplement = isComplement,
+                        ValidReferences = obj.Where(x => x.Qualification == "Dió referencia").Count(),
+                        Cycle = cycle
+                    });
                 }
-                var history = await context.TicketHistories.Where(X => X.IdTicket == idTicket && X.AsignedTo.Contains("RC") && X.Flag == false).FirstOrDefaultAsync();
-                if (history != null)
-                {
-                    history.UpdateDate = DateTime.Now;
-                    history.Flag = true;
-                    context.TicketHistories.Update(history);
-                }
+                
                 await context.SaveChangesAsync();
                 response.Data = true;
             }

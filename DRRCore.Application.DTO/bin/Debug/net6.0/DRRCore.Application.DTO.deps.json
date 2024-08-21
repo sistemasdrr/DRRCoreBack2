@@ -1217,7 +1217,10 @@
           "log4net": "2.0.15"
         },
         "runtime": {
-          "DRRCore.Transversal.Common.dll": {}
+          "DRRCore.Transversal.Common.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       },
       "DRRCore.Infraestructure.Configuration/1.0.0.0": {

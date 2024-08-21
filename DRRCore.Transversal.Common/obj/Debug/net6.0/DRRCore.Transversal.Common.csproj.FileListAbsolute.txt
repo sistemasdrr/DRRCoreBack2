@@ -35,3 +35,4 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Transversal.Common\obj\D
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Transversal.Common\obj\Debug\net6.0\refint\DRRCore.Transversal.Common.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Transversal.Common\obj\Debug\net6.0\DRRCore.Transversal.Common.pdb
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Transversal.Common\obj\Debug\net6.0\ref\DRRCore.Transversal.Common.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Transversal.Common\obj\Debug\net6.0\DRRCore.Transversal.Common.sourcelink.json

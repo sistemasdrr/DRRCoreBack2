@@ -1,57 +1,129 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\jpfer\\source\\repos\\DRRCoreBack2\\",
+  "WorkspaceRootPath": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{3A6B5760-D69F-4F94-BCC6-C662C3A5D285}|DRRCore.Services.ApiCore\\DRRCore.Services.ApiCore.csproj|c:\\users\\jpfer\\source\\repos\\drrcoreback2\\drrcore.services.apicore\\controllers\\agentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3A6B5760-D69F-4F94-BCC6-C662C3A5D285}|DRRCore.Services.ApiCore\\DRRCore.Services.ApiCore.csproj|solutionrelative:drrcore.services.apicore\\controllers\\agentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{279425BB-AE46-467A-88CA-97B959339E60}|DRRCore.Application.Main\\DRRCore.Application.Main.csproj|c:\\users\\programador1\\source\\repos\\drrcoreback2\\drrcore.application.main\\coreapplication\\companyapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{279425BB-AE46-467A-88CA-97B959339E60}|DRRCore.Application.Main\\DRRCore.Application.Main.csproj|solutionrelative:drrcore.application.main\\coreapplication\\companyapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{279425BB-AE46-467A-88CA-97B959339E60}|DRRCore.Application.Main\\DRRCore.Application.Main.csproj|c:\\users\\jpfer\\source\\repos\\drrcoreback2\\drrcore.application.main\\webdataapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{279425BB-AE46-467A-88CA-97B959339E60}|DRRCore.Application.Main\\DRRCore.Application.Main.csproj|solutionrelative:drrcore.application.main\\webdataapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3A6B5760-D69F-4F94-BCC6-C662C3A5D285}|DRRCore.Services.ApiCore\\DRRCore.Services.ApiCore.csproj|c:\\users\\programador1\\source\\repos\\drrcoreback2\\drrcore.services.apicore\\controllers\\companycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A6B5760-D69F-4F94-BCC6-C662C3A5D285}|DRRCore.Services.ApiCore\\DRRCore.Services.ApiCore.csproj|solutionrelative:drrcore.services.apicore\\controllers\\companycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{279425BB-AE46-467A-88CA-97B959339E60}|DRRCore.Application.Main\\DRRCore.Application.Main.csproj|c:\\users\\jpfer\\source\\repos\\drrcoreback2\\drrcore.application.main\\migrationapplication\\migrauser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{279425BB-AE46-467A-88CA-97B959339E60}|DRRCore.Application.Main\\DRRCore.Application.Main.csproj|solutionrelative:drrcore.application.main\\migrationapplication\\migrauser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F7EB9451-E49A-4C43-99E5-5C058E169626}|DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj|c:\\users\\jpfer\\source\\repos\\drrcoreback2\\drrcore.transversal.common\\reportingdownload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F7EB9451-E49A-4C43-99E5-5C058E169626}|DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj|solutionrelative:drrcore.transversal.common\\reportingdownload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DF0B88F4-541B-483E-8A1E-48E5CDCE58A8}|DRRCore.Services.ApiWeb\\DRRCore.Services.ApiWeb.csproj|c:\\users\\jpfer\\source\\repos\\drrcoreback2\\drrcore.services.apiweb\\controllers\\webcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DF0B88F4-541B-483E-8A1E-48E5CDCE58A8}|DRRCore.Services.ApiWeb\\DRRCore.Services.ApiWeb.csproj|solutionrelative:drrcore.services.apiweb\\controllers\\webcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{279425BB-AE46-467A-88CA-97B959339E60}|DRRCore.Application.Main\\DRRCore.Application.Main.csproj|c:\\users\\jpfer\\source\\repos\\drrcoreback2\\drrcore.application.main\\coreapplication\\ticketapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{279425BB-AE46-467A-88CA-97B959339E60}|DRRCore.Application.Main\\DRRCore.Application.Main.csproj|c:\\users\\programador1\\source\\repos\\drrcoreback2\\drrcore.application.main\\coreapplication\\ticketapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{279425BB-AE46-467A-88CA-97B959339E60}|DRRCore.Application.Main\\DRRCore.Application.Main.csproj|solutionrelative:drrcore.application.main\\coreapplication\\ticketapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D53821FC-2047-4684-A3F2-0964CC8D3E2C}|DRRCore.Infraestructure.Configuration\\DRRCore.Infraestructure.Configuration.csproj|c:\\users\\jpfer\\source\\repos\\drrcoreback2\\drrcore.infraestructure.configuration\\sqlcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D53821FC-2047-4684-A3F2-0964CC8D3E2C}|DRRCore.Infraestructure.Configuration\\DRRCore.Infraestructure.Configuration.csproj|solutionrelative:drrcore.infraestructure.configuration\\sqlcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{81C3D6F6-A336-4BC8-9B6B-F67B52BF4528}|DRRCore.Application.Interfaces\\DRRCore.Application.Interfaces.csproj|c:\\users\\programador1\\source\\repos\\drrcoreback2\\drrcore.application.interfaces\\coreapplication\\icompanyapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{81C3D6F6-A336-4BC8-9B6B-F67B52BF4528}|DRRCore.Application.Interfaces\\DRRCore.Application.Interfaces.csproj|solutionrelative:drrcore.application.interfaces\\coreapplication\\icompanyapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3A6B5760-D69F-4F94-BCC6-C662C3A5D285}|DRRCore.Services.ApiCore\\DRRCore.Services.ApiCore.csproj|c:\\users\\jpfer\\source\\repos\\drrcoreback2\\drrcore.services.apicore\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{3A6B5760-D69F-4F94-BCC6-C662C3A5D285}|DRRCore.Services.ApiCore\\DRRCore.Services.ApiCore.csproj|solutionrelative:drrcore.services.apicore\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{DDBA74E3-265B-4E55-AE79-839A011B0EAC}|DRRCore.Infraestructure.Repository\\DRRCore.Infraestructure.Repository.csproj|c:\\users\\programador1\\source\\repos\\drrcoreback2\\drrcore.infraestructure.repository\\corerepository\\ticketreceptorrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DDBA74E3-265B-4E55-AE79-839A011B0EAC}|DRRCore.Infraestructure.Repository\\DRRCore.Infraestructure.Repository.csproj|solutionrelative:drrcore.infraestructure.repository\\corerepository\\ticketreceptorrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F7EB9451-E49A-4C43-99E5-5C058E169626}|DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj|c:\\users\\jpfer\\source\\repos\\drrcoreback2\\drrcore.transversal.common\\mailformatter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F7EB9451-E49A-4C43-99E5-5C058E169626}|DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj|solutionrelative:drrcore.transversal.common\\mailformatter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DD1E85F3-B9DC-4199-A450-5382E62B6BDF}|DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj|c:\\users\\programador1\\source\\repos\\drrcoreback2\\drrcore.domain.entities\\sqlcorecontext\\person.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DD1E85F3-B9DC-4199-A450-5382E62B6BDF}|DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj|solutionrelative:drrcore.domain.entities\\sqlcorecontext\\person.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F7EB9451-E49A-4C43-99E5-5C058E169626}|DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj|c:\\users\\jpfer\\source\\repos\\drrcoreback2\\drrcore.transversal.common\\constants.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F7EB9451-E49A-4C43-99E5-5C058E169626}|DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj|solutionrelative:drrcore.transversal.common\\constants.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DD1E85F3-B9DC-4199-A450-5382E62B6BDF}|DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj|c:\\users\\programador1\\source\\repos\\drrcoreback2\\drrcore.domain.entities\\sqlcorecontext\\company.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DD1E85F3-B9DC-4199-A450-5382E62B6BDF}|DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj|solutionrelative:drrcore.domain.entities\\sqlcorecontext\\company.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{81C3D6F6-A336-4BC8-9B6B-F67B52BF4528}|DRRCore.Application.Interfaces\\DRRCore.Application.Interfaces.csproj|c:\\users\\jpfer\\source\\repos\\drrcoreback2\\drrcore.application.interfaces\\iwebdataapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{81C3D6F6-A336-4BC8-9B6B-F67B52BF4528}|DRRCore.Application.Interfaces\\DRRCore.Application.Interfaces.csproj|solutionrelative:drrcore.application.interfaces\\iwebdataapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D53821FC-2047-4684-A3F2-0964CC8D3E2C}|DRRCore.Infraestructure.Configuration\\DRRCore.Infraestructure.Configuration.csproj|c:\\users\\jpfer\\source\\repos\\drrcoreback2\\drrcore.infraestructure.configuration\\sqlcorecontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{D53821FC-2047-4684-A3F2-0964CC8D3E2C}|DRRCore.Infraestructure.Configuration\\DRRCore.Infraestructure.Configuration.csproj|c:\\users\\programador1\\source\\repos\\drrcoreback2\\drrcore.infraestructure.configuration\\sqlcorecontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D53821FC-2047-4684-A3F2-0964CC8D3E2C}|DRRCore.Infraestructure.Configuration\\DRRCore.Infraestructure.Configuration.csproj|solutionrelative:drrcore.infraestructure.configuration\\sqlcorecontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DF0B88F4-541B-483E-8A1E-48E5CDCE58A8}|DRRCore.Services.ApiWeb\\DRRCore.Services.ApiWeb.csproj|c:\\users\\jpfer\\source\\repos\\drrcoreback2\\drrcore.services.apiweb\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{DD1E85F3-B9DC-4199-A450-5382E62B6BDF}|DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj|c:\\users\\programador1\\source\\repos\\drrcoreback2\\drrcore.domain.entities\\sqlcorecontext\\eecorecontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DD1E85F3-B9DC-4199-A450-5382E62B6BDF}|DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj|solutionrelative:drrcore.domain.entities\\sqlcorecontext\\eecorecontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A6B5760-D69F-4F94-BCC6-C662C3A5D285}|DRRCore.Services.ApiCore\\DRRCore.Services.ApiCore.csproj|c:\\users\\programador1\\source\\repos\\drrcoreback2\\drrcore.services.apicore\\controllers\\ticketcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A6B5760-D69F-4F94-BCC6-C662C3A5D285}|DRRCore.Services.ApiCore\\DRRCore.Services.ApiCore.csproj|solutionrelative:drrcore.services.apicore\\controllers\\ticketcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{279425BB-AE46-467A-88CA-97B959339E60}|DRRCore.Application.Main\\DRRCore.Application.Main.csproj|c:\\users\\programador1\\source\\repos\\drrcoreback2\\drrcore.application.main\\coreapplication\\queryapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{279425BB-AE46-467A-88CA-97B959339E60}|DRRCore.Application.Main\\DRRCore.Application.Main.csproj|solutionrelative:drrcore.application.main\\coreapplication\\queryapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{279425BB-AE46-467A-88CA-97B959339E60}|DRRCore.Application.Main\\DRRCore.Application.Main.csproj|c:\\users\\programador1\\source\\repos\\drrcoreback2\\drrcore.application.main\\webdataapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{279425BB-AE46-467A-88CA-97B959339E60}|DRRCore.Application.Main\\DRRCore.Application.Main.csproj|solutionrelative:drrcore.application.main\\webdataapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8C7F3D6-F547-4AB9-97C3-EACAACCFCD26}|DRRCore.Transversal.Mapper\\DRRCore.Transversal.Mapper.csproj|c:\\users\\programador1\\source\\repos\\drrcoreback2\\drrcore.transversal.mapper\\profiles\\core\\ticketprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8C7F3D6-F547-4AB9-97C3-EACAACCFCD26}|DRRCore.Transversal.Mapper\\DRRCore.Transversal.Mapper.csproj|solutionrelative:drrcore.transversal.mapper\\profiles\\core\\ticketprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{81C3D6F6-A336-4BC8-9B6B-F67B52BF4528}|DRRCore.Application.Interfaces\\DRRCore.Application.Interfaces.csproj|c:\\users\\programador1\\source\\repos\\drrcoreback2\\drrcore.application.interfaces\\coreapplication\\iticketapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{81C3D6F6-A336-4BC8-9B6B-F67B52BF4528}|DRRCore.Application.Interfaces\\DRRCore.Application.Interfaces.csproj|solutionrelative:drrcore.application.interfaces\\coreapplication\\iticketapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FC1A35C0-2EFB-4237-BEB8-FD6DE0AC7201}|DRRCore.Domain.Interfaces\\DRRCore.Domain.Interfaces.csproj|c:\\users\\programador1\\source\\repos\\drrcoreback2\\drrcore.domain.interfaces\\coredomain\\iproviderdomain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FC1A35C0-2EFB-4237-BEB8-FD6DE0AC7201}|DRRCore.Domain.Interfaces\\DRRCore.Domain.Interfaces.csproj|solutionrelative:drrcore.domain.interfaces\\coredomain\\iproviderdomain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{96E7AF6A-3DEC-4405-B3FB-58F6212A63FE}|DRRCore.Domain.Main\\DRRCore.Domain.Main.csproj|c:\\users\\programador1\\source\\repos\\drrcoreback2\\drrcore.domain.main\\coredomain\\providerdomain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{96E7AF6A-3DEC-4405-B3FB-58F6212A63FE}|DRRCore.Domain.Main\\DRRCore.Domain.Main.csproj|solutionrelative:drrcore.domain.main\\coredomain\\providerdomain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DDBA74E3-265B-4E55-AE79-839A011B0EAC}|DRRCore.Infraestructure.Repository\\DRRCore.Infraestructure.Repository.csproj|c:\\users\\programador1\\source\\repos\\drrcoreback2\\drrcore.infraestructure.repository\\corerepository\\providerrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DDBA74E3-265B-4E55-AE79-839A011B0EAC}|DRRCore.Infraestructure.Repository\\DRRCore.Infraestructure.Repository.csproj|solutionrelative:drrcore.infraestructure.repository\\corerepository\\providerrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{279425BB-AE46-467A-88CA-97B959339E60}|DRRCore.Application.Main\\DRRCore.Application.Main.csproj|c:\\users\\programador1\\source\\repos\\drrcoreback2\\drrcore.application.main\\apiapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{279425BB-AE46-467A-88CA-97B959339E60}|DRRCore.Application.Main\\DRRCore.Application.Main.csproj|solutionrelative:drrcore.application.main\\apiapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F7EB9451-E49A-4C43-99E5-5C058E169626}|DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj|c:\\users\\programador1\\source\\repos\\drrcoreback2\\drrcore.transversal.common\\reportingdownload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F7EB9451-E49A-4C43-99E5-5C058E169626}|DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj|solutionrelative:drrcore.transversal.common\\reportingdownload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F7EB9451-E49A-4C43-99E5-5C058E169626}|DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj|c:\\users\\programador1\\source\\repos\\drrcoreback2\\drrcore.transversal.common\\functions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F7EB9451-E49A-4C43-99E5-5C058E169626}|DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj|solutionrelative:drrcore.transversal.common\\functions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DD1E85F3-B9DC-4199-A450-5382E62B6BDF}|DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj|c:\\users\\programador1\\source\\repos\\drrcoreback2\\drrcore.domain.entities\\sqlcorecontext\\traduction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DD1E85F3-B9DC-4199-A450-5382E62B6BDF}|DRRCore.Domain.Entities\\DRRCore.Domain.Entities.csproj|solutionrelative:drrcore.domain.entities\\sqlcorecontext\\traduction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D53821FC-2047-4684-A3F2-0964CC8D3E2C}|DRRCore.Infraestructure.Configuration\\DRRCore.Infraestructure.Configuration.csproj|c:\\users\\programador1\\source\\repos\\drrcoreback2\\drrcore.infraestructure.configuration\\sqlcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D53821FC-2047-4684-A3F2-0964CC8D3E2C}|DRRCore.Infraestructure.Configuration\\DRRCore.Infraestructure.Configuration.csproj|solutionrelative:drrcore.infraestructure.configuration\\sqlcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DDBA74E3-265B-4E55-AE79-839A011B0EAC}|DRRCore.Infraestructure.Repository\\DRRCore.Infraestructure.Repository.csproj|c:\\users\\programador1\\source\\repos\\drrcoreback2\\drrcore.infraestructure.repository\\corerepository\\companysbsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DDBA74E3-265B-4E55-AE79-839A011B0EAC}|DRRCore.Infraestructure.Repository\\DRRCore.Infraestructure.Repository.csproj|solutionrelative:drrcore.infraestructure.repository\\corerepository\\companysbsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A6B5760-D69F-4F94-BCC6-C662C3A5D285}|DRRCore.Services.ApiCore\\DRRCore.Services.ApiCore.csproj|c:\\users\\programador1\\source\\repos\\drrcoreback2\\drrcore.services.apicore\\controllers\\agentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A6B5760-D69F-4F94-BCC6-C662C3A5D285}|DRRCore.Services.ApiCore\\DRRCore.Services.ApiCore.csproj|solutionrelative:drrcore.services.apicore\\controllers\\agentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{279425BB-AE46-467A-88CA-97B959339E60}|DRRCore.Application.Main\\DRRCore.Application.Main.csproj|c:\\users\\programador1\\source\\repos\\drrcoreback2\\drrcore.application.main\\migrationapplication\\migrauser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{279425BB-AE46-467A-88CA-97B959339E60}|DRRCore.Application.Main\\DRRCore.Application.Main.csproj|solutionrelative:drrcore.application.main\\migrationapplication\\migrauser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DF0B88F4-541B-483E-8A1E-48E5CDCE58A8}|DRRCore.Services.ApiWeb\\DRRCore.Services.ApiWeb.csproj|c:\\users\\programador1\\source\\repos\\drrcoreback2\\drrcore.services.apiweb\\controllers\\webcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DF0B88F4-541B-483E-8A1E-48E5CDCE58A8}|DRRCore.Services.ApiWeb\\DRRCore.Services.ApiWeb.csproj|solutionrelative:drrcore.services.apiweb\\controllers\\webcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A6B5760-D69F-4F94-BCC6-C662C3A5D285}|DRRCore.Services.ApiCore\\DRRCore.Services.ApiCore.csproj|c:\\users\\programador1\\source\\repos\\drrcoreback2\\drrcore.services.apicore\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{3A6B5760-D69F-4F94-BCC6-C662C3A5D285}|DRRCore.Services.ApiCore\\DRRCore.Services.ApiCore.csproj|solutionrelative:drrcore.services.apicore\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F7EB9451-E49A-4C43-99E5-5C058E169626}|DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj|c:\\users\\programador1\\source\\repos\\drrcoreback2\\drrcore.transversal.common\\mailformatter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F7EB9451-E49A-4C43-99E5-5C058E169626}|DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj|solutionrelative:drrcore.transversal.common\\mailformatter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F7EB9451-E49A-4C43-99E5-5C058E169626}|DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj|c:\\users\\programador1\\source\\repos\\drrcoreback2\\drrcore.transversal.common\\constants.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F7EB9451-E49A-4C43-99E5-5C058E169626}|DRRCore.Transversal.Common\\DRRCore.Transversal.Common.csproj|solutionrelative:drrcore.transversal.common\\constants.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{81C3D6F6-A336-4BC8-9B6B-F67B52BF4528}|DRRCore.Application.Interfaces\\DRRCore.Application.Interfaces.csproj|c:\\users\\programador1\\source\\repos\\drrcoreback2\\drrcore.application.interfaces\\iwebdataapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{81C3D6F6-A336-4BC8-9B6B-F67B52BF4528}|DRRCore.Application.Interfaces\\DRRCore.Application.Interfaces.csproj|solutionrelative:drrcore.application.interfaces\\iwebdataapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DF0B88F4-541B-483E-8A1E-48E5CDCE58A8}|DRRCore.Services.ApiWeb\\DRRCore.Services.ApiWeb.csproj|c:\\users\\programador1\\source\\repos\\drrcoreback2\\drrcore.services.apiweb\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DF0B88F4-541B-483E-8A1E-48E5CDCE58A8}|DRRCore.Services.ApiWeb\\DRRCore.Services.ApiWeb.csproj|solutionrelative:drrcore.services.apiweb\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -62,17 +134,17 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 16,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 25,
               "Title": "WebController.cs",
-              "DocumentMoniker": "C:\\Users\\jpfer\\source\\repos\\DRRCoreBack2\\DRRCore.Services.ApiWeb\\Controllers\\WebController.cs",
+              "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Services.ApiWeb\\Controllers\\WebController.cs",
               "RelativeDocumentMoniker": "DRRCore.Services.ApiWeb\\Controllers\\WebController.cs",
-              "ToolTip": "C:\\Users\\jpfer\\source\\repos\\DRRCoreBack2\\DRRCore.Services.ApiWeb\\Controllers\\WebController.cs",
+              "ToolTip": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Services.ApiWeb\\Controllers\\WebController.cs",
               "RelativeToolTip": "DRRCore.Services.ApiWeb\\Controllers\\WebController.cs",
-              "ViewState": "AQIAACEAAAAAAAAAAAAwwD8AAAAqAAAA",
+              "ViewState": "AgIAACEAAAAAAAAAAAAwwD8AAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-25T15:40:55.035Z",
               "IsPinned": true,
@@ -80,13 +152,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 23,
               "Title": "AgentController.cs",
-              "DocumentMoniker": "C:\\Users\\jpfer\\source\\repos\\DRRCoreBack2\\DRRCore.Services.ApiCore\\Controllers\\AgentController.cs",
+              "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Services.ApiCore\\Controllers\\AgentController.cs",
               "RelativeDocumentMoniker": "DRRCore.Services.ApiCore\\Controllers\\AgentController.cs",
-              "ToolTip": "C:\\Users\\jpfer\\source\\repos\\DRRCoreBack2\\DRRCore.Services.ApiCore\\Controllers\\AgentController.cs",
+              "ToolTip": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Services.ApiCore\\Controllers\\AgentController.cs",
               "RelativeToolTip": "DRRCore.Services.ApiCore\\Controllers\\AgentController.cs",
-              "ViewState": "AQIAAAwAAAAAAAAAAAAAACAAAAAIAAAA",
+              "ViewState": "AgIAAAkAAAAAAAAAAIBJwCAAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-25T15:41:11.402Z",
               "IsPinned": true,
@@ -94,13 +166,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 11,
               "Title": "WebDataApplication.cs",
-              "DocumentMoniker": "C:\\Users\\jpfer\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Main\\WebDataApplication.cs",
+              "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Main\\WebDataApplication.cs",
               "RelativeDocumentMoniker": "DRRCore.Application.Main\\WebDataApplication.cs",
-              "ToolTip": "C:\\Users\\jpfer\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Main\\WebDataApplication.cs",
+              "ToolTip": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Main\\WebDataApplication.cs",
               "RelativeToolTip": "DRRCore.Application.Main\\WebDataApplication.cs",
-              "ViewState": "AQIAAN0AAAAAAAAAAAAAAN8AAAAIAAAA",
+              "ViewState": "AgIAAN0AAAAAAAAAAAAAAN8AAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-25T15:42:19.612Z",
               "IsPinned": true,
@@ -108,25 +180,63 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 2,
               "Title": "TicketApplication.cs",
-              "DocumentMoniker": "C:\\Users\\jpfer\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Main\\CoreApplication\\TicketApplication.cs",
+              "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Main\\CoreApplication\\TicketApplication.cs",
               "RelativeDocumentMoniker": "DRRCore.Application.Main\\CoreApplication\\TicketApplication.cs",
-              "ToolTip": "C:\\Users\\jpfer\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Main\\CoreApplication\\TicketApplication.cs",
+              "ToolTip": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Main\\CoreApplication\\TicketApplication.cs",
               "RelativeToolTip": "DRRCore.Application.Main\\CoreApplication\\TicketApplication.cs",
-              "ViewState": "AQIAAAwAAAAAAAAAAAAAACMAAAAFAAAA",
+              "ViewState": "AgIAAAsCAAAAAAAAAAAqwCkCAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-25T15:45:16.571Z",
               "IsPinned": true,
               "EditorCaption": ""
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:128:0:{13b12e3e-c1b4-4539-9371-4fe9a0d523fc}"
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "QueryApplication.cs",
+              "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Main\\CoreApplication\\QueryApplication.cs",
+              "RelativeDocumentMoniker": "DRRCore.Application.Main\\CoreApplication\\QueryApplication.cs",
+              "ToolTip": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Main\\CoreApplication\\QueryApplication.cs",
+              "RelativeToolTip": "DRRCore.Application.Main\\CoreApplication\\QueryApplication.cs",
+              "ViewState": "AgIAAEcIAAAAAAAAAAAgwE0IAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-19T14:22:58.546Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "EecoreContext.cs",
+              "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Entities\\SqlCoreContext\\EecoreContext.cs",
+              "RelativeDocumentMoniker": "DRRCore.Domain.Entities\\SqlCoreContext\\EecoreContext.cs",
+              "ToolTip": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Entities\\SqlCoreContext\\EecoreContext.cs",
+              "RelativeToolTip": "DRRCore.Domain.Entities\\SqlCoreContext\\EecoreContext.cs",
+              "ViewState": "AgIAAEAWAAAAAAAAAAAmwFoWAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-19T21:49:28.849Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "SqlCoreContext.cs",
+              "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Configuration\\SqlCoreContext.cs",
+              "RelativeDocumentMoniker": "DRRCore.Infraestructure.Configuration\\SqlCoreContext.cs",
+              "ToolTip": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Configuration\\SqlCoreContext.cs",
+              "RelativeToolTip": "DRRCore.Infraestructure.Configuration\\SqlCoreContext.cs",
+              "ViewState": "AgIAACMAAAAAAAAAAAAswC0AAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-25T12:25:22.529Z",
+              "IsPinned": true,
+              "EditorCaption": ""
             },
             {
               "$type": "Bookmark",
-              "Name": "ST:130:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+              "Name": "ST:128:0:{13b12e3e-c1b4-4539-9371-4fe9a0d523fc}"
             },
             {
               "$type": "Bookmark",
@@ -141,130 +251,313 @@
               "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:129:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "CompanyController.cs",
+              "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Services.ApiCore\\Controllers\\CompanyController.cs",
+              "RelativeDocumentMoniker": "DRRCore.Services.ApiCore\\Controllers\\CompanyController.cs",
+              "ToolTip": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Services.ApiCore\\Controllers\\CompanyController.cs",
+              "RelativeToolTip": "DRRCore.Services.ApiCore\\Controllers\\CompanyController.cs",
+              "ViewState": "AgIAALQAAAAAAAAAAAAgwMcAAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-20T16:59:58.898Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "MigraUser.cs",
-              "DocumentMoniker": "C:\\Users\\jpfer\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Main\\MigrationApplication\\MigraUser.cs",
-              "RelativeDocumentMoniker": "DRRCore.Application.Main\\MigrationApplication\\MigraUser.cs",
-              "ToolTip": "C:\\Users\\jpfer\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Main\\MigrationApplication\\MigraUser.cs",
-              "RelativeToolTip": "DRRCore.Application.Main\\MigrationApplication\\MigraUser.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "DocumentIndex": 9,
+              "Title": "TicketController.cs",
+              "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Services.ApiCore\\Controllers\\TicketController.cs",
+              "RelativeDocumentMoniker": "DRRCore.Services.ApiCore\\Controllers\\TicketController.cs",
+              "ToolTip": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Services.ApiCore\\Controllers\\TicketController.cs",
+              "RelativeToolTip": "DRRCore.Services.ApiCore\\Controllers\\TicketController.cs",
+              "ViewState": "AgIAACkBAAAAAAAAAAA5wD0BAAA4AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-25T20:59:57.23Z",
+              "WhenOpened": "2024-08-19T16:51:23.078Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Company.cs",
+              "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Entities\\SqlCoreContext\\Company.cs",
+              "RelativeDocumentMoniker": "DRRCore.Domain.Entities\\SqlCoreContext\\Company.cs",
+              "ToolTip": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Entities\\SqlCoreContext\\Company.cs",
+              "RelativeToolTip": "DRRCore.Domain.Entities\\SqlCoreContext\\Company.cs",
+              "ViewState": "AgIAAH8AAAAAAAAAAAAYwIgAAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-19T21:49:35.828Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
+              "Title": "ICompanyApplication.cs",
+              "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Interfaces\\CoreApplication\\ICompanyApplication.cs",
+              "RelativeDocumentMoniker": "DRRCore.Application.Interfaces\\CoreApplication\\ICompanyApplication.cs",
+              "ToolTip": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Interfaces\\CoreApplication\\ICompanyApplication.cs",
+              "RelativeToolTip": "DRRCore.Application.Interfaces\\CoreApplication\\ICompanyApplication.cs",
+              "ViewState": "AgIAABoAAAAAAAAAAADwvyEAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-20T16:54:38.759Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Person.cs",
+              "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Entities\\SqlCoreContext\\Person.cs",
+              "RelativeDocumentMoniker": "DRRCore.Domain.Entities\\SqlCoreContext\\Person.cs",
+              "ToolTip": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Entities\\SqlCoreContext\\Person.cs",
+              "RelativeToolTip": "DRRCore.Domain.Entities\\SqlCoreContext\\Person.cs",
+              "ViewState": "AgIAAF8AAAAAAAAAAAAYwGkAAABeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-19T21:50:12.747Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "CompanyApplication.cs",
+              "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Main\\CoreApplication\\CompanyApplication.cs",
+              "RelativeDocumentMoniker": "DRRCore.Application.Main\\CoreApplication\\CompanyApplication.cs",
+              "ToolTip": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Main\\CoreApplication\\CompanyApplication.cs*",
+              "RelativeToolTip": "DRRCore.Application.Main\\CoreApplication\\CompanyApplication.cs*",
+              "ViewState": "AgIAAP8JAAAAAAAAAAAewBAKAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-19T14:07:13.177Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "TicketReceptorRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Repository\\CoreRepository\\TicketReceptorRepository.cs",
+              "RelativeDocumentMoniker": "DRRCore.Infraestructure.Repository\\CoreRepository\\TicketReceptorRepository.cs",
+              "ToolTip": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Repository\\CoreRepository\\TicketReceptorRepository.cs",
+              "RelativeToolTip": "DRRCore.Infraestructure.Repository\\CoreRepository\\TicketReceptorRepository.cs",
+              "ViewState": "AgIAAGIAAAAAAAAAAAApwH0AAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-19T21:58:57.982Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "TicketProfile.cs",
+              "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Mapper\\Profiles\\Core\\TicketProfile.cs",
+              "RelativeDocumentMoniker": "DRRCore.Transversal.Mapper\\Profiles\\Core\\TicketProfile.cs",
+              "ToolTip": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Mapper\\Profiles\\Core\\TicketProfile.cs",
+              "RelativeToolTip": "DRRCore.Transversal.Mapper\\Profiles\\Core\\TicketProfile.cs",
+              "ViewState": "AgIAAHIBAAAAAAAAAAAowIMBAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-19T18:38:54.051Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "ITicketApplication.cs",
+              "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Interfaces\\CoreApplication\\ITicketApplication.cs",
+              "RelativeDocumentMoniker": "DRRCore.Application.Interfaces\\CoreApplication\\ITicketApplication.cs",
+              "ToolTip": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Interfaces\\CoreApplication\\ITicketApplication.cs",
+              "RelativeToolTip": "DRRCore.Application.Interfaces\\CoreApplication\\ITicketApplication.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADUAAAA+AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-19T16:49:51.25Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "IProviderDomain.cs",
+              "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Interfaces\\CoreDomain\\IProviderDomain.cs",
+              "RelativeDocumentMoniker": "DRRCore.Domain.Interfaces\\CoreDomain\\IProviderDomain.cs",
+              "ToolTip": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Interfaces\\CoreDomain\\IProviderDomain.cs",
+              "RelativeToolTip": "DRRCore.Domain.Interfaces\\CoreDomain\\IProviderDomain.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAsAAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-20T15:43:31.172Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "ProviderDomain.cs",
+              "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Main\\CoreDomain\\ProviderDomain.cs",
+              "RelativeDocumentMoniker": "DRRCore.Domain.Main\\CoreDomain\\ProviderDomain.cs",
+              "ToolTip": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Main\\CoreDomain\\ProviderDomain.cs",
+              "RelativeToolTip": "DRRCore.Domain.Main\\CoreDomain\\ProviderDomain.cs",
+              "ViewState": "AgIAACwAAAAAAAAAAAAhwDQAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-20T15:43:35.709Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "ProviderRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Repository\\CoreRepository\\ProviderRepository.cs",
+              "RelativeDocumentMoniker": "DRRCore.Infraestructure.Repository\\CoreRepository\\ProviderRepository.cs",
+              "ToolTip": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Repository\\CoreRepository\\ProviderRepository.cs",
+              "RelativeToolTip": "DRRCore.Infraestructure.Repository\\CoreRepository\\ProviderRepository.cs",
+              "ViewState": "AgIAALIAAAAAAAAAAAAMwL0AAAA/AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-19T14:07:13.277Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "Functions.cs",
+              "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Common\\Functions.cs",
+              "RelativeDocumentMoniker": "DRRCore.Transversal.Common\\Functions.cs",
+              "ToolTip": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Common\\Functions.cs",
+              "RelativeToolTip": "DRRCore.Transversal.Common\\Functions.cs",
+              "ViewState": "AgIAAGwAAAAAAAAAAAAmwEUAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-19T22:30:59.413Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "ApiApplication.cs",
+              "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Main\\ApiApplication.cs",
+              "RelativeDocumentMoniker": "DRRCore.Application.Main\\ApiApplication.cs",
+              "ToolTip": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Main\\ApiApplication.cs",
+              "RelativeToolTip": "DRRCore.Application.Main\\ApiApplication.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-19T22:39:15.053Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
               "Title": "ReportingDownload.cs",
-              "DocumentMoniker": "C:\\Users\\jpfer\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Common\\ReportingDownload.cs",
+              "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Common\\ReportingDownload.cs",
               "RelativeDocumentMoniker": "DRRCore.Transversal.Common\\ReportingDownload.cs",
-              "ToolTip": "C:\\Users\\jpfer\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Common\\ReportingDownload.cs",
+              "ToolTip": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Common\\ReportingDownload.cs",
               "RelativeToolTip": "DRRCore.Transversal.Common\\ReportingDownload.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAqwAsAAAAiAAAA",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAqwAsAAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-25T19:03:25.131Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 20,
+              "Title": "Traduction.cs",
+              "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Entities\\SqlCoreContext\\Traduction.cs",
+              "RelativeDocumentMoniker": "DRRCore.Domain.Entities\\SqlCoreContext\\Traduction.cs",
+              "ToolTip": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Entities\\SqlCoreContext\\Traduction.cs",
+              "RelativeToolTip": "DRRCore.Domain.Entities\\SqlCoreContext\\Traduction.cs",
+              "ViewState": "AgIAACIAAAAAAAAAAAAUwAcAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-19T21:52:51.372Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
               "Title": "SqlContext.cs",
-              "DocumentMoniker": "C:\\Users\\jpfer\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Configuration\\SqlContext.cs",
+              "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Configuration\\SqlContext.cs",
               "RelativeDocumentMoniker": "DRRCore.Infraestructure.Configuration\\SqlContext.cs",
-              "ToolTip": "C:\\Users\\jpfer\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Configuration\\SqlContext.cs",
+              "ToolTip": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Configuration\\SqlContext.cs",
               "RelativeToolTip": "DRRCore.Infraestructure.Configuration\\SqlContext.cs",
-              "ViewState": "AQIAABsAAAAAAAAAAAAmwCMAAACIAAAA",
+              "ViewState": "AgIAABwAAAAAAAAAAAAcwDEAAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-25T18:57:49.817Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 22,
+              "Title": "CompanySBSRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Repository\\CoreRepository\\CompanySBSRepository.cs",
+              "RelativeDocumentMoniker": "DRRCore.Infraestructure.Repository\\CoreRepository\\CompanySBSRepository.cs",
+              "ToolTip": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Repository\\CoreRepository\\CompanySBSRepository.cs",
+              "RelativeToolTip": "DRRCore.Infraestructure.Repository\\CoreRepository\\CompanySBSRepository.cs",
+              "ViewState": "AgIAAN0AAAAAAAAAAAAiwPEAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-19T14:07:13.188Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "MigraUser.cs",
+              "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Main\\MigrationApplication\\MigraUser.cs",
+              "RelativeDocumentMoniker": "DRRCore.Application.Main\\MigrationApplication\\MigraUser.cs",
+              "ToolTip": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Main\\MigrationApplication\\MigraUser.cs",
+              "RelativeToolTip": "DRRCore.Application.Main\\MigrationApplication\\MigraUser.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-25T20:59:57.23Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
               "Title": "MailFormatter.cs",
-              "DocumentMoniker": "C:\\Users\\jpfer\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Common\\MailFormatter.cs",
+              "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Common\\MailFormatter.cs",
               "RelativeDocumentMoniker": "DRRCore.Transversal.Common\\MailFormatter.cs",
-              "ToolTip": "C:\\Users\\jpfer\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Common\\MailFormatter.cs",
+              "ToolTip": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Common\\MailFormatter.cs",
               "RelativeToolTip": "DRRCore.Transversal.Common\\MailFormatter.cs",
-              "ViewState": "AQIAAB8AAAAAAAAAAAAgwDEAAAA1AAAA",
+              "ViewState": "AgIAAB8AAAAAAAAAAAAgwDEAAAA1AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-25T16:32:34.445Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 28,
               "Title": "Constants.cs",
-              "DocumentMoniker": "C:\\Users\\jpfer\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Common\\Constants.cs",
+              "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Common\\Constants.cs",
               "RelativeDocumentMoniker": "DRRCore.Transversal.Common\\Constants.cs",
-              "ToolTip": "C:\\Users\\jpfer\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Common\\Constants.cs",
+              "ToolTip": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Common\\Constants.cs",
               "RelativeToolTip": "DRRCore.Transversal.Common\\Constants.cs",
-              "ViewState": "AQIAAEYAAAAAAAAAAAAiwFoAAABMAAAA",
+              "ViewState": "AgIAAEYAAAAAAAAAAAAiwFoAAABMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-25T16:31:56.544Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 29,
               "Title": "IWebDataApplication.cs",
-              "DocumentMoniker": "C:\\Users\\jpfer\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Interfaces\\IWebDataApplication.cs",
+              "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Interfaces\\IWebDataApplication.cs",
               "RelativeDocumentMoniker": "DRRCore.Application.Interfaces\\IWebDataApplication.cs",
-              "ToolTip": "C:\\Users\\jpfer\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Interfaces\\IWebDataApplication.cs",
+              "ToolTip": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Interfaces\\IWebDataApplication.cs",
               "RelativeToolTip": "DRRCore.Application.Interfaces\\IWebDataApplication.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAMAAAA",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-25T15:41:45.546Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 26,
               "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\jpfer\\source\\repos\\DRRCoreBack2\\DRRCore.Services.ApiCore\\appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Services.ApiCore\\appsettings.json",
               "RelativeDocumentMoniker": "DRRCore.Services.ApiCore\\appsettings.json",
-              "ToolTip": "C:\\Users\\jpfer\\source\\repos\\DRRCoreBack2\\DRRCore.Services.ApiCore\\appsettings.json",
+              "ToolTip": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Services.ApiCore\\appsettings.json",
               "RelativeToolTip": "DRRCore.Services.ApiCore\\appsettings.json",
-              "ViewState": "AQIAAI0AAAAAAAAAAAAAAJYAAAAnAAAA",
+              "ViewState": "AgIAAIoAAAAAAAAAAIBJwJYAAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
               "WhenOpened": "2024-07-25T15:39:29.099Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "SqlCoreContext.cs",
-              "DocumentMoniker": "C:\\Users\\jpfer\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Configuration\\SqlCoreContext.cs",
-              "RelativeDocumentMoniker": "DRRCore.Infraestructure.Configuration\\SqlCoreContext.cs",
-              "ToolTip": "C:\\Users\\jpfer\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Configuration\\SqlCoreContext.cs",
-              "RelativeToolTip": "DRRCore.Infraestructure.Configuration\\SqlCoreContext.cs",
-              "ViewState": "AQIAAMgAAAAAAAAAAAAYwNQAAAAbAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-25T12:25:22.529Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 30,
               "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\jpfer\\source\\repos\\DRRCoreBack2\\DRRCore.Services.ApiWeb\\Program.cs",
+              "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Services.ApiWeb\\Program.cs",
               "RelativeDocumentMoniker": "DRRCore.Services.ApiWeb\\Program.cs",
-              "ToolTip": "C:\\Users\\jpfer\\source\\repos\\DRRCoreBack2\\DRRCore.Services.ApiWeb\\Program.cs",
+              "ToolTip": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Services.ApiWeb\\Program.cs",
               "RelativeToolTip": "DRRCore.Services.ApiWeb\\Program.cs",
-              "ViewState": "AQIAADYAAAAAAAAAAADwv1sAAAAAAAAA",
+              "ViewState": "AgIAADYAAAAAAAAAAADwv1sAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-25T12:22:18.119Z",
               "EditorCaption": ""

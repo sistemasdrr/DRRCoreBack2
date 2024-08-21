@@ -167,6 +167,8 @@ public partial class SqlCoreContext : DbContext
 
     public virtual DbSet<Reason> Reasons { get; set; }
 
+    public virtual DbSet<ReferencesHistory> ReferencesHistories { get; set; }
+
     public virtual DbSet<Reputation> Reputations { get; set; }
 
     public virtual DbSet<SalesHistory> SalesHistories { get; set; }
@@ -4247,6 +4249,33 @@ public partial class SqlCoreContext : DbContext
             entity.Property(e => e.UpdateDate)
                 .HasColumnType("datetime")
                 .HasColumnName("updateDate");
+        });
+
+        modelBuilder.Entity<ReferencesHistory>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Referenc__3213E83FD4E36FCE");
+
+            entity.ToTable("ReferencesHistory");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Code)
+                .HasMaxLength(10)
+                .IsUnicode(false)
+                .HasColumnName("code");
+            entity.Property(e => e.Cycle)
+                .HasMaxLength(10)
+                .IsUnicode(false)
+                .HasColumnName("cycle");
+            entity.Property(e => e.IdTicket).HasColumnName("idTicket");
+            entity.Property(e => e.IdUser).HasColumnName("idUser");
+            entity.Property(e => e.IsComplement)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("isComplement");
+            entity.Property(e => e.ValidReferences).HasColumnName("validReferences");
+
+            entity.HasOne(d => d.IdTicketNavigation).WithMany(p => p.ReferencesHistories)
+                .HasForeignKey(d => d.IdTicket)
+                .HasConstraintName("FK__Reference__cycle__349EBC9F");
         });
 
         modelBuilder.Entity<Reputation>(entity =>

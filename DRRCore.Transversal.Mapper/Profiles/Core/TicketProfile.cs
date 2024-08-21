@@ -194,7 +194,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                 .ForMember(dest => dest.Observations, opt => opt?.MapFrom(src => src.Observations))
                 .ForMember(dest => dest.StartDate, opt => opt?.MapFrom(src => StaticFunctions.DateTimeToString(src.StartDate)))
                 .ForMember(dest => dest.EndDate, opt => opt?.MapFrom(src => StaticFunctions.DateTimeToString(src.EndDate)))
-                .ForMember(dest => dest.References, opt => opt?.MapFrom(src => src.IdTicketNavigation.TicketHistories.Where(x => x.AsignedTo.Contains("RC")).FirstOrDefault() != null ? src.IdTicketNavigation.TicketHistories.Where(x => x.AsignedTo.Contains("RC")).FirstOrDefault().Flag == true ? 1 : 0 : -1))
+                .ForMember(dest => dest.References, opt => opt?.MapFrom(src => GetReferencesValue(src)))
                   .ReverseMap();
             CreateMap<TicketHistory, GetListTicketResponseDto2>()
                 .ForMember(dest => dest.StatusFinalOwner, opt => opt.MapFrom(src => src.IdTicketNavigation.TicketHistories != null ? GetStatusFinalOwner(src.IdTicketNavigation.TicketHistories) : default))
@@ -261,6 +261,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                 .ForMember(dest => dest.AssinedTo, opt => opt.MapFrom(src => src.AsignedTo ?? string.Empty))
                 .ForMember(dest => dest.NumberAssign, opt => opt.MapFrom(src => src.NumberAssign))
 
+                .ForMember(dest => dest.References, opt => opt?.MapFrom(src => GetReferencesValue(src)))
                 .ForMember(dest => dest.Origen, opt => opt.MapFrom(src => src.IdTicketNavigation.Web == false ? "E&E" : "WEB"))
                 .ForMember(dest => dest.Observations, opt => opt.MapFrom(src => src.Observations  ?? string.Empty))
                 .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => StaticFunctions.DateTimeToString(src.StartDate)))
@@ -383,7 +384,24 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                     return string.Empty;
             }
         }
-
+        private static int GetReferencesValue(TicketHistory ticketHistory)
+        {
+            if(ticketHistory.IdTicketNavigation.TicketHistories.Any(x => x.AsignationType.Contains("RF") == true))
+            {
+                if (ticketHistory.IdTicketNavigation.TicketHistories.Where(x => x.AsignationType.Contains("RF") == true).FirstOrDefault().Flag == false)
+                {
+                    return 0; 
+                }
+                else
+                {
+                    return 1;
+                }
+            }
+            else
+            {
+                return -1;
+            }
+        }
         private static string GetProcedureType(string? tram)
         {
             if (!string.IsNullOrEmpty(tram))

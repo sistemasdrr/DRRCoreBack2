@@ -2143,7 +2143,8 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 using var context = new SqlCoreContext();
                 var ticketHistories = await context.TicketHistories
-                    .Where(x => x.UserTo == idUser && x.ShippingDate != null && x.Cycle.Contains(cycle) && (x.AsignationType == "RP" || x.AsignationType == "DI" || x.AsignationType == "TR") && x.AsignedTo.Contains("CR") == false)
+                    .Where(x => x.UserTo == idUser && x.ShippingDate != null && x.IdStatusTicket != 15 && x.Cycle.Contains(cycle) && (x.AsignationType == "RP" || x.AsignationType == "DI" || x.AsignationType == "TR") && x.AsignedTo.Contains("CR") == false)
+                    .Include(x => x.IdStatusTicketNavigation)
                     .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCountryNavigation)
                     .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCompanyNavigation).ThenInclude(x => x.IdCountryNavigation)
                     .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdPersonNavigation).ThenInclude(x => x.IdCountryNavigation)
@@ -2194,13 +2195,13 @@ namespace DRRCore.Application.Main.CoreApplication
                             IdTicket = item1.IdTicket,
                             IdCompany = item1.IdTicketNavigation.IdCompany,
                             IdPerson = item1.IdTicketNavigation.IdPerson,
-                            IdStatusTicket = item1.IdTicketNavigation.IdStatusTicket,
+                            IdStatusTicket = item1.IdStatusTicket,
                             Quality = item1.IdTicketNavigation.Quality,
                             Number = item1.IdTicketNavigation.Number.ToString("D6"),
                             Language = item1.IdTicketNavigation.Language,
                             About = item1.IdTicketNavigation.About,
-                            Status = item1.IdTicketNavigation.IdStatusTicketNavigation.Abrev,
-                            StatusColor = item1.IdTicketNavigation.IdStatusTicketNavigation.Color,
+                            Status = item1.IdStatusTicketNavigation.Abrev,
+                            StatusColor = item1.IdStatusTicketNavigation.Color,
                             Country = item1.IdTicketNavigation.IdCountryNavigation.Iso,
                             FlagCountry = item1.IdTicketNavigation.IdCountryNavigation.FlagIso,
                             SubscriberCode = item1.IdTicketNavigation.IdSubscriberNavigation.Code,
@@ -2228,8 +2229,8 @@ namespace DRRCore.Application.Main.CoreApplication
                             WebPage = item1.IdTicketNavigation.About == "E" ? item1.IdTicketNavigation.IdCompanyNavigation.WebPage : "",
 
 
-                            OrderDate = StaticFunctions.DateTimeToString(item1.IdTicketNavigation.OrderDate),
-                            ExpireDate = StaticFunctions.DateTimeToString(item1.IdTicketNavigation.ExpireDate),
+                            OrderDate = StaticFunctions.DateTimeToString(item1.StartDate),
+                            ExpireDate = StaticFunctions.DateTimeToString(item1.EndDate),
                             RealExpireDate = StaticFunctions.DateTimeToString(item1.IdTicketNavigation.RealExpireDate),
                             ProcedureType = item1.IdTicketNavigation.ProcedureType,
                             ReportType = item1.IdTicketNavigation.ReportType,

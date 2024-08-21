@@ -146,18 +146,6 @@
           }
         }
       },
-      "EntityFramework/6.2.0": {
-        "runtime": {
-          "lib/net45/EntityFramework.SqlServer.dll": {
-            "assemblyVersion": "6.0.0.0",
-            "fileVersion": "6.2.61023.0"
-          },
-          "lib/net45/EntityFramework.dll": {
-            "assemblyVersion": "6.0.0.0",
-            "fileVersion": "6.2.61023.0"
-          }
-        }
-      },
       "Google.Protobuf/3.25.1": {
         "runtime": {
           "lib/net5.0/Google.Protobuf.dll": {
@@ -1720,12 +1708,14 @@
           "Newtonsoft.Json": "13.0.3"
         },
         "runtime": {
-          "DRRCore.Application.DTO.dll": {}
+          "DRRCore.Application.DTO.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       },
       "DRRCore.Domain.Entities/1.0.0": {
         "dependencies": {
-          "EntityFramework": "6.2.0",
           "Microsoft.EntityFrameworkCore": "7.0.9",
           "Microsoft.EntityFrameworkCore.SqlServer": "7.0.9",
           "MySql.Data": "8.3.0",
@@ -1733,7 +1723,10 @@
           "Pomelo.EntityFrameworkCore.MySql": "7.0.0"
         },
         "runtime": {
-          "DRRCore.Domain.Entities.dll": {}
+          "DRRCore.Domain.Entities.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       },
       "DRRCore.Domain.Interfaces/1.0.0": {
@@ -1743,7 +1736,10 @@
           "DRRCore.Transversal.Common": "1.0.0"
         },
         "runtime": {
-          "DRRCore.Domain.Interfaces.dll": {}
+          "DRRCore.Domain.Interfaces.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       },
       "DRRCore.Infraestructure.Configuration/1.0.0": {
@@ -1756,7 +1752,10 @@
           "MySql.EntityFrameworkCore": "7.0.5"
         },
         "runtime": {
-          "DRRCore.Infraestructure.Configuration.dll": {}
+          "DRRCore.Infraestructure.Configuration.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       },
       "DRRCore.Infraestructure.Interfaces/1.0.0": {
@@ -1766,7 +1765,10 @@
           "DRRCore.Transversal.Common": "1.0.0"
         },
         "runtime": {
-          "DRRCore.Infraestructure.Interfaces.dll": {}
+          "DRRCore.Infraestructure.Interfaces.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       },
       "DRRCore.Infraestructure.Repository/1.0.0": {
@@ -1778,7 +1780,10 @@
           "Dapper": "2.0.143"
         },
         "runtime": {
-          "DRRCore.Infraestructure.Repository.dll": {}
+          "DRRCore.Infraestructure.Repository.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       },
       "DRRCore.Transversal.Common/1.0.0": {
@@ -1795,7 +1800,10 @@
           "log4net": "2.0.15"
         },
         "runtime": {
-          "DRRCore.Transversal.Common.dll": {}
+          "DRRCore.Transversal.Common.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       }
     }
@@ -1875,13 +1883,6 @@
       "sha512": "sha512-Vh0U+Fins3IpS7APUlrzga3+1mswWngB5fZ0xj4w+FQR5JhJzA5uHV5rSepkahvmshNZUA0YcHtae9vFQpiVTw==",
       "path": "dapper/2.0.143",
       "hashPath": "dapper.2.0.143.nupkg.sha512"
-    },
-    "EntityFramework/6.2.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-ptGyXOf26qLrtn+2doAmylIlCxOnBJANwlyyLrXDmqIk9O18IzLWHyxDwwAyhgXkxmbiaA0WNpRy67WRReInBw==",
-      "path": "entityframework/6.2.0",
-      "hashPath": "entityframework.6.2.0.nupkg.sha512"
     },
     "Google.Protobuf/3.25.1": {
       "type": "package",

@@ -63,8 +63,9 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Reposito
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Repository\obj\Debug\net6.0\DRRCore.Infraestructure.Repository.AssemblyInfoInputs.cache
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Repository\obj\Debug\net6.0\DRRCore.Infraestructure.Repository.AssemblyInfo.cs
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Repository\obj\Debug\net6.0\DRRCore.Infraestructure.Repository.csproj.CoreCompileInputs.cache
-C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Repository\obj\Debug\net6.0\DRRCore.Infraestructure.Repository.csproj.CopyComplete
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Repository\obj\Debug\net6.0\DRRCore.Infraestructure.Repository.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Repository\obj\Debug\net6.0\refint\DRRCore.Infraestructure.Repository.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Repository\obj\Debug\net6.0\DRRCore.Infraestructure.Repository.pdb
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Repository\obj\Debug\net6.0\ref\DRRCore.Infraestructure.Repository.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Repository\obj\Debug\net6.0\DRRCore.Infraestructure.Repository.sourcelink.json
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Repository\obj\Debug\net6.0\DRRCore..19D58863.Up2Date

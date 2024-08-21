@@ -1,0 +1,19 @@
+2024-08-19 11:45:40,538 [22] ERROR App  
+ La transacción (id. de proceso 72) quedó en interbloqueo en bloqueo recursos con otro proceso y fue elegida como sujeto del interbloqueo. Ejecute de nuevo la transacción. 
+ 
+2024-08-19 14:24:30,751 [28] ERROR App  
+ No existe el objeto solicitado 
+ 
+2024-08-19 14:29:13,812 [57] ERROR App  
+ No existe el objeto solicitado 
+ 
+2024-08-19 14:29:13,882 [57] ERROR App  
+ No existe el objeto solicitado 
+ 
+System.Exception: No existe el objeto solicitado
+   at DRRCore.Infraestructure.Repository.CoreRepository.TicketRepository.GetByIdAsync(Int32 id) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Repository\CoreRepository\TicketRepository.cs:line 230
+   at DRRCore.Domain.Main.CoreDomain.TicketDomain.GetByIdAsync(Int32 id) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Main\CoreDomain\TicketDomain.cs:line 57
+   at DRRCore.Application.Main.CoreApplication.TicketApplication.GetNumCuponById(Int32 idTicket) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\TicketApplication.cs:line 1418
+2024-08-19 14:56:26,116 [6] ERROR App  
+ Object reference not set to an instance of an object. 
+ 

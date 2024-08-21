@@ -265,7 +265,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 }
                 else
                 {
-                    if (productionClosure.EndDate > DateTime.Now)
+                    if (productionClosure.EndDate < DateTime.Now)
                     {
                         if (DateTime.Now.Month == 12)
                         {
@@ -543,15 +543,15 @@ namespace DRRCore.Application.Main.CoreApplication
             if (reportType == "DF")
             {
                 getReceptor = await _ticketReceptorDomain.GetReceptorDoubleDate(idCountry);
-                return getReceptor.IdEmployee ?? null;
+                return getReceptor.IdEmployee ?? 38;
             }
             if (reportType == "EF")
             {
                 getReceptor = await _ticketReceptorDomain.GetReceptorInDate(idCountry);
-                return getReceptor.IdEmployee ?? null;
+                return getReceptor.IdEmployee ?? 38;
             }
             getReceptor = await _ticketReceptorDomain.GetReceptorOtherCase(idCountry);
-            return getReceptor.IdEmployee ?? null;
+            return getReceptor.IdEmployee ?? 38;
         }
 
         public async Task<Response<bool>> DeleteTicket(int id)
@@ -1545,7 +1545,7 @@ namespace DRRCore.Application.Main.CoreApplication
                             {
                                 IdTicket = ticket.Id,
                                 Path = path,
-                                Name = "RV_" + DateTime.Now.ToString("ddMMyy") + "_" + request.Number.ToString("D6") + ".pdf",
+                                Name = ticket.ReportType + "_" + ticket.RequestedName + ".pdf",
                                 Extension = ".pdf"
                             });
                             await context.SaveChangesAsync();
@@ -2238,7 +2238,8 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = item.Type,
-                                                Cycle = code
+                                                Cycle = code,
+                                                References = item.References
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
                                             
@@ -2342,7 +2343,8 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = item.Type,
-                                                Cycle = code
+                                                Cycle = code,
+                                                References = item.References
 
                                             };
 
@@ -2468,8 +2470,8 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = item.Type,
-                                                Cycle = code
-
+                                                Cycle = code,
+                                                References = item.References
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
                                         }
@@ -2833,7 +2835,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = item.Type,
-                                                Cycle = code
+                                                Cycle = code,
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
                                         
@@ -2941,8 +2943,6 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Cycle = code
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
-
-
                                         }
 
                                         context.Tickets.Update(ticket);
@@ -2996,7 +2996,6 @@ namespace DRRCore.Application.Main.CoreApplication
                                             history.ShippingDate = DateTime.Now;
                                             history.UpdateDate = DateTime.Now;
                                             await context.TicketHistories.AddAsync(newTicketHistory);
-
                                         }
                                         else
                                         {
@@ -3041,7 +3040,6 @@ namespace DRRCore.Application.Main.CoreApplication
 
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
-
                                         }
 
                                         ticket.UpdateDate = DateTime.Now;
@@ -3198,7 +3196,7 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<bool>> DispatchTicket(int idTicket, int idUser)
+        public async Task<Response<bool>> DispatchTicket(int idTicket, int idUser, List<int> idTicketFiles)
         {
             var response = new Response<bool>();
             try
@@ -3362,6 +3360,61 @@ namespace DRRCore.Application.Main.CoreApplication
                             Extension = ".xlsx"
                         });
                     }
+                    if (idTicketFiles.Count > 0)
+                    {
+                        var directoryPath = Path.Combine(_path.Path, "cupones", ticket.Number.ToString("D6"));
+                        var memoryStream = new MemoryStream();
+
+                        using (var archive = ZipArchive.Create())
+                        {
+                            var filesToAdd = new List<string>();
+
+                            foreach (var idTicketFile in idTicketFiles)
+                            {
+                                var ticketFile = await context.TicketFiles
+                                    .Where(x => x.Id == idTicketFile)
+                                    .FirstOrDefaultAsync();
+
+                                if (File.Exists(ticketFile.Path))
+                                {
+                                    filesToAdd.Add(ticketFile.Path);
+                                }
+                            }
+
+                            foreach (var filePath in filesToAdd)
+                            {
+                                var fileName = Path.GetFileName(filePath);
+                                archive.AddEntry(fileName, filePath);
+                            }
+
+                            archive.SaveTo(memoryStream, new WriterOptions(CompressionType.Deflate)
+                            {
+                                LeaveStreamOpen = true
+                            });
+                        }
+
+                        var documentDto = new GetFileDto
+                        {
+                            File = memoryStream,
+                            ContentType = GetContentType(".zip"),
+                            FileName = ticket.Number.ToString("D6") + ".zip" 
+                        };
+
+                        byte[] fileBytes;
+                        using (var ms = new MemoryStream())
+                        {
+                            documentDto.File.CopyTo(ms);
+                            fileBytes = ms.ToArray();
+                        }
+
+                        memoryStream.Position = 0;
+
+                        var attachmentsSelected= new AttachmentDto();
+                        attachmentsSelected.FileName = documentDto.FileName;
+                        attachmentsSelected.Content = Convert.ToBase64String(fileBytes);
+                        emailDataDto.Attachments.Add(attachmentsSelected);
+                    }
+
 
 
                     ticket.IdCompanyNavigation.LastSearched = DateTime.Now;
@@ -4315,14 +4368,17 @@ namespace DRRCore.Application.Main.CoreApplication
                             }
                         }
                     }
-                return new Response<bool>();
+                
 
             }
             catch (Exception ex)
             {
 
+                _logger.LogError(ex.Message);
+                response.Data = false;
+                response.IsSuccess = false;
             }
-            return new Response<bool>();
+            return response;
         }
 
         public async Task<Response<List<GetShortProviderByTicket>>> GetProvidersByIdTicket(int idTicket)
@@ -4936,7 +4992,30 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             return response;
         }
-        
+
+        public async Task<Response<bool>> FinishWorkById(int idTicketHistory)
+        {
+            var response = new Response<bool>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var ticketHistory = await context.TicketHistories.Where(x => x.Id == idTicketHistory).FirstOrDefaultAsync();
+                if(ticketHistory != null)
+                {
+                    ticketHistory.Flag = true;
+                    ticketHistory.ShippingDate = DateTime.Now;
+                    context.TicketHistories.Update(ticketHistory);
+                    await context.SaveChangesAsync();
+                }
+
+            }catch(Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = ex.Message;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
     }
 
 }

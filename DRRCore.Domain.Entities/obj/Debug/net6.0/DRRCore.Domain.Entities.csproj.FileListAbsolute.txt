@@ -41,3 +41,4 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Entities\obj\Debu
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Entities\obj\Debug\net6.0\DRRCore.Domain.Entities.pdb
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Entities\obj\Debug\net6.0\DRRCore.Domain.Entities.genruntimeconfig.cache
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Entities\obj\Debug\net6.0\ref\DRRCore.Domain.Entities.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Entities\obj\Debug\net6.0\DRRCore.Domain.Entities.sourcelink.json

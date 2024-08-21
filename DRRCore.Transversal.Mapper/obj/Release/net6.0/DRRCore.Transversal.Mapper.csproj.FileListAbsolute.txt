@@ -31,8 +31,9 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Transversal.Mapper\obj\R
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Transversal.Mapper\obj\Release\net6.0\DRRCore.Transversal.Mapper.AssemblyInfoInputs.cache
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Transversal.Mapper\obj\Release\net6.0\DRRCore.Transversal.Mapper.AssemblyInfo.cs
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Transversal.Mapper\obj\Release\net6.0\DRRCore.Transversal.Mapper.csproj.CoreCompileInputs.cache
-C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Transversal.Mapper\obj\Release\net6.0\DRRCore.Transversal.Mapper.csproj.CopyComplete
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Transversal.Mapper\obj\Release\net6.0\DRRCore.Transversal.Mapper.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Transversal.Mapper\obj\Release\net6.0\refint\DRRCore.Transversal.Mapper.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Transversal.Mapper\obj\Release\net6.0\DRRCore.Transversal.Mapper.pdb
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Transversal.Mapper\obj\Release\net6.0\ref\DRRCore.Transversal.Mapper.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Transversal.Mapper\obj\Release\net6.0\DRRCore.Transversal.Mapper.sourcelink.json
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Transversal.Mapper\obj\Release\net6.0\DRRCore..427EDB5A.Up2Date

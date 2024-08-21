@@ -280,7 +280,6 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Rel
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\staticwebassets.build.json
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\staticwebassets.development.json
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\scopedcss\bundle\DRRCore.Services.ApiCore.styles.css
-C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\DRRCore.Services.ApiCore.csproj.CopyComplete
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\DRRCore.Services.ApiCore.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\refint\DRRCore.Services.ApiCore.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\DRRCore.Services.ApiCore.pdb
@@ -289,3 +288,5 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Rel
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\bin\Release\net6.0\DocumentFormat.OpenXml.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\bin\Release\net6.0\SpreadsheetLight.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\bin\Release\net6.0\System.IO.Packaging.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\DRRCore.Services.ApiCore.sourcelink.json
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiCore\obj\Release\net6.0\DRRCore..83146C3F.Up2Date

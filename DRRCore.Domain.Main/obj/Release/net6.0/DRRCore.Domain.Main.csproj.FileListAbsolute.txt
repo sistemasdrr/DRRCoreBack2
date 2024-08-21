@@ -47,8 +47,9 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Main\obj\Release\
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Main\obj\Release\net6.0\DRRCore.Domain.Main.AssemblyInfoInputs.cache
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Main\obj\Release\net6.0\DRRCore.Domain.Main.AssemblyInfo.cs
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Main\obj\Release\net6.0\DRRCore.Domain.Main.csproj.CoreCompileInputs.cache
-C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Main\obj\Release\net6.0\DRRCore.Domain.Main.csproj.CopyComplete
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Main\obj\Release\net6.0\DRRCore.Domain.Main.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Main\obj\Release\net6.0\refint\DRRCore.Domain.Main.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Main\obj\Release\net6.0\DRRCore.Domain.Main.pdb
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Main\obj\Release\net6.0\ref\DRRCore.Domain.Main.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Main\obj\Release\net6.0\DRRCore.Domain.Main.sourcelink.json
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Main\obj\Release\net6.0\DRRCore..C01FAACA.Up2Date

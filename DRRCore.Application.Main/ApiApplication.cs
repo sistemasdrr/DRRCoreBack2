@@ -6,7 +6,6 @@ using DRRCore.Domain.Entities.SqlCoreContext;
 using DRRCore.Domain.Interfaces;
 using DRRCore.Transversal.Common;
 using DRRCore.Transversal.Common.Interface;
-using System.Data.Entity;
 
 namespace DRRCore.Application.Main
 {

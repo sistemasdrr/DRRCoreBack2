@@ -20,7 +20,7 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<GetTicketRequestDto>> GetTicketRequestAsync(int id);
         Task<Response<List<GetListTicketResponseDto>>> GetTicketListAsync();
         Task<Response<List<GetListTicketResponseDto>>> GetTicketListToDispatchAsync();
-        Task<Response<bool>> DispatchTicket(int idTicket, int idUser);
+        Task<Response<bool>> DispatchTicket(int idTicket, int idUser, List<int> idTicketFiles);
         Task<Response<bool>> DeleteTicketHistory(int idTicket, string? assignedTo, int? numberAssign, string? returnMessage);
         Task<Response<List<GetTicketHistorySubscriberResponseDto>>> GetTicketHistoryByIdSubscriber(int idSubscriber, string? name, DateTime? from, DateTime? until, int? idCountry);
         Task<Response<bool>> DeleteTicket(int id);
@@ -51,6 +51,7 @@ namespace DRRCore.Application.Interfaces.CoreApplication
 
         Task<Response<bool?>> AssignTicket(NewAsignationDto obj);
         Task<Response<bool>> FinishWork(AssignTicketRequestDto obj);
+        Task<Response<bool>> FinishWorkById(int idTicketHistory);
         Task<Response<List<GetShortProviderByTicket>>> GetProvidersByIdTicket(int idTicket);
         Task<Response<List<GetShortProviderByTicket>>> GetProvidersHistoryByIdTicket(int idTicket);
 

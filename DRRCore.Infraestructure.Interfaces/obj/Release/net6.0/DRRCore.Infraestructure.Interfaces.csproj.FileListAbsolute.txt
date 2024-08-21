@@ -31,8 +31,9 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Interfac
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Interfaces\obj\Release\net6.0\DRRCore.Infraestructure.Interfaces.AssemblyInfoInputs.cache
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Interfaces\obj\Release\net6.0\DRRCore.Infraestructure.Interfaces.AssemblyInfo.cs
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Interfaces\obj\Release\net6.0\DRRCore.Infraestructure.Interfaces.csproj.CoreCompileInputs.cache
-C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Interfaces\obj\Release\net6.0\DRRCore.Infraestructure.Interfaces.csproj.CopyComplete
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Interfaces\obj\Release\net6.0\DRRCore.Infraestructure.Interfaces.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Interfaces\obj\Release\net6.0\refint\DRRCore.Infraestructure.Interfaces.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Interfaces\obj\Release\net6.0\DRRCore.Infraestructure.Interfaces.pdb
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Interfaces\obj\Release\net6.0\ref\DRRCore.Infraestructure.Interfaces.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Interfaces\obj\Release\net6.0\DRRCore.Infraestructure.Interfaces.sourcelink.json
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Interfaces\obj\Release\net6.0\DRRCore..A56CD46F.Up2Date

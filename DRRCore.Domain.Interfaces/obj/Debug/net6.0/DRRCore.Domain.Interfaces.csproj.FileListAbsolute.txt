@@ -51,8 +51,9 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Interfaces\obj\De
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Interfaces\obj\Debug\net6.0\DRRCore.Domain.Interfaces.AssemblyInfoInputs.cache
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Interfaces\obj\Debug\net6.0\DRRCore.Domain.Interfaces.AssemblyInfo.cs
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Interfaces\obj\Debug\net6.0\DRRCore.Domain.Interfaces.csproj.CoreCompileInputs.cache
-C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Interfaces\obj\Debug\net6.0\DRRCore.Domain.Interfaces.csproj.CopyComplete
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Interfaces\obj\Debug\net6.0\DRRCore.Domain.Interfaces.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Interfaces\obj\Debug\net6.0\refint\DRRCore.Domain.Interfaces.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Interfaces\obj\Debug\net6.0\DRRCore.Domain.Interfaces.pdb
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Interfaces\obj\Debug\net6.0\ref\DRRCore.Domain.Interfaces.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Interfaces\obj\Debug\net6.0\DRRCore.Domain.Interfaces.sourcelink.json
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Interfaces\obj\Debug\net6.0\DRRCore..9169C1A4.Up2Date
