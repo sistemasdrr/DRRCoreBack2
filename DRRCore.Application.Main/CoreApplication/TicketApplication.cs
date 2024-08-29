@@ -1,10 +1,8 @@
 ﻿using AspNetCore.Reporting;
-using AspNetCore.ReportingServices.ReportProcessing.ReportObjectModel;
 using AutoMapper;
 using CoreFtp;
-using DocumentFormat.OpenXml.Bibliography;
-using DocumentFormat.OpenXml.ExtendedProperties;
-using DocumentFormat.OpenXml.InkML;
+using DocumentFormat.OpenXml.Drawing;
+using DocumentFormat.OpenXml.Math;
 using DRRCore.Application.DTO.Core.Request;
 using DRRCore.Application.DTO.Core.Response;
 using DRRCore.Application.DTO.Email;
@@ -29,6 +27,7 @@ using SharpCompress.Archives.Zip;
 using SharpCompress.Common;
 using SharpCompress.Writers;
 using SpreadsheetLight;
+using System.IO;
 
 namespace DRRCore.Application.Main.CoreApplication
 {
@@ -152,7 +151,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 var ticket = await context.Tickets.Where(x => x.Id == idTicket).FirstOrDefaultAsync();
                 if(ticket != null)
                 {
-                    var directoryPath = Path.Combine(_path.Path, "cupones", ticket.Number.ToString("D6"));
+                    var directoryPath = System.IO.Path.Combine(_path.Path, "cupones", ticket.Number.ToString("D6"));
                     var memoryStream = new MemoryStream();
                     using (var archive = ZipArchive.Create())
                     {
@@ -298,9 +297,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                     Observations = ""
                                 });
                             }
-
                         }
-
                     }
                 }
 
@@ -503,7 +500,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         var path = await UploadF1(ticket.Id, data.File);
 
                         var fileName = ticket.RequestedName;
-                        foreach (char c in Path.GetInvalidFileNameChars())
+                        foreach (char c in System.IO.Path.GetInvalidFileNameChars())
                         {
                             if (fileName.Contains(c))
                             {
@@ -788,7 +785,7 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 var ticket = await _ticketDomain.GetByIdAsync(idTicket);
                 var fileName = ticket.RequestedName;
-                foreach (char c in Path.GetInvalidFileNameChars())
+                foreach (char c in System.IO.Path.GetInvalidFileNameChars())
                 {
                     if (fileName.Contains(c))
                     {
@@ -796,8 +793,8 @@ namespace DRRCore.Application.Main.CoreApplication
                     }
                 }
                 var ticketPath = _path.Path;
-                var directoryPath = Path.Combine(ticketPath, "cupones", ticket.Number.ToString("D6"));
-                var filePath = Path.Combine(directoryPath, $"{ticket.ReportType}_{fileName}.pdf");
+                var directoryPath = System.IO.Path.Combine(ticketPath, "cupones", ticket.Number.ToString("D6"));
+                var filePath = System.IO.Path.Combine(directoryPath, $"{ticket.ReportType}_{fileName}.pdf");
 
                 if (!Directory.Exists(directoryPath))
                 {
@@ -824,7 +821,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 {
                     Directory.CreateDirectory(directoryPath);
                 }
-                foreach (char c in Path.GetInvalidFileNameChars())
+                foreach (char c in System.IO.Path.GetInvalidFileNameChars())
                 {
                     if (fileName.Contains(c))
                     {
@@ -832,7 +829,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     }
                 }
 
-                var filePath = Path.Combine(directoryPath, fileName + format);
+                var filePath = System.IO.Path.Combine(directoryPath, fileName + format);
                 await File.WriteAllBytesAsync(filePath, byteArray);
 
                 return filePath;
@@ -1299,9 +1296,9 @@ namespace DRRCore.Application.Main.CoreApplication
 
                 var ticketPath = _path.Path;
 
-                var directoryPath = Path.Combine(ticketPath, "cupones", ticket.Number.ToString("D6"));
+                var directoryPath = System.IO.Path.Combine(ticketPath, "cupones", ticket.Number.ToString("D6"));
                 string name = file.FileName;
-                foreach (char c in Path.GetInvalidFileNameChars())
+                foreach (char c in System.IO.Path.GetInvalidFileNameChars())
                 {
                     if (name.Contains(c))
                     {
@@ -1309,7 +1306,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     }
                 }
 
-                var filePath = Path.Combine(directoryPath, name);
+                var filePath = System.IO.Path.Combine(directoryPath, name);
 
                 if (!Directory.Exists(directoryPath))
                 {
@@ -1320,7 +1317,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     await file.CopyToAsync(stream);
                 }
                 response.Data = true;
-                string fileExtension = Path.GetExtension(file.FileName);
+                string fileExtension = System.IO.Path.GetExtension(file.FileName);
                 if (response.Data == true)
                 {
                     await _ticketDomain.AddTicketFile(new TicketFile
@@ -3362,7 +3359,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     }
                     if (idTicketFiles.Count > 0)
                     {
-                        var directoryPath = Path.Combine(_path.Path, "cupones", ticket.Number.ToString("D6"));
+                        var directoryPath = System.IO.Path.Combine(_path.Path, "cupones", ticket.Number.ToString("D6"));
                         var memoryStream = new MemoryStream();
 
                         using (var archive = ZipArchive.Create())
@@ -3383,7 +3380,7 @@ namespace DRRCore.Application.Main.CoreApplication
 
                             foreach (var filePath in filesToAdd)
                             {
-                                var fileName = Path.GetFileName(filePath);
+                                var fileName = System.IO.Path.GetFileName(filePath);
                                 archive.AddEntry(fileName, filePath);
                             }
 
@@ -3401,11 +3398,9 @@ namespace DRRCore.Application.Main.CoreApplication
                         };
 
                         byte[] fileBytes;
-                        using (var ms = new MemoryStream())
-                        {
-                            documentDto.File.CopyTo(ms);
-                            fileBytes = ms.ToArray();
-                        }
+                        documentDto.File.CopyTo(memoryStream);
+                        fileBytes = memoryStream.ToArray();
+                     
 
                         memoryStream.Position = 0;
 
@@ -3506,8 +3501,8 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 var ticket = await _ticketDomain.GetByIdAsync(idTicket);
                 var ticketPath = _path.Path;
-                var directoryPath = Path.Combine(ticketPath, "cupones", ticket.Number.ToString("D6"));
-                var filePath = Path.Combine(directoryPath, fileName);
+                var directoryPath = System.IO.Path.Combine(ticketPath, "cupones", ticket.Number.ToString("D6"));
+                var filePath = System.IO.Path.Combine(directoryPath, fileName);
 
                 if (!Directory.Exists(directoryPath))
                 {
@@ -3667,12 +3662,12 @@ namespace DRRCore.Application.Main.CoreApplication
                     .FirstOrDefaultAsync();
                 if (ticket != null)
                 {
-                    var directoryPath = Path.Combine(_path.Path, "cupones", ticket.Number.ToString("D6")); // => "C:\\Debug_EIECORE\\cupones\\000162"
+                    var directoryPath = System.IO.Path.Combine(_path.Path, "cupones", ticket.Number.ToString("D6")); // => "C:\\Debug_EIECORE\\cupones\\000162"
                     if (!Directory.Exists(directoryPath))
                     {
                         Directory.CreateDirectory(directoryPath);
                     }
-                    var filePath = Path.Combine(directoryPath, ticket.IdCompanyNavigation.Name + ".xlsx");
+                    var filePath = System.IO.Path.Combine(directoryPath, ticket.IdCompanyNavigation.Name + ".xlsx");
                     using var memoryStream = new MemoryStream();
                     using var sLDocument = new SLDocument();
                     
@@ -4999,9 +4994,90 @@ namespace DRRCore.Application.Main.CoreApplication
             try
             {
                 using var context = new SqlCoreContext();
-                var ticketHistory = await context.TicketHistories.Where(x => x.Id == idTicketHistory).FirstOrDefaultAsync();
+                var cycle = "CP_" + DateTime.Now.Month.ToString("D2") + "_" + DateTime.Now.Year;
+                var productionClosure = await context.ProductionClosures.Where(x => x.Code.Contains(cycle)).FirstOrDefaultAsync();
+                if (productionClosure == null)
+                {
+                    DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1).AddDays(-1);
+                    await context.ProductionClosures.AddAsync(new ProductionClosure
+                    {
+                        EndDate = lastDayOfCurrentMonth,
+                        Code = cycle,
+                        Title = "Cierre de Producción " + DateTime.Now.Month.ToString("D2") + " - " + DateTime.Now.Year,
+                        Observations = ""
+                    });
+                }
+                else
+                {
+                    if (productionClosure.EndDate < DateTime.Now)
+                    {
+                        if (DateTime.Now.Month == 12)
+                        {
+                            cycle = "CP_" + (1).ToString("D2") + "_" + (DateTime.Now.Year + 1);
+                            var nextProductionClosureExistent = await context.ProductionClosures.Where(x => x.Code.Contains(cycle)).FirstOrDefaultAsync();
+                            if (nextProductionClosureExistent == null)
+                            {
+                                DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year + 1, 1, 1).AddMonths(1).AddDays(-1);
+                                await context.ProductionClosures.AddAsync(new ProductionClosure
+                                {
+                                    EndDate = lastDayOfCurrentMonth,
+                                    Code = cycle,
+                                    Title = "Cierre de Producción " + (1).ToString("D2") + " - " + DateTime.Today.Year + 1,
+                                    Observations = ""
+                                });
+                            }
+                        }
+                        else
+                        {
+                            cycle = "CP_" + (DateTime.Now.Month + 1).ToString("D2") + "_" + DateTime.Now.Year;
+                            var nextProductionClosureExistent = await context.ProductionClosures.Where(x => x.Code.Contains(cycle)).FirstOrDefaultAsync();
+                            if (nextProductionClosureExistent == null)
+                            {
+                                DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year, (DateTime.Today.Month + 1), 1).AddMonths(1).AddDays(-1);
+                                await context.ProductionClosures.AddAsync(new ProductionClosure
+                                {
+                                    EndDate = lastDayOfCurrentMonth,
+                                    Code = cycle,
+                                    Title = "Cierre de Producción " + (DateTime.Now.Month + 1).ToString("D2") + " - " + DateTime.Now.Year,
+                                    Observations = ""
+                                });
+                            }
+                        }
+                    }
+                }
+
+
+                var ticketHistory = await context.TicketHistories.Where(x => x.Id == idTicketHistory)
+                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCompanyNavigation).ThenInclude(x => x.Providers)
+                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdPersonNavigation).ThenInclude(x => x.Providers)
+                    .FirstOrDefaultAsync();
                 if(ticketHistory != null)
                 {
+                    if(ticketHistory.IdTicketNavigation.About == "E")
+                    {
+                        await context.ReferencesHistories.AddAsync(new ReferencesHistory
+                        {
+                            IdUser = int.Parse(ticketHistory.UserTo),
+                            Code = ticketHistory.AsignedTo,
+                            IdTicket = ticketHistory.IdTicket,
+                            IsComplement = false,
+                            ValidReferences = ticketHistory.IdTicketNavigation.IdCompanyNavigation.Providers.Where(x => x.IdTicket == ticketHistory.IdTicket && x.Qualification == "Dió referencia" && x.Flag == true).Count(),
+                            Cycle = cycle
+                        });
+                    }
+                    else
+                    {
+                        await context.ReferencesHistories.AddAsync(new ReferencesHistory
+                        {
+                            IdUser = int.Parse(ticketHistory.UserTo),
+                            Code = ticketHistory.AsignedTo,
+                            IdTicket = ticketHistory.IdTicket,
+                            IsComplement = false,
+                            ValidReferences = ticketHistory.IdTicketNavigation.IdPersonNavigation.Providers.Where(x => x.IdTicket == ticketHistory.IdTicket && x.Qualification == "Dió referencia" && x.Flag == true).Count(),
+                            Cycle = cycle
+                        });
+                    }
+
                     ticketHistory.Flag = true;
                     ticketHistory.ShippingDate = DateTime.Now;
                     context.TicketHistories.Update(ticketHistory);
@@ -5013,6 +5089,105 @@ namespace DRRCore.Application.Main.CoreApplication
                 response.IsSuccess = false;
                 response.Message = ex.Message;
                 _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
+        public async Task<Response<string>> GetNumerationRefCom()
+        {
+            var response = new Response<string>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var numeration = await context.Numerations.Where(x => x.Name == "NUM_COMP_REFCOM").FirstOrDefaultAsync();
+                if(numeration == null)
+                {
+                    throw new Exception("No se encontro la numeración ");
+                }
+                response.Data = numeration.Number?.ToString("D6");
+            }catch(Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = ex.Message;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
+        public async Task<Response<bool>> SendComplementRefCom(int idUser, int idTicket,string asignedTo, string numOrder, string message)
+        {
+            var response = new Response<bool>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var user = await context.UserLogins.Where(x => x.Id == idUser).Include(x => x.IdEmployeeNavigation).FirstOrDefaultAsync();
+                var ticket = await context.Tickets.Where(x => x.Id == idTicket).FirstOrDefaultAsync();
+                if(user != null && ticket != null)
+                {
+                    var emailDataDto = new EmailDataDTO();
+                    emailDataDto.Parameters = new List<string>();
+
+                    emailDataDto.EmailKey = "DRR_WORKFLOW_ESP_0062";
+
+                    var debug = await context.Parameters.Where(x => x.Key == "DEBUG").FirstOrDefaultAsync();
+                    if (debug != null && debug.Flag == true)
+                    {
+                        emailDataDto.From = "diego.rodriguez@del-risco.com";//user.IdEmployeeNavigation.Email;
+                        emailDataDto.UserName = "diego.rodriguez@del-risco.com";//user.IdEmployeeNavigation.Email;
+                        emailDataDto.Password = "w*@JHCr7mH";// user.EmailPassword;
+                        emailDataDto.To = new List<string>
+                        {
+                            //"crodriguez@del-risco.com",
+                            "jfernandez@del-risco.com"
+                        };
+                        emailDataDto.CC = new List<string>
+                        {
+                            "diego.rodriguez@del-risco.com",
+                             //user.IdEmployeeNavigation.Email,
+                            // "crc@del-risco.com"
+                        };
+                        emailDataDto.Subject = "PRUEBA_COMPLEMENTO_" + ticket.Number.ToString("D6");
+                    }
+                    else
+                    {
+                        emailDataDto.From = user.IdEmployeeNavigation.Email;
+                        emailDataDto.UserName = user.IdEmployeeNavigation.Email;
+                        emailDataDto.Password = user.EmailPassword;
+                        emailDataDto.To = new List<string>
+                        {
+                            "crodriguez@del-risco.com"
+                        };
+                        emailDataDto.CC = new List<string>
+                        {
+                             user.IdEmployeeNavigation.Email,
+                            // "crc@del-risco.com"
+                        };
+                        emailDataDto.Subject = "COMPLEMENTO_" + ticket.Number.ToString("D6");
+                    }
+
+                    emailDataDto.IsBodyHTML = true;
+                    emailDataDto.Parameters.Add(ticket.Number.ToString("D6")); //userFrom.IdEmployeeNavigation.FirstName + " " + userFrom.IdEmployeeNavigation.LastName
+                    emailDataDto.Parameters.Add(asignedTo);
+                    emailDataDto.Parameters.Add(user.IdEmployeeNavigation.FirstName + " " + user.IdEmployeeNavigation.LastName);
+                    emailDataDto.Parameters.Add(numOrder);
+                    emailDataDto.Parameters.Add(message);
+                    emailDataDto.BodyHTML = emailDataDto.IsBodyHTML ? await GetBodyHtml(emailDataDto) : emailDataDto.BodyHTML;
+                    _logger.LogInformation(JsonConvert.SerializeObject(emailDataDto));
+                    var numeration = await context.Numerations.Where(x => x.Name == "NUM_COMP_REFCOM").FirstOrDefaultAsync();
+                    numeration.Number++;
+                    context.Numerations.Update(numeration);
+                    await context.SaveChangesAsync();
+                    var result = await _mailSender.SendMailAsync(_mapper.Map<EmailValues>(emailDataDto));
+
+                    var emailHistory = _mapper.Map<EmailHistory>(emailDataDto);
+                    emailHistory.Success = result;
+                    response.Data = await _emailHistoryDomain.AddAsync(emailHistory);
+
+                }
+            }
+            catch(Exception ex)
+            {
+
             }
             return response;
         }

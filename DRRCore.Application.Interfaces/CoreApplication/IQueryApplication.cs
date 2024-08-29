@@ -72,7 +72,7 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<List<GetQuery5_1_2ResponseDto>>> GetQuery5_1_2(string idUser);
         Task<Response<List<GetQuery5_1_2ResponseDto>>> GetQuery5_1_2Daily(string idUser);
         Task<Response<List<GetQuery5_1_2ResponseDto>>> GetQuery5_1_2Monthly(string idUser, int month);
-        Task<Response<List<GetQuery5_1_2ByCycleResponseDto>>> GetQuery5_1_2MonthlyByCycle(string idUser, string cycle);
+        Task<Response<List<GetQuery5_1_2ByCycleResponseDto>>> GetQuery5_1_2MonthlyByCycle(string idUser, string cycle, string? code);
         Task<Response<List<GetCyclesResponseDto>>> GetCycles();
         Task<Response<List<string>>> GetUserCode(int idUser);
     }

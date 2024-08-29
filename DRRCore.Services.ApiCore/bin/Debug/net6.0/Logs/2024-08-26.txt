@@ -1,0 +1,355 @@
+2024-08-26 08:50:11,303 [6] ERROR App  
+ No existe el objeto solicitado 
+ 
+2024-08-26 08:50:11,380 [6] ERROR App  
+ No existe el objeto solicitado 
+ 
+System.Exception: No existe el objeto solicitado
+   at DRRCore.Infraestructure.Repository.CoreRepository.TicketRepository.GetByIdAsync(Int32 id) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Repository\CoreRepository\TicketRepository.cs:line 256
+   at DRRCore.Domain.Main.CoreDomain.TicketDomain.GetByIdAsync(Int32 id) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Main\CoreDomain\TicketDomain.cs:line 57
+   at DRRCore.Application.Main.CoreApplication.TicketApplication.GetNumCuponById(Int32 idTicket) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\TicketApplication.cs:line 1415
+2024-08-26 09:06:03,176 [94] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:06:05,524 [92] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:06:08,153 [94] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:06:09,192 [92] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:06:15,929 [97] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:06:17,119 [92] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:06:17,975 [92] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:06:20,840 [92] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:06:21,585 [100] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:06:23,060 [94] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:07:20,107 [94] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:07:21,804 [93] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:07:23,829 [93] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:07:38,895 [98] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:08:48,439 [94] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:08:56,591 [97] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:08:58,820 [94] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:09:01,979 [94] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:09:07,971 [94] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:09:09,597 [102] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:09:10,597 [93] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:10:48,582 [104] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:17:02,290 [129] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:18:19,524 [134] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:18:20,791 [142] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:19:24,855 [140] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:32:33,939 [6] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:32:35,503 [4] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:32:36,329 [4] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:32:37,467 [9] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:33:25,431 [26] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:33:32,484 [4] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:33:47,049 [9] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:33:48,713 [9] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:33:52,811 [26] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:33:53,663 [9] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:33:54,921 [26] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:33:57,202 [4] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:34:00,247 [26] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:34:03,348 [9] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:34:15,092 [9] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:34:39,174 [9] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:37:38,010 [35] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:43:15,074 [57] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:44:11,991 [67] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:47:17,092 [91] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:47:20,990 [91] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:47:25,279 [95] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:47:29,208 [94] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:47:34,116 [91] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:47:48,616 [90] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:50:46,875 [94] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:50:50,528 [97] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:50:54,830 [99] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:51:05,590 [94] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:51:06,567 [94] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:51:07,024 [97] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:51:07,375 [100] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:51:07,775 [99] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:51:08,213 [99] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:51:08,773 [90] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:51:26,655 [99] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:51:31,831 [90] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:51:54,651 [97] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:52:03,906 [99] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:52:09,099 [99] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:52:22,201 [94] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:53:34,270 [94] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278
+2024-08-26 09:55:45,377 [92] ERROR App  
+  
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_2MonthlyByCycle(String idUser, String cycle, String code) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 2278

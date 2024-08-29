@@ -69,5 +69,9 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<bool>> SendComplement(int idTicket, int idUser, bool digited, bool file, string observations);
         Task<Response<bool>> SaveTicketCommentary(int idTicket, string commentary);
 
+        Task<Response<string>> GetNumerationRefCom();
+
+        Task<Response<bool>> SendComplementRefCom(int idUser, int idTicketHistory, string asignedTo, string numOrder, string message);
+
     }
 }

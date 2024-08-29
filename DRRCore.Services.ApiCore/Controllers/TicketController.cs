@@ -1,9 +1,11 @@
-﻿using DocumentFormat.OpenXml.Office2010.Excel;
+﻿using AspNetCore.ReportingServices.ReportProcessing.ReportObjectModel;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using DRRCore.Application.DTO.Core.Request;
 using DRRCore.Application.DTO.Core.Response;
 using DRRCore.Application.Interfaces.CoreApplication;
 using DRRCore.Application.Main.CoreApplication;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Reflection.Emit;
 
 namespace DRRCore.Services.ApiCore.Controllers
@@ -388,9 +390,20 @@ namespace DRRCore.Services.ApiCore.Controllers
         public async Task<IActionResult> DownloadF8ByIdTicket(int idTicket, string language, string format)
         {
             var result = await _ticketApplication.DownloadF8ByIdTicket(idTicket, language, format);
-
             return File(result.Data.File, result.Data.ContentType, result.Data.Name);
         }
+        [HttpGet()]
+        [Route("GetNumerationRefCom")]
+        public async Task<IActionResult> GetNumerationRefCom()
+        {
+            return Ok(await _ticketApplication.GetNumerationRefCom());
+        }
 
+        [HttpPost()]
+        [Route("SendComplementRefCom")]
+        public async Task<IActionResult> SendComplementRefCom(int idUser, int idTicket, string asignedTo, string numOrder, string message)
+        {
+            return Ok(await _ticketApplication.SendComplementRefCom(idUser, idTicket, asignedTo, numOrder, message));
+        }
     }
 }

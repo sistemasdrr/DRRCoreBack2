@@ -1,0 +1,30 @@
+2024-08-29 08:58:58,159 [6] ERROR App  
+ Object reference not set to an instance of an object. 
+ 
+2024-08-29 09:00:52,800 [18] ERROR App  
+ Object reference not set to an instance of an object. 
+ 
+2024-08-29 09:16:37,865 [59] ERROR App  
+ Object reference not set to an instance of an object. 
+ 
+2024-08-29 11:22:56,011 [143] ERROR App  
+ Object reference not set to an instance of an object. 
+ 
+2024-08-29 11:43:00,281 [142] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-08-29 11:44:55,534 [173] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-29 11:45:05,322 [160] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-29 11:45:05,325 [160] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-08-29 12:33:06,023 [115] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-08-29 12:33:12,325 [115] ERROR App  
+ Object reference not set to an instance of an object. 
+ 

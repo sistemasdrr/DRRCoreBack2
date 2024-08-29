@@ -101,6 +101,10 @@ public partial class SqlCoreContext : DbContext
 
     public virtual DbSet<ImportsAndExport> ImportsAndExports { get; set; }
 
+    public virtual DbSet<InternalInvoice> InternalInvoices { get; set; }
+
+    public virtual DbSet<InternalInvoiceDetail> InternalInvoiceDetails { get; set; }
+
     public virtual DbSet<InvoiceState> InvoiceStates { get; set; }
 
     public virtual DbSet<Job> Jobs { get; set; }
@@ -220,9 +224,9 @@ public partial class SqlCoreContext : DbContext
         if (!optionsBuilder.IsConfigured)
         {
             optionsBuilder.UseSqlServer(
-            "Data Source=200.58.123.184,14330;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
-            //"Data Source=SD-4154134-W;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
-
+            //"Data Source=200.58.123.184,14330;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
+            "Data Source=SD-4154134-W;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
+            , sqlServerOptions => sqlServerOptions.EnableRetryOnFailure()
             );
         }
     }
@@ -2653,6 +2657,83 @@ public partial class SqlCoreContext : DbContext
                 .HasConstraintName("FK__ImportsAn__idCom__642DD430");
         });
 
+        modelBuilder.Entity<InternalInvoice>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Internal__3213E83F2E05612A");
+
+            entity.ToTable("InternalInvoice");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Code)
+                .HasMaxLength(5)
+                .IsUnicode(false)
+                .HasColumnName("code");
+            entity.Property(e => e.CreationDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("creationDate");
+            entity.Property(e => e.Cycle)
+                .HasMaxLength(20)
+                .IsUnicode(false)
+                .HasColumnName("cycle");
+            entity.Property(e => e.DeleteDate)
+                .HasColumnType("datetime")
+                .HasColumnName("deleteDate");
+            entity.Property(e => e.Enable)
+                .HasDefaultValueSql("((1))")
+                .HasColumnName("enable");
+            entity.Property(e => e.Sended)
+                .HasDefaultValueSql("((1))")
+                .HasColumnName("sended");
+            entity.Property(e => e.TotalPrice)
+                .HasColumnType("decimal(8, 2)")
+                .HasColumnName("totalPrice");
+            entity.Property(e => e.Type)
+                .HasMaxLength(2)
+                .IsUnicode(false)
+                .HasColumnName("type");
+            entity.Property(e => e.UpdateDate)
+                .HasColumnType("datetime")
+                .HasColumnName("updateDate");
+        });
+
+        modelBuilder.Entity<InternalInvoiceDetail>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Internal__3213E83FEC855A2F");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.CreationDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("creationDate");
+            entity.Property(e => e.DeleteDate)
+                .HasColumnType("datetime")
+                .HasColumnName("deleteDate");
+            entity.Property(e => e.Enable)
+                .HasDefaultValueSql("((1))")
+                .HasColumnName("enable");
+            entity.Property(e => e.IdInternalInvoice).HasColumnName("idInternalInvoice");
+            entity.Property(e => e.IdTicket).HasColumnName("idTicket");
+            entity.Property(e => e.IsComplement).HasColumnName("isComplement");
+            entity.Property(e => e.Price)
+                .HasColumnType("decimal(6, 2)")
+                .HasColumnName("price");
+            entity.Property(e => e.Quality)
+            .HasMaxLength(2)
+            .HasColumnName("quality");
+            entity.Property(e => e.UpdateDate)
+                .HasColumnType("datetime")
+                .HasColumnName("updateDate");
+
+            entity.HasOne(d => d.IdInternalInvoiceNavigation).WithMany(p => p.InternalInvoiceDetails)
+                .HasForeignKey(d => d.IdInternalInvoice)
+                .HasConstraintName("FK__InternalI__idInt__3F1C4B12");
+
+            entity.HasOne(d => d.IdTicketNavigation).WithMany(p => p.InternalInvoiceDetails)
+                .HasForeignKey(d => d.IdTicket)
+                .HasConstraintName("FK__InternalI__idTic__40106F4B");
+        });
+
         modelBuilder.Entity<InvoiceState>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__InvoiceS__3213E83F3F9127AB");
@@ -4262,15 +4343,28 @@ public partial class SqlCoreContext : DbContext
                 .HasMaxLength(10)
                 .IsUnicode(false)
                 .HasColumnName("code");
+            entity.Property(e => e.CreationDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("creationDate");
             entity.Property(e => e.Cycle)
                 .HasMaxLength(10)
                 .IsUnicode(false)
                 .HasColumnName("cycle");
+            entity.Property(e => e.DeleteDate)
+                .HasColumnType("datetime")
+                .HasColumnName("deleteDate");
+            entity.Property(e => e.Enable)
+                .HasDefaultValueSql("((1))")
+                .HasColumnName("enable");
             entity.Property(e => e.IdTicket).HasColumnName("idTicket");
             entity.Property(e => e.IdUser).HasColumnName("idUser");
             entity.Property(e => e.IsComplement)
                 .HasDefaultValueSql("((0))")
                 .HasColumnName("isComplement");
+            entity.Property(e => e.UpdateDate)
+                .HasColumnType("datetime")
+                .HasColumnName("updateDate");
             entity.Property(e => e.ValidReferences).HasColumnName("validReferences");
 
             entity.HasOne(d => d.IdTicketNavigation).WithMany(p => p.ReferencesHistories)

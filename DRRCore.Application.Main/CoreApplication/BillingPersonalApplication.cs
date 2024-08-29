@@ -163,7 +163,7 @@ namespace DRRCore.Application.Main.CoreApplication
             try
             {
                 using var context = new SqlCoreContext();
-                var personal = await context.Personals.Where(x => x.IdEmployee == idEmployee && (x.Type == "RP" || x.Type == "DI" || x.Type == "TR")).ToListAsync();
+                var personal = await context.Personals.Where(x => x.IdEmployee == idEmployee && (x.Type == "RP" || x.Type == "DI" || x.Type == "TR" || x.Type == "RF") && x.Enable == true).ToListAsync();
                 foreach (var item in personal)
                 {
                     response.Data.Add(item.Code);

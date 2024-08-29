@@ -101,7 +101,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 if(cycle != null)
                 {
                     var ticketHistory = await context.TicketHistories
-                    .Where(x => x.UserTo.Contains(userTo) && x.Flag == true && x.AsignedTo.Contains("CR") == false && x.Cycle == cycle.Code && x.ShippingDate.HasValue && (x.AsignationType == "RP" || x.AsignationType == "DI" || x.AsignationType == "TR"))
+                    .Where(x => x.UserTo.Contains(userTo) && x.Flag == true && x.AsignedTo.Contains("CR") == false && x.Cycle == cycle.Code && x.ShippingDate.HasValue && (x.AsignationType == "RP" || x.AsignationType == "DI" || x.AsignationType == "TR" || x.AsignationType == "RF"))
                     .ToListAsync();
                     num = ticketHistory.Count();
                 }

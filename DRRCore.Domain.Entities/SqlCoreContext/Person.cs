@@ -7,6 +7,7 @@ public partial class Person
 {
     public int Id { get; set; }
 
+    public virtual ICollection<Traduction> Traductions { get; set; } = new List<Traduction>();
     public string? OldCode { get; set; }
 
     public string Fullname { get; set; } = null!;
@@ -103,7 +104,6 @@ public partial class Person
 
     public bool? HaveReport { get; set; }
 
-    public virtual ICollection<Traduction> Traductions { get; set; } = new List<Traduction>();
     public virtual ICollection<BankDebt> BankDebts { get; set; } = new List<BankDebt>();
 
     public virtual ICollection<ComercialLatePayment> ComercialLatePayments { get; set; } = new List<ComercialLatePayment>();

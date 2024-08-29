@@ -2,6 +2,7 @@
 using DRRCore.Application.Main.CoreApplication;
 using DRRCore.Domain.Entities.SqlCoreContext;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DRRCore.Services.ApiCore.Controllers
 {
@@ -280,9 +281,10 @@ namespace DRRCore.Services.ApiCore.Controllers
 
         [HttpGet]
         [Route("GetQuery5_1_2MonthlyByCycle")]
-        public async Task<ActionResult> GetQuery5_1_2MonthlyByCycle(string idUser, string cycle)
+        public async Task<ActionResult> GetQuery5_1_2MonthlyByCycle(string idUser, string cycle, string? code)
         {
-            return Ok(await _queryApplication.GetQuery5_1_2MonthlyByCycle(idUser, cycle));
+            code = code ?? string.Empty; 
+            return Ok(await _queryApplication.GetQuery5_1_2MonthlyByCycle(idUser, cycle, code));
         }
         [HttpGet]
         [Route("GetCycles")]
@@ -296,5 +298,6 @@ namespace DRRCore.Services.ApiCore.Controllers
         {
             return Ok(await _queryApplication.GetUserCode(idUser));
         }
+        
     }
 }

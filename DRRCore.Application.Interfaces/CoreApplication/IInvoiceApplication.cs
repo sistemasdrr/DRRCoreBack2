@@ -26,6 +26,11 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<bool>> UpdateInvoiceToCollect(int idAgentInvoice, int idAgentInvoiceDetails, string requestedName, string procedureType, string shippingDate, decimal price);
         Task<Response<bool>> CancelAgentInvoiceToCollect(int idAgentInvoice, string cancelDate);
 
+        Task<Response<List<GetPersonalResponseDto>>> GetPersonalToInvoice();
 
+
+        Task<Response<bool>> SaveInternalInvoice(string type, string code, string currentCycle, decimal totalPrice, List<GetQueryTicket5_1_2ResponseDto>? tickets);
+
+        Task<Response<bool>> ReportEmployee(int idUser, string code, string type, string cycle);
     }
 }

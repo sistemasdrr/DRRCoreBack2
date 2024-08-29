@@ -1,0 +1,6 @@
+2024-08-26 18:39:13,842 [6] ERROR App  
+ Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding. 
+ 
+2024-08-26 18:39:13,936 [4] ERROR App  
+ An exception has been raised that is likely due to a transient failure. Consider enabling transient error resiliency by adding 'EnableRetryOnFailure' to the 'UseSqlServer' call. 
+ 

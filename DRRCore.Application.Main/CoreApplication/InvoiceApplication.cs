@@ -13,19 +13,42 @@ using Microsoft.Extensions.Options;
 using DRRCore.Application.DTO.Core.Request;
 using Org.BouncyCastle.Crypto;
 using AutoMapper.Execution;
+using SharpCompress;
+using System.Runtime.InteropServices;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using DocumentFormat.OpenXml.ExtendedProperties;
+using DRRCore.Application.DTO.Email;
+using DocumentFormat.OpenXml.Wordprocessing;
+using DRRCore.Domain.Entities.SQLContext;
+using Newtonsoft.Json;
+using System.ServiceModel.Channels;
+using DRRCore.Domain.Interfaces.EmailDomain;
 
 namespace DRRCore.Application.Main.CoreApplication
 {
     public class InvoiceApplication : IInvoiceApplication
     {
         private readonly List<SpecialPriceAgent> _specialPriceAgent;
+        private IEmailHistoryDomain _emailHistoryDomain;
+        private readonly IMailFormatter _mailFormatter;
+        private readonly IAttachmentsNotSendDomain _attachmentsNotSendDomain;
+        private readonly IEmailConfigurationDomain _emailConfigurationDomain;
+        private readonly IMailSender _mailSender;
+        private readonly IReportingDownload _reportingDownload;
         private readonly ILogger _logger;
         private IMapper _mapper;
-        public InvoiceApplication(ILogger logger, IMapper mapper, IOptions<List<SpecialPriceAgent>> specialPriceAgent)
+        public InvoiceApplication(ILogger logger, IMapper mapper, IOptions<List<SpecialPriceAgent>> specialPriceAgent, IEmailConfigurationDomain emailConfigurationDomain,
+            IReportingDownload reportingDownload, IMailSender mailSender, IEmailHistoryDomain emailHistoryDomain, IMailFormatter mailFormatter, IAttachmentsNotSendDomain attachmentsNotSendDomain)
         {
             _logger = logger;
             _mapper = mapper;
             _specialPriceAgent = specialPriceAgent.Value;
+            _reportingDownload = reportingDownload;
+            _mailSender = mailSender;
+            _emailHistoryDomain = emailHistoryDomain;
+            _mailFormatter = mailFormatter;
+            _attachmentsNotSendDomain = attachmentsNotSendDomain;
+            _emailConfigurationDomain = emailConfigurationDomain;
         }
         private decimal? GetAgentPrice(string about, string procedureType, string quality, int? idCountry, Agent agent)
         {
@@ -88,7 +111,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     foreach (var item in ticketHistory)
                     {
                         var agent1 = new Agent();
-                        var agent2 = new Personal();
+                        var agent2 = new Domain.Entities.SqlCoreContext.Personal();
                         agent1 = await context.Agents
                             .Include(x => x.AgentPrices)
                             .Where(x => x.Code == item.AsignedTo.Trim()).FirstOrDefaultAsync();
@@ -705,5 +728,335 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
+        public async Task<Response<List<GetPersonalResponseDto>>> GetPersonalToInvoice()
+        {
+            var response = new Response<List<GetPersonalResponseDto>>();
+            response.Data = new List<GetPersonalResponseDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var personal = await context.Personals
+                    .Where(x => x.Enable == true && (x.Type == "RP" || x.Type == "DI" || x.Type == "TR" || x.Type == "RF"))
+                    .Include(x => x.IdEmployeeNavigation).ThenInclude(x => x.UserLogins)
+                    .ToListAsync();
+                foreach (var item in personal)
+                {
+                    var country = "";
+                    var flagCountry = "";
+                    if(item.IdEmployeeNavigation.IdCountry != 0 && item.IdEmployeeNavigation.IdCountry != null)
+                    {
+                        var c = await context.Countries.Where(x => x.Id == item.IdEmployeeNavigation.IdCountry).FirstOrDefaultAsync();
+                        country = c.Iso ?? "";
+                        flagCountry = c.FlagIso ?? "";
+                    }
+                    response.Data.Add(new GetPersonalResponseDto
+                    {
+                        IdUser = item.IdEmployeeNavigation.UserLogins.FirstOrDefault().Id,
+                        IdEmployee = item.IdEmployee,
+                        Type = item.Type.Trim(),
+                        Code = item.Code.Trim(),
+                        FirstName = item.IdEmployeeNavigation.FirstName,
+                        LastName = item.IdEmployeeNavigation.LastName,
+                        IdCountry = item.IdEmployeeNavigation.IdCountry,
+                        Country = country,
+                        FlagCountry = flagCountry,
+                    });
+                }
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                response.IsSuccess = false;
+            }
+            return response;
+        }
+
+        public async Task<Response<bool>> SaveInternalInvoice(string type, string code, string currentCycle, decimal totalPrice, List<GetQueryTicket5_1_2ResponseDto>? tickets)
+        {
+            var response = new Response<bool>();            
+            try
+            {
+                using var context = new SqlCoreContext();
+                var cycleCode = "CP_" + DateTime.Now.Month.ToString("D2") + "_" + DateTime.Now.Year;
+                var productionClosure = await context.ProductionClosures.Where(x => x.Code.Contains(cycleCode)).FirstOrDefaultAsync();
+                if (productionClosure == null)
+                {
+
+                    DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1).AddDays(-1);
+                    await context.ProductionClosures.AddAsync(new ProductionClosure
+                    {
+                        EndDate = lastDayOfCurrentMonth,
+                        Code = code,
+                        Title = "Cierre de Producción " + DateTime.Now.Month.ToString("D2") + " - " + DateTime.Now.Year,
+                        Observations = ""
+                    });
+                }
+                else
+                {
+                    if (productionClosure.EndDate < DateTime.Now)
+                    {
+                        if (DateTime.Now.Month == 12)
+                        {
+                            code = "CP_" + (1).ToString("D2") + "_" + (DateTime.Now.Year + 1);
+                            var nextProductionClosureExistent = await context.ProductionClosures.Where(x => x.Code.Contains(code)).FirstOrDefaultAsync();
+                            if (nextProductionClosureExistent == null)
+                            {
+                                DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year + 1, 1, 1).AddMonths(1).AddDays(-1);
+                                await context.ProductionClosures.AddAsync(new ProductionClosure
+                                {
+                                    EndDate = lastDayOfCurrentMonth,
+                                    Code = code,
+                                    Title = "Cierre de Producción " + (1).ToString("D2") + " - " + DateTime.Today.Year + 1,
+                                    Observations = ""
+                                });
+                            }
+                        }
+                        else
+                        {
+                            code = "CP_" + (DateTime.Now.Month + 1).ToString("D2") + "_" + DateTime.Now.Year;
+                            var nextProductionClosureExistent = await context.ProductionClosures.Where(x => x.Code.Contains(code)).FirstOrDefaultAsync();
+                            if (nextProductionClosureExistent == null)
+                            {
+                                DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1).AddDays(-1);
+                                await context.ProductionClosures.AddAsync(new ProductionClosure
+                                {
+                                    EndDate = lastDayOfCurrentMonth,
+                                    Code = code,
+                                    Title = "Cierre de Producción " + (DateTime.Now.Month + 1).ToString("D2") + " - " + DateTime.Now.Year,
+                                    Observations = ""
+                                });
+                            }
+                        }
+                    }
+                }
+
+                var internalInvoice = await context.InternalInvoices
+                    .Where(x => x.Code == code && x.Cycle == currentCycle && x.Type == type)
+                    .Include(x => x.InternalInvoiceDetails)
+                    .FirstOrDefaultAsync();
+                decimal? totalPrice1 = 0;
+                if (internalInvoice != null)
+                {
+                    foreach (var details in internalInvoice.InternalInvoiceDetails)
+                    {
+                        context.InternalInvoiceDetails.Remove(details);
+                    }
+                    internalInvoice.InternalInvoiceDetails = new List<InternalInvoiceDetail>();
+                    foreach (var ticket in tickets)
+                    {
+                        totalPrice1 += ticket.Price;
+                        var t = await context.Tickets.Where(x => x.Id == ticket.IdTicket).FirstOrDefaultAsync();
+                        var quality = "";
+                        switch (type.Trim())
+                        {
+                            case "RP": quality = t.Quality; break;
+                            case "DI": quality = t.QualityTypist; break;
+                            case "TR": quality = t.QualityTranslator; break;
+                            case "RF": quality = t.Quality; break;
+                        }
+                        var newInternalInvoiceDetails = new InternalInvoiceDetail
+                        {
+                            IdTicket = ticket.IdTicket,
+                            IsComplement = ticket.IsComplement,
+                            Quality = quality,
+                            Price = ticket.Price,
+                        };
+                        internalInvoice.InternalInvoiceDetails.Add(newInternalInvoiceDetails);
+                    }
+                    internalInvoice.TotalPrice = totalPrice1;
+                    context.InternalInvoices.Update(internalInvoice);
+                }
+                else
+                {
+                    var newInternalInvoice = new InternalInvoice();
+                    newInternalInvoice.InternalInvoiceDetails = new List<InternalInvoiceDetail>();
+                    newInternalInvoice.Code = code.Trim();
+                    newInternalInvoice.Cycle = cycleCode;
+                    newInternalInvoice.Type = type;
+                    newInternalInvoice.Sended = false;
+                    foreach (var ticket in tickets)
+                    {
+                        totalPrice1 += ticket.Price;
+                        var t = await context.Tickets.Where(x => x.Id == ticket.IdTicket).FirstOrDefaultAsync();
+                        var quality = "";
+                        switch (type.Trim())
+                        {
+                            case "RP": quality = t.Quality; break;
+                            case "DI": quality = t.QualityTypist; break;
+                            case "TR": quality = t.QualityTranslator; break;
+                            case "RF": quality = t.Quality; break;
+                        }
+                        var newInternalInvoiceDetails = new InternalInvoiceDetail
+                        {
+                            IdTicket = ticket.IdTicket,
+                            IsComplement = ticket.IsComplement,
+                            Quality = quality,
+                            Price = ticket.Price,
+                        };
+                        newInternalInvoice.InternalInvoiceDetails.Add(newInternalInvoiceDetails);
+                    }
+
+                    newInternalInvoice.TotalPrice = totalPrice1;
+                    await context.InternalInvoices.AddAsync(newInternalInvoice);
+                }
+                await context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                //response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+        private int GetFlagDate(DateTime? expireDate)
+        {
+            if (!expireDate.HasValue)
+            {
+                throw new ArgumentNullException(nameof(expireDate), "expireDate es null");
+            }
+
+            DateTime currentDate = DateTime.Now.Date;
+            DateTime targetDate = expireDate.Value.Date;
+
+            int difference = (targetDate - currentDate).Days;
+
+            if (difference > 2)
+            {
+                return 0;
+            }
+            else if (difference >= 0)
+            {
+                return 1;
+            }
+            else
+            {
+                return 2;
+            }
+        }
+
+        public async Task<Response<bool>> ReportEmployee(int idUser, string code, string type, string cycle)
+        {
+            var response = new Response<bool>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var user = await context.UserLogins.Where(x => x.Id == idUser).Include(x => x.IdEmployeeNavigation).FirstOrDefaultAsync();
+                var employee = await context.Personals
+                    .Where(x => x.Type == type && x.Code == code)
+                    .Include(x => x.IdEmployeeNavigation)
+                    .FirstOrDefaultAsync();
+                if(user != null && employee != null)
+                {
+                    var emailDataDto = new EmailDataDTO();
+                    emailDataDto.Parameters = new List<string>();
+                    emailDataDto.Attachments = new List<AttachmentDto>();
+                    var name = "";
+                    var typeStr = "";
+                    emailDataDto.EmailKey = "DRR_WORKFLOW_ESP_0063";
+                    switch (type)
+                    {
+                        case "RP": typeStr = "Reportero"; break;
+                        case "DI": typeStr = "Digitador"; break;
+                        case "TR": typeStr = "Traductor"; break;
+                        case "RF": typeStr = "Referencista"; break;
+                    }
+                    name = code + " || " + employee.IdEmployeeNavigation.FirstName + " " + employee.IdEmployeeNavigation.LastName;
+                    emailDataDto.Subject = "PRUEBA_Vale de Comisión " + typeStr + " " + name + " | " + cycle;
+
+                    var debug = await context.Parameters.Where(x => x.Key == "DEBUG").FirstOrDefaultAsync();
+                    if (debug != null && debug.Flag == true)
+                    {
+                        
+                        emailDataDto.From = "diego.rodriguez@del-risco.com";//user.IdEmployeeNavigation.Email;
+                        emailDataDto.UserName = "diego.rodriguez@del-risco.com";//user.IdEmployeeNavigation.Email;
+                        emailDataDto.Password = "w*@JHCr7mH";// user.EmailPassword;
+                        emailDataDto.To = new List<string>
+                        {
+                            //"crodriguez@del-risco.com",
+                            "jfernandez@del-risco.com"
+                        };
+                        emailDataDto.CC = new List<string>
+                        {
+                            "diego.rodriguez@del-risco.com",
+                             //user.IdEmployeeNavigation.Email,
+                            // "crc@del-risco.com"
+                        };
+
+                    }
+                    else
+                    {
+                        emailDataDto.From = user.IdEmployeeNavigation.Email;
+                        emailDataDto.UserName = user.IdEmployeeNavigation.Email;
+                        emailDataDto.Password = user.EmailPassword;
+                        emailDataDto.To = new List<string>
+                        {
+                            employee.IdEmployeeNavigation.Email
+                            
+                        };
+                        emailDataDto.CC = new List<string>
+                        {
+                            "crodriguez@del-risco.com",
+                            "eduardo.delacruz@del-risco.com"
+                        };
+                    }
+
+                    string fileFormat = "{0}_{1}.{2}";
+                    //string report = language == "I" ? "EMPRESAS/F8-EMPRESAS-EN" : "EMPRESAS/F8-EMPRESAS-ES";
+                    string report = "COMISION_EMPLEADOS";
+                    var reportRenderType = StaticFunctions.GetReportRenderType("excel");
+                    var extension = StaticFunctions.FileExtension(reportRenderType);
+                    var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                    var dictionary = new Dictionary<string, string>
+                {
+                     { "code", code },
+                     { "type", type },
+                     { "cycle", cycle },
+                };
+
+                    var file = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary);
+                    var fileDto = new GetFileResponseDto
+                    {
+                        File = file,
+                        ContentType = contentType,
+                        Name = string.Format(fileFormat, code, (employee.IdEmployeeNavigation.FirstName + " " + employee.IdEmployeeNavigation.LastName), extension)
+                    };
+                    var attachment = new AttachmentDto();
+                    attachment.FileName = fileDto.Name+"xlsx";
+                    attachment.Content = Convert.ToBase64String(fileDto.File);
+                    emailDataDto.Attachments.Add(attachment);
+                    emailDataDto.IsBodyHTML = true;
+                    emailDataDto.Parameters.Add(typeStr + " " + name); //userFrom.IdEmployeeNavigation.FirstName + " " + userFrom.IdEmployeeNavigation.LastName
+                    emailDataDto.Parameters.Add("Cecilia Rodriguez");
+                    emailDataDto.Parameters.Add("crodriguez@del-risco.com");
+                    emailDataDto.BodyHTML = emailDataDto.IsBodyHTML ? await GetBodyHtml(emailDataDto) : emailDataDto.BodyHTML;
+                    _logger.LogInformation(JsonConvert.SerializeObject(emailDataDto));
+                    await context.SaveChangesAsync();
+                    var result = await _mailSender.SendMailAsync(_mapper.Map<EmailValues>(emailDataDto));
+
+                    var emailHistory = _mapper.Map<EmailHistory>(emailDataDto);
+                    emailHistory.Success = result;
+                    response.Data = await _emailHistoryDomain.AddAsync(emailHistory);
+                }
+               
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+        private async Task<string> GetBodyHtml(EmailDataDTO emailDataDto)
+        {
+            var emailConfiguration = await _emailConfigurationDomain.GetByNameAsync(emailDataDto.EmailKey);
+
+            var emailConfigurationFooter = await _emailConfigurationDomain.GetByNameAsync(Constants.DRR_WORKFLOW_FOOTER);
+            var stringBody = await _mailFormatter.GetEmailBody(emailConfiguration.Name, emailConfiguration.Value, emailDataDto.Parameters, emailDataDto.Table);
+            return stringBody.Replace(Constants.FOOTER, emailConfiguration.FlagFooter.Value ? emailConfigurationFooter.Value : string.Empty);
+
+        }
     }
 }
