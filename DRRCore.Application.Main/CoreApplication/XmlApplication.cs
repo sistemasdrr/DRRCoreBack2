@@ -1813,9 +1813,9 @@ namespace DRRCore.Application.Main.CoreApplication
 
                     //General_Information
                     if (companyInfoGeneral != null &&
-                        !companyInfoGeneral.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TIgeneral.IsNullOrEmpty() ||
+                        (!companyInfoGeneral.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TIgeneral.IsNullOrEmpty() ||
                         company.IdReputation != null ||
-                        !company.TraductionCompanies.FirstOrDefault().TEreputation.IsNullOrEmpty())
+                        !company.TraductionCompanies.FirstOrDefault().TEreputation.IsNullOrEmpty()))
                         {
                         XmlElement generalInfoElement = xmlDoc.CreateElement("General_Information");
                         rootElement.AppendChild(generalInfoElement);

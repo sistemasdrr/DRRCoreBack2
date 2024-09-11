@@ -61,7 +61,7 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<bool>> FinishTicketObservation(int idTicketObservation, string? conclusion, bool dr, bool ag, bool cl);
         Task<Response<List<string>>> GetOtherUserCode(int idUser);
         Task<Response<List<GetTicketHistoryResponseDto>>> getCountAsignation();
-        Task<Response<bool>> TicketToDispatch(int idTicketHistory,int idTicket);
+        Task<Response<bool>> TicketToDispatch(int idTicketHistory,int idTicket,string quality, string qualityTranslator, string qualityTypist);
         Task<Response<string>> GetSupervisorTicket(int idTicket);
         Task<Response<bool>> DeleteTicketHistoryById(int idTicket);
         Task<Response<GetFileDto>> DownloadZipByIdTicket(int idTicket);
@@ -72,6 +72,6 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<string>> GetNumerationRefCom();
 
         Task<Response<bool>> SendComplementRefCom(int idUser, int idTicketHistory, string asignedTo, string numOrder, string message);
-
+        Task<Response<bool>?> ConfirmAgentHistory(int idTicketHistory);
     }
 }

@@ -763,6 +763,7 @@ namespace DRRCore.Application.Main.CoreApplication
             try
             {
                 var list = await _providerDomain.GetProvidersByIdCompany(idCompany);
+
                 if (list == null)
                 {
                     response.IsSuccess = false;
@@ -771,14 +772,38 @@ namespace DRRCore.Application.Main.CoreApplication
                     return response;
                 }
                 using var context = new SqlCoreContext();
+
+                var company = await context.Companies.Where(x => x.Id == idCompany).FirstOrDefaultAsync();
+               
+                var newList = new List<GetListProviderResponseDto>();
                 foreach (var item in list)
                 {
+                    
+                    var order = 0;
                     var ticket = new Ticket();
                     if (item.IdTicket != null)
                     {
                         ticket = await context.Tickets.Where(x => x.Id == item.IdTicket).FirstOrDefaultAsync();
                     }
-                    response.Data.Add(new GetListProviderResponseDto
+                    if(item.IdCountry==company.IdCountry && item.Qualification=="Dió referencia")
+                    {
+                        order = 1;
+                    }else if (item.IdCountry == company.IdCountry && item.Qualification != "Dió referencia")
+                    {
+                        order = 2;
+                    }else if (item.IdCountry != company.IdCountry && item.Qualification == "Dió referencia")
+                    {
+                        order = 3;
+                    }
+                    else if (item.IdCountry != company.IdCountry && item.Qualification != "Dió referencia")
+                    {
+                        order = 4;
+                    }
+                    else
+                    {
+                        order = 5;
+                    }
+                    var obj = new GetListProviderResponseDto
                     {
                         Id = item.Id,
                         IdCompany = item.IdCompany,
@@ -797,9 +822,9 @@ namespace DRRCore.Application.Main.CoreApplication
                         MaximumAmount = item.MaximumAmount,
                         MaximumAmountEng = item.MaximumAmountEng,
                         ClientSince = item.ClientSince,
-                        ClientSinceEng  = item.ClientSinceEng,
+                        ClientSinceEng = item.ClientSinceEng,
                         Compliance = item.Compliance,
-                        ComplianceEng  = item.ComplianceEng,
+                        ComplianceEng = item.ComplianceEng,
                         IdCurrency = item.IdCurrency,
                         ReferentCommentary = item.ReferentCommentary,
                         Telephone = item.Telephone,
@@ -810,10 +835,15 @@ namespace DRRCore.Application.Main.CoreApplication
                         ProductsTheySell = item.ProductsTheySell,
                         ProductsTheySellEng = item.ProductsTheySellEng,
                         ReferentName = item.ReferentName,
+                        Order = order
 
-                    });
+                    };
+                    newList.Add(obj);
+                    
                 }
-                
+                newList = newList.OrderBy(x => x.Order).ToList();
+                response.Data=newList;
+
             }
             catch (Exception ex)
             {
@@ -1656,6 +1686,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     _logger.LogError(response.Message);
                     return response;
                 }
+              
                 if (obj.Id == 0)
                 {
                     var newImportAndExport = _mapper.Map<ImportsAndExport>(obj);
@@ -1717,12 +1748,14 @@ namespace DRRCore.Application.Main.CoreApplication
                 if(type == "I")
                 {
                     var list = await _importsAndExportsDomain.GetImports(idCompany);
+                    list=list.OrderByDescending(x => x.Year).ToList();
                     response.Data = _mapper.Map<List<GetImportsAndExportResponseDto>>(list);
 
                 }
                 else if(type == "E") 
                 {
                     var list = await _importsAndExportsDomain.GetExports(idCompany);
+                    list = list.OrderByDescending(x => x.Year).ToList();
                     response.Data = _mapper.Map<List<GetImportsAndExportResponseDto>>(list);
                 }
             }

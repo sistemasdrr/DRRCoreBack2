@@ -1811,19 +1811,17 @@ namespace DRRCore.Application.Main.CoreApplication
                     {
                         emailDataDto.EmailKey = "DRR_WORKFLOW_ESP_0050";
                         emailDataDto.BeAuthenticated = true;
-                        emailDataDto.From = "diego.rodriguez@del-risco.com";//user.IdEmployeeNavigation.Email;
-                        emailDataDto.UserName = "diego.rodriguez@del-risco.com"; //user.IdEmployeeNavigation.Email;
-                        emailDataDto.Password = "w*@JHCr7mH";  // user.EmailPassword;
+                        emailDataDto.From = user.IdEmployeeNavigation.Email;
+                        emailDataDto.UserName = user.IdEmployeeNavigation.Email;
+                        emailDataDto.Password = user.EmailPassword;
                         emailDataDto.To = new List<string>
-                                                {
-                                                    "jfernandez@del-risco.com",
-                                                    //userLoginTo.IdEmployeeNavigation.Email
+                                                {                                                  
+                                                   userLoginTo.IdEmployeeNavigation.Email
                                                 };
                         emailDataDto.CC = new List<string>
                                                 {
                                                     "diego.rodriguez@del-risco.com",
-                                                    //user.IdEmployeeNavigation.Email,
-                                                    // "crc@del-risco.com"
+                                                    user.IdEmployeeNavigation.Email                                                  
                                                 };
                         emailDataDto.Subject = "Alerta de Informe";
                         emailDataDto.IsBodyHTML = true;
@@ -2235,7 +2233,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 else
                 {
                     var ticketHistories = await context.TicketHistories
-                    .Where(x => x.UserTo == idUser && x.ShippingDate != null && x.Flag == true && x.AsignedTo.Contains(code) && x.IdStatusTicket != 15 && x.Cycle.Contains(cycle) && (x.AsignationType == "RP" || x.AsignationType == "DI" || x.AsignationType == "TR") && x.AsignedTo.Contains("CR") == false)
+                    .Where(x => x.UserTo == idUser && x.ShippingDate != null && x.Flag == true && x.AsignedTo.Contains(code) && x.IdStatusTicket != 15 && x.Cycle.Contains(cycle) && (x.AsignationType == "RP" || x.AsignationType == "DI" || x.AsignationType == "TR"|| x.AsignationType == "AG") && x.AsignedTo.Contains("CR") == false)
                     .Include(x => x.IdStatusTicketNavigation)
                     .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCountryNavigation)
                     .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCompanyNavigation).ThenInclude(x => x.IdCountryNavigation)
@@ -2256,7 +2254,7 @@ namespace DRRCore.Application.Main.CoreApplication
                             if (item1.AsignationType == "RP")
                             {
                                 var billingPersonal = await context.BillinPersonals.Where(x => x.Code.Trim() == item1.AsignedTo.Trim() && x.Quality.Contains((item1.IdTicketNavigation.Quality.IsNullOrEmpty() == false ? item1.IdTicketNavigation.Quality.Trim() : "")) && x.ReportType == item1.IdTicketNavigation.ReportType.Trim()).FirstOrDefaultAsync();
-                                if (billingPersonal != null && billingPersonal.Commission == false && billingPersonal.Amount != null)
+                                if (billingPersonal != null && billingPersonal.Commission==true && billingPersonal.Amount != null)
                                 {
                                     amount = (decimal)billingPersonal.Amount;
                                 }
@@ -2264,7 +2262,7 @@ namespace DRRCore.Application.Main.CoreApplication
                             else if (item1.AsignationType == "DI")
                             {
                                 var billingPersonal = await context.BillinPersonals.Where(x => x.Code.Trim() == item1.AsignedTo.Trim() && x.Quality.Contains((item1.IdTicketNavigation.QualityTypist.IsNullOrEmpty() == false ? item1.IdTicketNavigation.QualityTypist.Trim() : "")) && x.ReportType == item1.IdTicketNavigation.ReportType.Trim()).FirstOrDefaultAsync();
-                                if (billingPersonal != null && billingPersonal.Commission == false && billingPersonal.Amount != null)
+                                if (billingPersonal != null && billingPersonal.Commission==true && billingPersonal.Amount != null)
                                 {
                                     amount = (decimal)billingPersonal.Amount;
                                 }
@@ -2272,7 +2270,7 @@ namespace DRRCore.Application.Main.CoreApplication
                             else if (item1.AsignationType == "TR")
                             {
                                 var billingPersonal = await context.BillinPersonals.Where(x => x.Code.Trim() == item1.AsignedTo.Trim() && x.Quality.Contains((item1.IdTicketNavigation.QualityTranslator.IsNullOrEmpty() == false ? item1.IdTicketNavigation.QualityTranslator.Trim() : "")) && x.ReportType == item1.IdTicketNavigation.ReportType.Trim()).FirstOrDefaultAsync();
-                                if (billingPersonal != null && billingPersonal.Commission == false && billingPersonal.Amount != null)
+                                if (billingPersonal != null && billingPersonal.Commission == true && billingPersonal.Amount != null)
                                 {
                                     amount = (decimal)billingPersonal.Amount;
                                 }

@@ -1192,22 +1192,23 @@ namespace DRRCore.Application.Main.CoreApplication
                     .Include(x => x.IdEmployeeNavigation.Personals)
                     .Where(x => x.Id == int.Parse(userTo)).FirstOrDefaultAsync();
 
-                var list = await context.TicketHistories
-                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdSubscriberNavigation).ThenInclude(x => x.IdCountryNavigation)
-                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdContinentNavigation)
-                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCompanyNavigation)
-                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCompanyNavigation).ThenInclude(x => x.IdCountryNavigation).ThenInclude(x => x.IdContinentNavigation)
-                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdPersonNavigation).ThenInclude(x => x.IdCountryNavigation).ThenInclude(x => x.IdContinentNavigation)
-                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.TicketAssignation).ThenInclude(x => x.IdEmployeeNavigation).ThenInclude(x => x.UserLogins)
-                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCountryNavigation)
-                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdStatusTicketNavigation)
-                    .Include(x => x.IdStatusTicketNavigation)
-                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.TicketQuery)
-                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.TicketFiles)
-                    .Include(x => x.IdTicketNavigation.TicketHistories.OrderByDescending(x => x.Id)).Where(x => x.Enable == true)
-                    .OrderByDescending(x => x.IdTicketNavigation.OrderDate)
-                    .Where(x => x.UserTo == userTo && x.Flag == false && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Despachado && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Observado && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Rechazado)
-                        .ToListAsync();
+                   var  list = await context.TicketHistories
+                       .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdSubscriberNavigation).ThenInclude(x => x.IdCountryNavigation)
+                       .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdContinentNavigation)
+                       .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCompanyNavigation)
+                       .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCompanyNavigation).ThenInclude(x => x.IdCountryNavigation).ThenInclude(x => x.IdContinentNavigation)
+                       .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdPersonNavigation).ThenInclude(x => x.IdCountryNavigation).ThenInclude(x => x.IdContinentNavigation)
+                       .Include(x => x.IdTicketNavigation).ThenInclude(x => x.TicketAssignation).ThenInclude(x => x.IdEmployeeNavigation).ThenInclude(x => x.UserLogins)
+                       .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCountryNavigation)
+                       .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdStatusTicketNavigation)
+                       .Include(x => x.IdStatusTicketNavigation)
+                       .Include(x => x.IdTicketNavigation).ThenInclude(x => x.TicketQuery)
+                       .Include(x => x.IdTicketNavigation).ThenInclude(x => x.TicketFiles)
+                       .Include(x => x.IdTicketNavigation.TicketHistories.OrderByDescending(x => x.Id)).Where(x => x.Enable == true)
+                       .OrderByDescending(x => x.IdTicketNavigation.OrderDate)
+                       .Where(x => x.UserTo == userTo && x.Flag == false && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Despachado && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Observado && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Rechazado)
+                           .ToListAsync();
+                
                 if (list != null)
                 {
                    
@@ -2268,8 +2269,8 @@ namespace DRRCore.Application.Main.CoreApplication
                                                         emailDataDto.CC = new List<string>
                                                         {
                                                             "diego.rodriguez@del-risco.com",
-                                                            userFrom.IdEmployeeNavigation.Email,
-                                                            // "crc@del-risco.com"
+                                                            userFrom.IdEmployeeNavigation.Email
+                                                           
                                                         };
                                                         emailDataDto.Subject = "PRUEBA_" + ticket.ReportType + ": " + (numeration != null ? numeration.Number : 1) + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureType + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
                                                     }
@@ -2292,8 +2293,8 @@ namespace DRRCore.Application.Main.CoreApplication
                                                     }
 
                                                     emailDataDto.IsBodyHTML = true;
-                                                    emailDataDto.Parameters.Add("Cecilia Sayas"); //userFrom.IdEmployeeNavigation.FirstName + " " + userFrom.IdEmployeeNavigation.LastName
-                                                    emailDataDto.Parameters.Add("crc@del-risco.com");//userFrom.IdEmployeeNavigation.Email;
+                                                    emailDataDto.Parameters.Add(userFrom.IdEmployeeNavigation.FirstName + " " + userFrom.IdEmployeeNavigation.LastName); 
+                                                    emailDataDto.Parameters.Add(userFrom.IdEmployeeNavigation.Email);
                                                     emailDataDto.BodyHTML = emailDataDto.IsBodyHTML ? await GetBodyHtml(emailDataDto) : emailDataDto.BodyHTML;
                                                     _logger.LogInformation(JsonConvert.SerializeObject(emailDataDto));
 
@@ -2367,9 +2368,8 @@ namespace DRRCore.Application.Main.CoreApplication
                                                         emailDataDto.UserName = userFrom.IdEmployeeNavigation.Email;
                                                         emailDataDto.Password = userFrom.EmailPassword;
                                                         emailDataDto.To = new List<string>
-                                                        {
-                                                            "jfernandez@del-risco.com",
-                                                            //user.Email
+                                                        {                                                           
+                                                            user.Email
                                                         };
                                                         emailDataDto.CC = new List<string>
                                                         {
@@ -2385,23 +2385,21 @@ namespace DRRCore.Application.Main.CoreApplication
                                                         emailDataDto.UserName = userFrom.IdEmployeeNavigation.Email;
                                                         emailDataDto.Password = userFrom.EmailPassword;
                                                         emailDataDto.To = new List<string>
-                                                        {
-
-                                                            "jfernandez@del-risco.com",
-                                                            //user.Email
+                                                        {                                                          
+                                                            user.Email
                                                         };
                                                         emailDataDto.CC = new List<string>
                                                         {
                                                             "diego.rodriguez@del-risco.com",
                                                             userFrom.IdEmployeeNavigation.Email,
-                                                            "crc@del-risco.com"
+                                                           
                                                         };
                                                         emailDataDto.Subject = ticket.ReportType + ": " + (numeration != null ? numeration.Number : 1) + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureType + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
                                                     }
 
                                                     emailDataDto.IsBodyHTML = true;
-                                                    emailDataDto.Parameters.Add("Cecilia Sayas"); //userFrom.IdEmployeeNavigation.FirstName + " " + userFrom.IdEmployeeNavigation.LastName
-                                                    emailDataDto.Parameters.Add("crc@del-risco.com");//userFrom.IdEmployeeNavigation.Email;
+                                                    emailDataDto.Parameters.Add(userFrom.IdEmployeeNavigation.FirstName + " " + userFrom.IdEmployeeNavigation.LastName); 
+                                                    emailDataDto.Parameters.Add(userFrom.IdEmployeeNavigation.Email);
                                                     emailDataDto.BodyHTML = emailDataDto.IsBodyHTML ? await GetBodyHtml(emailDataDto) : emailDataDto.BodyHTML;
                                                     _logger.LogInformation(JsonConvert.SerializeObject(emailDataDto));
 
@@ -2575,7 +2573,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                             
                                             if (userFrom != null && user != null)
                                             {
-                                                emailDataDto.EmailKey = ticket.Language == "E" ? "DRR_WORKFLOW_ESP_0023" : "DRR_WORKFLOW_ENG_0023";
+                                                emailDataDto.EmailKey = "DRR_WORKFLOW_ESP_0023";
                                                 emailDataDto.BeAuthenticated = true;
 
                                                 var debug = await context.Parameters.Where(x => x.Key == "DEBUG").FirstOrDefaultAsync();
@@ -2592,7 +2590,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                     {
                                                         "diego.rodriguez@del-risco.com",
                                                         userFrom.IdEmployeeNavigation.Email,
-                                                        // "crc@del-risco.com"
+                                                      
                                                     };
                                                     emailDataDto.Subject = "PRUEBA_" + ticket.ReportType + ": " + (numeration != null ? numeration.Number : 1) + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureType + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
                                                 }
@@ -2616,8 +2614,8 @@ namespace DRRCore.Application.Main.CoreApplication
 
 
                                                 emailDataDto.IsBodyHTML = true;
-                                                emailDataDto.Parameters.Add("Cecilia Sayas"); //userFrom.IdEmployeeNavigation.FirstName + " " + userFrom.IdEmployeeNavigation.LastName
-                                                emailDataDto.Parameters.Add("crc@del-risco.com");//userFrom.IdEmployeeNavigation.Email;
+                                                emailDataDto.Parameters.Add(userFrom.IdEmployeeNavigation.FirstName + " " + userFrom.IdEmployeeNavigation.LastName); 
+                                                emailDataDto.Parameters.Add(userFrom.IdEmployeeNavigation.Email);
                                                 emailDataDto.BodyHTML = emailDataDto.IsBodyHTML ? await GetBodyHtml(emailDataDto) : emailDataDto.BodyHTML;
                                                 _logger.LogInformation(JsonConvert.SerializeObject(emailDataDto));
 
@@ -2657,7 +2655,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                             if (userFrom != null && agent != null)
                                             {
                                                 emailDataDto = new EmailDataDTO();
-                                                emailDataDto.EmailKey = ticket.Language == "E" ? "DRR_WORKFLOW_ESP_0023" : "DRR_WORKFLOW_ENG_0023";
+                                                emailDataDto.EmailKey = "DRR_WORKFLOW_ESP_0023";
                                                 emailDataDto.BeAuthenticated = true;
                                                 var debug = await context.Parameters.Where(x => x.Key == "DEBUG").FirstOrDefaultAsync();
                                                 if (debug != null && debug.Flag == true)
@@ -2667,19 +2665,15 @@ namespace DRRCore.Application.Main.CoreApplication
                                                     emailDataDto.Password = userFrom.EmailPassword;
                                                     emailDataDto.To = new List<string>();
 
-
-                                                    foreach (var email in emailAgents)
-                                                    {
-                                                        emailDataDto.To.Add(email);
-                                                    }
+                                                    emailDataDto.To.Add(userFrom.IdEmployeeNavigation.Email);
+                                                   
                                                     emailDataDto.CC = new List<string>
                                                     {
-                                                        "diego.rodriguez@del-risco.com"
-                                                        // "crc@del-risco.com"
+                                                        "diego.rodriguez@del-risco.com"                                                      
                                                     };
                                                     emailDataDto.Subject = "PRUEBA_" + ticket.ReportType + ": " + (numeration != null ? numeration.Number : 1) + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureType + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
-                                                    emailDataDto.Parameters.Add("CECILIA SAYAS");
-                                                    emailDataDto.Parameters.Add("crc@del-risco.com");
+                                                    emailDataDto.Parameters.Add(userFrom.IdEmployeeNavigation.FirstName + " " + userFrom.IdEmployeeNavigation.LastName);
+                                                    emailDataDto.Parameters.Add(userFrom.IdEmployeeNavigation.Email);
                                                 }
                                                 else
                                                 {
@@ -2694,11 +2688,11 @@ namespace DRRCore.Application.Main.CoreApplication
                                                     emailDataDto.CC = new List<string>
                                                     {
                                                         "diego.rodriguez@del-risco.com",
-                                                        "crc@del-risco.com"
+                                                        userFrom.IdEmployeeNavigation.Email
                                                     };
                                                     emailDataDto.Subject = ticket.ReportType + ": " + (numeration != null ? numeration.Number : 1) + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureType + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
                                                     emailDataDto.Parameters.Add(userFrom.IdEmployeeNavigation.FirstName + " " + userFrom.IdEmployeeNavigation.LastName); 
-                                                    emailDataDto.Parameters.Add("userFrom.IdEmployeeNavigation.Email");
+                                                    emailDataDto.Parameters.Add(userFrom.IdEmployeeNavigation.Email);
                                                 }
                                                 emailDataDto.IsBodyHTML = true;
                                                
@@ -3229,41 +3223,43 @@ namespace DRRCore.Application.Main.CoreApplication
                     {
                         if(debug.Flag == true)
                         {
-                            emailDataDto.From = "diego.rodriguez@del-risco.com";// ticket.RequestedName + "_" + ticket.ReportType + "_" + DateTime.Now.ToString("dd-MM-yyyy"); // userLogin.IdEmployeeNavigation.Email;
-                            emailDataDto.UserName = "diego.rodriguez@del-risco.com";//emailDataDto.From;
-                            emailDataDto.Password = "w*@JHCr7mH";//userLogin.EmailPassword;
+                            emailDataDto.Subject = "PRUEBA_DESPACHO_" + ticket.RequestedName + "_" + ticket.ReportType + "_" + DateTime.Now.ToString("dd-MM-yyyy");
+                            emailDataDto.From =  userLogin.IdEmployeeNavigation.Email;
+                            emailDataDto.UserName = emailDataDto.From;
+                            emailDataDto.Password = userLogin.EmailPassword;
                             emailDataDto.To = new List<string>
                             {
-                                "jfernandez@del-risco.com",
-                                "diego.rodriguez@del-risco.com"
+                                userLogin.IdEmployeeNavigation.Email
                                 //ticket.IdSubscriberNavigation.SendReportToEmail,
                             };
                             emailDataDto.CC = new List<string>
                             {
-                                //"crc@del-risco.com"
+                                "diego.rodriguez@del-risco.com",
+                                "myepez@del-risco.com"
                             };
                         }
                         else
                         {
+                            emailDataDto.Subject = ticket.RequestedName + "_" + ticket.ReportType + "_" + DateTime.Now.ToString("dd-MM-yyyy");
+
                             emailDataDto.From = userLogin.IdEmployeeNavigation.Email;
                             emailDataDto.UserName = emailDataDto.From;
                             emailDataDto.Password =userLogin.EmailPassword;
                             emailDataDto.To = new List<string>
-                            {
-                                "jfernandez@del-risco.com",
-                                "diego.rodriguez@del-risco.com",
+                            {                              
                                 ticket.IdSubscriberNavigation.SendReportToEmail,
                             };
                             emailDataDto.CC = new List<string>
                             {
-                                "crc@del-risco.com"
+                                "despacho@del-risco.com",
+                                "myepez@del-risco.com"
                             };
                         }
                     }
-                    emailDataDto.EmailKey = ticket.Language == "E" ? "DRR_WORKFLOW_ESP_0027" : "DRR_WORKFLOW_ENG_0027";
+                    emailDataDto.EmailKey = ticket.IdSubscriberNavigation.Language == "E" ? "DRR_WORKFLOW_ESP_0027" : "DRR_WORKFLOW_ENG_0027";
                     emailDataDto.BeAuthenticated = true;
                     
-                    emailDataDto.Subject = ticket.RequestedName + "_" + ticket.ReportType + "_" + DateTime.Now.ToString("dd-MM-yyyy");
+                  
                     emailDataDto.IsBodyHTML = true;
                     emailDataDto.Parameters.Add(ticket.IdSubscriberNavigation.Name);
                     emailDataDto.Parameters.Add(userLogin.IdEmployeeNavigation.FirstName + " " + userLogin.IdEmployeeNavigation.LastName);
@@ -3272,22 +3268,25 @@ namespace DRRCore.Application.Main.CoreApplication
                     _logger.LogInformation(JsonConvert.SerializeObject(emailDataDto));
 
                     //ADJUNTOS
-
-                    byte[] fileArray = DownloadF8((int)ticket.Id, ticket.Language, "pdf").Result.Data.File;
-                    var attachment = new AttachmentDto();
-                    attachment.FileName = emailDataDto.Subject+".pdf";
-                    attachment.Content = Convert.ToBase64String(fileArray);
-                    emailDataDto.Attachments.Add(attachment);
-
-                    string path = await UploadDispatchReport(idTicket, emailDataDto.Subject, fileArray,".pdf");
-                    await context.TicketFiles.AddAsync(new TicketFile
+                    //DESPACHO PDF
+                    if (ticket.IdSubscriberNavigation.ReportInPdf != null && ticket.IdSubscriberNavigation.ReportInPdf == true)
                     {
-                        IdTicket = idTicket,
-                        Path = path,
-                        Name = emailDataDto.Subject,
-                        Extension = ".pdf"
-                    });
+                        byte[] fileArray = DownloadF8((int)ticket.Id, ticket.Language, "pdf").Result.Data.File;
+                        var attachment = new AttachmentDto();
+                        attachment.FileName = emailDataDto.Subject + ".pdf";
+                        attachment.Content = Convert.ToBase64String(fileArray);
+                        emailDataDto.Attachments.Add(attachment);
 
+                        string path = await UploadDispatchReport(idTicket, emailDataDto.Subject, fileArray, ".pdf");
+                        await context.TicketFiles.AddAsync(new TicketFile
+                        {
+                            IdTicket = idTicket,
+                            Path = path,
+                            Name = emailDataDto.Subject,
+                            Extension = ".pdf"
+                        });
+                    }
+                    //DESPACHO word
                     if (ticket.IdSubscriberNavigation.ReportInWord != null && ticket.IdSubscriberNavigation.ReportInWord == true)
                     {
                         byte[] fileArrayWord = DownloadF8((int)ticket.Id, ticket.Language, "word").Result.Data.File;
@@ -3306,6 +3305,7 @@ namespace DRRCore.Application.Main.CoreApplication
                             Extension = ".docx"
                         });
                     }
+                    //DESPACHO XML
                     if (ticket.IdSubscriberNavigation.ReportInXml != null && ticket.IdSubscriberNavigation.ReportInXml == true)
                     {
                         byte[] fileArrayXml = _xmlApplication.GetXmlAtradiusAsync(idTicket).Result.Data.File;
@@ -3323,6 +3323,7 @@ namespace DRRCore.Application.Main.CoreApplication
                             Extension = ".xml"
                         });
                     }
+                    //DESPACHO XML CREDENDO
                     if (ticket.IdSubscriberNavigation.ReportInXmlCredendo != null && ticket.IdSubscriberNavigation.ReportInXmlCredendo == true)
                     {
                         byte[] fileArrayXmlCred = _xmlApplication.GetXmlCredendoAsync(idTicket).Result.Data.File;
@@ -3340,6 +3341,7 @@ namespace DRRCore.Application.Main.CoreApplication
                             Extension = ".xml"
                         });
                     }
+                    //DESPACHO EXCEL KSURE
                     if (ticket.IdSubscriberNavigation.ReportInExcel != null && ticket.IdSubscriberNavigation.ReportInExcel == true)
                     {
                         byte[] fileArrayExcel = GetExcel(idTicket).Result.Data.File;
@@ -3927,7 +3929,7 @@ namespace DRRCore.Application.Main.CoreApplication
                             .Include(x => x.IdCurrencyNavigation)
                             .OrderByDescending(x => x.Date).Take(2)
                             .ToListAsync();
-                        if (balance != null)
+                        if (balance != null && balance.Count>0)
                         {
                             sLDocument.SetCellValue("A57", "CURR_NM");
                             sLDocument.SetCellValue("B57", balance[0].IdCurrencyNavigation.Abreviation);
@@ -4668,7 +4670,7 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<bool>> TicketToDispatch(int idTicketHistory,int idTicket)
+        public async Task<Response<bool>> TicketToDispatch(int idTicketHistory,int idTicket,string quality,string qualityTranslator,string qualityTypist)
         {
             var response = new Response<bool>();
             try
@@ -4678,6 +4680,10 @@ namespace DRRCore.Application.Main.CoreApplication
                 if(ticket != null)
                 {
                     ticket.IdStatusTicket = 18;
+                    ticket.Quality =quality;
+                    ticket.QualityTranslator = qualityTranslator;
+                    ticket.QualityTypist = qualityTypist;
+
                     var ticketHistory = await context.TicketHistories.Where(x => x.Id == idTicketHistory).FirstOrDefaultAsync();
                     if(ticketHistory != null)
                     {
@@ -5188,6 +5194,40 @@ namespace DRRCore.Application.Main.CoreApplication
             catch(Exception ex)
             {
 
+            }
+            return response;
+        }
+
+        public async Task<Response<bool>?> ConfirmAgentHistory(int idTicketHistory)
+        {
+            var response = new Response<bool>();
+            using var context = new SqlCoreContext();
+            try
+            {
+                var ticketHistory = await context.TicketHistories.FindAsync(idTicketHistory);
+
+                if (ticketHistory != null)
+                {
+                    ticketHistory.Flag = true;
+                    ticketHistory.UpdateDate = DateTime.Now;
+                    ticketHistory.ShippingDate = DateTime.Now;
+
+                    context.TicketHistories.Update(ticketHistory);
+                    await context.SaveChangesAsync();
+                    response.Data = true;
+                    response.IsSuccess = true;
+                }
+                else
+                {
+                    throw new Exception("No se encontro en el historia del cupón");
+                }
+            }
+            catch ( Exception ex)
+            {
+                response.Data = false;
+                response.IsSuccess = false;
+                response.Message = ex.Message;
+            
             }
             return response;
         }

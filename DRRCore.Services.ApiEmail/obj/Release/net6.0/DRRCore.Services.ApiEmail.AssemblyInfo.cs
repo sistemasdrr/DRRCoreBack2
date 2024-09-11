@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DRRCore.Services.ApiEmail")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cb240cc90cc9cdb028245ebf8d084a2532f807c9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a325ac839c52a6bea3c03cde34403bf50abfc97e")]
 [assembly: System.Reflection.AssemblyProductAttribute("DRRCore.Services.ApiEmail")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DRRCore.Services.ApiEmail")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

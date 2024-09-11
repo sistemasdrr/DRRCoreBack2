@@ -5,6 +5,7 @@ using DRRCore.Domain.Entities.SQLContext;
 using DRRCore.Domain.Entities.SqlCoreContext;
 using DRRCore.Transversal.Common;
 using Microsoft.IdentityModel.Tokens;
+using System.Globalization;
 
 namespace DRRCore.Transversal.Mapper.Profiles.Core
 {
@@ -266,6 +267,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
           .ReverseMap();
             CreateMap<AddOrUpdateImportsAndExportsRequestDto, ImportsAndExport>()
                 .ForMember(dest => dest.IdCompany, opt => opt?.MapFrom(src => src.IdCompany == 0 ? null : src.IdCompany))
+                 .ForMember(dest => dest.Amount, opt => opt?.MapFrom(src => src.Amount.Value.ToString("#,#.00", CultureInfo.InvariantCulture)))
           .ReverseMap();
 
             CreateMap<CompanyPartner, GetCompanyPartnersResponseDto>()

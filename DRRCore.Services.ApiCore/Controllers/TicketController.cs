@@ -129,9 +129,9 @@ namespace DRRCore.Services.ApiCore.Controllers
         }
         [HttpGet()]
         [Route("TicketToDispatch")]
-        public async Task<ActionResult> TicketToDispatch(int idTicketHistory, int idTicket)
+        public async Task<ActionResult> TicketToDispatch(int idTicketHistory, int idTicket, string quality, string qualityTranslator, string qualityTypist)
         {
-            return Ok(await _ticketApplication.TicketToDispatch(idTicketHistory, idTicket));
+            return Ok(await _ticketApplication.TicketToDispatch(idTicketHistory, idTicket,quality,qualityTranslator,qualityTypist));
         }
         [HttpPost()]
         [Route("DispatchTicket")]
@@ -404,6 +404,12 @@ namespace DRRCore.Services.ApiCore.Controllers
         public async Task<IActionResult> SendComplementRefCom(int idUser, int idTicket, string asignedTo, string numOrder, string message)
         {
             return Ok(await _ticketApplication.SendComplementRefCom(idUser, idTicket, asignedTo, numOrder, message));
+        }
+        [HttpPost()]
+        [Route("ConfirmAgentHistory")]
+        public async Task<IActionResult> ConfirmAgentHistory( int idTicketHistory)
+        {
+            return Ok(await _ticketApplication.ConfirmAgentHistory(idTicketHistory));
         }
     }
 }
