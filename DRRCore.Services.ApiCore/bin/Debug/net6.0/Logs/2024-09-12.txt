@@ -1,0 +1,138 @@
+2024-09-12 10:40:56,427 [4] ERROR App  
+ Object reference not set to an instance of an object. 
+ 
+2024-09-12 10:41:02,967 [4] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-12 10:41:03,075 [6] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-12 10:41:54,115 [4] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-12 10:41:54,215 [4] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-12 10:42:22,547 [33] ERROR App  
+ Object reference not set to an instance of an object. 
+ 
+2024-09-12 10:42:28,670 [6] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-12 10:42:28,776 [6] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-12 10:45:57,027 [4] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-12 10:45:57,144 [6] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-12 10:47:43,625 [4] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-12 10:47:43,730 [6] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-12 11:36:43,486 [13] ERROR App  
+ No se pudo realizar la consulta 
+ 
+AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+CompanyBranch -> GetCompanyBranchResponseDto
+DRRCore.Domain.Entities.SqlCoreContext.CompanyBranch -> DRRCore.Application.DTO.Core.Response.GetCompanyBranchResponseDto
+
+Type Map configuration:
+CompanyBranch -> GetCompanyBranchResponseDto
+DRRCore.Domain.Entities.SqlCoreContext.CompanyBranch -> DRRCore.Application.DTO.Core.Response.GetCompanyBranchResponseDto
+
+Destination Member:
+Traductions
+
+ ---> AutoMapper.AutoMapperMappingException: Missing type map configuration or unsupported mapping.
+
+Mapping types:
+TraductionCompany -> TraductionDto
+DRRCore.Domain.Entities.SqlCoreContext.TraductionCompany -> DRRCore.Application.DTO.Core.Request.TraductionDto
+   at lambda_method1697(Closure , TraductionCompany , TraductionDto , ResolutionContext )
+   at lambda_method1696(Closure , Object , GetCompanyBranchResponseDto , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method1696(Closure , Object , GetCompanyBranchResponseDto , ResolutionContext )
+   at DRRCore.Application.Main.CoreApplication.CompanyApplication.GetCompanyBranchByIdCompany(Int32 idCompany) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\CompanyApplication.cs:line 1639
+2024-09-12 11:36:49,044 [4] ERROR App  
+ No se pudo realizar la consulta 
+ 
+AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+CompanyFinancialInformation -> GetCompanyFinancialInformationResponseDto
+DRRCore.Domain.Entities.SqlCoreContext.CompanyFinancialInformation -> DRRCore.Application.DTO.Core.Response.GetCompanyFinancialInformationResponseDto
+
+Type Map configuration:
+CompanyFinancialInformation -> GetCompanyFinancialInformationResponseDto
+DRRCore.Domain.Entities.SqlCoreContext.CompanyFinancialInformation -> DRRCore.Application.DTO.Core.Response.GetCompanyFinancialInformationResponseDto
+
+Destination Member:
+Traductions
+
+ ---> AutoMapper.AutoMapperMappingException: Missing type map configuration or unsupported mapping.
+
+Mapping types:
+TraductionCompany -> TraductionDto
+DRRCore.Domain.Entities.SqlCoreContext.TraductionCompany -> DRRCore.Application.DTO.Core.Request.TraductionDto
+   at lambda_method1697(Closure , TraductionCompany , TraductionDto , ResolutionContext )
+   at lambda_method1980(Closure , Object , GetCompanyFinancialInformationResponseDto , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method1980(Closure , Object , GetCompanyFinancialInformationResponseDto , ResolutionContext )
+   at DRRCore.Application.Main.CoreApplication.CompanyApplication.GetCompanyFinancialInformationByIdCompany(Int32 idCompany) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\CompanyApplication.cs:line 506
+2024-09-12 11:36:57,561 [23] ERROR App  
+ No se pudo realizar la consulta 
+ 
+AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+CompanySb -> GetCompanySbsResponseDto
+DRRCore.Domain.Entities.SqlCoreContext.CompanySb -> DRRCore.Application.DTO.Core.Response.GetCompanySbsResponseDto
+
+Type Map configuration:
+CompanySb -> GetCompanySbsResponseDto
+DRRCore.Domain.Entities.SqlCoreContext.CompanySb -> DRRCore.Application.DTO.Core.Response.GetCompanySbsResponseDto
+
+Destination Member:
+Traductions
+
+ ---> AutoMapper.AutoMapperMappingException: Missing type map configuration or unsupported mapping.
+
+Mapping types:
+TraductionCompany -> TraductionDto
+DRRCore.Domain.Entities.SqlCoreContext.TraductionCompany -> DRRCore.Application.DTO.Core.Request.TraductionDto
+   at lambda_method1697(Closure , TraductionCompany , TraductionDto , ResolutionContext )
+   at lambda_method2222(Closure , Object , GetCompanySbsResponseDto , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method2222(Closure , Object , GetCompanySbsResponseDto , ResolutionContext )
+   at DRRCore.Application.Main.CoreApplication.CompanyApplication.GetCompanySBSById(Int32 id) in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\CompanyApplication.cs:line 1205
+2024-09-12 11:37:11,605 [6] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-12 11:37:11,606 [6] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-09-12 11:37:13,482 [4] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-12 11:37:13,483 [4] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-09-12 11:37:49,818 [10] ERROR App  
+ Object reference not set to an instance of an object. 
+ 
+2024-09-12 11:37:55,866 [9] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-12 11:37:55,960 [4] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-12 11:44:27,790 [4] ERROR App  
+ Object reference not set to an instance of an object. 
+ 

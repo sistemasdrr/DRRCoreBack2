@@ -1442,7 +1442,7 @@ namespace DRRCore.Application.Main.MigrationApplication
                 {
                     var back = new CompanyBackground
                     {
-                        ConstitutionDate = StaticFunctions.VerifyDate(antecedentes.EmFecest),
+                        ConstitutionDate = antecedentes.EmFecest,
                         StartFunctionYear = antecedentes.EmIniope,
                         OperationDuration = antecedentes.EmDuraci,
                         RegisterPlace = antecedentes.EmRegen,

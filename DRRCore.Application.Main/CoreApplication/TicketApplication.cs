@@ -3768,7 +3768,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         sLDocument.SetCellValue("B31", "");
 
                         sLDocument.SetCellValue("A32", "FUND_DD");
-                        sLDocument.SetCellValue("B32", ticket.IdCompanyNavigation.CompanyBackgrounds.FirstOrDefault()?.ConstitutionDate?.ToString("yyyyMMdd") ?? "");
+                        sLDocument.SetCellValue("B32", ticket.IdCompanyNavigation.CompanyBackgrounds.FirstOrDefault()?.ConstitutionDate ?? "");
 
                         sLDocument.SetCellValue("A33", "PROD_1_NM");
                         sLDocument.SetCellValue("B33", "");
