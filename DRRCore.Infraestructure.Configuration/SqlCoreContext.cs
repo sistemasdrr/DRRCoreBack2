@@ -186,7 +186,7 @@ public partial class SqlCoreContext : DbContext
     public virtual DbSet<Subscriber> Subscribers { get; set; }
 
     public virtual DbSet<SubscriberCategory> SubscriberCategories { get; set; }
-
+    public virtual DbSet<SpecialAgentBalancePrice> SpecialAgentBalancePrices { get; set; }
     public virtual DbSet<SubscriberInvoice> SubscriberInvoices { get; set; }
 
     public virtual DbSet<SubscriberInvoiceDetail> SubscriberInvoiceDetails { get; set; }
@@ -225,8 +225,8 @@ public partial class SqlCoreContext : DbContext
         {
             optionsBuilder.UseSqlServer(
            "Data Source=200.58.123.184,14330;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
-            );
-         /*  "Data Source=SD-4154134-W;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
+           );
+          /* "Data Source=SD-4154134-W;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
             , sqlServerOptions => sqlServerOptions.EnableRetryOnFailure(
                 maxRetryCount: 18,
                 maxRetryDelay: TimeSpan.FromSeconds(60),
@@ -245,6 +245,7 @@ public partial class SqlCoreContext : DbContext
         modelBuilder.Entity<TicketsInCurrentMonthSP>().ToSqlQuery("EXEC SP_TicketsInCurrentMonth").HasNoKey();
         modelBuilder.Entity<CompanyShareholderSP>().ToSqlQuery("EXEC ShareholderCompany").HasNoKey();
 
+      
         modelBuilder.Entity<Agent>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Agent__3213E83FAB71BE05");
@@ -320,7 +321,45 @@ public partial class SqlCoreContext : DbContext
                 .HasForeignKey(d => d.IdCountry)
                 .HasConstraintName("FK__Agent__idCountry__59E54FE7");
         });
+        modelBuilder.Entity<SpecialAgentBalancePrice>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__SpecialA__3213E83F9CCF7533");
 
+            entity.ToTable("SpecialAgentBalancePrice");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.CreationDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("creationDate");
+            entity.Property(e => e.DeleteDate)
+                .HasColumnType("datetime")
+                .HasColumnName("deleteDate");
+            entity.Property(e => e.Description)
+                .HasMaxLength(60)
+                .IsUnicode(false)
+                .HasColumnName("description");
+            entity.Property(e => e.Enable)
+                .HasDefaultValueSql("((1))")
+                .HasColumnName("enable");
+            entity.Property(e => e.IdAgent).HasColumnName("idAgent");
+            entity.Property(e => e.Price)
+                .HasColumnType("decimal(10, 2)")
+                .HasColumnName("price");
+            entity.Property(e => e.Quality)
+                .HasMaxLength(1)
+                .IsUnicode(false)
+                .IsFixedLength()
+                .HasColumnName("quality");
+            entity.Property(e => e.UpdateDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("updateDate");
+
+            entity.HasOne(d => d.IdAgentNavigation).WithMany(p => p.SpecialAgentBalancePrices)
+                .HasForeignKey(d => d.IdAgent)
+                .HasConstraintName("FK__SpecialAg__idAge__5AC46587");
+        });
         modelBuilder.Entity<AgentInvoice>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__AgentInv__3213E83FA1227F51");

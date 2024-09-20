@@ -197,6 +197,8 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                 .ForMember(dest => dest.References, opt => opt?.MapFrom(src => GetReferencesValue(src)))
                   .ReverseMap();
             CreateMap<TicketHistory, GetListTicketResponseDto2>()
+                .ForMember(dest => dest.IsAgent, opt => opt.MapFrom(src =>  src.IdTicketNavigation.TicketHistories != null ? GetIsAgent(src.IdTicketNavigation.TicketHistories) : default))
+                .ForMember(dest => dest.AgentFrom, opt => opt.MapFrom(src => src.IdTicketNavigation.TicketHistories != null ? GetAgentFrom(src.IdTicketNavigation.TicketHistories) : default))
                 .ForMember(dest => dest.StatusFinalOwner, opt => opt.MapFrom(src => src.IdTicketNavigation.TicketHistories != null ? GetStatusFinalOwner(src.IdTicketNavigation.TicketHistories) : default))
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.IdTicket, opt => opt.MapFrom(src => src.IdTicket))
@@ -384,6 +386,24 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                     return string.Empty;
             }
         }
+        private bool GetIsAgent(ICollection<TicketHistory> ticketHistories)
+        {
+            return ticketHistories.Any(x => x.AsignedTo.StartsWith('A'));
+        }
+        private string GetAgentFrom(ICollection<TicketHistory> ticketHistories)
+        {
+           var histories= ticketHistories.Where(x => x.AsignedTo.StartsWith('A')).FirstOrDefault();
+
+            if (ticketHistories.Any(x => x.AsignedTo.StartsWith('A')))
+            {
+                return histories.AsignedTo;
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
+       
         private static int GetReferencesValue(TicketHistory ticketHistory)
         {
             if(ticketHistory.IdTicketNavigation.TicketHistories.Any(x => x.AsignationType.Contains("RF") == true))

@@ -1202,6 +1202,7 @@ namespace DRRCore.Application.Main.CoreApplication
                        .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCountryNavigation)
                        .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdStatusTicketNavigation)
                        .Include(x => x.IdStatusTicketNavigation)
+                       
                        .Include(x => x.IdTicketNavigation).ThenInclude(x => x.TicketQuery)
                        .Include(x => x.IdTicketNavigation).ThenInclude(x => x.TicketFiles)
                        .Include(x => x.IdTicketNavigation.TicketHistories.OrderByDescending(x => x.Id)).Where(x => x.Enable == true)
@@ -1215,6 +1216,23 @@ namespace DRRCore.Application.Main.CoreApplication
                     response.Data = _mapper.Map<List<GetListTicketResponseDto2>>(list);
                     foreach (var item in response.Data)
                     {
+
+                        if (item.IsAgent)
+                        {
+                            var getIdAgent =await context.Agents.Where(x => x.Code == item.AgentFrom).FirstOrDefaultAsync();
+
+                            var specialPriceAgents = await context.SpecialAgentBalancePrices.Where(x => x.IdAgent == getIdAgent.Id).ToListAsync();
+                            foreach (var specialPriceAgent in specialPriceAgents)
+                            {
+                                item.SpecialAgentBalancePrices.Add(new DTO.Core.Response.SpecialAgentBalancePrice
+                                {
+                                    Id=specialPriceAgent.Id,
+                                    Description=specialPriceAgent.Description
+                                });
+                            }
+                        }
+
+
                         item.OtherUserCode = new List<UserCode>();
                         var otherCodes = new List<UserCode>();
                         foreach (var item1 in user.IdEmployeeNavigation.Personals)
@@ -3223,7 +3241,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     {
                         if(debug.Flag == true)
                         {
-                            emailDataDto.Subject = "PRUEBA_DESPACHO_" + ticket.RequestedName + "_" + ticket.ReportType + "_" + DateTime.Now.ToString("dd-MM-yyyy");
+                            emailDataDto.Subject = "PRUEBA_DESPACHO_" +ticket.ReferenceNumber +"_" + ticket.RequestedName + "_" + ticket.ReportType + "_" + DateTime.Now.ToString("dd-MM-yyyy");
                             emailDataDto.From =  userLogin.IdEmployeeNavigation.Email;
                             emailDataDto.UserName = emailDataDto.From;
                             emailDataDto.Password = userLogin.EmailPassword;
@@ -3240,7 +3258,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         }
                         else
                         {
-                            emailDataDto.Subject = ticket.RequestedName + "_" + ticket.ReportType + "_" + DateTime.Now.ToString("dd-MM-yyyy");
+                            emailDataDto.Subject = ticket.ReferenceNumber+"_"+ticket.RequestedName + "_" + ticket.ReportType + "_" + DateTime.Now.ToString("dd-MM-yyyy");
 
                             emailDataDto.From = userLogin.IdEmployeeNavigation.Email;
                             emailDataDto.UserName = emailDataDto.From;
@@ -3418,7 +3436,7 @@ namespace DRRCore.Application.Main.CoreApplication
 
                     ticket.IdStatusTicket = (int?)TicketStatusEnum.Despachado;
                     ticket.DispatchtDate = DateTime.Now;
-                    ticket.DispatchedName = emailDataDto.Subject;
+                    ticket.DispatchedName = ticket.About=="E"?ticket.IdCompanyNavigation.Name:ticket.IdPersonNavigation.Fullname;
                     context.Tickets.Update(ticket);
 
                     if (ticket.IdSubscriberNavigation.FacturationType == "CC")

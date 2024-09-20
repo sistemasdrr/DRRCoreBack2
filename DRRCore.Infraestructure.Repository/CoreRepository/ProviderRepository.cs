@@ -59,9 +59,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                 var provider = await context.Providers.FindAsync(id);
                 if(provider != null)
                 {
-                    provider.Enable = false;
-                    provider.DeleteDate = DateTime.Now; 
-                    context.Providers.Update(provider);
+                    context.Providers.Remove(provider);   
                     await context.SaveChangesAsync();
                     return true;
                 }
@@ -114,7 +112,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
             try
             {
                 using var context = new SqlCoreContext();
-                var list = await context.Providers.Include(x => x.IdCountryNavigation).Where(x => x.IdCompany == idCompany && x.Enable == true && x.Flag == true).ToListAsync();
+                var list = await context.Providers.Include(x => x.IdCountryNavigation).Where(x => x.IdCompany == idCompany && x.Enable == true && x.Flag == true).OrderBy(x=>x.IdCountry).ToListAsync();
                 return list;
             }catch(Exception ex)
             {
