@@ -3063,7 +3063,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                     }
                                     if (item.Type == "SU")
                                     {
-                                        if (ticket.TicketHistories.Any(x =>x.AsignedTo!=null && x.AsignedTo.Contains("RC") && x.Flag == false))
+                                        if (ticket.TicketHistories.Any(x =>x.AsignedTo!=null && x.AsignedTo.Contains("RC") && x.Flag == false) && !item.ForceSupervisor)
                                         {
 
                                             string nameAssignedToRef = "SUPERVISAR_CR3";
