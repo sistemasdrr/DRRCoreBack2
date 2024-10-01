@@ -3,6 +3,7 @@ using AutoMapper;
 using CoreFtp;
 using DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml.Math;
+using DocumentFormat.OpenXml.Wordprocessing;
 using DRRCore.Application.DTO.Core.Request;
 using DRRCore.Application.DTO.Core.Response;
 using DRRCore.Application.DTO.Email;
@@ -5246,6 +5247,30 @@ namespace DRRCore.Application.Main.CoreApplication
                 response.IsSuccess = false;
                 response.Message = ex.Message;
             
+            }
+            return response;
+        }
+
+        public async Task<Response<List<GetSearchSituationResponseDto>>> GetNewSearchSituation(string about, string name, string form, int idCountry, bool haveReport, string filterBy)
+        {
+            var response = new Response<List<GetSearchSituationResponseDto>>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                if(about == "E")
+                {
+                    var companies = await _companyDomain.GetByNameAsync(name, form, idCountry, haveReport, filterBy);
+                    response.Data = _mapper.Map<List<GetSearchSituationResponseDto>>(companies);
+                }
+                else
+                {
+                    var peoples = await _personDomain.GetAllByAsync(name, form, idCountry, haveReport, filterBy); ;
+                    response.Data = _mapper.Map<List<GetSearchSituationResponseDto>>(peoples);
+                }
+            }catch(Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = ex.Message;
             }
             return response;
         }

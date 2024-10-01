@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DRRCore.Domain.Entities.SqlCoreContext;
 
-public partial class Provider: IEquatable<Provider>, IComparable<Provider>
+public partial class Provider
 {
     public int Id { get; set; }
 
@@ -80,16 +80,4 @@ public partial class Provider: IEquatable<Provider>, IComparable<Provider>
     public virtual Currency? IdCurrencyNavigation { get; set; }
 
     public virtual Person? IdPersonNavigation { get; set; }
-
-    public int CompareTo(Provider? other)
-    {
-        throw new NotImplementedException();
-    }
-
- 
-
-    public bool Equals(Provider? other)
-    {
-        throw new NotImplementedException();
-    }
 }

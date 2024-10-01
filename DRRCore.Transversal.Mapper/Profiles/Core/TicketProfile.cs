@@ -13,6 +13,34 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
     {
         public TicketProfile() {
 
+
+            
+            CreateMap<Company, GetSearchSituationResponseDto>()
+                   .ForMember(dest => dest.IdCompany, opt => opt?.MapFrom(src => src.Id))
+                   .ForMember(dest => dest.OldCode, opt => opt?.MapFrom(src => src.OldCode))
+                   .ForMember(dest => dest.Name, opt => opt?.MapFrom(src => src.Name))
+                   .ForMember(dest => dest.SocialName, opt => opt?.MapFrom(src => src.SocialName))
+                   .ForMember(dest => dest.TaxName, opt => opt?.MapFrom(src => src.TaxTypeName))
+                   .ForMember(dest => dest.TaxCode, opt => opt?.MapFrom(src => src.TaxTypeCode))
+                   .ForMember(dest => dest.Telephone, opt => opt?.MapFrom(src => src.Telephone))
+                   .ForMember(dest => dest.IdCountry, opt => opt?.MapFrom(src => src.IdCountry))
+                   .ForMember(dest => dest.Country, opt => opt?.MapFrom(src => src.IdCountryNavigation != null ? src.IdCountryNavigation.Name : ""))
+                   .ForMember(dest => dest.FlagCountry, opt => opt?.MapFrom(src => src.IdCountryNavigation != null ? src.IdCountryNavigation.FlagIso : "" ))
+                   .ReverseMap();
+
+            CreateMap<Person, GetSearchSituationResponseDto>()
+                   .ForMember(dest => dest.IdCompany, opt => opt?.MapFrom(src => src.Id))
+                   .ForMember(dest => dest.OldCode, opt => opt?.MapFrom(src => src.OldCode))
+                   .ForMember(dest => dest.Name, opt => opt?.MapFrom(src => src.Fullname))
+                   .ForMember(dest => dest.SocialName, opt => opt?.MapFrom(src => src.TradeName))
+                   .ForMember(dest => dest.TaxName, opt => opt?.MapFrom(src => src.TaxTypeName))
+                   .ForMember(dest => dest.TaxCode, opt => opt?.MapFrom(src => src.TaxTypeCode))
+                   .ForMember(dest => dest.Telephone, opt => opt?.MapFrom(src => src.Cellphone))
+                   .ForMember(dest => dest.IdCountry, opt => opt?.MapFrom(src => src.IdCountry))
+                   .ForMember(dest => dest.Country, opt => opt?.MapFrom(src => src.IdCountryNavigation != null ? src.IdCountryNavigation.Name : ""))
+                   .ForMember(dest => dest.FlagCountry, opt => opt?.MapFrom(src => src.IdCountryNavigation != null ? src.IdCountryNavigation.FlagIso : ""))
+                   .ReverseMap();
+
             CreateMap<AddOrUpdateTicketRequestDto, Ticket>()
                    .ForMember(dest => dest.OrderDate, opt => opt?.MapFrom(src => src.OrderDate))
                    .ForMember(dest => dest.ExpireDate, opt => opt?.MapFrom(src => src.ExpireDate))
@@ -448,4 +476,4 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
         }
       
     }
-}
+}                                                                                                                                                   

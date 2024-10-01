@@ -3454,5 +3454,30 @@ namespace DRRCore.Application.Main.MigrationApplication
                 return false;
             }
         }
+
+        public async Task<bool> arreglarNumeration()
+        {
+            try
+            {
+                using var context = new SqlCoreContext();
+                var companies = await context.Companies.Where(x => x.CompanyPartners.ToList().Count > 0).Include(x => x.CompanyPartners).ToListAsync();
+                foreach(var company in companies)
+                {
+                    var numeration = 1;
+                    foreach(var partner in company.CompanyPartners)
+                    {
+                        partner.Numeration = numeration;
+                        numeration++;
+                        context.CompanyPartners.Update(partner);
+                    }
+                    await context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }

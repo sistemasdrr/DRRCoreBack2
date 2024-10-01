@@ -179,6 +179,8 @@ public partial class SqlCoreContext : DbContext
 
     public virtual DbSet<SearchedName> SearchedNames { get; set; }
 
+    public virtual DbSet<SpecialAgentBalancePrice> SpecialAgentBalancePrices { get; set; }
+
     public virtual DbSet<StatusTicket> StatusTickets { get; set; }
 
     public virtual DbSet<StatusTicketObservation> StatusTicketObservations { get; set; }
@@ -186,7 +188,7 @@ public partial class SqlCoreContext : DbContext
     public virtual DbSet<Subscriber> Subscribers { get; set; }
 
     public virtual DbSet<SubscriberCategory> SubscriberCategories { get; set; }
-    public virtual DbSet<SpecialAgentBalancePrice> SpecialAgentBalancePrices { get; set; }
+
     public virtual DbSet<SubscriberInvoice> SubscriberInvoices { get; set; }
 
     public virtual DbSet<SubscriberInvoiceDetail> SubscriberInvoiceDetails { get; set; }
@@ -224,8 +226,8 @@ public partial class SqlCoreContext : DbContext
         if (!optionsBuilder.IsConfigured)
         {
             optionsBuilder.UseSqlServer(
-          // "Data Source=200.58.123.184,14330;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
-           "Data Source=SD-4154134-W;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
+          "Data Source=200.58.123.184,14330;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
+            // "Data Source=SD-4154134-W;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
             , sqlServerOptions => sqlServerOptions.EnableRetryOnFailure(
                 maxRetryCount: 18,
                 maxRetryDelay: TimeSpan.FromSeconds(60),
@@ -320,45 +322,7 @@ public partial class SqlCoreContext : DbContext
                 .HasForeignKey(d => d.IdCountry)
                 .HasConstraintName("FK__Agent__idCountry__59E54FE7");
         });
-        modelBuilder.Entity<SpecialAgentBalancePrice>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__SpecialA__3213E83F9CCF7533");
 
-            entity.ToTable("SpecialAgentBalancePrice");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.CreationDate)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime")
-                .HasColumnName("creationDate");
-            entity.Property(e => e.DeleteDate)
-                .HasColumnType("datetime")
-                .HasColumnName("deleteDate");
-            entity.Property(e => e.Description)
-                .HasMaxLength(60)
-                .IsUnicode(false)
-                .HasColumnName("description");
-            entity.Property(e => e.Enable)
-                .HasDefaultValueSql("((1))")
-                .HasColumnName("enable");
-            entity.Property(e => e.IdAgent).HasColumnName("idAgent");
-            entity.Property(e => e.Price)
-                .HasColumnType("decimal(10, 2)")
-                .HasColumnName("price");
-            entity.Property(e => e.Quality)
-                .HasMaxLength(1)
-                .IsUnicode(false)
-                .IsFixedLength()
-                .HasColumnName("quality");
-            entity.Property(e => e.UpdateDate)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime")
-                .HasColumnName("updateDate");
-
-            entity.HasOne(d => d.IdAgentNavigation).WithMany(p => p.SpecialAgentBalancePrices)
-                .HasForeignKey(d => d.IdAgent)
-                .HasConstraintName("FK__SpecialAg__idAge__5AC46587");
-        });
         modelBuilder.Entity<AgentInvoice>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__AgentInv__3213E83FA1227F51");
@@ -1111,7 +1075,8 @@ public partial class SqlCoreContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("background");
             entity.Property(e => e.ConstitutionDate)
-               .HasMaxLength(40)
+                .HasMaxLength(40)
+                .IsUnicode(false)
                 .HasColumnName("constitutionDate");
             entity.Property(e => e.CreationDate)
                 .HasDefaultValueSql("(getdate())")
@@ -1602,6 +1567,7 @@ public partial class SqlCoreContext : DbContext
             entity.Property(e => e.IdPerson).HasColumnName("idPerson");
             entity.Property(e => e.LastUpdateUser).HasColumnName("lastUpdateUser");
             entity.Property(e => e.MainExecutive).HasColumnName("mainExecutive");
+            entity.Property(e => e.Numeration).HasColumnName("numeration");
             entity.Property(e => e.Participation)
                 .HasColumnType("decimal(5, 2)")
                 .HasColumnName("participation");
@@ -1609,6 +1575,7 @@ public partial class SqlCoreContext : DbContext
                 .HasMaxLength(20)
                 .IsUnicode(false)
                 .HasColumnName("participationStr");
+            entity.Property(e => e.Print).HasColumnName("print");
             entity.Property(e => e.Profession)
                 .HasMaxLength(100)
                 .IsUnicode(false)
@@ -1791,7 +1758,9 @@ public partial class SqlCoreContext : DbContext
                 .HasMaxLength(20)
                 .IsUnicode(false)
                 .HasColumnName("participacionStr");
-            entity.Property(e => e.Participation).HasColumnName("participation");
+            entity.Property(e => e.Participation)
+                .HasColumnType("decimal(5, 2)")
+                .HasColumnName("participation");
             entity.Property(e => e.Relation)
                 .HasMaxLength(100)
                 .IsUnicode(false)
@@ -2761,8 +2730,9 @@ public partial class SqlCoreContext : DbContext
                 .HasColumnType("decimal(6, 2)")
                 .HasColumnName("price");
             entity.Property(e => e.Quality)
-            .HasMaxLength(2)
-            .HasColumnName("quality");
+                .HasMaxLength(2)
+                .IsUnicode(false)
+                .HasColumnName("quality");
             entity.Property(e => e.UpdateDate)
                 .HasColumnType("datetime")
                 .HasColumnName("updateDate");
@@ -4532,6 +4502,46 @@ public partial class SqlCoreContext : DbContext
             entity.HasOne(d => d.IdPersonNavigation).WithMany(p => p.SearchedNames)
                 .HasForeignKey(d => d.IdPerson)
                 .HasConstraintName("FK__SearchedN__idPer__5F691F13");
+        });
+
+        modelBuilder.Entity<SpecialAgentBalancePrice>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__SpecialA__3213E83F9CCF7533");
+
+            entity.ToTable("SpecialAgentBalancePrice");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.CreationDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("creationDate");
+            entity.Property(e => e.DeleteDate)
+                .HasColumnType("datetime")
+                .HasColumnName("deleteDate");
+            entity.Property(e => e.Description)
+                .HasMaxLength(60)
+                .IsUnicode(false)
+                .HasColumnName("description");
+            entity.Property(e => e.Enable)
+                .HasDefaultValueSql("((1))")
+                .HasColumnName("enable");
+            entity.Property(e => e.IdAgent).HasColumnName("idAgent");
+            entity.Property(e => e.Price)
+                .HasColumnType("decimal(10, 2)")
+                .HasColumnName("price");
+            entity.Property(e => e.Quality)
+                .HasMaxLength(1)
+                .IsUnicode(false)
+                .IsFixedLength()
+                .HasColumnName("quality");
+            entity.Property(e => e.UpdateDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("updateDate");
+
+            entity.HasOne(d => d.IdAgentNavigation).WithMany(p => p.SpecialAgentBalancePrices)
+                .HasForeignKey(d => d.IdAgent)
+                .HasConstraintName("FK__SpecialAg__idAge__5AC46587");
         });
 
         modelBuilder.Entity<StatusTicket>(entity =>

@@ -7,6 +7,7 @@
 
         public string? OldCode { get; set; }
         public string? Name { get; set; }
+        public string? SocialName { get; set; }
         public string? TaxName { get; set; }
         public string? TaxCode { get; set; }
         public string? Telephone { get; set; }

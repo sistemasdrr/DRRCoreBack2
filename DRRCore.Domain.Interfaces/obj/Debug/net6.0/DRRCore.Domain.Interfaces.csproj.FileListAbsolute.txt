@@ -57,3 +57,23 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Interfaces\obj\De
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Interfaces\obj\Debug\net6.0\ref\DRRCore.Domain.Interfaces.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Interfaces\obj\Debug\net6.0\DRRCore.Domain.Interfaces.sourcelink.json
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Interfaces\obj\Debug\net6.0\DRRCore..9169C1A4.Up2Date
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Interfaces\bin\Debug\net6.0\DRRCore.Domain.Interfaces.deps.json
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Interfaces\bin\Debug\net6.0\DRRCore.Domain.Interfaces.dll
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Interfaces\bin\Debug\net6.0\DRRCore.Domain.Interfaces.pdb
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Interfaces\bin\Debug\net6.0\DRRCore.Application.DTO.dll
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Interfaces\bin\Debug\net6.0\DRRCore.Domain.Entities.dll
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Interfaces\bin\Debug\net6.0\DRRCore.Transversal.Common.dll
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Interfaces\bin\Debug\net6.0\DRRCore.Application.DTO.pdb
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Interfaces\bin\Debug\net6.0\DRRCore.Domain.Entities.pdb
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Interfaces\bin\Debug\net6.0\DRRCore.Transversal.Common.pdb
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Interfaces\obj\Debug\net6.0\DRRCore.Domain.Interfaces.csproj.AssemblyReference.cache
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Interfaces\obj\Debug\net6.0\DRRCore.Domain.Interfaces.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Interfaces\obj\Debug\net6.0\DRRCore.Domain.Interfaces.AssemblyInfoInputs.cache
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Interfaces\obj\Debug\net6.0\DRRCore.Domain.Interfaces.AssemblyInfo.cs
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Interfaces\obj\Debug\net6.0\DRRCore.Domain.Interfaces.csproj.CoreCompileInputs.cache
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Interfaces\obj\Debug\net6.0\DRRCore.Domain.Interfaces.sourcelink.json
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Interfaces\obj\Debug\net6.0\DRRCore..9169C1A4.Up2Date
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Interfaces\obj\Debug\net6.0\DRRCore.Domain.Interfaces.dll
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Interfaces\obj\Debug\net6.0\refint\DRRCore.Domain.Interfaces.dll
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Interfaces\obj\Debug\net6.0\DRRCore.Domain.Interfaces.pdb
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Interfaces\obj\Debug\net6.0\ref\DRRCore.Domain.Interfaces.dll

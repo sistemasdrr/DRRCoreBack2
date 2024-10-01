@@ -77,6 +77,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
             CreateMap<Company, GetListCompanyResponseDto>()
                 .ForMember(dest => dest.Id, opt => opt?.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Name, opt => opt?.MapFrom(src => src.Name))
+                .ForMember(dest => dest.SocialName, opt => opt?.MapFrom(src => src.SocialName))
                  .ForMember(dest => dest.Code, opt => opt?.MapFrom(src => string.IsNullOrEmpty(src.OldCode) ? "N" + src.Id.ToString("D10") : src.OldCode))
                 .ForMember(dest => dest.CreditRisk, opt => opt?.MapFrom(src => src.IdCreditRiskNavigation!=null?src.IdCreditRiskNavigation.Identifier:string.Empty))
                 .ForMember(dest => dest.Language, opt => opt?.MapFrom(src => src.Language))
@@ -284,6 +285,8 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
             .ForMember(dest => dest.Nationality, opt => opt?.MapFrom(src => src.IdPersonNavigation.Nationality))
             .ForMember(dest => dest.BirthDate, opt => opt?.MapFrom(src => src.IdPersonNavigation.BirthDate))
             .ForMember(dest => dest.IdentificationDocument, opt => opt?.MapFrom(src => src.IdPersonNavigation.IdDocumentTypeNavigation.Abreviation + " - " + src.IdPersonNavigation.CodeDocumentType))
+            .ForMember(dest => dest.Numeration, opt => opt?.MapFrom(src => src.Numeration))
+            .ForMember(dest => dest.Print, opt => opt?.MapFrom(src => src.Print))
             .ForMember(dest => dest.Profession, opt => opt?.MapFrom(src => src.Profession))
             .ForMember(dest => dest.StartDate, opt => opt?.MapFrom(src => StaticFunctions.DateTimeToString(src.StartDate)))
       .ReverseMap();
@@ -302,6 +305,8 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
              .ForMember(dest => dest.IdCompany, opt => opt?.MapFrom(src => src.IdCompany == 0 ? null : src.IdCompany))
             .ForMember(dest => dest.IdPerson, opt => opt?.MapFrom(src => src.IdPerson == 0 ? null : src.IdPerson))
             .ForMember(dest => dest.Profession, opt => opt?.MapFrom(src => src.Profession))
+            .ForMember(dest => dest.Print, opt => opt?.MapFrom(src => src.Print))
+            .ForMember(dest => dest.Numeration, opt => opt?.MapFrom(src => src.Numeration))
                  .ForMember(dest => dest.StartDate, opt => opt?.MapFrom(src => StaticFunctions.VerifyDate(src.StartDate)))
           .ReverseMap();
 

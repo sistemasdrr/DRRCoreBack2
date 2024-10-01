@@ -90,6 +90,15 @@ namespace DRRCore.Services.ApiCore.Controllers
             return Ok(await _ticketApplication.GetSearchSituation(about, typeSearch, search, idCountry));
         }
         [HttpGet()]
+        [Route("GetNewSearchSituation")]
+        public async Task<ActionResult> GetNewSearchSituation(string about, string name, string form, int idCountry, bool haveReport, string filterBy)
+        {
+            about ??= string.Empty;
+            filterBy ??= string.Empty;
+            name ??= string.Empty;
+            return Ok(await _ticketApplication.GetNewSearchSituation(about, name, form, idCountry, haveReport, filterBy));
+        }
+        [HttpGet()]
         [Route("getListTicketSituation")]
         public async Task<ActionResult> getListTicketSituation(string about, int id, string oldCode)
         {

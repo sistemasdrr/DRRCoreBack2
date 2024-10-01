@@ -15,6 +15,8 @@
         public decimal? Participation { get; set; }
 
         public string? StartDate { get; set; }
+        public int? Numeration { get; set; }
+        public bool? Print { get; set; }
 
     }
 }

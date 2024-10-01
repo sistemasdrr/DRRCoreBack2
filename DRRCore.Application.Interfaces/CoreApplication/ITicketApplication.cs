@@ -72,6 +72,8 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<string>> GetNumerationRefCom();
 
         Task<Response<bool>> SendComplementRefCom(int idUser, int idTicketHistory, string asignedTo, string numOrder, string message);
-        Task<Response<bool>?> ConfirmAgentHistory(int idTicketHistory);
+        Task<Response<bool>?> ConfirmAgentHistory(int idTicketHistory); 
+        Task<Response<List<GetSearchSituationResponseDto>>> GetNewSearchSituation(string about, string name, string form, int idCountry, bool haveReport, string filterBy);
+
     }
 }
