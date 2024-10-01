@@ -49,6 +49,12 @@ namespace DRRCore.Services.ApiCore.Controllers
         {
             return Ok(await _dashboardApplication.GetPendingTaskByUser(userTo));
         }
-        
+        [HttpGet()]
+        [Route("GetStaticsByCountryDto")]
+        public async Task<ActionResult> GetStaticsByCountry(int idCountry)
+        {
+            return Ok(await _dashboardApplication.GetStaticsByCountry(idCountry));
+        }
+
     }
 }

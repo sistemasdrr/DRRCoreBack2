@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DRRCore.Infraestructure.Configuration")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cd79f365c6dc1477cd50575642164cdc718f84db")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d44267e331449dd8ea91ca023bff152295e5964b")]
 [assembly: System.Reflection.AssemblyProductAttribute("DRRCore.Infraestructure.Configuration")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DRRCore.Infraestructure.Configuration")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

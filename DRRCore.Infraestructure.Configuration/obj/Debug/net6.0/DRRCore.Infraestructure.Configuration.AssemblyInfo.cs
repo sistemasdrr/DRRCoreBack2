@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DRRCore.Infraestructure.Configuration")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+95f49a3cb3d86546ceb543d1c7f10e05ff67a5fc")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d44267e331449dd8ea91ca023bff152295e5964b")]
 [assembly: System.Reflection.AssemblyProductAttribute("DRRCore.Infraestructure.Configuration")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DRRCore.Infraestructure.Configuration")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -11,6 +11,7 @@
         public string? BalanceType { get; set; }
 
         public string? Duration { get; set; }
+        public string? DurationEng { get; set; }
 
         public int? IdCurrency { get; set; }
 

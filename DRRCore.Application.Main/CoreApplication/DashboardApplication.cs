@@ -1,26 +1,11 @@
-﻿using AspNetCore.Reporting;
-using AutoMapper;
-using CoreFtp;
-using DocumentFormat.OpenXml.Bibliography;
-using DRRCore.Application.DTO.Core.Request;
-using DRRCore.Application.DTO.Core.Response;
-using DRRCore.Application.DTO.Email;
+﻿using DRRCore.Application.DTO.Core.Response;
 using DRRCore.Application.DTO.Enum;
 using DRRCore.Application.Interfaces.CoreApplication;
-using DRRCore.Application.Interfaces.EmailApplication;
-using DRRCore.Domain.Entities.MYSQLContext;
-using DRRCore.Domain.Entities.SQLContext;
 using DRRCore.Domain.Entities.SqlCoreContext;
-using DRRCore.Domain.Interfaces.CoreDomain;
-using DRRCore.Domain.Interfaces.EmailDomain;
-using DRRCore.Domain.Interfaces.MysqlDomain;
 using DRRCore.Transversal.Common;
 using DRRCore.Transversal.Common.Interface;
-using Microsoft.AspNetCore.Http;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Diagnostics.Metrics;
 
 namespace DRRCore.Application.Main.CoreApplication
 {
@@ -28,7 +13,7 @@ namespace DRRCore.Application.Main.CoreApplication
     {
 
         private ILogger _logger;
-        public DashboardApplication(ILogger logger) 
+        public DashboardApplication(ILogger logger)
         {
             _logger = logger;
         }
@@ -98,10 +83,10 @@ namespace DRRCore.Application.Main.CoreApplication
                 var today = DateTime.Today;
                 using var context = new SqlCoreContext();
                 var cycle = await context.ProductionClosures.Where(x => x.EndDate.Value.Month == today.Month && x.EndDate.Value.Year == today.Year).FirstOrDefaultAsync();
-                if(cycle != null)
+                if (cycle != null)
                 {
                     var ticketHistory = await context.TicketHistories
-                    .Where(x => x.UserTo.Contains(userTo) && x.Flag == true && x.AsignedTo.Contains("CR") == false && x.Cycle == cycle.Code && x.ShippingDate.HasValue && (x.AsignationType == "RP" || x.AsignationType == "DI" || x.AsignationType == "TR" || x.AsignationType == "RF"|| x.AsignationType == "AG"))
+                    .Where(x => x.UserTo.Contains(userTo) && x.Flag == true && x.AsignedTo.Contains("CR") == false && x.Cycle == cycle.Code && x.ShippingDate.HasValue && (x.AsignationType == "RP" || x.AsignationType == "DI" || x.AsignationType == "TR" || x.AsignationType == "RF" || x.AsignationType == "AG"))
                     .ToListAsync();
                     num = ticketHistory.Count();
                 }
@@ -152,7 +137,7 @@ namespace DRRCore.Application.Main.CoreApplication
         public async Task<Response<object>> TicketsInCurrentMonth()
         {
             var response = new Response<object>();
-            var listSerie=new List<SeriesDashboard>();
+            var listSerie = new List<SeriesDashboard>();
             try
             {
                 using var context = new SqlCoreContext();
@@ -160,27 +145,28 @@ namespace DRRCore.Application.Main.CoreApplication
                                     .FromSqlRaw("EXECUTE SP_TicketsInCurrentMonth")
                                     .AsEnumerable()
                                     .ToList();
-                var selectRt= resultRelated.Select(x=>x.ReportType).Distinct().ToArray();
+                var selectRt = resultRelated.Select(x => x.ReportType).Distinct().ToArray();
                 var selectPt = resultRelated.Select(x => x.ProcedureType).Distinct().ToArray();
 
                 for (int i = 0; i < selectPt.Length; i++)
                 {
                     int[] arrayData = new int[selectRt.Length];
-                    if (selectPt[i] != null) {
+                    if (selectPt[i] != null)
+                    {
 
                         for (int j = 0; j < selectRt.Length; j++)
                         {
                             var selectPtByRt = resultRelated.Where(x => x.ReportType == selectRt[j] && x.ProcedureType == selectPt[i]).FirstOrDefault();
 
-                            arrayData[j]=selectPtByRt != null? selectPtByRt.Quantity.Value:0;
+                            arrayData[j] = selectPtByRt != null ? selectPtByRt.Quantity.Value : 0;
                         }
 
                         listSerie.Add(new SeriesDashboard
                         {
                             Name = selectPt[i].ToString(),
-                            Data= arrayData
+                            Data = arrayData
                         });
-                   }
+                    }
                 }
 
 
@@ -190,7 +176,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     Series = listSerie,
                     Categories = selectRt
                 };
-                
+
 
             }
             catch (Exception ex)
@@ -215,7 +201,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 var subordinates = new List<Supervisor>();
                 if (supervisor != null && supervisor.IdEmployeeNavigation.Personals.FirstOrDefault() != null)
                 {
-                    if(supervisor.Id == 31 || supervisor.Id == 38 || supervisor.Id == 42) //GERENCIA
+                    if (supervisor.Id == 31 || supervisor.Id == 38 || supervisor.Id == 42) //GERENCIA
                     {
                         subordinates = await context.Supervisors
                             .Include(x => x.IdUserLoginNavigation).ThenInclude(x => x.IdEmployeeNavigation).ThenInclude(x => x.Personals)
@@ -410,7 +396,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                 pendingTaskSupervisor.Details.Add(pendingTaskTranslator);
                             }
 
-                           
+
                             response.Data.Add(pendingTaskSupervisor);
                         }
                     }
@@ -434,7 +420,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         var pendingTaskSupervisor = new PendingTaskSupervisorResponseDto();
                         pendingTaskSupervisor.Details = new List<PendingTaskPersonalResponseDto>();
                         pendingTaskSupervisor.Name = supervisor.IdEmployeeNavigation.FirstName + " " + supervisor.IdEmployeeNavigation.LastName;
-                        if(userTo == "42" || userTo == "23" || userTo == "50")
+                        if (userTo == "42" || userTo == "23" || userTo == "50")
                         {
                             pendingTaskSupervisor.Code = "";
                         }
@@ -536,9 +522,9 @@ namespace DRRCore.Application.Main.CoreApplication
                         response.Data.Add(pendingTaskSupervisor);
                     }
                 }
-                
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 response.IsSuccess = true;
@@ -571,6 +557,50 @@ namespace DRRCore.Application.Main.CoreApplication
             }
         }
 
+        public async Task<Response<GetStaticsByCountryDto>> GetStaticsByCountry(int idCountry)
+        {
+            var response = new Response<GetStaticsByCountryDto>();
+            var objeto = new GetStaticsByCountryDto();
+
+
+            try
+            {
+                var idParameter = new SqlParameter("@idCountry", idCountry);
+                using var context = new SqlCoreContext();
+                var resultRelated = context.Set<StaticsByCountry>()
+                                    .FromSqlRaw("EXECUTE SP_STATICS_BY_COUNTRY @idCountry", idParameter)
+                                    .AsEnumerable()
+                                    .First();
+
+
+                if (resultRelated != null)
+                {
+                    response.IsSuccess = true;
+                    response.Data = new GetStaticsByCountryDto
+                    {
+                        ConInforme = resultRelated.ConInforme,
+                        A = resultRelated.A,
+                        B = resultRelated.B,
+                        C = resultRelated.C,
+                        D = resultRelated.D,
+                        SinInforme = resultRelated.SinInforme,
+                        Eliminado = resultRelated.Eliminado,
+                        SinQ = resultRelated.SinQ
+                    };
+                }
+                else
+                {
+                    throw new Exception("No se encontró el objeto");
+                }
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = ex.Message;
+
+            }
+            return response;
+        }
     }
 
     public class SeriesDashboard

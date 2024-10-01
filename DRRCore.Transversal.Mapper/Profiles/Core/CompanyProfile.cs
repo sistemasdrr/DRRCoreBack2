@@ -144,6 +144,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
             CreateMap<FinancialBalance, GetFinancialBalanceResponseDto>()
                  .ForMember(dest => dest.IdCompany, opt => opt?.MapFrom(src => src.IdCompany == 0 ? null : src.IdCompany))
                  .ForMember(dest => dest.IdCurrency, opt => opt?.MapFrom(src => src.IdCurrency == 0 ? null : src.IdCurrency))
+                 .ForMember(dest => dest.DurationEng, opt => opt?.MapFrom(src => src.DurationEng))
                  .ForMember(dest => dest.Date, opt => opt?.MapFrom(src => StaticFunctions.DateTimeToString(src.Date)))
              .ReverseMap();
             CreateMap<FinancialBalance, GetComboValueResponseDto>()
