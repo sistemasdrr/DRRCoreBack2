@@ -14,7 +14,11 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DRRCore.Services.Migration")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
+<<<<<<< HEAD
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7f66577afd066df625b7cb75fcd8ed938061fe58")]
+=======
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bb13362c6d3347d396cae6c0a1e70e18b8e9cb11")]
+>>>>>>> dsd
 [assembly: System.Reflection.AssemblyProductAttribute("DRRCore.Services.Migration")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DRRCore.Services.Migration")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
