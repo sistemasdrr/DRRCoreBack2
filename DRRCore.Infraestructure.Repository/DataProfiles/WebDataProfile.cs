@@ -13,7 +13,8 @@ namespace DRRCore.Infraestructure.Repository.DataProfiles
               .ForMember(dest => dest.NombreEmpresa, opt => opt?.MapFrom(src => src.Empresa ?? string.Empty))
               .ForMember(dest => dest.Migrado, opt => opt?.MapFrom(src => true))
               .ForMember(dest => dest.RamoIngles, opt => opt?.MapFrom(src => src.RamoIngles ?? string.Empty))
-              .ForMember(dest => dest.RamoActividadIngles, opt => opt?.MapFrom(src => src.RamoActividadIngles ?? string.Empty));
+              .ForMember(dest => dest.RamoActividadIngles, opt => opt?.MapFrom(src => src.RamoActividadIngles ?? string.Empty))
+              .ForMember(dest => dest.CodigoEmpresaWeb, opt => opt?.MapFrom(src => src.CodigoEmpresa+DateTime.Now.ToString("HHmmss") ?? string.Empty));
           
 
 
