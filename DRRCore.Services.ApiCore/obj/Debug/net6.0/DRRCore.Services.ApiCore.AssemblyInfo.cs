@@ -14,7 +14,11 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DRRCore.Services.ApiCore")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
+<<<<<<< HEAD
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b777b486b4d3d4f382597efb8bc5a65d7e3aea4c")]
+=======
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d44267e331449dd8ea91ca023bff152295e5964b")]
+>>>>>>> Revert "dsd"
 [assembly: System.Reflection.AssemblyProductAttribute("DRRCore.Services.ApiCore")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DRRCore.Services.ApiCore")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

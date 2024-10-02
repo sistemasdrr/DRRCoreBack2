@@ -4,12 +4,19 @@
   "Documents": [
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
       "AbsoluteMoniker": "D:0:0:{D53821FC-2047-4684-A3F2-0964CC8D3E2C}|DRRCore.Infraestructure.Configuration\\DRRCore.Infraestructure.Configuration.csproj|c:\\users\\jean\\desktop\\drr core\\back\\drrcore.infraestructure.configuration\\sqlcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D53821FC-2047-4684-A3F2-0964CC8D3E2C}|DRRCore.Infraestructure.Configuration\\DRRCore.Infraestructure.Configuration.csproj|solutionrelative:drrcore.infraestructure.configuration\\sqlcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D53821FC-2047-4684-A3F2-0964CC8D3E2C}|DRRCore.Infraestructure.Configuration\\DRRCore.Infraestructure.Configuration.csproj|c:\\users\\jean\\desktop\\drr core\\back\\drrcore.infraestructure.configuration\\sqlcorecontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
 =======
+=======
+      "AbsoluteMoniker": "D:0:0:{3A6B5760-D69F-4F94-BCC6-C662C3A5D285}|DRRCore.Services.ApiCore\\DRRCore.Services.ApiCore.csproj|c:\\users\\programador1\\source\\repos\\drrcoreback2\\drrcore.services.apicore\\controllers\\ticketcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A6B5760-D69F-4F94-BCC6-C662C3A5D285}|DRRCore.Services.ApiCore\\DRRCore.Services.ApiCore.csproj|solutionrelative:drrcore.services.apicore\\controllers\\ticketcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+>>>>>>> Revert "dsd"
       "AbsoluteMoniker": "D:0:0:{D53821FC-2047-4684-A3F2-0964CC8D3E2C}|DRRCore.Infraestructure.Configuration\\DRRCore.Infraestructure.Configuration.csproj|c:\\users\\programador1\\source\\repos\\drrcoreback2\\drrcore.infraestructure.configuration\\sqlcorecontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
 >>>>>>> dsd
       "RelativeMoniker": "D:0:0:{D53821FC-2047-4684-A3F2-0964CC8D3E2C}|DRRCore.Infraestructure.Configuration\\DRRCore.Infraestructure.Configuration.csproj|solutionrelative:drrcore.infraestructure.configuration\\sqlcorecontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
@@ -19,6 +26,7 @@
       "RelativeMoniker": "D:0:0:{A8C7F3D6-F547-4AB9-97C3-EACAACCFCD26}|DRRCore.Transversal.Mapper\\DRRCore.Transversal.Mapper.csproj|solutionrelative:drrcore.transversal.mapper\\profiles\\core\\ticketprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+<<<<<<< HEAD
 <<<<<<< HEAD
       "AbsoluteMoniker": "D:0:0:{81C3D6F6-A336-4BC8-9B6B-F67B52BF4528}|DRRCore.Application.Interfaces\\DRRCore.Application.Interfaces.csproj|c:\\users\\jean\\desktop\\drr core\\back\\drrcore.application.interfaces\\coreapplication\\iticketapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{81C3D6F6-A336-4BC8-9B6B-F67B52BF4528}|DRRCore.Application.Interfaces\\DRRCore.Application.Interfaces.csproj|solutionrelative:drrcore.application.interfaces\\coreapplication\\iticketapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
@@ -31,6 +39,8 @@
       "RelativeMoniker": "D:0:0:{3A6B5760-D69F-4F94-BCC6-C662C3A5D285}|DRRCore.Services.ApiCore\\DRRCore.Services.ApiCore.csproj|solutionrelative:drrcore.services.apicore\\controllers\\ticketcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+=======
+>>>>>>> Revert "dsd"
       "AbsoluteMoniker": "D:0:0:{3A6B5760-D69F-4F94-BCC6-C662C3A5D285}|DRRCore.Services.ApiCore\\DRRCore.Services.ApiCore.csproj|c:\\users\\programador1\\source\\repos\\drrcoreback2\\drrcore.services.apicore\\controllers\\companycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3A6B5760-D69F-4F94-BCC6-C662C3A5D285}|DRRCore.Services.ApiCore\\DRRCore.Services.ApiCore.csproj|solutionrelative:drrcore.services.apicore\\controllers\\companycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -156,6 +166,7 @@
         {
           "DockedWidth": 200,
 <<<<<<< HEAD
+<<<<<<< HEAD
           "SelectedChildIndex": 8,
           "Children": [
             {
@@ -169,10 +180,13 @@
               "ViewState": "AgIAAPIAAAAAAAAAAAAjwP0AAACdAAAAAAAAAA==",
 =======
           "SelectedChildIndex": 10,
+=======
+          "SelectedChildIndex": 12,
+>>>>>>> Revert "dsd"
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 11,
               "Title": "XmlApplication.cs",
               "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Main\\CoreApplication\\XmlApplication.cs",
               "RelativeDocumentMoniker": "DRRCore.Application.Main\\CoreApplication\\XmlApplication.cs",
@@ -200,6 +214,7 @@
             },
             {
               "$type": "Document",
+<<<<<<< HEAD
               "DocumentIndex": 7,
               "Title": "CompanyProfile.cs",
               "DocumentMoniker": "C:\\Users\\Jean\\Desktop\\DRR CORE\\BACK\\DRRCore.Transversal.Mapper\\Profiles\\Core\\CompanyProfile.cs",
@@ -222,6 +237,9 @@
             {
               "$type": "Document",
               "DocumentIndex": 5,
+=======
+              "DocumentIndex": 4,
+>>>>>>> Revert "dsd"
               "Title": "GetCompanyPartnersResponseDto.cs",
               "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.DTO\\Core\\Response\\GetCompanyPartnersResponseDto.cs",
               "RelativeDocumentMoniker": "DRRCore.Application.DTO\\Core\\Response\\GetCompanyPartnersResponseDto.cs",
@@ -229,24 +247,25 @@
               "RelativeToolTip": "DRRCore.Application.DTO\\Core\\Response\\GetCompanyPartnersResponseDto.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-30T15:32:10.868Z"
+              "WhenOpened": "2024-09-30T15:32:10.868Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "SqlContext.cs",
               "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Configuration\\SqlContext.cs",
               "RelativeDocumentMoniker": "DRRCore.Infraestructure.Configuration\\SqlContext.cs",
-              "ToolTip": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Configuration\\SqlContext.cs*",
-              "RelativeToolTip": "DRRCore.Infraestructure.Configuration\\SqlContext.cs*",
-              "ViewState": "AgIAABgAAAAAAAAAAAAowCwAAAARAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Configuration\\SqlContext.cs",
+              "RelativeToolTip": "DRRCore.Infraestructure.Configuration\\SqlContext.cs",
+              "ViewState": "AgIAABcAAAAAAAAAAAA9wCwAAAAPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-13T13:01:40.617Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 18,
               "Title": "FotosContext.cs",
               "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Configuration\\FotosContext.cs",
               "RelativeDocumentMoniker": "DRRCore.Infraestructure.Configuration\\FotosContext.cs",
@@ -274,6 +293,7 @@
             },
             {
               "$type": "Document",
+<<<<<<< HEAD
               "DocumentIndex": 5,
               "Title": "TicketApplication.cs",
               "DocumentMoniker": "C:\\Users\\Jean\\Desktop\\DRR CORE\\BACK\\DRRCore.Application.Main\\CoreApplication\\TicketApplication.cs",
@@ -283,19 +303,22 @@
               "ViewState": "AgIAADcUAAAAAAAAAAAswIYUAAAIAAAAAAAAAA==",
 =======
               "DocumentIndex": 0,
+=======
+              "DocumentIndex": 1,
+>>>>>>> Revert "dsd"
               "Title": "SqlCoreContext.cs",
               "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Configuration\\SqlCoreContext.cs",
               "RelativeDocumentMoniker": "DRRCore.Infraestructure.Configuration\\SqlCoreContext.cs",
-              "ToolTip": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Configuration\\SqlCoreContext.cs*",
-              "RelativeToolTip": "DRRCore.Infraestructure.Configuration\\SqlCoreContext.cs*",
-              "ViewState": "AgIAANkAAAAAAAAAAAA3wOgAAAAQAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Configuration\\SqlCoreContext.cs",
+              "RelativeToolTip": "DRRCore.Infraestructure.Configuration\\SqlCoreContext.cs",
+              "ViewState": "AgIAANkAAAAAAAAAAAAkwOEAAAALAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-13T13:01:45.76Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 6,
               "Title": "CompanyApplication.cs",
               "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Main\\CoreApplication\\CompanyApplication.cs",
               "RelativeDocumentMoniker": "DRRCore.Application.Main\\CoreApplication\\CompanyApplication.cs",
@@ -324,9 +347,13 @@
             },
             {
               "$type": "Document",
+<<<<<<< HEAD
               "DocumentIndex": 4,
 =======
               "DocumentIndex": 9,
+=======
+              "DocumentIndex": 8,
+>>>>>>> Revert "dsd"
               "Title": "CompanyProfile.cs",
               "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Transversal.Mapper\\Profiles\\Core\\CompanyProfile.cs",
               "RelativeDocumentMoniker": "DRRCore.Transversal.Mapper\\Profiles\\Core\\CompanyProfile.cs",
@@ -334,22 +361,31 @@
               "RelativeToolTip": "DRRCore.Transversal.Mapper\\Profiles\\Core\\CompanyProfile.cs",
               "ViewState": "AgIAAH0AAAAAAAAAAAAIwJIAAABgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-13T13:03:09.251Z"
+              "WhenOpened": "2024-09-13T13:03:09.251Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
+<<<<<<< HEAD
               "DocumentIndex": 3,
 >>>>>>> dsd
+=======
+              "DocumentIndex": 0,
+>>>>>>> Revert "dsd"
               "Title": "TicketController.cs",
               "DocumentMoniker": "C:\\Users\\Jean\\Desktop\\DRR CORE\\BACK\\DRRCore.Services.ApiCore\\Controllers\\TicketController.cs",
               "RelativeDocumentMoniker": "DRRCore.Services.ApiCore\\Controllers\\TicketController.cs",
               "ToolTip": "C:\\Users\\Jean\\Desktop\\DRR CORE\\BACK\\DRRCore.Services.ApiCore\\Controllers\\TicketController.cs",
               "RelativeToolTip": "DRRCore.Services.ApiCore\\Controllers\\TicketController.cs",
 <<<<<<< HEAD
+<<<<<<< HEAD
               "ViewState": "AgIAAE4AAAAAAAAAAAAYwGIAAABEAAAAAAAAAA==",
 =======
               "ViewState": "AgIAALcAAAAAAAAAAAAAANcAAAAoAAAAAAAAAA==",
 >>>>>>> dsd
+=======
+              "ViewState": "AgIAAMYAAAAAAAAAAAAowNcAAAAoAAAAAAAAAA==",
+>>>>>>> Revert "dsd"
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-01T21:38:51.585Z",
               "IsPinned": true
@@ -361,6 +397,7 @@
             },
             {
               "$type": "Document",
+<<<<<<< HEAD
               "DocumentIndex": 0,
               "Title": "SqlContext.cs",
               "DocumentMoniker": "C:\\Users\\Jean\\Desktop\\DRR CORE\\BACK\\DRRCore.Infraestructure.Configuration\\SqlContext.cs",
@@ -371,6 +408,9 @@
 =======
               "$type": "Document",
               "DocumentIndex": 13,
+=======
+              "DocumentIndex": 12,
+>>>>>>> Revert "dsd"
               "Title": "AssignTicketRequestDto.cs",
               "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.DTO\\Core\\Request\\AssignTicketRequestDto.cs",
               "RelativeDocumentMoniker": "DRRCore.Application.DTO\\Core\\Request\\AssignTicketRequestDto.cs",
@@ -382,7 +422,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 3,
               "Title": "CompanyController.cs",
               "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Services.ApiCore\\Controllers\\CompanyController.cs",
               "RelativeDocumentMoniker": "DRRCore.Services.ApiCore\\Controllers\\CompanyController.cs",
@@ -410,9 +450,13 @@
             },
             {
               "$type": "Document",
+<<<<<<< HEAD
               "DocumentIndex": 12,
 =======
               "DocumentIndex": 6,
+=======
+              "DocumentIndex": 5,
+>>>>>>> Revert "dsd"
               "Title": "GetListCompanyPartnersResponseDto.cs",
               "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.DTO\\Core\\Response\\GetListCompanyPartnersResponseDto.cs",
               "RelativeDocumentMoniker": "DRRCore.Application.DTO\\Core\\Response\\GetListCompanyPartnersResponseDto.cs",
@@ -420,12 +464,17 @@
               "RelativeToolTip": "DRRCore.Application.DTO\\Core\\Response\\GetListCompanyPartnersResponseDto.cs",
               "ViewState": "AgIAAAQAAAAAAAAAAAA1wBYAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-30T15:30:17.07Z"
+              "WhenOpened": "2024-09-30T15:30:17.07Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
+<<<<<<< HEAD
               "DocumentIndex": 8,
 >>>>>>> dsd
+=======
+              "DocumentIndex": 7,
+>>>>>>> Revert "dsd"
               "Title": "AddOrUpdateCompanyPartnersRequestDto.cs",
               "DocumentMoniker": "C:\\Users\\Jean\\Desktop\\DRR CORE\\BACK\\DRRCore.Application.DTO\\Core\\Request\\AddOrUpdateCompanyPartnersRequestDto.cs",
               "RelativeDocumentMoniker": "DRRCore.Application.DTO\\Core\\Request\\AddOrUpdateCompanyPartnersRequestDto.cs",
@@ -436,11 +485,12 @@
 =======
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-20T21:44:15.352Z"
+              "WhenOpened": "2024-09-20T21:44:15.352Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 10,
               "Title": "DashboardApplication.cs",
               "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Main\\CoreApplication\\DashboardApplication.cs",
               "RelativeDocumentMoniker": "DRRCore.Application.Main\\CoreApplication\\DashboardApplication.cs",
@@ -454,6 +504,7 @@
             {
               "$type": "Document",
 <<<<<<< HEAD
+<<<<<<< HEAD
               "DocumentIndex": 6,
               "Title": "PersonApplication.cs",
               "DocumentMoniker": "C:\\Users\\Jean\\Desktop\\DRR CORE\\BACK\\DRRCore.Application.Main\\CoreApplication\\PersonApplication.cs",
@@ -463,6 +514,9 @@
               "ViewState": "AgIAAHoEAAAAAAAAAADwv40EAABxAAAAAAAAAA==",
 =======
               "DocumentIndex": 10,
+=======
+              "DocumentIndex": 9,
+>>>>>>> Revert "dsd"
               "Title": "GetFinancialBalanceResponseDto.cs",
               "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.DTO\\Core\\Response\\GetFinancialBalanceResponseDto.cs",
               "RelativeDocumentMoniker": "DRRCore.Application.DTO\\Core\\Response\\GetFinancialBalanceResponseDto.cs",
@@ -474,7 +528,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 16,
               "Title": "Statics.cs",
               "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Entities\\SqlCoreContext\\Statics.cs",
               "RelativeDocumentMoniker": "DRRCore.Domain.Entities\\SqlCoreContext\\Statics.cs",
@@ -488,6 +542,7 @@
             {
               "$type": "Document",
 <<<<<<< HEAD
+<<<<<<< HEAD
               "DocumentIndex": 8,
               "Title": "GetSearchSituationResponseDto.cs",
               "DocumentMoniker": "C:\\Users\\Jean\\Desktop\\DRR CORE\\BACK\\DRRCore.Application.DTO\\Core\\Response\\GetSearchSituationResponseDto.cs",
@@ -497,6 +552,9 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAqwAcAAAAsAAAAAAAAAA==",
 =======
               "DocumentIndex": 16,
+=======
+              "DocumentIndex": 15,
+>>>>>>> Revert "dsd"
               "Title": "IDashboardApplication.cs",
               "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Interfaces\\CoreApplication\\IDashboardApplication.cs",
               "RelativeDocumentMoniker": "DRRCore.Application.Interfaces\\CoreApplication\\IDashboardApplication.cs",
@@ -510,6 +568,7 @@
             {
               "$type": "Document",
 <<<<<<< HEAD
+<<<<<<< HEAD
               "DocumentIndex": 11,
               "Title": "CompanyController.cs",
               "DocumentMoniker": "C:\\Users\\Jean\\Desktop\\DRR CORE\\BACK\\DRRCore.Services.ApiCore\\Controllers\\CompanyController.cs",
@@ -519,6 +578,9 @@
               "ViewState": "AgIAAB4AAAAAAAAAAAAWwDEAAAA+AAAAAAAAAA==",
 =======
               "DocumentIndex": 14,
+=======
+              "DocumentIndex": 13,
+>>>>>>> Revert "dsd"
               "Title": "GetStaticsByCountryDto.cs",
               "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.DTO\\Core\\Response\\GetStaticsByCountryDto.cs",
               "RelativeDocumentMoniker": "DRRCore.Application.DTO\\Core\\Response\\GetStaticsByCountryDto.cs",
@@ -532,6 +594,7 @@
             {
               "$type": "Document",
 <<<<<<< HEAD
+<<<<<<< HEAD
               "DocumentIndex": 14,
               "Title": "CompanyPartnersDomain.cs",
               "DocumentMoniker": "C:\\Users\\Jean\\Desktop\\DRR CORE\\BACK\\DRRCore.Domain.Main\\CoreDomain\\CompanyPartnersDomain.cs",
@@ -541,6 +604,9 @@
               "ViewState": "AgIAABkAAAAAAAAAAAAkwCkAAABKAAAAAAAAAA==",
 =======
               "DocumentIndex": 15,
+=======
+              "DocumentIndex": 14,
+>>>>>>> Revert "dsd"
               "Title": "DashboardController.cs",
               "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Services.ApiCore\\Controllers\\DashboardController.cs",
               "RelativeDocumentMoniker": "DRRCore.Services.ApiCore\\Controllers\\DashboardController.cs",
@@ -554,6 +620,7 @@
             {
               "$type": "Document",
 <<<<<<< HEAD
+<<<<<<< HEAD
               "DocumentIndex": 10,
               "Title": "GetListCompanyResponseDto.cs",
               "DocumentMoniker": "C:\\Users\\Jean\\Desktop\\DRR CORE\\BACK\\DRRCore.Application.DTO\\Core\\Response\\GetListCompanyResponseDto.cs",
@@ -563,6 +630,9 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAqwAIAAAARAAAAAAAAAA==",
 =======
               "DocumentIndex": 31,
+=======
+              "DocumentIndex": 30,
+>>>>>>> Revert "dsd"
               "Title": "PruebasController.cs",
               "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Services.ApiWeb\\Controllers\\PruebasController.cs",
               "RelativeDocumentMoniker": "DRRCore.Services.ApiWeb\\Controllers\\PruebasController.cs",
@@ -576,6 +646,7 @@
             {
               "$type": "Document",
 <<<<<<< HEAD
+<<<<<<< HEAD
               "DocumentIndex": 13,
               "Title": "CompanyPartnersRepository.cs",
               "DocumentMoniker": "C:\\Users\\Jean\\Desktop\\DRR CORE\\BACK\\DRRCore.Infraestructure.Repository\\CoreRepository\\CompanyPartnersRepository.cs",
@@ -585,6 +656,9 @@
               "ViewState": "AgIAAE0AAAAAAAAAAAAswGIAAAAuAAAAAAAAAA==",
 =======
               "DocumentIndex": 18,
+=======
+              "DocumentIndex": 17,
+>>>>>>> Revert "dsd"
               "Title": "TicketApplication.cs",
               "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Main\\CoreApplication\\TicketApplication.cs",
               "RelativeDocumentMoniker": "DRRCore.Application.Main\\CoreApplication\\TicketApplication.cs",
@@ -597,7 +671,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 30,
+              "DocumentIndex": 29,
               "Title": "WebController.cs",
               "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Services.ApiWeb\\Controllers\\WebController.cs",
               "RelativeDocumentMoniker": "DRRCore.Services.ApiWeb\\Controllers\\WebController.cs",
@@ -611,6 +685,7 @@
             {
               "$type": "Document",
 <<<<<<< HEAD
+<<<<<<< HEAD
               "DocumentIndex": 19,
               "Title": "GetListCompanyPartnersResponseDto.cs",
               "DocumentMoniker": "C:\\Users\\Jean\\Desktop\\DRR CORE\\BACK\\DRRCore.Application.DTO\\Core\\Response\\GetListCompanyPartnersResponseDto.cs",
@@ -620,6 +695,9 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAARAAAAAAAAAA==",
 =======
               "DocumentIndex": 20,
+=======
+              "DocumentIndex": 19,
+>>>>>>> Revert "dsd"
               "Title": "CompanyBranchRepository.cs",
               "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Repository\\CoreRepository\\CompanyBranchRepository.cs",
               "RelativeDocumentMoniker": "DRRCore.Infraestructure.Repository\\CoreRepository\\CompanyBranchRepository.cs",
@@ -633,6 +711,7 @@
             {
               "$type": "Document",
 <<<<<<< HEAD
+<<<<<<< HEAD
               "DocumentIndex": 15,
               "Title": "MigraUser.cs",
               "DocumentMoniker": "C:\\Users\\Jean\\Desktop\\DRR CORE\\BACK\\DRRCore.Application.Main\\MigrationApplication\\MigraUser.cs",
@@ -642,6 +721,9 @@
               "ViewState": "AgIAAHwNAAAAAAAAAAAjwIINAAAIAAAAAAAAAA==",
 =======
               "DocumentIndex": 21,
+=======
+              "DocumentIndex": 20,
+>>>>>>> Revert "dsd"
               "Title": "MySqlContext.cs",
               "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Configuration\\MySqlContext.cs",
               "RelativeDocumentMoniker": "DRRCore.Infraestructure.Configuration\\MySqlContext.cs",
@@ -655,6 +737,7 @@
             {
               "$type": "Document",
 <<<<<<< HEAD
+<<<<<<< HEAD
               "DocumentIndex": 17,
               "Title": "MigrationController.cs",
               "DocumentMoniker": "C:\\Users\\Jean\\Desktop\\DRR CORE\\BACK\\DRRCore.Services.Migration\\Controllers\\MigrationController.cs",
@@ -664,6 +747,9 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAjAAAAAAAAAA==",
 =======
               "DocumentIndex": 29,
+=======
+              "DocumentIndex": 28,
+>>>>>>> Revert "dsd"
               "Title": "WebDataApplication.cs",
               "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Main\\WebDataApplication.cs",
               "RelativeDocumentMoniker": "DRRCore.Application.Main\\WebDataApplication.cs",
@@ -677,6 +763,7 @@
             {
               "$type": "Document",
 <<<<<<< HEAD
+<<<<<<< HEAD
               "DocumentIndex": 16,
               "Title": "IMigraUser.cs",
               "DocumentMoniker": "C:\\Users\\Jean\\Desktop\\DRR CORE\\BACK\\DRRCore.Application.Interfaces\\MigrationApplication\\IMigraUser.cs",
@@ -686,6 +773,9 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAABAAAAAAAAAA==",
 =======
               "DocumentIndex": 23,
+=======
+              "DocumentIndex": 22,
+>>>>>>> Revert "dsd"
               "Title": "ProviderRepository.cs",
               "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Repository\\CoreRepository\\ProviderRepository.cs",
               "RelativeDocumentMoniker": "DRRCore.Infraestructure.Repository\\CoreRepository\\ProviderRepository.cs",
@@ -699,6 +789,7 @@
             {
               "$type": "Document",
 <<<<<<< HEAD
+<<<<<<< HEAD
               "DocumentIndex": 18,
               "Title": "GetCompanyPartnersResponseDto.cs",
               "DocumentMoniker": "C:\\Users\\Jean\\Desktop\\DRR CORE\\BACK\\DRRCore.Application.DTO\\Core\\Response\\GetCompanyPartnersResponseDto.cs",
@@ -708,6 +799,9 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAuAAAAAAAAAA==",
 =======
               "DocumentIndex": 22,
+=======
+              "DocumentIndex": 21,
+>>>>>>> Revert "dsd"
               "Title": "ExecutionContext.cs",
               "DocumentMoniker": "C:\\Users\\Programador1\\AppData\\Local\\SourceServer\\8c2eb5d7f278424983afd84fa9ae8f2c9613bf918cc0112fba8b5c0c15e9ddb4\\src\\libraries\\System.Private.CoreLib\\src\\System\\Threading\\ExecutionContext.cs",
               "RelativeDocumentMoniker": "..\\..\\..\\AppData\\Local\\SourceServer\\8c2eb5d7f278424983afd84fa9ae8f2c9613bf918cc0112fba8b5c0c15e9ddb4\\src\\libraries\\System.Private.CoreLib\\src\\System\\Threading\\ExecutionContext.cs",
@@ -721,6 +815,7 @@
             {
               "$type": "Document",
 <<<<<<< HEAD
+<<<<<<< HEAD
               "DocumentIndex": 21,
               "Title": "Person.cs",
               "DocumentMoniker": "C:\\Users\\Jean\\Desktop\\DRR CORE\\BACK\\DRRCore.Domain.Entities\\SqlCoreContext\\Person.cs",
@@ -730,6 +825,9 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
 =======
               "DocumentIndex": 24,
+=======
+              "DocumentIndex": 23,
+>>>>>>> Revert "dsd"
               "Title": "ProviderDomain.cs",
               "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Main\\CoreDomain\\ProviderDomain.cs",
               "RelativeDocumentMoniker": "DRRCore.Domain.Main\\CoreDomain\\ProviderDomain.cs",
@@ -743,6 +841,7 @@
             {
               "$type": "Document",
 <<<<<<< HEAD
+<<<<<<< HEAD
               "DocumentIndex": 22,
               "Title": "Company.cs",
               "DocumentMoniker": "C:\\Users\\Jean\\Desktop\\DRR CORE\\BACK\\DRRCore.Domain.Entities\\SqlCoreContext\\Company.cs",
@@ -752,6 +851,9 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
 =======
               "DocumentIndex": 28,
+=======
+              "DocumentIndex": 27,
+>>>>>>> Revert "dsd"
               "Title": "WebDataDomain.cs",
               "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Main\\WebDataDomain.cs",
               "RelativeDocumentMoniker": "DRRCore.Domain.Main\\WebDataDomain.cs",
@@ -765,6 +867,7 @@
             {
               "$type": "Document",
 <<<<<<< HEAD
+<<<<<<< HEAD
               "DocumentIndex": 20,
               "Title": "AgentPriceRepository.cs",
               "DocumentMoniker": "C:\\Users\\Jean\\Desktop\\DRR CORE\\BACK\\DRRCore.Infraestructure.Repository\\CoreRepository\\AgentPriceRepository.cs",
@@ -774,6 +877,9 @@
               "ViewState": "AgIAABkAAAAAAAAAAAAUwCkAAAA2AAAAAAAAAA==",
 =======
               "DocumentIndex": 27,
+=======
+              "DocumentIndex": 26,
+>>>>>>> Revert "dsd"
               "Title": "MySqlWebRepository.cs",
               "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Repository\\MYSQLRepository\\MySqlWebRepository.cs",
               "RelativeDocumentMoniker": "DRRCore.Infraestructure.Repository\\MYSQLRepository\\MySqlWebRepository.cs",
@@ -787,6 +893,7 @@
             {
               "$type": "Document",
 <<<<<<< HEAD
+<<<<<<< HEAD
               "DocumentIndex": 25,
               "Title": "CompanyDomain.cs",
               "DocumentMoniker": "C:\\Users\\Jean\\Desktop\\DRR CORE\\BACK\\DRRCore.Domain.Main\\CoreDomain\\CompanyDomain.cs",
@@ -796,6 +903,9 @@
               "ViewState": "AgIAACIAAAAAAAAAAAAUwDMAAAAIAAAAAAAAAA==",
 =======
               "DocumentIndex": 26,
+=======
+              "DocumentIndex": 25,
+>>>>>>> Revert "dsd"
               "Title": "AddOrUpdateCompanyShareHolderRequestDto.cs",
               "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.DTO\\Core\\Request\\AddOrUpdateCompanyShareHolderRequestDto.cs",
               "RelativeDocumentMoniker": "DRRCore.Application.DTO\\Core\\Request\\AddOrUpdateCompanyShareHolderRequestDto.cs",
@@ -807,7 +917,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 24,
               "Title": "GetListCompanyShareHolderResponseDto.cs",
               "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.DTO\\Core\\Response\\GetListCompanyShareHolderResponseDto.cs",
               "RelativeDocumentMoniker": "DRRCore.Application.DTO\\Core\\Response\\GetListCompanyShareHolderResponseDto.cs",
@@ -819,7 +929,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 33,
+              "DocumentIndex": 32,
               "Title": "CompanyBackgroundDomain.cs",
               "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Main\\CoreDomain\\CompanyBackgroundDomain.cs",
               "RelativeDocumentMoniker": "DRRCore.Domain.Main\\CoreDomain\\CompanyBackgroundDomain.cs",
@@ -833,6 +943,7 @@
             {
               "$type": "Document",
 <<<<<<< HEAD
+<<<<<<< HEAD
               "DocumentIndex": 26,
               "Title": "PersonProfile.cs",
               "DocumentMoniker": "C:\\Users\\Jean\\Desktop\\DRR CORE\\BACK\\DRRCore.Transversal.Mapper\\Profiles\\Core\\PersonProfile.cs",
@@ -842,6 +953,9 @@
               "ViewState": "AgIAAB4AAAAAAAAAAAArwDEAAABdAAAAAAAAAA==",
 =======
               "DocumentIndex": 34,
+=======
+              "DocumentIndex": 33,
+>>>>>>> Revert "dsd"
               "Title": "ICompanyBackgroundRepository.cs",
               "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Interfaces\\CoreRepository\\ICompanyBackgroundRepository.cs",
               "RelativeDocumentMoniker": "DRRCore.Infraestructure.Interfaces\\CoreRepository\\ICompanyBackgroundRepository.cs",
@@ -855,6 +969,7 @@
             {
               "$type": "Document",
 <<<<<<< HEAD
+<<<<<<< HEAD
               "DocumentIndex": 27,
               "Title": "GetListPersonResponseDto.cs",
               "DocumentMoniker": "C:\\Users\\Jean\\Desktop\\DRR CORE\\BACK\\DRRCore.Application.DTO\\Core\\Response\\GetListPersonResponseDto.cs",
@@ -864,6 +979,9 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAApAAAAAAAAAA==",
 =======
               "DocumentIndex": 36,
+=======
+              "DocumentIndex": 35,
+>>>>>>> Revert "dsd"
               "Title": "UserController.cs",
               "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Services.ApiCore\\Controllers\\UserController.cs",
               "RelativeDocumentMoniker": "DRRCore.Services.ApiCore\\Controllers\\UserController.cs",
@@ -877,6 +995,7 @@
             {
               "$type": "Document",
 <<<<<<< HEAD
+<<<<<<< HEAD
               "DocumentIndex": 24,
               "Title": "CompanyRepository.cs",
               "DocumentMoniker": "C:\\Users\\Jean\\Desktop\\DRR CORE\\BACK\\DRRCore.Infraestructure.Repository\\CoreRepository\\CompanyRepository.cs",
@@ -886,6 +1005,9 @@
               "ViewState": "AgIAANUAAAAAAAAAAAArwNMAAAAIAAAAAAAAAA==",
 =======
               "DocumentIndex": 38,
+=======
+              "DocumentIndex": 37,
+>>>>>>> Revert "dsd"
               "Title": "ApiDummy.cs",
               "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Main\\ApiDummy.cs",
               "RelativeDocumentMoniker": "DRRCore.Application.Main\\ApiDummy.cs",
@@ -899,6 +1021,7 @@
             {
               "$type": "Document",
 <<<<<<< HEAD
+<<<<<<< HEAD
               "DocumentIndex": 28,
               "Title": "PersonDomain.cs",
               "DocumentMoniker": "C:\\Users\\Jean\\Desktop\\DRR CORE\\BACK\\DRRCore.Domain.Main\\CoreDomain\\PersonDomain.cs",
@@ -908,6 +1031,9 @@
               "ViewState": "AgIAAB4AAAAAAAAAAAAUwCwAAAA1AAAAAAAAAA==",
 =======
               "DocumentIndex": 35,
+=======
+              "DocumentIndex": 34,
+>>>>>>> Revert "dsd"
               "Title": "CompanyBackground.cs",
               "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Domain.Entities\\SqlCoreContext\\CompanyBackground.cs",
               "RelativeDocumentMoniker": "DRRCore.Domain.Entities\\SqlCoreContext\\CompanyBackground.cs",
@@ -921,6 +1047,7 @@
             {
               "$type": "Document",
 <<<<<<< HEAD
+<<<<<<< HEAD
               "DocumentIndex": 29,
               "Title": "IPersonRepository.cs",
               "DocumentMoniker": "C:\\Users\\Jean\\Desktop\\DRR CORE\\BACK\\DRRCore.Infraestructure.Interfaces\\CoreRepository\\IPersonRepository.cs",
@@ -930,6 +1057,9 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAFAAAAAAAAAA==",
 =======
               "DocumentIndex": 37,
+=======
+              "DocumentIndex": 36,
+>>>>>>> Revert "dsd"
               "Title": "MigraUser.cs",
               "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Application.Main\\MigrationApplication\\MigraUser.cs",
               "RelativeDocumentMoniker": "DRRCore.Application.Main\\MigrationApplication\\MigraUser.cs",
@@ -943,6 +1073,7 @@
             {
               "$type": "Document",
 <<<<<<< HEAD
+<<<<<<< HEAD
               "DocumentIndex": 30,
               "Title": "PersonRepository.cs",
               "DocumentMoniker": "C:\\Users\\Jean\\Desktop\\DRR CORE\\BACK\\DRRCore.Infraestructure.Repository\\CoreRepository\\PersonRepository.cs",
@@ -954,6 +1085,9 @@
               "WhenOpened": "2024-10-01T15:08:30.059Z"
 =======
               "DocumentIndex": 32,
+=======
+              "DocumentIndex": 31,
+>>>>>>> Revert "dsd"
               "Title": "CompanyBackgroundRepository.cs",
               "DocumentMoniker": "C:\\Users\\Programador1\\source\\repos\\DRRCoreBack2\\DRRCore.Infraestructure.Repository\\CoreRepository\\CompanyBackgroundRepository.cs",
               "RelativeDocumentMoniker": "DRRCore.Infraestructure.Repository\\CoreRepository\\CompanyBackgroundRepository.cs",
