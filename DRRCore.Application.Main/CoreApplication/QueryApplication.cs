@@ -2174,6 +2174,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                 Quality = item1.IdTicketNavigation.Quality,
                                 QualityTypist = item1.IdTicketNavigation.QualityTypist,
                                 QualityTraductor = item1.IdTicketNavigation.QualityTranslator,
+                                QualityReport = item1.IdTicketNavigation.About == "E" ? item1.IdTicketNavigation.IdCompanyNavigation.Quality : item1.IdTicketNavigation.IdPersonNavigation.Quality,
                                 Number = item1.IdTicketNavigation.Number.ToString("D6"),
                                 Language = item1.IdTicketNavigation.Language,
                                 About = item1.IdTicketNavigation.About,

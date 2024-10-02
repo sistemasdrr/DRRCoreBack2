@@ -2844,7 +2844,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
-                                                AsignationType = item.Type,
+                                                AsignationType = "RF",
                                                 Cycle = code,
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
@@ -2894,7 +2894,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
-                                                AsignationType = item.Type,
+                                                AsignationType = "DI",
                                                 Cycle = code
                                             };
                                             ticket.UpdateDate = DateTime.Now;
@@ -2998,7 +2998,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
-                                                AsignationType = item.Type,
+                                                AsignationType = "TR",
                                                 Cycle = code
                                             };
                                             ticket.UpdateDate = DateTime.Now;
@@ -3045,7 +3045,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
-                                                AsignationType = item.Type,
+                                                AsignationType = "TR",
                                                 Cycle = code
 
                                             };
@@ -3103,7 +3103,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
-                                                AsignationType = item.Type,
+                                                AsignationType = "SU",
                                                 Cycle = code
                                             };
                                             ticket.UpdateDate = DateTime.Now;
@@ -3156,7 +3156,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
-                                                AsignationType = item.Type,
+                                                AsignationType = "SU",
                                                 Cycle = code
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
@@ -5268,6 +5268,37 @@ namespace DRRCore.Application.Main.CoreApplication
                     response.Data = _mapper.Map<List<GetSearchSituationResponseDto>>(peoples);
                 }
             }catch(Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
+
+        public async Task<Response<List<GetTicketUserResponseDto>>> GetTicketAssignedValidation(int idTicket)
+        {
+            var response = new Response<List<GetTicketUserResponseDto>>();
+            response.Data = new List<GetTicketUserResponseDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var ticketHistories = await context.TicketHistories.Where(x => x.IdTicket == idTicket && 
+                ((x.AsignedTo.Contains("R")) || (x.AsignedTo.Contains("A")) || (x.AsignedTo.Contains("RC")) || (x.AsignedTo.Contains("D")) || (x.AsignedTo.Contains("T")))  && (!x.AsignedTo.Contains("CR") && !x.AsignedTo.Contains("PA") && !x.AsignedTo.Contains("S"))).ToListAsync();
+                if(ticketHistories == null)
+                {
+                    throw new Exception("No se encontro el ticket");
+                }
+                foreach(var ticketHistory in ticketHistories)
+                {
+                    var asignation = new GetTicketUserResponseDto();
+                    asignation.Code = ticketHistory.AsignedTo;
+                    asignation.Type = ticketHistory.AsignationType;
+                    asignation.Flag = ticketHistory.Flag;
+                    response.Data.Add(asignation);
+                }
+
+            }
+            catch(Exception ex)
             {
                 response.IsSuccess = false;
                 response.Message = ex.Message;

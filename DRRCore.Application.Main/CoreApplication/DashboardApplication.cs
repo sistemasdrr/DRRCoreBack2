@@ -201,7 +201,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 var subordinates = new List<Supervisor>();
                 if (supervisor != null && supervisor.IdEmployeeNavigation.Personals.FirstOrDefault() != null)
                 {
-                    if (supervisor.Id == 31 || supervisor.Id == 38 || supervisor.Id == 42) //GERENCIA
+                    if (supervisor.Id == 31 || supervisor.Id == 38 || supervisor.Id == 42 || supervisor.Id == 23) //GERENCIA
                     {
                         subordinates = await context.Supervisors
                             .Include(x => x.IdUserLoginNavigation).ThenInclude(x => x.IdEmployeeNavigation).ThenInclude(x => x.Personals)
@@ -347,6 +347,54 @@ namespace DRRCore.Application.Main.CoreApplication
 
 
                                 pendingTaskSupervisor.Details.Add(pendingTaskTypist);
+                            }
+
+
+                            var references = await context.Personals.Where(x => x.Type == "RF" && x.Enable == true).Include(x => x.IdEmployeeNavigation).ToListAsync();
+                            foreach (var item1 in references)
+                            {
+                                var pendingTaskReferences= new PendingTaskPersonalResponseDto();
+                                pendingTaskReferences.Details = new List<PendingTaskPersonalDetailsResponseDto>();
+                                var c = "";
+                                var fc = "";
+                                pendingTaskReferences.Name = item1.IdEmployeeNavigation.FirstName + " " + item1.IdEmployeeNavigation.LastName;
+                                if (item1.IdEmployeeNavigation.IdCountry != null && item1.IdEmployeeNavigation.IdCountry != 0)
+                                {
+                                    var country1 = await context.Countries.Where(x => x.Id == item1.IdEmployeeNavigation.IdCountry).FirstOrDefaultAsync();
+                                    if (country1 != null)
+                                    {
+                                        c = country1.Iso;
+                                        fc = country1.FlagIso;
+                                    }
+                                }
+                                pendingTaskReferences.FlagCountry = fc;
+                                pendingTaskReferences.Country = c;
+                                pendingTaskReferences.Type = "RF";
+                                pendingTaskReferences.AsignedTo = item1.Code.Trim();
+
+                                var ticketHistoryReferences = await context.TicketHistories
+                                .Where(x => x.AsignedTo.Contains(item1.Code.Trim())
+                                && x.IdTicketNavigation.IdStatusTicket != (int?)TicketStatusEnum.Despachado
+                                && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Observado
+                                && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Rechazado
+                                && x.Flag == false)
+                                .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCountryNavigation)
+                                .ToListAsync();
+                                foreach (var ticket in ticketHistoryReferences)
+                                {
+                                    var details = new PendingTaskPersonalDetailsResponseDto();
+                                    details.Id = ticket.IdTicket;
+                                    details.RequestedName = ticket.IdTicketNavigation.RequestedName;
+                                    details.Number = ticket.IdTicketNavigation.IsComplement != null && ticket.IdTicketNavigation.IsComplement == true ? ticket.IdTicketNavigation.About + " - " + ticket.IdTicketNavigation.Number.ToString("D6") + " (C) " : ticket.IdTicketNavigation.About + " - " + ticket.IdTicketNavigation.Number.ToString("D6");
+                                    details.Country = ticket.IdTicketNavigation.IdCountryNavigation.Iso ?? "";
+                                    details.FlagCountry = ticket.IdTicketNavigation.IdCountryNavigation.FlagIso ?? "";
+                                    details.ExpireDate = StaticFunctions.DateTimeToString(ticket.IdTicketNavigation.ExpireDate);
+                                    details.Flag = GetFlagDate(ticket.IdTicketNavigation.ExpireDate);
+                                    pendingTaskReferences.Details.Add(details);
+                                }
+
+
+                                pendingTaskSupervisor.Details.Add(pendingTaskReferences);
                             }
 
                             var translators = await context.Personals.Where(x => x.Type == "TR" && x.Enable == true).Include(x => x.IdEmployeeNavigation).ToListAsync();

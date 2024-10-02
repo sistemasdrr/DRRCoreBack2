@@ -3,6 +3,7 @@ using DRRCore.Application.DTO.Core.Response;
 using DRRCore.Domain.Entities.SqlCoreContext;
 using DRRCore.Transversal.Common;
 using Microsoft.AspNetCore.Http;
+using System.ComponentModel;
 
 namespace DRRCore.Application.Interfaces.CoreApplication
 {
@@ -75,5 +76,6 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<bool>?> ConfirmAgentHistory(int idTicketHistory); 
         Task<Response<List<GetSearchSituationResponseDto>>> GetNewSearchSituation(string about, string name, string form, int idCountry, bool haveReport, string filterBy);
 
+        Task<Response<List<GetTicketUserResponseDto>>> GetTicketAssignedValidation(int idTicket);
     }
 }

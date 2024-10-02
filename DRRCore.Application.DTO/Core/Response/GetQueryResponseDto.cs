@@ -579,6 +579,7 @@
         public string? Quality { get; set; }
         public string? QualityTypist { get; set; }
         public string? QualityTraductor { get; set; }
+        public string? QualityReport { get; set; }
 
         public bool? HasFiles { get; set; }
         public List<TicketFileResponseDto>? Files { get; set; } = new List<TicketFileResponseDto>();

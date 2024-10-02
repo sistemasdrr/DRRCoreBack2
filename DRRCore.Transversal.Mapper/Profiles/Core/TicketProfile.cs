@@ -136,8 +136,11 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                  .ForMember(dest => dest.RealExpireDate, opt => opt?.MapFrom(src => StaticFunctions.DateTimeToString(src.RealExpireDate)))
 
                  .ForMember(dest => dest.Price, opt => opt?.MapFrom(src => src.Price == null ? 0 : src.Price))
+                 .ForMember(dest => dest.Quality, opt => opt.MapFrom(src => src.Quality ?? ""))
+                .ForMember(dest => dest.QualityTypist, opt => opt.MapFrom(src => src.QualityTypist ?? ""))
+                .ForMember(dest => dest.QualityTranslator, opt => opt.MapFrom(src => src.QualityTranslator ?? ""))
+                .ForMember(dest => dest.QualityReport, opt => opt.MapFrom(src => src.About == "E" ? src.IdCompanyNavigation.Quality : src.IdPersonNavigation.Quality))
 
-                 .ForMember(dest => dest.Quality, opt => opt?.MapFrom(src => src.About == "E" ? src.IdCompanyNavigation.Quality : src.IdPersonNavigation.Language))
                  .ForMember(dest => dest.DispatchDate, opt => opt?.MapFrom(src => StaticFunctions.DateTimeToString(src.DispatchtDate)))
                  .ForMember(dest => dest.StatusQuery, opt => opt?.MapFrom(src => src.TicketQuery != null ? src.TicketQuery.Status : 0))
                  .ForMember(dest => dest.HasQuery, opt => opt?.MapFrom(src => src.TicketQuery != null))

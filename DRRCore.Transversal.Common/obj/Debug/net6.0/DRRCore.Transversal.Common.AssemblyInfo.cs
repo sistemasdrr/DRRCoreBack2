@@ -16,6 +16,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7f66577afd066df625b7cb75fcd8ed938061fe58")]
 =======
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bb13362c6d3347d396cae6c0a1e70e18b8e9cb11")]
@@ -23,6 +24,9 @@ using System.Reflection;
 =======
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d44267e331449dd8ea91ca023bff152295e5964b")]
 >>>>>>> Revert "dsd"
+=======
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b777b486b4d3d4f382597efb8bc5a65d7e3aea4c")]
+>>>>>>> 2/10 2
 [assembly: System.Reflection.AssemblyProductAttribute("DRRCore.Transversal.Common")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DRRCore.Transversal.Common")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

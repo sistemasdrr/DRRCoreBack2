@@ -420,5 +420,14 @@ namespace DRRCore.Services.ApiCore.Controllers
         {
             return Ok(await _ticketApplication.ConfirmAgentHistory(idTicketHistory));
         }
+        [HttpGet()]
+        [Route("GetTicketAssignedValidation")]
+        public async Task<IActionResult> GetTicketAssignedValidation(int idTicket)
+        {
+            return Ok(await _ticketApplication.GetTicketAssignedValidation(idTicket));
+        }
+
+
+        
     }
 }

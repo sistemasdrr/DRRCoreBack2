@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DRRCore.Infraestructure.Interfaces")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7f66577afd066df625b7cb75fcd8ed938061fe58")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b777b486b4d3d4f382597efb8bc5a65d7e3aea4c")]
 [assembly: System.Reflection.AssemblyProductAttribute("DRRCore.Infraestructure.Interfaces")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DRRCore.Infraestructure.Interfaces")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -14,6 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DRRCore.Services.ApiEmail")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
+<<<<<<< HEAD:DRRCore.Services.ApiEmail/obj/Debug/net6.0/DRRCore.Services.ApiEmail.AssemblyInfo.cs
 <<<<<<< HEAD
 <<<<<<< HEAD
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7f66577afd066df625b7cb75fcd8ed938061fe58")]
@@ -25,6 +26,11 @@ using System.Reflection;
 >>>>>>> Revert "dsd"
 [assembly: System.Reflection.AssemblyProductAttribute("DRRCore.Services.ApiEmail")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DRRCore.Services.ApiEmail")]
+=======
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b777b486b4d3d4f382597efb8bc5a65d7e3aea4c")]
+[assembly: System.Reflection.AssemblyProductAttribute("DRRCore.Domain.Entities")]
+[assembly: System.Reflection.AssemblyTitleAttribute("DRRCore.Domain.Entities")]
+>>>>>>> 2/10 2:DRRCore.Domain.Entities/obj/Debug/net6.0/DRRCore.Domain.Entities.AssemblyInfo.cs
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 
 // Generado por la clase WriteCodeFragment de MSBuild.

@@ -68,6 +68,13 @@
         public string? Commentary { get; set; }
         public string? WebPage { get; set; }
     }
+
+    public class GetTicketUserResponseDto
+    {
+        public string Code { get; set; }
+        public string Type { get; set; }
+        public bool? Flag { get; set; }
+    }
     public class GetTicketPendingObservationsResponseDto
     {
         public int Id { get; set; }
