@@ -474,14 +474,12 @@
 /DRRCore.Infraestructure.Interfaces/obj/Release/net6.0
 /DRRCore.Infraestructure.Repository/bin/Release/net6.0
 /DRRCore.Infraestructure.Repository/obj/Release/net6.0
-/DRRCore.Services.ApiCore/bin/Debug/net6.0/Logs
-/DRRCore.Services.ApiCore/bin/Release/net6.0
+/DRRCore.Services.ApiCore/bin
 /DRRCore.Services.ApiCore/obj/Release/net6.0
 /DRRCore.Services.ApiCore/Properties/PublishProfiles
 /DRRCore.Services.ApiEmail/obj
 /DRRCore.Services.ApiWeb/bin/Debug/net6.0
-/DRRCore.Services.ApiWeb/obj/Debug/net6.0
-/DRRCore.Services.ApiWeb/obj/Release/net6.0
+/DRRCore.Services.ApiWeb/obj
 /DRRCore.Services.Migration/obj
 /DRRCore.Transversal.Common/obj
 /DRRCore.Transversal.Mapper/bin/Release/net6.0
