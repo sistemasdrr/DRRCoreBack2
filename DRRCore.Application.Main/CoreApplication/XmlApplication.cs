@@ -615,7 +615,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     }
                     if (!company.TaxTypeCode.IsNullOrEmpty())
                     {
-                        AddCDataElement(xmlDoc, identificationElement, "Taxpayer_Registration", company.TaxTypeCode);
+                        AddCDataElement(xmlDoc, identificationElement, "Taxpayer_Registration",company.TaxTypeName+" "+ company.TaxTypeCode);
                     }
                     if (!company.Address.IsNullOrEmpty())
                     {

@@ -24,16 +24,16 @@ namespace DRRCore.Infraestructure.Repository.SQLRepository
                     i++;
                     var data = await context.WebQueries.Where(x => x.CodigoEmpresa == webData.CodigoEmpresa).FirstOrDefaultAsync();
                     if (data != null)
-                    {
-                        if (!data.Migrado.Value)
-                        {
+                    {                       
                             context.WebQueries.Update(Mapper.Map(webData, data));
                             await context.SaveChangesAsync();
-                        }
+                        
                     }
                     else
                     {
-                        await context.WebQueries.AddAsync(Mapper.Map<WebQuery>(webData));
+                        var query = Mapper.Map<WebQuery>(webData);
+                        query.CodigoEmpresaWeb = webData.CodigoEmpresa + DateTime.Now.ToString("HHmmss");
+                        await context.WebQueries.AddAsync(query);
                         await context.SaveChangesAsync();
                     }
                 }

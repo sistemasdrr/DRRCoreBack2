@@ -69,6 +69,7 @@ namespace DRRCore.Domain.Entities.SqlCoreContext
         public string? NormalisedSourceRatingValue { get; set; }
         public string? NormalisedSourceRatingType { get; set; }
         public string? CompanyListedStockExchange { get; set; }
+      
     }
     public class CompanyBalanceData
     {
