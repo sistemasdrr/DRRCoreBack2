@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DRRCore.Domain.Interfaces")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bb13362c6d3347d396cae6c0a1e70e18b8e9cb11")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7f66577afd066df625b7cb75fcd8ed938061fe58")]
 [assembly: System.Reflection.AssemblyProductAttribute("DRRCore.Domain.Interfaces")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DRRCore.Domain.Interfaces")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -37,3 +37,23 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Interfac
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Interfaces\obj\Release\net6.0\ref\DRRCore.Infraestructure.Interfaces.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Interfaces\obj\Release\net6.0\DRRCore.Infraestructure.Interfaces.sourcelink.json
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Infraestructure.Interfaces\obj\Release\net6.0\DRRCore..A56CD46F.Up2Date
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Infraestructure.Interfaces\bin\Release\net6.0\DRRCore.Infraestructure.Interfaces.deps.json
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Infraestructure.Interfaces\bin\Release\net6.0\DRRCore.Infraestructure.Interfaces.dll
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Infraestructure.Interfaces\bin\Release\net6.0\DRRCore.Infraestructure.Interfaces.pdb
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Infraestructure.Interfaces\bin\Release\net6.0\DRRCore.Application.DTO.dll
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Infraestructure.Interfaces\bin\Release\net6.0\DRRCore.Domain.Entities.dll
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Infraestructure.Interfaces\bin\Release\net6.0\DRRCore.Transversal.Common.dll
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Infraestructure.Interfaces\bin\Release\net6.0\DRRCore.Application.DTO.pdb
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Infraestructure.Interfaces\bin\Release\net6.0\DRRCore.Domain.Entities.pdb
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Infraestructure.Interfaces\bin\Release\net6.0\DRRCore.Transversal.Common.pdb
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Infraestructure.Interfaces\obj\Release\net6.0\DRRCore.Infraestructure.Interfaces.csproj.AssemblyReference.cache
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Infraestructure.Interfaces\obj\Release\net6.0\DRRCore.Infraestructure.Interfaces.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Infraestructure.Interfaces\obj\Release\net6.0\DRRCore.Infraestructure.Interfaces.AssemblyInfoInputs.cache
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Infraestructure.Interfaces\obj\Release\net6.0\DRRCore.Infraestructure.Interfaces.AssemblyInfo.cs
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Infraestructure.Interfaces\obj\Release\net6.0\DRRCore.Infraestructure.Interfaces.csproj.CoreCompileInputs.cache
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Infraestructure.Interfaces\obj\Release\net6.0\DRRCore.Infraestructure.Interfaces.sourcelink.json
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Infraestructure.Interfaces\obj\Release\net6.0\DRRCore..A56CD46F.Up2Date
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Infraestructure.Interfaces\obj\Release\net6.0\DRRCore.Infraestructure.Interfaces.dll
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Infraestructure.Interfaces\obj\Release\net6.0\refint\DRRCore.Infraestructure.Interfaces.dll
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Infraestructure.Interfaces\obj\Release\net6.0\DRRCore.Infraestructure.Interfaces.pdb
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Infraestructure.Interfaces\obj\Release\net6.0\ref\DRRCore.Infraestructure.Interfaces.dll

@@ -24,7 +24,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                    .ForMember(dest => dest.TaxCode, opt => opt?.MapFrom(src => src.TaxTypeCode))
                    .ForMember(dest => dest.Telephone, opt => opt?.MapFrom(src => src.Telephone))
                    .ForMember(dest => dest.IdCountry, opt => opt?.MapFrom(src => src.IdCountry))
-                   .ForMember(dest => dest.Country, opt => opt?.MapFrom(src => src.IdCountryNavigation != null ? src.IdCountryNavigation.Name : ""))
+                   .ForMember(dest => dest.Country, opt => opt?.MapFrom(src => src.IdCountryNavigation != null ? src.IdCountryNavigation.Iso : ""))
                    .ForMember(dest => dest.FlagCountry, opt => opt?.MapFrom(src => src.IdCountryNavigation != null ? src.IdCountryNavigation.FlagIso : "" ))
                    .ReverseMap();
 
@@ -37,7 +37,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                    .ForMember(dest => dest.TaxCode, opt => opt?.MapFrom(src => src.TaxTypeCode))
                    .ForMember(dest => dest.Telephone, opt => opt?.MapFrom(src => src.Cellphone))
                    .ForMember(dest => dest.IdCountry, opt => opt?.MapFrom(src => src.IdCountry))
-                   .ForMember(dest => dest.Country, opt => opt?.MapFrom(src => src.IdCountryNavigation != null ? src.IdCountryNavigation.Name : ""))
+                   .ForMember(dest => dest.Country, opt => opt?.MapFrom(src => src.IdCountryNavigation != null ? src.IdCountryNavigation.Iso : ""))
                    .ForMember(dest => dest.FlagCountry, opt => opt?.MapFrom(src => src.IdCountryNavigation != null ? src.IdCountryNavigation.FlagIso : ""))
                    .ReverseMap();
 

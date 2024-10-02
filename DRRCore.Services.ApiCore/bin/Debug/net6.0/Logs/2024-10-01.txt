@@ -1,0 +1,3 @@
+2024-10-01 17:34:46,178 [35] ERROR App  
+ No existe la empresa solicitada 
+ 

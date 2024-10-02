@@ -91,7 +91,7 @@ namespace DRRCore.Services.ApiCore.Controllers
         }
         [HttpGet()]
         [Route("GetNewSearchSituation")]
-        public async Task<ActionResult> GetNewSearchSituation(string about, string name, string form, int idCountry, bool haveReport, string filterBy)
+        public async Task<ActionResult> GetNewSearchSituation(string about, string? name, string form, int idCountry, bool haveReport, string filterBy)
         {
             about ??= string.Empty;
             filterBy ??= string.Empty;
