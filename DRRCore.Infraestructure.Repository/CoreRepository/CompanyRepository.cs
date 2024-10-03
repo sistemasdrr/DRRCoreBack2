@@ -243,6 +243,34 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                        .ToListAsync();
                     }
                 }
+                else if (filterBy == "C")
+                {
+                    if (haveReport)
+                    {
+                        companys = await context.Companies
+                        .Include(x => x.TraductionCompanies)
+                        .Include(x => x.IdCreditRiskNavigation)
+                        .Include(x => x.IdCountryNavigation)
+                        .Include(x => x.CompanyPartners.Where(x => x.MainExecutive == true)).ThenInclude(x => x.IdPersonNavigation)
+                        .Where(x => (idCountry == 0 || x.IdCountry == idCountry) &&
+                                    (form == "C" ? x.SocialName.Contains(name) : form == "I" ? x.SocialName.StartsWith(name) : false) &&
+                                    x.HaveReport == true)
+                        .Take(100)
+                        .ToListAsync();
+                    }
+                    else
+                    {
+                        companys = await context.Companies
+                        .Include(x => x.TraductionCompanies)
+                       .Include(x => x.IdCreditRiskNavigation)
+                       .Include(x => x.IdCountryNavigation)
+                       .Include(x => x.CompanyPartners.Where(x => x.MainExecutive == true)).ThenInclude(x => x.IdPersonNavigation)
+                       .Where(x => (idCountry == 0 || x.IdCountry == idCountry) &&
+                                   (form == "C" ? x.SocialName.Contains(name) : form == "I" ? x.SocialName.StartsWith(name) : false))
+                       .Take(100)
+                       .ToListAsync();
+                    }
+                }
                 else if (filterBy == "D")
                 {
                     if (haveReport)

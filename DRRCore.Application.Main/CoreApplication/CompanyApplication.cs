@@ -763,6 +763,7 @@ namespace DRRCore.Application.Main.CoreApplication
             try
             {
                 var list = await _providerDomain.GetProvidersByIdCompany(idCompany);
+
                 if (list == null)
                 {
                     response.IsSuccess = false;
@@ -771,22 +772,46 @@ namespace DRRCore.Application.Main.CoreApplication
                     return response;
                 }
                 using var context = new SqlCoreContext();
+
+                var company = await context.Companies.Where(x => x.Id == idCompany).FirstOrDefaultAsync();
+               
+                var newList = new List<GetListProviderResponseDto>();
                 foreach (var item in list)
                 {
+                    
+                    var order = 0;
                     var ticket = new Ticket();
                     if (item.IdTicket != null)
                     {
                         ticket = await context.Tickets.Where(x => x.Id == item.IdTicket).FirstOrDefaultAsync();
                     }
-                    response.Data.Add(new GetListProviderResponseDto
+                    if(item.IdCountry==company.IdCountry && item.Qualification=="Dió referencia")
+                    {
+                        order = 1;
+                    }else if (item.IdCountry == company.IdCountry && item.Qualification != "Dió referencia")
+                    {
+                        order = 2;
+                    }else if (item.IdCountry != company.IdCountry && item.Qualification == "Dió referencia")
+                    {
+                        order = 3;
+                    }
+                    else if (item.IdCountry != company.IdCountry && item.Qualification != "Dió referencia")
+                    {
+                        order = 4;
+                    }
+                    else
+                    {
+                        order = 5;
+                    }
+                    var obj = new GetListProviderResponseDto
                     {
                         Id = item.Id,
                         IdCompany = item.IdCompany,
                         IdPerson = item.IdPerson,
                         Name = item.Name,
                         IdCountry = item.IdCountry,
-                        Country = item.IdCountryNavigation.Iso ?? "",
-                        FlagCountry = item.IdCountryNavigation.FlagIso ?? "",
+                        Country =item.IdCountryNavigation!=null?item.IdCountryNavigation.Iso ?? "":"",
+                        FlagCountry = item.IdCountryNavigation != null ? item.IdCountryNavigation.FlagIso ?? "":"",
                         Date = StaticFunctions.DateTimeToString(item.Date),
                         DateReferent = StaticFunctions.DateTimeToString(item.DateReferent),
                         Qualification = item.Qualification,
@@ -797,9 +822,9 @@ namespace DRRCore.Application.Main.CoreApplication
                         MaximumAmount = item.MaximumAmount,
                         MaximumAmountEng = item.MaximumAmountEng,
                         ClientSince = item.ClientSince,
-                        ClientSinceEng  = item.ClientSinceEng,
+                        ClientSinceEng = item.ClientSinceEng,
                         Compliance = item.Compliance,
-                        ComplianceEng  = item.ComplianceEng,
+                        ComplianceEng = item.ComplianceEng,
                         IdCurrency = item.IdCurrency,
                         ReferentCommentary = item.ReferentCommentary,
                         Telephone = item.Telephone,
@@ -810,10 +835,15 @@ namespace DRRCore.Application.Main.CoreApplication
                         ProductsTheySell = item.ProductsTheySell,
                         ProductsTheySellEng = item.ProductsTheySellEng,
                         ReferentName = item.ReferentName,
+                        Order = order
 
-                    });
+                    };
+                    newList.Add(obj);
+                    
                 }
-                
+                newList = newList.OrderBy(x => x.Order).ToList();
+                response.Data=newList;
+
             }
             catch (Exception ex)
             {
@@ -1656,6 +1686,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     _logger.LogError(response.Message);
                     return response;
                 }
+              
                 if (obj.Id == 0)
                 {
                     var newImportAndExport = _mapper.Map<ImportsAndExport>(obj);
@@ -1717,12 +1748,14 @@ namespace DRRCore.Application.Main.CoreApplication
                 if(type == "I")
                 {
                     var list = await _importsAndExportsDomain.GetImports(idCompany);
+                    list=list.OrderByDescending(x => x.Year).ToList();
                     response.Data = _mapper.Map<List<GetImportsAndExportResponseDto>>(list);
 
                 }
                 else if(type == "E") 
                 {
                     var list = await _importsAndExportsDomain.GetExports(idCompany);
+                    list = list.OrderByDescending(x => x.Year).ToList();
                     response.Data = _mapper.Map<List<GetImportsAndExportResponseDto>>(list);
                 }
             }
@@ -2410,7 +2443,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         {
                             IdTicket = item.IdTicket,
                             Ticket = item.Ticket,
-                            Date = StaticFunctions.DateTimeToString(item.DateReferent),
+                            Date = StaticFunctions.DateTimeToString(distProvider.FirstOrDefault().DateReferent),
                             NumReferences = distProvider.Count(),
                             ReferentName = item.ReferentName,
                         });
@@ -2451,7 +2484,6 @@ namespace DRRCore.Application.Main.CoreApplication
                 var productionClosure = await context.ProductionClosures.Where(x => x.Code.Contains(cycle)).FirstOrDefaultAsync();
                 if (productionClosure == null)
                 {
-
                     DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1).AddDays(-1);
                     await context.ProductionClosures.AddAsync(new ProductionClosure
                     {
@@ -2463,7 +2495,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 }
                 else
                 {
-                    if (productionClosure.EndDate > DateTime.Now)
+                    if (productionClosure.EndDate < DateTime.Now)
                     {
                         if (DateTime.Now.Month == 12)
                         {
@@ -2496,13 +2528,9 @@ namespace DRRCore.Application.Main.CoreApplication
                                     Observations = ""
                                 });
                             }
-
                         }
-
                     }
                 }
-
-
 
                 var ticket = await context.Tickets.Where(x => x.Id == idTicket).FirstOrDefaultAsync();
                 var currentUser =await context.UserLogins.Include(x=>x.IdEmployeeNavigation).Where(x => x.Id == int.Parse(user)).FirstOrDefaultAsync();
@@ -2520,10 +2548,13 @@ namespace DRRCore.Application.Main.CoreApplication
                 {
                     list = await context.Providers.Where(x => x.Enable == true && x.IdPerson== idCompany && x.Flag == true).ToListAsync();
                 }
-                foreach (var item in list)
+                if(list.Count > 0)
                 {
-                    item.Flag = false;
-                    context.Providers.Update(item);
+                    foreach (var item in list)
+                    {
+                        item.Flag = false;
+                        context.Providers.Update(item);
+                    }
                 }
                 
                 foreach (var item1 in obj)
@@ -2560,17 +2591,19 @@ namespace DRRCore.Application.Main.CoreApplication
                         Ticket = ticket.Number.ToString("D6"),
                         DateReferent =DateTime.Now
                     });
-                    await context.ReferencesHistories.AddAsync(new ReferencesHistory
-                    {
-                        IdUser = currentUser.Id,
-                        Code = asignedTo,
-                        IdTicket = ticket.Id,
-                        IsComplement = isComplement,
-                        ValidReferences = obj.Where(x => x.Qualification == "Dió referencia").Count(),
-                        Cycle = cycle
-                    });
                 }
-                
+                //if (isComplement == true)
+                //{
+                //    await context.ReferencesHistories.AddAsync(new ReferencesHistory
+                //    {
+                //        IdUser = currentUser.Id,
+                //        Code = asignedTo.Trim(),
+                //        IdTicket = ticket.Id,
+                //        IsComplement = isComplement,
+                //        ValidReferences = obj.Where(x => x.Qualification == "Dió referencia").Count(),
+                //        Cycle = cycle
+                //    });
+                //}
                 await context.SaveChangesAsync();
                 response.Data = true;
             }
@@ -2616,11 +2649,11 @@ namespace DRRCore.Application.Main.CoreApplication
                     var contentType = StaticFunctions.GetContentType(reportRenderType);
 
                     var dictionary = new Dictionary<string, string>
-                {
-                    { "idCompany", idCompany.ToString() },
-                    { "idTicket", "" },
-                    { "language", language }
-                 };
+                    {
+                        { "idCompany", idCompany.ToString() },
+                        { "idTicket", "" },
+                        { "language", language }
+                    };
 
                     var file = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary);
                     response.Data = new GetFileResponseDto

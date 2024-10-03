@@ -3,6 +3,7 @@ using DRRCore.Application.DTO.Core.Response;
 using DRRCore.Domain.Entities.SqlCoreContext;
 using DRRCore.Transversal.Common;
 using Microsoft.AspNetCore.Http;
+using System.ComponentModel;
 
 namespace DRRCore.Application.Interfaces.CoreApplication
 {
@@ -61,7 +62,7 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<bool>> FinishTicketObservation(int idTicketObservation, string? conclusion, bool dr, bool ag, bool cl);
         Task<Response<List<string>>> GetOtherUserCode(int idUser);
         Task<Response<List<GetTicketHistoryResponseDto>>> getCountAsignation();
-        Task<Response<bool>> TicketToDispatch(int idTicketHistory,int idTicket);
+        Task<Response<bool>> TicketToDispatch(int idTicketHistory,int idTicket,string quality, string qualityTranslator, string qualityTypist);
         Task<Response<string>> GetSupervisorTicket(int idTicket);
         Task<Response<bool>> DeleteTicketHistoryById(int idTicket);
         Task<Response<GetFileDto>> DownloadZipByIdTicket(int idTicket);
@@ -69,5 +70,12 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<bool>> SendComplement(int idTicket, int idUser, bool digited, bool file, string observations);
         Task<Response<bool>> SaveTicketCommentary(int idTicket, string commentary);
 
+        Task<Response<string>> GetNumerationRefCom();
+
+        Task<Response<bool>> SendComplementRefCom(int idUser, int idTicketHistory, string asignedTo, string numOrder, string message);
+        Task<Response<bool>?> ConfirmAgentHistory(int idTicketHistory); 
+        Task<Response<List<GetSearchSituationResponseDto>>> GetNewSearchSituation(string about, string name, string form, int idCountry, bool haveReport, string filterBy);
+
+        Task<Response<List<GetTicketUserResponseDto>>> GetTicketAssignedValidation(int idTicket);
     }
 }

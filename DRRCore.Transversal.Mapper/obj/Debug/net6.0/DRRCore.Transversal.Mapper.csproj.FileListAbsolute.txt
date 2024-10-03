@@ -57,3 +57,23 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Transversal.Mapper\obj\D
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Transversal.Mapper\obj\Debug\net6.0\ref\DRRCore.Transversal.Mapper.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Transversal.Mapper\obj\Debug\net6.0\DRRCore.Transversal.Mapper.sourcelink.json
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Transversal.Mapper\obj\Debug\net6.0\DRRCore..427EDB5A.Up2Date
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Transversal.Mapper\bin\Debug\net6.0\DRRCore.Transversal.Mapper.deps.json
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Transversal.Mapper\bin\Debug\net6.0\DRRCore.Transversal.Mapper.dll
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Transversal.Mapper\bin\Debug\net6.0\DRRCore.Transversal.Mapper.pdb
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Transversal.Mapper\bin\Debug\net6.0\DRRCore.Application.DTO.dll
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Transversal.Mapper\bin\Debug\net6.0\DRRCore.Domain.Entities.dll
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Transversal.Mapper\bin\Debug\net6.0\DRRCore.Transversal.Common.dll
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Transversal.Mapper\bin\Debug\net6.0\DRRCore.Application.DTO.pdb
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Transversal.Mapper\bin\Debug\net6.0\DRRCore.Domain.Entities.pdb
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Transversal.Mapper\bin\Debug\net6.0\DRRCore.Transversal.Common.pdb
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Transversal.Mapper\obj\Debug\net6.0\DRRCore.Transversal.Mapper.csproj.AssemblyReference.cache
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Transversal.Mapper\obj\Debug\net6.0\DRRCore.Transversal.Mapper.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Transversal.Mapper\obj\Debug\net6.0\DRRCore.Transversal.Mapper.AssemblyInfoInputs.cache
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Transversal.Mapper\obj\Debug\net6.0\DRRCore.Transversal.Mapper.AssemblyInfo.cs
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Transversal.Mapper\obj\Debug\net6.0\DRRCore.Transversal.Mapper.csproj.CoreCompileInputs.cache
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Transversal.Mapper\obj\Debug\net6.0\DRRCore.Transversal.Mapper.sourcelink.json
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Transversal.Mapper\obj\Debug\net6.0\DRRCore..427EDB5A.Up2Date
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Transversal.Mapper\obj\Debug\net6.0\DRRCore.Transversal.Mapper.dll
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Transversal.Mapper\obj\Debug\net6.0\refint\DRRCore.Transversal.Mapper.dll
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Transversal.Mapper\obj\Debug\net6.0\DRRCore.Transversal.Mapper.pdb
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Transversal.Mapper\obj\Debug\net6.0\ref\DRRCore.Transversal.Mapper.dll

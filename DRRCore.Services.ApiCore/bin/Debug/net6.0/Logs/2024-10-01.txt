@@ -1,0 +1,82 @@
+<<<<<<< HEAD
+2024-10-01 17:34:46,178 [35] ERROR App  
+ No existe la empresa solicitada 
+ 
+=======
+2024-10-01 12:05:48,212 [27] ERROR App  
+ A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server) 
+ 
+2024-10-01 12:05:48,212 [30] ERROR App  
+ A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server) 
+ 
+2024-10-01 12:05:48,212 [29] ERROR App  
+ A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server) 
+ 
+2024-10-01 12:05:48,212 [31] ERROR App  
+ A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server) 
+ 
+2024-10-01 12:05:48,212 [28] ERROR App  
+ A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server) 
+ 
+2024-10-01 12:05:48,221 [30] ERROR App  
+ No se encontrÃ³ datos en la entidad 
+ 
+2024-10-01 12:05:48,221 [31] ERROR App  
+ No se encontrÃ³ datos en la entidad 
+ 
+2024-10-01 12:05:48,781 [31] ERROR App  
+ A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server) 
+ 
+2024-10-01 12:05:48,810 [31] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-10-01 12:05:48,902 [29] ERROR App  
+ A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server) 
+ 
+2024-10-01 12:05:49,227 [26] ERROR App  
+ A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server) 
+ 
+2024-10-01 12:05:49,509 [26] ERROR App  
+ A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server) 
+ 
+2024-10-01 12:05:49,798 [26] ERROR App  
+ A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server) 
+ 
+2024-10-01 12:05:50,066 [26] ERROR App  
+ A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server) 
+ 
+2024-10-01 12:05:50,338 [26] ERROR App  
+ A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server) 
+ 
+2024-10-01 12:05:50,338 [26] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-10-01 12:05:50,893 [26] ERROR App  
+ A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server) 
+ 
+2024-10-01 12:05:51,248 [26] ERROR App  
+ A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server) 
+ 
+2024-10-01 12:05:51,249 [26] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-10-01 12:06:09,758 [30] ERROR App  
+ A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server) 
+ 
+2024-10-01 12:06:12,278 [28] ERROR App  
+ A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server) 
+ 
+2024-10-01 12:06:41,966 [31] ERROR App  
+ A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server) 
+ 
+2024-10-01 12:09:10,579 [23] ERROR App  
+ No se pudo realizar la consulta 
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_1() in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 1690
+2024-10-01 12:13:55,895 [19] ERROR App  
+ No se pudo realizar la consulta 
+ 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at DRRCore.Application.Main.CoreApplication.QueryApplication.GetQuery5_1_1() in C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Application.Main\CoreApplication\QueryApplication.cs:line 1690
+>>>>>>> dsd

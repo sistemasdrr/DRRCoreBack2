@@ -1,0 +1,6 @@
+2024-09-25 14:15:25,680 [39] ERROR App  
+ Object reference not set to an instance of an object. 
+ 
+2024-09-25 14:53:55,351 [71] ERROR App  
+ Object reference not set to an instance of an object. 
+ 

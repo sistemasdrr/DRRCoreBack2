@@ -9,7 +9,7 @@ public partial class CompanyBackground
 
     public int? IdCompany { get; set; }
 
-    public DateTime? ConstitutionDate { get; set; }
+    public string? ConstitutionDate { get; set; }
 
     public string? StartFunctionYear { get; set; }
 

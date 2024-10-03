@@ -21,6 +21,32 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                 using (var context = new SqlCoreContext())
                 {
                     await context.Tickets.AddAsync(obj);
+                    if(obj.About == "E" && obj.IdCompany != null)
+                    {
+                        var providers = await context.Providers.Where(x => x.IdCompany == obj.IdCompany && x.Flag == true).ToListAsync();
+                        if(providers.Count > 0)
+                        {
+                            foreach(var provider in providers)
+                            {
+                                provider.Qualification = null;
+                                provider.QualificationEng = null;
+                                context.Providers.Update(provider);
+                            }
+                        }
+                    }
+                    else if(obj.About == "P" && obj.IdPerson != null)
+                    {
+                        var providers = await context.Providers.Where(x => x.IdPerson == obj.IdPerson && x.Flag == true).ToListAsync();
+                        if (providers.Count > 0)
+                        {
+                            foreach (var provider in providers)
+                            {
+                                provider.Qualification = null;
+                                provider.QualificationEng = null;
+                                context.Providers.Update(provider);
+                            }
+                        }
+                    }
                     await context.SaveChangesAsync();
                     return true;
                 }

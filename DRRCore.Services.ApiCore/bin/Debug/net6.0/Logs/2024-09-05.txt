@@ -1,0 +1,12 @@
+2024-09-05 12:04:01,603 [9] ERROR App  
+ Object reference not set to an instance of an object. 
+ 
+2024-09-05 12:04:58,148 [6] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-09-05 12:05:32,608 [4] ERROR App  
+ Object reference not set to an instance of an object. 
+ 
+2024-09-05 12:06:17,424 [4] ERROR App  
+ Object reference not set to an instance of an object. 
+ 

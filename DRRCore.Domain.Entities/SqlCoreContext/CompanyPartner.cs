@@ -35,6 +35,10 @@ public partial class CompanyPartner
 
     public string? StartDateStr { get; set; }
 
+    public int? Numeration { get; set; }
+
+    public bool? Print { get; set; }
+
     public virtual Company? IdCompanyNavigation { get; set; }
 
     public virtual Person? IdPersonNavigation { get; set; }

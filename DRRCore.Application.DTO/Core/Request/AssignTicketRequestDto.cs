@@ -16,6 +16,7 @@ namespace DRRCore.Application.DTO.Core.Request
         public string? AssignedToCode { get; set; }
         public string? AssignedToName { get; set; }      
         public bool References { get; set; }
+        public bool ForceSupervisor { get; set; }
         public string? Observations { get; set; }
         public string? Type { get; set; }
         // public string? Commentary { get; set; }

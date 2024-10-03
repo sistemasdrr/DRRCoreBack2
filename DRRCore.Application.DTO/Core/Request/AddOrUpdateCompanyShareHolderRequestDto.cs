@@ -12,7 +12,7 @@
 
         public string? RelationEng { get; set; }
 
-        public int? Participation { get; set; }
+        public double? Participation { get; set; }
 
         public string? StartDate { get; set; }
     }

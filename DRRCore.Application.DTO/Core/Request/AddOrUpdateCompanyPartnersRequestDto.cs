@@ -12,9 +12,11 @@
 
         public string? Profession { get; set; }
 
-        public int? Participation { get; set; }
+        public decimal? Participation { get; set; }
 
         public string? StartDate { get; set; }
+        public int? Numeration { get; set; }
+        public bool? Print { get; set; }
 
     }
 }

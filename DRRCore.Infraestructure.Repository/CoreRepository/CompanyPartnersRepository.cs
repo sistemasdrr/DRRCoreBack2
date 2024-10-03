@@ -95,7 +95,9 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                 var list = await context.CompanyPartners.Where(x => x.IdCompany == idCompany && x.Enable == true)
                     .Include(x => x.IdPersonNavigation)
                     //.Include(x => x.IdProfessionNavigation)
-                    .Include(x => x.IdPersonNavigation.IdDocumentTypeNavigation).ToListAsync();
+                    .Include(x => x.IdPersonNavigation.IdDocumentTypeNavigation)
+                    .OrderBy(x => x.Numeration)
+                    .ToListAsync();
                 if (list != null)
                 {
                     return list;

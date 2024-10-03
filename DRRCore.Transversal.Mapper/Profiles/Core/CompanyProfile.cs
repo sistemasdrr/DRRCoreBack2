@@ -5,6 +5,7 @@ using DRRCore.Domain.Entities.SQLContext;
 using DRRCore.Domain.Entities.SqlCoreContext;
 using DRRCore.Transversal.Common;
 using Microsoft.IdentityModel.Tokens;
+using System.Globalization;
 
 namespace DRRCore.Transversal.Mapper.Profiles.Core
 {
@@ -26,7 +27,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                    .ForMember(dest => dest.Currency, opt => opt?.MapFrom(src => src.Currency == 0 ? null : src.Currency))
                    .ForMember(dest => dest.CurrentPaidCapitalCurrency, opt => opt?.MapFrom(src => src.CurrentPaidCapitalCurrency == 0 ? null : src.CurrentPaidCapitalCurrency))
                   .ForMember(dest => dest.LastQueryRrpp, opt => opt?.MapFrom(src => StaticFunctions.VerifyDate(src.LastQueryRrpp)))
-                  .ForMember(dest => dest.ConstitutionDate, opt => opt?.MapFrom(src => StaticFunctions.VerifyDate(src.ConstitutionDate)))
+                  .ForMember(dest => dest.ConstitutionDate, opt => opt?.MapFrom(src => src.ConstitutionDate))
                   .ReverseMap();
             CreateMap<AddOrUpdateCompanyBranchRequestDto, CompanyBranch>()
                   .ForMember(dest => dest.IdCompany, opt => opt?.MapFrom(src => src.IdCompany == 0 ? null : src.IdCompany))
@@ -76,6 +77,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
             CreateMap<Company, GetListCompanyResponseDto>()
                 .ForMember(dest => dest.Id, opt => opt?.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Name, opt => opt?.MapFrom(src => src.Name))
+                .ForMember(dest => dest.SocialName, opt => opt?.MapFrom(src => src.SocialName))
                  .ForMember(dest => dest.Code, opt => opt?.MapFrom(src => string.IsNullOrEmpty(src.OldCode) ? "N" + src.Id.ToString("D10") : src.OldCode))
                 .ForMember(dest => dest.CreditRisk, opt => opt?.MapFrom(src => src.IdCreditRiskNavigation!=null?src.IdCreditRiskNavigation.Identifier:string.Empty))
                 .ForMember(dest => dest.Language, opt => opt?.MapFrom(src => src.Language))
@@ -112,7 +114,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
             CreateMap<CompanyBackground, GetCompanyBackgroundResponseDto>()
                 .ForMember(dest => dest.Traductions, opt => opt?.MapFrom(src => src.IdCompanyNavigation.Traductions))
               .ForMember(dest => dest.LastQueryRrpp, opt => opt?.MapFrom(src => StaticFunctions.DateTimeToString(src.LastQueryRrpp)))
-              .ForMember(dest => dest.ConstitutionDate, opt => opt?.MapFrom(src => StaticFunctions.DateTimeToString(src.ConstitutionDate)))
+              .ForMember(dest => dest.ConstitutionDate, opt => opt?.MapFrom(src => src.ConstitutionDate))
               .ReverseMap();
             CreateMap<CompanyFinancialInformation, GetCompanyFinancialInformationResponseDto>()
                 .ForMember(dest => dest.Traductions, opt => opt?.MapFrom(src => src.IdCompanyNavigation.Traductions))
@@ -143,6 +145,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
             CreateMap<FinancialBalance, GetFinancialBalanceResponseDto>()
                  .ForMember(dest => dest.IdCompany, opt => opt?.MapFrom(src => src.IdCompany == 0 ? null : src.IdCompany))
                  .ForMember(dest => dest.IdCurrency, opt => opt?.MapFrom(src => src.IdCurrency == 0 ? null : src.IdCurrency))
+                 .ForMember(dest => dest.DurationEng, opt => opt?.MapFrom(src => src.DurationEng))
                  .ForMember(dest => dest.Date, opt => opt?.MapFrom(src => StaticFunctions.DateTimeToString(src.Date)))
              .ReverseMap();
             CreateMap<FinancialBalance, GetComboValueResponseDto>()
@@ -266,6 +269,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
           .ReverseMap();
             CreateMap<AddOrUpdateImportsAndExportsRequestDto, ImportsAndExport>()
                 .ForMember(dest => dest.IdCompany, opt => opt?.MapFrom(src => src.IdCompany == 0 ? null : src.IdCompany))
+                 .ForMember(dest => dest.Amount, opt => opt?.MapFrom(src => src.Amount.Value.ToString("#,#.00", CultureInfo.InvariantCulture)))
           .ReverseMap();
 
             CreateMap<CompanyPartner, GetCompanyPartnersResponseDto>()
@@ -281,6 +285,8 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
             .ForMember(dest => dest.Nationality, opt => opt?.MapFrom(src => src.IdPersonNavigation.Nationality))
             .ForMember(dest => dest.BirthDate, opt => opt?.MapFrom(src => src.IdPersonNavigation.BirthDate))
             .ForMember(dest => dest.IdentificationDocument, opt => opt?.MapFrom(src => src.IdPersonNavigation.IdDocumentTypeNavigation.Abreviation + " - " + src.IdPersonNavigation.CodeDocumentType))
+            .ForMember(dest => dest.Numeration, opt => opt?.MapFrom(src => src.Numeration))
+            .ForMember(dest => dest.Print, opt => opt?.MapFrom(src => src.Print))
             .ForMember(dest => dest.Profession, opt => opt?.MapFrom(src => src.Profession))
             .ForMember(dest => dest.StartDate, opt => opt?.MapFrom(src => StaticFunctions.DateTimeToString(src.StartDate)))
       .ReverseMap();
@@ -299,6 +305,8 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
              .ForMember(dest => dest.IdCompany, opt => opt?.MapFrom(src => src.IdCompany == 0 ? null : src.IdCompany))
             .ForMember(dest => dest.IdPerson, opt => opt?.MapFrom(src => src.IdPerson == 0 ? null : src.IdPerson))
             .ForMember(dest => dest.Profession, opt => opt?.MapFrom(src => src.Profession))
+            .ForMember(dest => dest.Print, opt => opt?.MapFrom(src => src.Print))
+            .ForMember(dest => dest.Numeration, opt => opt?.MapFrom(src => src.Numeration))
                  .ForMember(dest => dest.StartDate, opt => opt?.MapFrom(src => StaticFunctions.VerifyDate(src.StartDate)))
           .ReverseMap();
 

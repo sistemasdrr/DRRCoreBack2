@@ -12,5 +12,6 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<List<ObservedTickets?>>> ObservedTickets(int idEmployee);
         Task<Response<object>> TicketsInCurrentMonth();
         Task<Response<List<PendingTaskSupervisorResponseDto>>> GetPendingTaskByUser(string userTo);
+        Task<Response<GetStaticsByCountryDto>> GetStaticsByCountry(int idCountry);
     }
 }

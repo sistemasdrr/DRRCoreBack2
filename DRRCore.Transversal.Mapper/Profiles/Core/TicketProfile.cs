@@ -13,6 +13,34 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
     {
         public TicketProfile() {
 
+
+            
+            CreateMap<Company, GetSearchSituationResponseDto>()
+                   .ForMember(dest => dest.IdCompany, opt => opt?.MapFrom(src => src.Id))
+                   .ForMember(dest => dest.OldCode, opt => opt?.MapFrom(src => src.OldCode))
+                   .ForMember(dest => dest.Name, opt => opt?.MapFrom(src => src.Name))
+                   .ForMember(dest => dest.SocialName, opt => opt?.MapFrom(src => src.SocialName))
+                   .ForMember(dest => dest.TaxName, opt => opt?.MapFrom(src => src.TaxTypeName))
+                   .ForMember(dest => dest.TaxCode, opt => opt?.MapFrom(src => src.TaxTypeCode))
+                   .ForMember(dest => dest.Telephone, opt => opt?.MapFrom(src => src.Telephone))
+                   .ForMember(dest => dest.IdCountry, opt => opt?.MapFrom(src => src.IdCountry))
+                   .ForMember(dest => dest.Country, opt => opt?.MapFrom(src => src.IdCountryNavigation != null ? src.IdCountryNavigation.Iso : ""))
+                   .ForMember(dest => dest.FlagCountry, opt => opt?.MapFrom(src => src.IdCountryNavigation != null ? src.IdCountryNavigation.FlagIso : "" ))
+                   .ReverseMap();
+
+            CreateMap<Person, GetSearchSituationResponseDto>()
+                   .ForMember(dest => dest.IdCompany, opt => opt?.MapFrom(src => src.Id))
+                   .ForMember(dest => dest.OldCode, opt => opt?.MapFrom(src => src.OldCode))
+                   .ForMember(dest => dest.Name, opt => opt?.MapFrom(src => src.Fullname))
+                   .ForMember(dest => dest.SocialName, opt => opt?.MapFrom(src => src.TradeName))
+                   .ForMember(dest => dest.TaxName, opt => opt?.MapFrom(src => src.TaxTypeName))
+                   .ForMember(dest => dest.TaxCode, opt => opt?.MapFrom(src => src.TaxTypeCode))
+                   .ForMember(dest => dest.Telephone, opt => opt?.MapFrom(src => src.Cellphone))
+                   .ForMember(dest => dest.IdCountry, opt => opt?.MapFrom(src => src.IdCountry))
+                   .ForMember(dest => dest.Country, opt => opt?.MapFrom(src => src.IdCountryNavigation != null ? src.IdCountryNavigation.Iso : ""))
+                   .ForMember(dest => dest.FlagCountry, opt => opt?.MapFrom(src => src.IdCountryNavigation != null ? src.IdCountryNavigation.FlagIso : ""))
+                   .ReverseMap();
+
             CreateMap<AddOrUpdateTicketRequestDto, Ticket>()
                    .ForMember(dest => dest.OrderDate, opt => opt?.MapFrom(src => src.OrderDate))
                    .ForMember(dest => dest.ExpireDate, opt => opt?.MapFrom(src => src.ExpireDate))
@@ -108,8 +136,11 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                  .ForMember(dest => dest.RealExpireDate, opt => opt?.MapFrom(src => StaticFunctions.DateTimeToString(src.RealExpireDate)))
 
                  .ForMember(dest => dest.Price, opt => opt?.MapFrom(src => src.Price == null ? 0 : src.Price))
+                 .ForMember(dest => dest.Quality, opt => opt.MapFrom(src => src.Quality ?? ""))
+                .ForMember(dest => dest.QualityTypist, opt => opt.MapFrom(src => src.QualityTypist ?? ""))
+                .ForMember(dest => dest.QualityTranslator, opt => opt.MapFrom(src => src.QualityTranslator ?? ""))
+                .ForMember(dest => dest.QualityReport, opt => opt.MapFrom(src => src.About == "E" ? src.IdCompanyNavigation.Quality : src.IdPersonNavigation.Quality))
 
-                 .ForMember(dest => dest.Quality, opt => opt?.MapFrom(src => src.About == "E" ? src.IdCompanyNavigation.Quality : src.IdPersonNavigation.Language))
                  .ForMember(dest => dest.DispatchDate, opt => opt?.MapFrom(src => StaticFunctions.DateTimeToString(src.DispatchtDate)))
                  .ForMember(dest => dest.StatusQuery, opt => opt?.MapFrom(src => src.TicketQuery != null ? src.TicketQuery.Status : 0))
                  .ForMember(dest => dest.HasQuery, opt => opt?.MapFrom(src => src.TicketQuery != null))
@@ -197,6 +228,8 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                 .ForMember(dest => dest.References, opt => opt?.MapFrom(src => GetReferencesValue(src)))
                   .ReverseMap();
             CreateMap<TicketHistory, GetListTicketResponseDto2>()
+                .ForMember(dest => dest.IsAgent, opt => opt.MapFrom(src =>  src.IdTicketNavigation.TicketHistories != null ? GetIsAgent(src.IdTicketNavigation.TicketHistories) : default))
+                .ForMember(dest => dest.AgentFrom, opt => opt.MapFrom(src => src.IdTicketNavigation.TicketHistories != null ? GetAgentFrom(src.IdTicketNavigation.TicketHistories) : default))
                 .ForMember(dest => dest.StatusFinalOwner, opt => opt.MapFrom(src => src.IdTicketNavigation.TicketHistories != null ? GetStatusFinalOwner(src.IdTicketNavigation.TicketHistories) : default))
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.IdTicket, opt => opt.MapFrom(src => src.IdTicket))
@@ -384,6 +417,24 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                     return string.Empty;
             }
         }
+        private bool GetIsAgent(ICollection<TicketHistory> ticketHistories)
+        {
+            return ticketHistories.Any(x => x.AsignedTo.StartsWith('A'));
+        }
+        private string GetAgentFrom(ICollection<TicketHistory> ticketHistories)
+        {
+           var histories= ticketHistories.Where(x => x.AsignedTo.StartsWith('A')).FirstOrDefault();
+
+            if (ticketHistories.Any(x => x.AsignedTo.StartsWith('A')))
+            {
+                return histories.AsignedTo;
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
+       
         private static int GetReferencesValue(TicketHistory ticketHistory)
         {
             if(ticketHistory.IdTicketNavigation.TicketHistories.Any(x =>x.AsignationType!=null && x.AsignationType.Contains("RF") == true))
@@ -428,4 +479,4 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
         }
       
     }
-}
+}                                                                                                                                                   

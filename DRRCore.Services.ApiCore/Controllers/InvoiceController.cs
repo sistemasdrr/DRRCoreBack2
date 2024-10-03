@@ -1,5 +1,7 @@
 ﻿using DRRCore.Application.DTO.Core.Request;
+using DRRCore.Application.DTO.Core.Response;
 using DRRCore.Application.Interfaces.CoreApplication;
+using DRRCore.Application.Main.CoreApplication;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DRRCore.Services.ApiCore.Controllers
@@ -101,6 +103,23 @@ namespace DRRCore.Services.ApiCore.Controllers
         {
             return Ok(await _invoiceApplication.CancelAgentInvoiceToCollect(idAgentInvoice, cancelDate));
         }
-        
+        [HttpGet()]
+        [Route("GetPersonalToInvoice")]
+        public async Task<ActionResult> GetPersonalToInvoice()
+        {
+            return Ok(await _invoiceApplication.GetPersonalToInvoice());
+        }
+        [HttpPost()]
+        [Route("SaveInternalInvoice")]
+        public async Task<ActionResult> SaveInternalInvoice(string type, string code, string currentCycle, decimal totalPrice, List<GetQueryTicket5_1_2ResponseDto>? tickets)
+        {
+            return Ok(await _invoiceApplication.SaveInternalInvoice(type,code, currentCycle,totalPrice, tickets));
+        }
+        [HttpGet()]
+        [Route("ReportEmployee")]
+        public async Task<IActionResult> ReportEmployee(int idUser, string code, string type, string cycle)
+        {
+            return Ok(await _invoiceApplication.ReportEmployee(idUser, code, type, cycle));
+        }
     }
 }

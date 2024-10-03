@@ -262,7 +262,7 @@ namespace DRRCore.Application.DTO
                 var background = new LegalBackgroundDto
                 {
                     LegalStatus = company.IdLegalPersonTypeNavigation.EnglishName == null ? "" : company.IdLegalPersonTypeNavigation.EnglishName,//"Publicly Held Corporation",
-                    IncorporationDate = company.CompanyBackgrounds.FirstOrDefault().ConstitutionDate == null ? "" : StaticFunctions.DateTimeToString(company.CompanyBackgrounds.FirstOrDefault().ConstitutionDate),
+                    IncorporationDate = company.CompanyBackgrounds.FirstOrDefault().ConstitutionDate == null ? "" : company.CompanyBackgrounds.FirstOrDefault().ConstitutionDate,
                     OperationStartDate = company.CompanyBackgrounds.FirstOrDefault().StartFunctionYear == null ? "" : company.CompanyBackgrounds.FirstOrDefault().StartFunctionYear,
                     RegisterPlace = company.TraductionCompanies.FirstOrDefault().TBregisterIn ?? "",//"Lima",
                     NotaryOffice = company.CompanyBackgrounds.FirstOrDefault().NotaryRegister == null ? "" : company.CompanyBackgrounds.FirstOrDefault().NotaryRegister,//"Julio César*****",

@@ -44,7 +44,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
             .ForMember(dest => dest.StartDate, opt => opt?.MapFrom(src => src.StartDate))
             .ForMember(dest => dest.IdCurrency, opt => opt?.MapFrom(src => src.IdCurrency))
             .ForMember(dest => dest.Enable, opt => opt?.MapFrom(src => src.Enable))
-            .ForMember(dest => dest.RemainingCoupons, opt => opt?.MapFrom(src => src.CouponBillingSubscribers.First().NumCoupon))
+            .ForMember(dest => dest.RemainingCoupons, opt => opt?.MapFrom(src => src.FacturationType=="FM"?0: src.CouponBillingSubscribers.Count<=0?0: src.CouponBillingSubscribers.First().NumCoupon))
         .ReverseMap(); 
                  CreateMap<Subscriber, GetSubscriberDataResponseDto>()
             .ForMember(dest => dest.Id, opt => opt?.MapFrom(src => src.Id))

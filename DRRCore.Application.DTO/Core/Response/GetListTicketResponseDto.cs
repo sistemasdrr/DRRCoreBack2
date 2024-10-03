@@ -14,6 +14,9 @@
         public int? Creditrisk { get; set; }
         public bool? Enable { get; set; }
         public string? Quality { get; set; }
+        public string? QualityTypist { get; set; }
+        public string? QualityTranslator { get; set; }
+        public string? QualityReport { get; set; }
         public string? Status { get; set; }
         public string? StatusColor { get; set; }
         public string? StatusFinalOwner { get; set; }
@@ -76,6 +79,8 @@
     }
     public class GetListTicketResponseDto2
     {
+        public bool IsAgent { get; set; }
+        public string AgentFrom { get; set; }
         public int Id { get; set; }
         public int? IdTicket { get; set; }
         public string? Number { get; set; }
@@ -143,6 +148,7 @@
         public string? Commentary { get; set; } = string.Empty;
         public bool? HasFiles { get; set; }
         public List<TicketFileResponseDto>? Files { get; set; } = new List<TicketFileResponseDto>();
+        public List<SpecialAgentBalancePrice>? SpecialAgentBalancePrices { get; set; } = new List<SpecialAgentBalancePrice>();
         public string Origen { get; set; }
         public int? NumberAssign { get; set; }
         public string? AssinedTo { get; set; }
@@ -157,5 +163,11 @@
     {
         public string? Code { get; set; }
         public bool Active { get; set; }
+    }
+    public class SpecialAgentBalancePrice
+    {
+        public int Id { get; set; }
+
+        public string Description { get; set; } = string.Empty;
     }
 }

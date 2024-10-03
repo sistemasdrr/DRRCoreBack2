@@ -27,6 +27,6 @@
 
         Task<bool> UpdateSubscriber();
         Task<bool> MigrateOccupation();
-
+        Task<bool> arreglarNumeration();
     }
 }

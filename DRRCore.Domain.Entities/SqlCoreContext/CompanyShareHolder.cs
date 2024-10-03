@@ -13,7 +13,7 @@ public partial class CompanyShareHolder
 
     public string? Relation { get; set; }
 
-    public int? Participation { get; set; }
+    public decimal? Participation { get; set; }
 
     public DateTime? StartDate { get; set; }
 

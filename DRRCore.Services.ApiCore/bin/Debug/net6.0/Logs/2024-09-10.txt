@@ -1,0 +1,18 @@
+2024-09-10 10:06:31,036 [4] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-10 10:06:31,152 [4] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-10 10:06:31,422 [9] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-10 10:06:31,725 [4] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-10 10:06:31,824 [4] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-10 18:03:27,806 [170] ERROR App  
+ No se encontró datos en la entidad 
+ 

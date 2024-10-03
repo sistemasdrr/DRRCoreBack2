@@ -205,6 +205,16 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                             && (form == "C" ? x.Fullname.Contains(fullname) : form == "I" ? x.Fullname.StartsWith(fullname) : false))
                             .Take(100).ToListAsync();
                     }
+                    else if (filterBy == "C")
+                    {
+                        people = await context.People
+                            .Include(x => x.IdCreditRiskNavigation)
+                            .Include(x => x.IdDocumentTypeNavigation)
+                            .Include(x => x.IdCountryNavigation)
+                            .Include(x => x.TraductionPeople)
+                            .Where(x => (idCountry == 0 || x.IdCountry == idCountry)
+                            && (form == "C" ? x.TradeName.Contains(fullname) : form == "I" ? x.TradeName.StartsWith(fullname) : false)).Take(100).ToListAsync();
+                    }
                     else if (filterBy == "D")
                     {
                         people = await context.People

@@ -1,0 +1,243 @@
+2024-09-13 09:08:45,079 [4] ERROR App  
+ The 'string' property 'CompanyBackground.ConstitutionDate' could not be mapped to the database type 'datetime' because the database provider does not support mapping 'string' properties to 'datetime' columns. Consider mapping to a different database type or converting the property value to a type supported by the database using a value converter. See https://aka.ms/efcore-docs-value-converters for more information. Alternately, exclude the property from the model using the '[NotMapped]' attribute or by using 'EntityTypeBuilder.Ignore' in 'OnModelCreating'. 
+ 
+2024-09-13 09:08:45,539 [6] ERROR App  
+ The 'string' property 'CompanyBackground.ConstitutionDate' could not be mapped to the database type 'datetime' because the database provider does not support mapping 'string' properties to 'datetime' columns. Consider mapping to a different database type or converting the property value to a type supported by the database using a value converter. See https://aka.ms/efcore-docs-value-converters for more information. Alternately, exclude the property from the model using the '[NotMapped]' attribute or by using 'EntityTypeBuilder.Ignore' in 'OnModelCreating'. 
+ 
+2024-09-13 09:08:45,960 [9] ERROR App  
+ The 'string' property 'CompanyBackground.ConstitutionDate' could not be mapped to the database type 'datetime' because the database provider does not support mapping 'string' properties to 'datetime' columns. Consider mapping to a different database type or converting the property value to a type supported by the database using a value converter. See https://aka.ms/efcore-docs-value-converters for more information. Alternately, exclude the property from the model using the '[NotMapped]' attribute or by using 'EntityTypeBuilder.Ignore' in 'OnModelCreating'. 
+ 
+2024-09-13 09:08:45,961 [9] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-09-13 09:08:46,371 [22] ERROR App  
+ The 'string' property 'CompanyBackground.ConstitutionDate' could not be mapped to the database type 'datetime' because the database provider does not support mapping 'string' properties to 'datetime' columns. Consider mapping to a different database type or converting the property value to a type supported by the database using a value converter. See https://aka.ms/efcore-docs-value-converters for more information. Alternately, exclude the property from the model using the '[NotMapped]' attribute or by using 'EntityTypeBuilder.Ignore' in 'OnModelCreating'. 
+ 
+2024-09-13 09:08:46,372 [22] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-09-13 09:08:46,842 [12] ERROR App  
+ The 'string' property 'CompanyBackground.ConstitutionDate' could not be mapped to the database type 'datetime' because the database provider does not support mapping 'string' properties to 'datetime' columns. Consider mapping to a different database type or converting the property value to a type supported by the database using a value converter. See https://aka.ms/efcore-docs-value-converters for more information. Alternately, exclude the property from the model using the '[NotMapped]' attribute or by using 'EntityTypeBuilder.Ignore' in 'OnModelCreating'. 
+ 
+2024-09-13 09:08:46,843 [12] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-09-13 09:08:47,326 [25] ERROR App  
+ The 'string' property 'CompanyBackground.ConstitutionDate' could not be mapped to the database type 'datetime' because the database provider does not support mapping 'string' properties to 'datetime' columns. Consider mapping to a different database type or converting the property value to a type supported by the database using a value converter. See https://aka.ms/efcore-docs-value-converters for more information. Alternately, exclude the property from the model using the '[NotMapped]' attribute or by using 'EntityTypeBuilder.Ignore' in 'OnModelCreating'. 
+ 
+2024-09-13 09:08:47,800 [9] ERROR App  
+ The 'string' property 'CompanyBackground.ConstitutionDate' could not be mapped to the database type 'datetime' because the database provider does not support mapping 'string' properties to 'datetime' columns. Consider mapping to a different database type or converting the property value to a type supported by the database using a value converter. See https://aka.ms/efcore-docs-value-converters for more information. Alternately, exclude the property from the model using the '[NotMapped]' attribute or by using 'EntityTypeBuilder.Ignore' in 'OnModelCreating'. 
+ 
+2024-09-13 09:08:48,275 [9] ERROR App  
+ The 'string' property 'CompanyBackground.ConstitutionDate' could not be mapped to the database type 'datetime' because the database provider does not support mapping 'string' properties to 'datetime' columns. Consider mapping to a different database type or converting the property value to a type supported by the database using a value converter. See https://aka.ms/efcore-docs-value-converters for more information. Alternately, exclude the property from the model using the '[NotMapped]' attribute or by using 'EntityTypeBuilder.Ignore' in 'OnModelCreating'. 
+ 
+2024-09-13 09:08:48,772 [9] ERROR App  
+ The 'string' property 'CompanyBackground.ConstitutionDate' could not be mapped to the database type 'datetime' because the database provider does not support mapping 'string' properties to 'datetime' columns. Consider mapping to a different database type or converting the property value to a type supported by the database using a value converter. See https://aka.ms/efcore-docs-value-converters for more information. Alternately, exclude the property from the model using the '[NotMapped]' attribute or by using 'EntityTypeBuilder.Ignore' in 'OnModelCreating'. 
+ 
+2024-09-13 09:08:49,222 [4] ERROR App  
+ The 'string' property 'CompanyBackground.ConstitutionDate' could not be mapped to the database type 'datetime' because the database provider does not support mapping 'string' properties to 'datetime' columns. Consider mapping to a different database type or converting the property value to a type supported by the database using a value converter. See https://aka.ms/efcore-docs-value-converters for more information. Alternately, exclude the property from the model using the '[NotMapped]' attribute or by using 'EntityTypeBuilder.Ignore' in 'OnModelCreating'. 
+ 
+2024-09-13 09:08:49,677 [9] ERROR App  
+ The 'string' property 'CompanyBackground.ConstitutionDate' could not be mapped to the database type 'datetime' because the database provider does not support mapping 'string' properties to 'datetime' columns. Consider mapping to a different database type or converting the property value to a type supported by the database using a value converter. See https://aka.ms/efcore-docs-value-converters for more information. Alternately, exclude the property from the model using the '[NotMapped]' attribute or by using 'EntityTypeBuilder.Ignore' in 'OnModelCreating'. 
+ 
+2024-09-13 09:08:50,119 [4] ERROR App  
+ The 'string' property 'CompanyBackground.ConstitutionDate' could not be mapped to the database type 'datetime' because the database provider does not support mapping 'string' properties to 'datetime' columns. Consider mapping to a different database type or converting the property value to a type supported by the database using a value converter. See https://aka.ms/efcore-docs-value-converters for more information. Alternately, exclude the property from the model using the '[NotMapped]' attribute or by using 'EntityTypeBuilder.Ignore' in 'OnModelCreating'. 
+ 
+2024-09-13 09:08:50,119 [4] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-09-13 09:08:50,567 [12] ERROR App  
+ The 'string' property 'CompanyBackground.ConstitutionDate' could not be mapped to the database type 'datetime' because the database provider does not support mapping 'string' properties to 'datetime' columns. Consider mapping to a different database type or converting the property value to a type supported by the database using a value converter. See https://aka.ms/efcore-docs-value-converters for more information. Alternately, exclude the property from the model using the '[NotMapped]' attribute or by using 'EntityTypeBuilder.Ignore' in 'OnModelCreating'. 
+ 
+2024-09-13 09:08:51,029 [12] ERROR App  
+ The 'string' property 'CompanyBackground.ConstitutionDate' could not be mapped to the database type 'datetime' because the database provider does not support mapping 'string' properties to 'datetime' columns. Consider mapping to a different database type or converting the property value to a type supported by the database using a value converter. See https://aka.ms/efcore-docs-value-converters for more information. Alternately, exclude the property from the model using the '[NotMapped]' attribute or by using 'EntityTypeBuilder.Ignore' in 'OnModelCreating'. 
+ 
+2024-09-13 09:08:51,030 [12] ERROR App  
+ No se encontró datos en la entidad 
+ 
+2024-09-13 09:08:59,043 [4] ERROR App  
+ The 'string' property 'CompanyBackground.ConstitutionDate' could not be mapped to the database type 'datetime' because the database provider does not support mapping 'string' properties to 'datetime' columns. Consider mapping to a different database type or converting the property value to a type supported by the database using a value converter. See https://aka.ms/efcore-docs-value-converters for more information. Alternately, exclude the property from the model using the '[NotMapped]' attribute or by using 'EntityTypeBuilder.Ignore' in 'OnModelCreating'. 
+ 
+2024-09-13 09:09:01,494 [12] ERROR App  
+ The 'string' property 'CompanyBackground.ConstitutionDate' could not be mapped to the database type 'datetime' because the database provider does not support mapping 'string' properties to 'datetime' columns. Consider mapping to a different database type or converting the property value to a type supported by the database using a value converter. See https://aka.ms/efcore-docs-value-converters for more information. Alternately, exclude the property from the model using the '[NotMapped]' attribute or by using 'EntityTypeBuilder.Ignore' in 'OnModelCreating'. 
+ 
+2024-09-13 09:09:07,115 [12] ERROR App  
+ The 'string' property 'CompanyBackground.ConstitutionDate' could not be mapped to the database type 'datetime' because the database provider does not support mapping 'string' properties to 'datetime' columns. Consider mapping to a different database type or converting the property value to a type supported by the database using a value converter. See https://aka.ms/efcore-docs-value-converters for more information. Alternately, exclude the property from the model using the '[NotMapped]' attribute or by using 'EntityTypeBuilder.Ignore' in 'OnModelCreating'. 
+ 
+2024-09-13 09:09:24,564 [4] ERROR App  
+ The 'string' property 'CompanyBackground.ConstitutionDate' could not be mapped to the database type 'datetime' because the database provider does not support mapping 'string' properties to 'datetime' columns. Consider mapping to a different database type or converting the property value to a type supported by the database using a value converter. See https://aka.ms/efcore-docs-value-converters for more information. Alternately, exclude the property from the model using the '[NotMapped]' attribute or by using 'EntityTypeBuilder.Ignore' in 'OnModelCreating'. 
+ 
+2024-09-13 09:09:48,069 [4] ERROR App  
+ The 'string' property 'CompanyBackground.ConstitutionDate' could not be mapped to the database type 'datetime' because the database provider does not support mapping 'string' properties to 'datetime' columns. Consider mapping to a different database type or converting the property value to a type supported by the database using a value converter. See https://aka.ms/efcore-docs-value-converters for more information. Alternately, exclude the property from the model using the '[NotMapped]' attribute or by using 'EntityTypeBuilder.Ignore' in 'OnModelCreating'. 
+ 
+2024-09-13 09:09:50,487 [9] ERROR App  
+ The 'string' property 'CompanyBackground.ConstitutionDate' could not be mapped to the database type 'datetime' because the database provider does not support mapping 'string' properties to 'datetime' columns. Consider mapping to a different database type or converting the property value to a type supported by the database using a value converter. See https://aka.ms/efcore-docs-value-converters for more information. Alternately, exclude the property from the model using the '[NotMapped]' attribute or by using 'EntityTypeBuilder.Ignore' in 'OnModelCreating'. 
+ 
+2024-09-13 09:09:52,893 [9] ERROR App  
+ The 'string' property 'CompanyBackground.ConstitutionDate' could not be mapped to the database type 'datetime' because the database provider does not support mapping 'string' properties to 'datetime' columns. Consider mapping to a different database type or converting the property value to a type supported by the database using a value converter. See https://aka.ms/efcore-docs-value-converters for more information. Alternately, exclude the property from the model using the '[NotMapped]' attribute or by using 'EntityTypeBuilder.Ignore' in 'OnModelCreating'. 
+ 
+2024-09-13 09:10:01,971 [6] ERROR App  
+ The 'string' property 'CompanyBackground.ConstitutionDate' could not be mapped to the database type 'datetime' because the database provider does not support mapping 'string' properties to 'datetime' columns. Consider mapping to a different database type or converting the property value to a type supported by the database using a value converter. See https://aka.ms/efcore-docs-value-converters for more information. Alternately, exclude the property from the model using the '[NotMapped]' attribute or by using 'EntityTypeBuilder.Ignore' in 'OnModelCreating'. 
+ 
+2024-09-13 09:15:15,116 [9] ERROR App  
+ Object reference not set to an instance of an object. 
+ 
+2024-09-13 09:15:20,597 [26] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 09:15:20,692 [4] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 09:18:26,261 [4] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 09:18:26,390 [4] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 09:19:04,594 [4] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 09:19:04,712 [4] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 09:21:02,465 [6] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 09:21:02,556 [13] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 09:21:06,191 [4] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 09:21:06,286 [9] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 09:21:09,667 [4] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 09:21:09,763 [6] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 09:25:49,029 [4] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 09:25:49,119 [31] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 09:33:05,944 [36] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 09:33:05,944 [29] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 09:33:05,944 [30] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 09:33:06,096 [36] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 09:33:06,096 [9] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 09:33:06,096 [29] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 09:34:04,241 [40] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 09:34:04,337 [28] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 09:34:10,069 [28] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 09:34:10,157 [51] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 09:35:23,855 [55] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 09:35:24,328 [58] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 09:35:24,462 [53] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 09:37:06,989 [12] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 09:37:07,120 [12] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 09:39:07,439 [4] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 09:39:07,553 [4] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 09:39:42,813 [13] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 09:39:42,909 [18] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 09:40:18,075 [6] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 09:40:18,177 [6] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 09:49:31,665 [6] ERROR App  
+ Error generating report: Value cannot be null. 
+ 
+2024-09-13 10:02:40,017 [6] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 10:02:40,018 [6] ERROR App  
+ No se encontr� datos en la entidad 
+ 
+2024-09-13 10:03:10,514 [9] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 10:03:10,514 [9] ERROR App  
+ No se encontr� datos en la entidad 
+ 
+2024-09-13 10:03:22,593 [20] ERROR App  
+ Error generating report: Value cannot be null. 
+ 
+2024-09-13 10:46:22,835 [6] ERROR App  
+ Error generating report: Value cannot be null. 
+ 
+2024-09-13 10:57:44,197 [45] ERROR App  
+ Error generating report: The document has no pages. 
+ 
+2024-09-13 10:58:09,429 [46] ERROR App  
+ Error generating report: The document has no pages. 
+ 
+2024-09-13 11:39:40,359 [38] ERROR App  
+ Object reference not set to an instance of an object. 
+ 
+2024-09-13 11:39:48,447 [52] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 11:40:35,341 [4] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 11:42:29,633 [38] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 11:42:53,073 [4] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 11:45:49,683 [4] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 11:45:50,767 [24] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 11:46:01,719 [38] ERROR App  
+ No existe la empresa solicitada 
+ 
+2024-09-13 11:46:02,804 [38] ERROR App  
+ No existe la empresa solicitada 
+ 

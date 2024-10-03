@@ -667,8 +667,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     }
                     if (companyBackground.ConstitutionDate != null)
                     {
-                        DateTime date = (DateTime)companyBackground.ConstitutionDate;
-                        AddCDataElement(xmlDoc, summaryElement, "Incorporation", date.ToString("yyyy"));
+                        AddCDataElement(xmlDoc, summaryElement, "Incorporation", companyBackground.ConstitutionDate);
                     }
                     if (companyBackground.CurrentPaidCapital > 0)
                     {
@@ -748,9 +747,8 @@ namespace DRRCore.Application.Main.CoreApplication
                         AddCDataElement(xmlDoc, legalBackgElement, "Legal_Status", company.IdLegalPersonTypeNavigation.EnglishName);
                     }
                     if (companyBackground.ConstitutionDate != null)
-                    {
-                        DateTime date = (DateTime)companyBackground.ConstitutionDate;
-                        AddCDataElement(xmlDoc, legalBackgElement, "Date_Of_Incorporation", date.ToString("ddMMMyyyy"));
+                    {                       
+                        AddCDataElement(xmlDoc, legalBackgElement, "Date_Of_Incorporation", companyBackground.ConstitutionDate);
                     }
                     if (!companyBackground.StartFunctionYear.IsNullOrEmpty())
                     {
@@ -1813,9 +1811,9 @@ namespace DRRCore.Application.Main.CoreApplication
 
                     //General_Information
                     if (companyInfoGeneral != null &&
-                        !companyInfoGeneral.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TIgeneral.IsNullOrEmpty() ||
+                        (!companyInfoGeneral.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TIgeneral.IsNullOrEmpty() ||
                         company.IdReputation != null ||
-                        !company.TraductionCompanies.FirstOrDefault().TEreputation.IsNullOrEmpty())
+                        !company.TraductionCompanies.FirstOrDefault().TEreputation.IsNullOrEmpty()))
                         {
                         XmlElement generalInfoElement = xmlDoc.CreateElement("General_Information");
                         rootElement.AppendChild(generalInfoElement);

@@ -33,6 +33,7 @@
         public string? DateReferent { get; set; }
         public string? Ticket { get; set; }
         public bool? Enable { get; set; }
+        public int Order { get; set; }
     }
     public class GetListProviderResponseDto2
     {

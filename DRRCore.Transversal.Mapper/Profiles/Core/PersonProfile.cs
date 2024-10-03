@@ -47,6 +47,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                  .ForMember(dest => dest.FlagCountry, opt => opt?.MapFrom(src => src.IdCountryNavigation.FlagIso))
                  .ForMember(dest => dest.DocumentType, opt => opt?.MapFrom(src => src.IdDocumentTypeNavigation.Abreviation))
                  .ForMember(dest => dest.Cellphone, opt => opt?.MapFrom(src => src.Cellphone))
+                 .ForMember(dest => dest.SocialName, opt => opt?.MapFrom(src => src.TradeName))
                  .ForMember(dest => dest.TraductionPercentage, opt => opt?.MapFrom(src => GetTraductionPersonPercentage(src.TraductionPeople.FirstOrDefault())))
                  .ForMember(dest => dest.Profession, opt => opt?.MapFrom(src => src.Profession))
                  .ForMember(dest => dest.LastSearched, opt => opt?.MapFrom(src => StaticFunctions.DateTimeToString(src.LastSearched)))

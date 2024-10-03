@@ -1,9 +1,11 @@
-﻿using DocumentFormat.OpenXml.Office2010.Excel;
+﻿using AspNetCore.ReportingServices.ReportProcessing.ReportObjectModel;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using DRRCore.Application.DTO.Core.Request;
 using DRRCore.Application.DTO.Core.Response;
 using DRRCore.Application.Interfaces.CoreApplication;
 using DRRCore.Application.Main.CoreApplication;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Reflection.Emit;
 
 namespace DRRCore.Services.ApiCore.Controllers
@@ -88,6 +90,15 @@ namespace DRRCore.Services.ApiCore.Controllers
             return Ok(await _ticketApplication.GetSearchSituation(about, typeSearch, search, idCountry));
         }
         [HttpGet()]
+        [Route("GetNewSearchSituation")]
+        public async Task<ActionResult> GetNewSearchSituation(string about, string? name, string form, int idCountry, bool haveReport, string filterBy)
+        {
+            about ??= string.Empty;
+            filterBy ??= string.Empty;
+            name ??= string.Empty;
+            return Ok(await _ticketApplication.GetNewSearchSituation(about, name, form, idCountry, haveReport, filterBy));
+        }
+        [HttpGet()]
         [Route("getListTicketSituation")]
         public async Task<ActionResult> getListTicketSituation(string about, int id, string oldCode)
         {
@@ -127,9 +138,9 @@ namespace DRRCore.Services.ApiCore.Controllers
         }
         [HttpGet()]
         [Route("TicketToDispatch")]
-        public async Task<ActionResult> TicketToDispatch(int idTicketHistory, int idTicket)
+        public async Task<ActionResult> TicketToDispatch(int idTicketHistory, int idTicket, string quality, string qualityTranslator, string qualityTypist)
         {
-            return Ok(await _ticketApplication.TicketToDispatch(idTicketHistory, idTicket));
+            return Ok(await _ticketApplication.TicketToDispatch(idTicketHistory, idTicket,quality,qualityTranslator,qualityTypist));
         }
         [HttpPost()]
         [Route("DispatchTicket")]
@@ -388,9 +399,35 @@ namespace DRRCore.Services.ApiCore.Controllers
         public async Task<IActionResult> DownloadF8ByIdTicket(int idTicket, string language, string format)
         {
             var result = await _ticketApplication.DownloadF8ByIdTicket(idTicket, language, format);
-
             return File(result.Data.File, result.Data.ContentType, result.Data.Name);
         }
+        [HttpGet()]
+        [Route("GetNumerationRefCom")]
+        public async Task<IActionResult> GetNumerationRefCom()
+        {
+            return Ok(await _ticketApplication.GetNumerationRefCom());
+        }
 
+        [HttpPost()]
+        [Route("SendComplementRefCom")]
+        public async Task<IActionResult> SendComplementRefCom(int idUser, int idTicket, string asignedTo, string numOrder, string message)
+        {
+            return Ok(await _ticketApplication.SendComplementRefCom(idUser, idTicket, asignedTo, numOrder, message));
+        }
+        [HttpPost()]
+        [Route("ConfirmAgentHistory")]
+        public async Task<IActionResult> ConfirmAgentHistory( int idTicketHistory)
+        {
+            return Ok(await _ticketApplication.ConfirmAgentHistory(idTicketHistory));
+        }
+        [HttpGet()]
+        [Route("GetTicketAssignedValidation")]
+        public async Task<IActionResult> GetTicketAssignedValidation(int idTicket)
+        {
+            return Ok(await _ticketApplication.GetTicketAssignedValidation(idTicket));
+        }
+
+
+        
     }
 }

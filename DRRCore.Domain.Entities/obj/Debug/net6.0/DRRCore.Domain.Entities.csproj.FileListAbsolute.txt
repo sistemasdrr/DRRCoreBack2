@@ -42,3 +42,18 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Entities\obj\Debu
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Entities\obj\Debug\net6.0\DRRCore.Domain.Entities.genruntimeconfig.cache
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Entities\obj\Debug\net6.0\ref\DRRCore.Domain.Entities.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Entities\obj\Debug\net6.0\DRRCore.Domain.Entities.sourcelink.json
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Entities\bin\Debug\net6.0\DRRCore.Domain.Entities.deps.json
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Entities\bin\Debug\net6.0\DRRCore.Domain.Entities.runtimeconfig.json
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Entities\bin\Debug\net6.0\DRRCore.Domain.Entities.dll
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Entities\bin\Debug\net6.0\DRRCore.Domain.Entities.pdb
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Entities\obj\Debug\net6.0\DRRCore.Domain.Entities.csproj.AssemblyReference.cache
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Entities\obj\Debug\net6.0\DRRCore.Domain.Entities.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Entities\obj\Debug\net6.0\DRRCore.Domain.Entities.AssemblyInfoInputs.cache
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Entities\obj\Debug\net6.0\DRRCore.Domain.Entities.AssemblyInfo.cs
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Entities\obj\Debug\net6.0\DRRCore.Domain.Entities.csproj.CoreCompileInputs.cache
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Entities\obj\Debug\net6.0\DRRCore.Domain.Entities.sourcelink.json
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Entities\obj\Debug\net6.0\DRRCore.Domain.Entities.dll
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Entities\obj\Debug\net6.0\refint\DRRCore.Domain.Entities.dll
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Entities\obj\Debug\net6.0\DRRCore.Domain.Entities.pdb
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Entities\obj\Debug\net6.0\DRRCore.Domain.Entities.genruntimeconfig.cache
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Entities\obj\Debug\net6.0\ref\DRRCore.Domain.Entities.dll

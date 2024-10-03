@@ -4,6 +4,7 @@
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
+        public string SocialName { get; set; } = string.Empty;
         public string DispatchedName { get; set; } = string.Empty;
         public string Code { get; set; } = string.Empty;
         public string Telephone { get; set; } = string.Empty;

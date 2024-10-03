@@ -55,5 +55,7 @@ public partial class Agent
 
     public virtual Country? IdCountryNavigation { get; set; }
 
+    public virtual ICollection<SpecialAgentBalancePrice> SpecialAgentBalancePrices { get; set; } = new List<SpecialAgentBalancePrice>();
+
     public virtual ICollection<Subscriber> Subscribers { get; set; } = new List<Subscriber>();
 }

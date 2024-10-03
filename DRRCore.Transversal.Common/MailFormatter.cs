@@ -67,6 +67,10 @@ namespace DRRCore.Transversal.Common
                 case Constants.DRR_WORKFLOW_ESP_0028:
                 case Constants.DRR_WORKFLOW_ESP_0029:
                 case Constants.DRR_WORKFLOW_ESP_0030:
+                case Constants.DRR_WORKFLOW_ESP_0062:
+                    return GetHtmlStringBody(body, parameters);
+                case Constants.DRR_WORKFLOW_ESP_0063:
+                    return GetHtmlStringBody(body, parameters);
                 case Constants.DRR_WORKFLOW_ESP_0031:
                     return GetHtmlStringBodyWithTable_DRR_WORKFLOW_ESP_ENG_0020(body, parameters, table);
                 case Constants.DRR_WORKFLOW_ESP_0004:

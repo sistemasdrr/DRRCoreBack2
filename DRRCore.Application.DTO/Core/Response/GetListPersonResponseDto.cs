@@ -7,6 +7,7 @@
         public string? OldCode { get; set; }
 
         public string Fullname { get; set; } = null!;
+        public string SocialName { get; set; } = null!;
         public string DispatchName { get; set; } = null!;
 
         public string? LastSearched { get; set; }
