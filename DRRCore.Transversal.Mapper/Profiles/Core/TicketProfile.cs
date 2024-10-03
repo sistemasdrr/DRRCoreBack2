@@ -386,7 +386,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
         }
         private static int GetReferencesValue(TicketHistory ticketHistory)
         {
-            if(ticketHistory.IdTicketNavigation.TicketHistories.Any(x => x.AsignationType.Contains("RF") == true))
+            if(ticketHistory.IdTicketNavigation.TicketHistories.Any(x =>x.AsignationType!=null && x.AsignationType.Contains("RF") == true))
             {
                 if (ticketHistory.IdTicketNavigation.TicketHistories.Where(x => x.AsignationType.Contains("RF") == true).FirstOrDefault().Flag == false)
                 {
