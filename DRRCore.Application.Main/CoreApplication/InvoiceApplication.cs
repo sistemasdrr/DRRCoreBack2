@@ -77,7 +77,7 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             else
             {
-                if(quality != null)
+                if(quality != null && _specialPriceAgent.Where(x => x.CodeAgent == agent.Code).FirstOrDefault()?.QualityAgent?.Where(x => x.Quality == quality.Trim()).FirstOrDefault()?.Price != null)
                 {
                     var price = _specialPriceAgent.Where(x => x.CodeAgent == agent.Code).FirstOrDefault().QualityAgent.Where(x => x.Quality == quality.Trim()).FirstOrDefault().Price;
                     return procedureType == "T1" ? price.T1 : procedureType == "T2" ? price.T2 : procedureType == "T3" ? price.T3 : 0;
