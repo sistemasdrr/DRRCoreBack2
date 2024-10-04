@@ -63,11 +63,15 @@ builder.Services.AddAutoMapper(typeof(DataProfile).Assembly);
 builder.Services.AddScoped<IMySqlApiRepository, MySqlApiRepository>();
 builder.Services.AddScoped<IMySqlUserRepository, MySqlUserRepository>();
 builder.Services.AddScoped<IMySqlWebRepository, MySqlWebRepository>();
+builder.Services.AddScoped<IEmailHistoryRepository, EmailHistoryRepository>();
+builder.Services.AddScoped<IEmailConfigurationRepository, EmailConfigurationRepository>();
 
 
 //builder.Services.AddScoped<IEmailUserRepository, EmailUserRepository>();
 builder.Services.AddScoped<IWebQueryRepository, WebQueryRepository>();
 builder.Services.AddScoped<IApiUserRepository, ApiUserRepository>();
+builder.Services.AddScoped<IEmailHistoryDomain, EmailHistoryDomain>();
+builder.Services.AddScoped<IEmailConfigurationDomain, EmailConfigurationDomain>();
 
 //Injection Domain
 
@@ -81,9 +85,12 @@ builder.Services.AddScoped<IWebDataApplication, WebDataApplication>();
 builder.Services.AddScoped<ITokenGeneratorApplication, TokenGeneratorApplication>();
 builder.Services.AddScoped<ITokenValidationApplication, TokenValidationApplication>();
 builder.Services.AddScoped<IApiUserApplication, ApiUserAplication>();
+builder.Services.AddScoped<IReportingDownload, ReportingDownload>();
 
 
 //Injection Common
+builder.Services.AddScoped<IMailFormatter, MailFormatter>();
+
 builder.Services.AddScoped<IMailSender, MailSender>();
 builder.Services.AddScoped<IFileManager, FileManager>();
 builder.Services.AddScoped<DRRCore.Transversal.Common.Interface.ILogger, LoggerManager>();
