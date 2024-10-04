@@ -568,3 +568,16 @@
 /DRRCore.Transversal.Mapper/obj/Debug/net6.0/ref/DRRCore.Transversal.Mapper.dll
 /DRRCore.Transversal.Mapper/obj/Debug/net6.0/refint/DRRCore.Transversal.Mapper.dll
 >>>>>>> 5b9a2392b6680f134b36edd01a21424ba4e52467
+/DRRCore.Domain.Main/bin/Debug/net6.0/DRRCore.Domain.Entities.pdb
+/DRRCore.Domain.Main/bin/Debug/net6.0/DRRCore.Domain.Main.dll
+/DRRCore.Infraestructure.Interfaces/bin/Debug/net6.0/DRRCore.Application.DTO.dll
+/DRRCore.Infraestructure.Repository/bin/Debug/net6.0/DRRCore.Domain.Entities.dll
+/DRRCore.Infraestructure.Repository/bin/Debug/net6.0/DRRCore.Domain.Entities.pdb
+/DRRCore.Infraestructure.Repository/bin/Debug/net6.0/DRRCore.Infraestructure.Configuration.dll
+/DRRCore.Infraestructure.Repository/bin/Debug/net6.0/DRRCore.Infraestructure.Interfaces.dll
+/DRRCore.Infraestructure.Repository/bin/Debug/net6.0/DRRCore.Infraestructure.Interfaces.pdb
+/DRRCore.Infraestructure.Repository/bin/Debug/net6.0/DRRCore.Infraestructure.Repository.dll
+/DRRCore.Transversal.Mapper/obj/Debug/net6.0/DRRCore.Transversal.Mapper.dll
+/DRRCore.Transversal.Mapper/obj/Debug/net6.0/DRRCore.Transversal.Mapper.pdb
+/DRRCore.Transversal.Mapper/obj/Debug/net6.0/ref/DRRCore.Transversal.Mapper.dll
+/DRRCore.Transversal.Mapper/obj/Debug/net6.0/refint/DRRCore.Transversal.Mapper.dll
