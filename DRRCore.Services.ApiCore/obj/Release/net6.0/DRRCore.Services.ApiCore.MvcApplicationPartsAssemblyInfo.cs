@@ -11,7 +11,17 @@
 using System;
 using System.Reflection;
 
+<<<<<<< HEAD:DRRCore.Services.ApiCore/obj/Release/net6.0/DRRCore.Services.ApiCore.MvcApplicationPartsAssemblyInfo.cs
 [assembly: Microsoft.AspNetCore.Mvc.ApplicationParts.ApplicationPartAttribute("Swashbuckle.AspNetCore.SwaggerGen")]
+=======
+[assembly: System.Reflection.AssemblyCompanyAttribute("DRRCore.Services.ApiCore")]
+[assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
+[assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4394d182bf99d2105a6e2c14f6fea4034ae466b8")]
+[assembly: System.Reflection.AssemblyProductAttribute("DRRCore.Services.ApiCore")]
+[assembly: System.Reflection.AssemblyTitleAttribute("DRRCore.Services.ApiCore")]
+[assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
+>>>>>>> 4/10 3:DRRCore.Services.ApiCore/obj/Debug/net6.0/DRRCore.Services.ApiCore.AssemblyInfo.cs
 
 // Generado por la clase WriteCodeFragment de MSBuild.
 

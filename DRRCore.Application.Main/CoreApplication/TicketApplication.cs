@@ -255,7 +255,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 {
 
                     DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1).AddDays(-1);
-                    await context.ProductionClosures.AddAsync(new ProductionClosure
+                    await context.ProductionClosures.AddAsync(new Domain.Entities.SqlCoreContext.ProductionClosure
                     {
                         EndDate = lastDayOfCurrentMonth,
                         Code = code,
@@ -2230,6 +2230,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                         }
 
 
+
                                         ticket.UpdateDate = DateTime.Now;
                                         ticket.IdStatusTicket = (int)TicketStatusEnum.Asig_Reportero;
                                         history.Flag = true;
@@ -2324,6 +2325,16 @@ namespace DRRCore.Application.Main.CoreApplication
                                                     string path = await UploadDispatchReport(ticket.Id, file.Name, file.File, ".pdf");
                                                     emailDataDto.Attachments.Add(attachment);
 
+
+                                                    if (item.AttachmentRefCom == true)
+                                                    {
+                                                        var providersFile = DownloadListProviders(ticket.About.Trim(), ticket.About.Trim() == "E" ? (int)ticket.IdCompany : (int)ticket.IdPerson).Result.Data;
+                                                        var attachmentProviders = new AttachmentDto();
+                                                        attachmentProviders.FileName = providersFile.Name + ".xlsx";
+                                                        attachmentProviders.Content = Convert.ToBase64String(providersFile.File);
+                                                        string pathProvider = await UploadDispatchReport(ticket.Id, providersFile.Name, providersFile.File, ".xlsx");
+                                                        emailDataDto.Attachments.Add(attachmentProviders);
+                                                    }
 
                                                     await context.TicketFiles.AddAsync(new TicketFile
                                                     {
@@ -2429,6 +2440,15 @@ namespace DRRCore.Application.Main.CoreApplication
                                                     string path = await UploadDispatchReport(ticket.Id, file.Name, file.File, ".pdf");
                                                     emailDataDto.Attachments.Add(attachment);
 
+                                                    if (item.AttachmentRefCom == true)
+                                                    {
+                                                        var providersFile = DownloadListProviders(ticket.About.Trim(), ticket.About.Trim() == "E" ? (int)ticket.IdCompany : (int)ticket.IdPerson).Result.Data;
+                                                        var attachmentProviders = new AttachmentDto();
+                                                        attachmentProviders.FileName = providersFile.Name + ".xlsx";
+                                                        attachmentProviders.Content = Convert.ToBase64String(providersFile.File);
+                                                        string pathProvider = await UploadDispatchReport(ticket.Id, providersFile.Name, providersFile.File, ".xlsx");
+                                                        emailDataDto.Attachments.Add(attachmentProviders);
+                                                    }
 
                                                     await context.TicketFiles.AddAsync(new TicketFile
                                                     {
@@ -2603,7 +2623,8 @@ namespace DRRCore.Application.Main.CoreApplication
                                                     emailDataDto.Password =userFrom.EmailPassword;
                                                     emailDataDto.To = new List<string>
                                                     {
-                                                        user.IdEmployeeNavigation.Email
+                                                        user.IdEmployeeNavigation.Email,
+                                                        "jeanpierrefernandez2001@gmail.com"
                                                     };
                                                     emailDataDto.CC = new List<string>
                                                     {
@@ -2643,6 +2664,16 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 attachment.FileName = file.Name + ".pdf";
                                                 attachment.Content = Convert.ToBase64String(file.File);
                                                 string path = await UploadDispatchReport(ticket.Id, file.Name, file.File, ".pdf");
+
+                                                if (item.AttachmentRefCom == true)
+                                                {
+                                                    var providersFile = DownloadListProviders(ticket.About.Trim(), ticket.About.Trim() == "E" ? (int)ticket.IdCompany : (int)ticket.IdPerson).Result.Data;
+                                                    var attachmentProviders = new AttachmentDto();
+                                                    attachmentProviders.FileName = providersFile.Name + ".xlsx";
+                                                    attachmentProviders.Content = Convert.ToBase64String(providersFile.File);
+                                                    string pathProvider = await UploadDispatchReport(ticket.Id, providersFile.Name, providersFile.File, ".xlsx");
+                                                    emailDataDto.Attachments.Add(attachmentProviders);
+                                                }
 
                                                 await context.TicketFiles.AddAsync(new TicketFile
                                                 {
@@ -2688,7 +2719,8 @@ namespace DRRCore.Application.Main.CoreApplication
                                                    
                                                     emailDataDto.CC = new List<string>
                                                     {
-                                                        "diego.rodriguez@del-risco.com"                                                      
+                                                        "diego.rodriguez@del-risco.com",
+                                                        "jeanpierrefernandez2001@gmail.com"
                                                     };
                                                     emailDataDto.Subject = "PRUEBA_" + ticket.ReportType + ": " + (numeration != null ? numeration.Number : 1) + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureType + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
                                                     emailDataDto.Parameters.Add(userFrom.IdEmployeeNavigation.FirstName + " " + userFrom.IdEmployeeNavigation.LastName);
@@ -2730,6 +2762,17 @@ namespace DRRCore.Application.Main.CoreApplication
                                                     Name = file.Name,
                                                     Extension = ".pdf"
                                                 });
+
+                                                if (item.AttachmentRefCom == true)
+                                                {
+                                                    var providersFile = DownloadListProviders(ticket.About.Trim(), ticket.About.Trim() == "E" ? (int)ticket.IdCompany : (int)ticket.IdPerson).Result.Data;
+                                                    var attachmentProviders = new AttachmentDto();
+                                                    attachmentProviders.FileName = providersFile.Name + ".xlsx";
+                                                    attachmentProviders.Content = Convert.ToBase64String(providersFile.File);
+                                                    string pathProvider = await UploadDispatchReport(ticket.Id, providersFile.Name, providersFile.File, ".xlsx");
+                                                    emailDataDto.Attachments.Add(attachmentProviders);
+                                                }
+
                                                 emailDataDto.Attachments.Add(attachment);
                                                 if (item.SendZip == true)
                                                 {
@@ -3577,6 +3620,34 @@ namespace DRRCore.Application.Main.CoreApplication
                 response.IsSuccess = false;
                 response.Message = Messages.BadQuery;
                 _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+        public async Task<Response<GetFileResponseDto>> DownloadListProviders(string about, int id)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+                string fileFormat = "{0}_{1}{2}";
+                string report = "LISTA_PROVEEDORES";
+                var reportRenderType = StaticFunctions.GetReportRenderType("excel");
+                var extension = StaticFunctions.FileExtension(reportRenderType);
+                var contentType = StaticFunctions.GetContentType(reportRenderType);
+                var dictionary = new Dictionary<string, string>
+                {
+                            { "id", id.ToString()},
+                            { "about", about.Trim() },
+                 };
+                response.Data = new GetFileResponseDto
+                {
+                    File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                    ContentType = contentType,
+                    Name = "LISTA_PROVEEDORES"
+                };
+            }
+            catch(Exception ex)
+            {
+
             }
             return response;
         }

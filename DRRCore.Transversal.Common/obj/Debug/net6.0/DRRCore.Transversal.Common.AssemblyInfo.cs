@@ -11,17 +11,13 @@
 using System;
 using System.Reflection;
 
-<<<<<<< HEAD:DRRCore.Services.ApiEmail/obj/Release/net6.0/DRRCore.Services.ApiEmail.MvcApplicationPartsAssemblyInfo.cs
-[assembly: Microsoft.AspNetCore.Mvc.ApplicationParts.ApplicationPartAttribute("Swashbuckle.AspNetCore.SwaggerGen")]
-=======
-[assembly: System.Reflection.AssemblyCompanyAttribute("DRRCore.Services.Migration")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("DRRCore.Transversal.Common")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4394d182bf99d2105a6e2c14f6fea4034ae466b8")]
-[assembly: System.Reflection.AssemblyProductAttribute("DRRCore.Services.Migration")]
-[assembly: System.Reflection.AssemblyTitleAttribute("DRRCore.Services.Migration")]
+[assembly: System.Reflection.AssemblyProductAttribute("DRRCore.Transversal.Common")]
+[assembly: System.Reflection.AssemblyTitleAttribute("DRRCore.Transversal.Common")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
->>>>>>> 4/10 3:DRRCore.Services.Migration/obj/Debug/net6.0/DRRCore.Services.Migration.AssemblyInfo.cs
 
 // Generado por la clase WriteCodeFragment de MSBuild.
 

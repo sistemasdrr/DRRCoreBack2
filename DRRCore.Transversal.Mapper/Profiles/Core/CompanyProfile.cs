@@ -300,6 +300,8 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
             .ForMember(dest => dest.TaxTypeCode, opt => opt?.MapFrom(src => src.IdCompanyNavigation.TaxTypeCode))
             .ForMember(dest => dest.Situation, opt => opt?.MapFrom(src => src.IdCompanyNavigation.IdLegalRegisterSituationNavigation.Abreviation))
             .ForMember(dest => dest.Profession, opt => opt?.MapFrom(src => src.Profession))
+            .ForMember(dest => dest.Print, opt => opt?.MapFrom(src => src.Print))
+            .ForMember(dest => dest.Numeration, opt => opt?.MapFrom(src => src.Numeration))
       .ReverseMap();
             CreateMap<AddOrUpdateCompanyPartnersRequestDto, CompanyPartner>()
              .ForMember(dest => dest.IdCompany, opt => opt?.MapFrom(src => src.IdCompany == 0 ? null : src.IdCompany))

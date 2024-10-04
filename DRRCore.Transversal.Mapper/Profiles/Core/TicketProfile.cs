@@ -114,7 +114,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                  .ForMember(dest => dest.IdCompany, opt => opt?.MapFrom(src => src.IdCompany == null ? 0 : src.IdCompany))
                  .ForMember(dest => dest.IdPerson, opt => opt?.MapFrom(src => src.IdPerson == null ? 0 : src.IdPerson))
                  .ForMember(dest => dest.BusineesName, opt => opt?.MapFrom(src => src.BusineesName.IsNullOrEmpty() == false ? src.BusineesName : src.RequestedName))
-                 .ForMember(dest => dest.Number, opt => opt?.MapFrom(src => src.About + " - " + src.Number.ToString("D6")))
+                 .ForMember(dest => dest.Number, opt => opt?.MapFrom(src => src.About + " - " + src.Number.ToString("D6") + (src.IsComplement == true ? " (C)" : "")))
                  .ForMember(dest => dest.Status, opt => opt?.MapFrom(src => src.IdStatusTicketNavigation.Abrev))
                  .ForMember(dest => dest.StatusColor, opt => opt?.MapFrom(src => src.IdStatusTicketNavigation.Color))
                  .ForMember(dest => dest.StatusFinalOwner, opt => opt?.MapFrom(src => GetStatusFinalOwner(src.TicketHistories)))

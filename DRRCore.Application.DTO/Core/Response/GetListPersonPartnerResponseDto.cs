@@ -21,6 +21,8 @@
         public string? Situation { get; set; }
 
         public bool? MainExecutive { get; set; }
+        public bool? Print { get; set; }
+        public int? Numeration { get; set; }
 
         public string? Profession { get; set; }
 
