@@ -5305,6 +5305,69 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             return response;
         }
+
+        public async Task<Response<bool>> deleteTicketComplement(int idTicket)
+        {
+            var response = new Response<bool>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var ticket = await context.Tickets.Include(x => x.TicketFiles).Include(x => x.TicketHistories).Where(x => x.Id == idTicket).FirstOrDefaultAsync();
+                context.Tickets.Remove(ticket);
+                await context.SaveChangesAsync();
+            }
+            catch(Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
+
+        public async Task<Response<int>> ValidateQuality(int idTicket)
+        {
+            var response = new Response<int>();
+            response.Data = 0;
+            try
+            {
+                using var context = new SqlCoreContext();
+                var ticket = await context.Tickets
+                    .Where(x => x.Id == idTicket)
+                    .Include(x => x.IdCompanyNavigation)
+                    .Include(x => x.IdPersonNavigation)
+                    .FirstOrDefaultAsync();
+                if(ticket == null)
+                {
+                    response.IsSuccess = true;
+                    response.Message = "No se encontro el ticket";
+                    _logger.LogError("No se encontro el ticket");
+                    return response;
+                }
+                //0 no mostrara mensaje
+                //1 mostrara mensaje
+                switch(ticket.About)
+                {
+                    case "E":
+                        if (ticket.IdCompanyNavigation.Quality.Trim().IsNullOrEmpty())
+                        {
+                            response.Data = 1; 
+                        }
+                        break;
+                    case "P":
+                        if (ticket.IdPersonNavigation.Quality.Trim().IsNullOrEmpty())
+                        {
+                            response.Data = 1; 
+                        }
+                        break;
+                }
+
+            }catch(Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
     }
 
 }

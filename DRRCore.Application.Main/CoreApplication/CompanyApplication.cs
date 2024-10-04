@@ -1587,7 +1587,6 @@ namespace DRRCore.Application.Main.CoreApplication
                     using var context = new SqlCoreContext();
                     var existingCompanyBranch = await context.CompanyBranches
                     .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.TraductionCompanies)
-                    .Include(x => x.IdLandOwnershipNavigation)
                     .Where(x => x.IdCompany == obj.IdCompany)
                     .FirstOrDefaultAsync();
                     if (existingCompanyBranch == null)

@@ -419,22 +419,22 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
         }
         private bool GetIsAgent(ICollection<TicketHistory> ticketHistories)
         {
-            return ticketHistories.Any(x => x.AsignedTo.StartsWith('A'));
+            return ticketHistories.Any(x => x.AsignedTo != null && x.AsignedTo.StartsWith("A"));
         }
+
         private string GetAgentFrom(ICollection<TicketHistory> ticketHistories)
         {
-           var histories= ticketHistories.Where(x => x.AsignedTo.StartsWith('A')).FirstOrDefault();
-
-            if (ticketHistories.Any(x => x.AsignedTo.StartsWith('A')))
-            {
-                return histories.AsignedTo;
-            }
-            else
+            if (ticketHistories == null)
             {
                 return string.Empty;
             }
+
+            var history = ticketHistories.FirstOrDefault(x => x.AsignedTo != null && x.AsignedTo.StartsWith("A"));
+
+            return history != null ? history.AsignedTo : string.Empty;
         }
-       
+
+
         private static int GetReferencesValue(TicketHistory ticketHistory)
         {
             if(ticketHistory.IdTicketNavigation.TicketHistories.Any(x =>x.AsignationType!=null && x.AsignationType.Contains("RF") == true))

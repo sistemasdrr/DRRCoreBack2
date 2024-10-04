@@ -23,6 +23,7 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<List<GetListTicketResponseDto>>> GetTicketListToDispatchAsync();
         Task<Response<bool>> DispatchTicket(int idTicket, int idUser, List<int> idTicketFiles);
         Task<Response<bool>> DeleteTicketHistory(int idTicket, string? assignedTo, int? numberAssign, string? returnMessage);
+        Task<Response<bool>> deleteTicketComplement(int idTicket);
         Task<Response<List<GetTicketHistorySubscriberResponseDto>>> GetTicketHistoryByIdSubscriber(int idSubscriber, string? name, DateTime? from, DateTime? until, int? idCountry);
         Task<Response<bool>> DeleteTicket(int id);
         Task<Response<List<GetListTicketResponseDto>>> GetTicketListPendingAsync();
@@ -77,5 +78,6 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<List<GetSearchSituationResponseDto>>> GetNewSearchSituation(string about, string name, string form, int idCountry, bool haveReport, string filterBy);
 
         Task<Response<List<GetTicketUserResponseDto>>> GetTicketAssignedValidation(int idTicket);
+        Task<Response<int>> ValidateQuality(int idTicket);
     }
 }

@@ -227,6 +227,12 @@ namespace DRRCore.Services.ApiCore.Controllers
         {
             return Ok(await _ticketApplication.GetTicketsToUser(userTo));
         }
+        [HttpPost()]
+        [Route("deleteTicketComplement")]
+        public async Task<ActionResult> deleteTicketComplement(int idTicket)
+        {
+            return Ok(await _ticketApplication.deleteTicketComplement(idTicket));
+        }
         [HttpGet()]
         [Route("deleteTicketHistory")]
         public async Task<ActionResult> deleteTicketHistory(int idTicket, string? assignedTo, int? numberAssign, string? returnMessage)
@@ -426,7 +432,12 @@ namespace DRRCore.Services.ApiCore.Controllers
         {
             return Ok(await _ticketApplication.GetTicketAssignedValidation(idTicket));
         }
-
+        [HttpPost()]
+        [Route("ValidateQuality")]
+        public async Task<IActionResult> ValidateQuality(int idTicket)
+        {
+            return Ok(await _ticketApplication.ValidateQuality(idTicket));
+        }
 
         
     }
