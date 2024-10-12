@@ -1,34 +1,26 @@
 ﻿
 using AutoMapper;
+using DRRCore.Application.DTO.Core.Request;
 using DRRCore.Application.DTO.Core.Response;
+using DRRCore.Application.DTO.Email;
 using DRRCore.Application.DTO.Enum;
 using DRRCore.Application.Interfaces.CoreApplication;
+using DRRCore.Domain.Entities.SQLContext;
 using DRRCore.Domain.Entities.SqlCoreContext;
+using DRRCore.Domain.Interfaces.EmailDomain;
 using DRRCore.Transversal.Common;
 using DRRCore.Transversal.Common.Interface;
 using DRRCore.Transversal.Common.JsonReader;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Options;
-using DRRCore.Application.DTO.Core.Request;
-using Org.BouncyCastle.Crypto;
-using AutoMapper.Execution;
-using SharpCompress;
-using System.Runtime.InteropServices;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using DocumentFormat.OpenXml.ExtendedProperties;
-using DRRCore.Application.DTO.Email;
-using DocumentFormat.OpenXml.Wordprocessing;
-using DRRCore.Domain.Entities.SQLContext;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
-using System.ServiceModel.Channels;
-using DRRCore.Domain.Interfaces.EmailDomain;
 
 namespace DRRCore.Application.Main.CoreApplication
 {
     public class InvoiceApplication : IInvoiceApplication
     {
-        private readonly List<SpecialPriceAgent> _specialPriceAgent;
+        private readonly List<Transversal.Common.JsonReader.SpecialPriceAgent> _specialPriceAgent;
         private IEmailHistoryDomain _emailHistoryDomain;
         private readonly IMailFormatter _mailFormatter;
         private readonly IAttachmentsNotSendDomain _attachmentsNotSendDomain;
@@ -37,7 +29,7 @@ namespace DRRCore.Application.Main.CoreApplication
         private readonly IReportingDownload _reportingDownload;
         private readonly ILogger _logger;
         private IMapper _mapper;
-        public InvoiceApplication(ILogger logger, IMapper mapper, IOptions<List<SpecialPriceAgent>> specialPriceAgent, IEmailConfigurationDomain emailConfigurationDomain,
+        public InvoiceApplication(ILogger logger, IMapper mapper, IOptions<List<Transversal.Common.JsonReader.SpecialPriceAgent>> specialPriceAgent, IEmailConfigurationDomain emailConfigurationDomain,
             IReportingDownload reportingDownload, IMailSender mailSender, IEmailHistoryDomain emailHistoryDomain, IMailFormatter mailFormatter, IAttachmentsNotSendDomain attachmentsNotSendDomain)
         {
             _logger = logger;
@@ -106,7 +98,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         .Include(x => x.IdTicketNavigation.IdCountryNavigation)
                         .Include(x => x.IdTicketNavigation.IdCompanyNavigation)
                         .Include(x => x.IdTicketNavigation.IdPersonNavigation)
-                        .Where(x => x.ShippingDate >= startDateTime && x.ShippingDate <= endDateTime && x.Flag == true && x.FlagInvoice == false && !x.AsignedTo.Contains("P") && x.AsignedTo.Contains("A"))
+                        .Where(x => x.ShippingDate >= startDateTime && x.ShippingDate <= endDateTime && x.Flag == true && x.FlagInvoice == false && !x.AsignedTo.Contains("P") && x.AsignedTo.Contains("A") && x.IdTicketNavigation.Quality != null && x.IdTicketNavigation.Quality != "")
                         .ToListAsync();
                     foreach (var item in ticketHistory)
                     {
@@ -135,6 +127,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                 IdAgent = agent1.Id,
                                 AgentName = agent1.Name,
                                 AgentCode = item.AsignedTo,
+                                Quality = item.IdTicketNavigation.Quality ?? "",
                                 Price = item.IdTicketNavigation.About == "E" ? GetAgentPrice(item.IdTicketNavigation.About,item.IdTicketNavigation.ProcedureType,item.IdTicketNavigation.Quality,item.IdTicketNavigation.IdCompanyNavigation.IdCountry,agent1) 
                                 : GetAgentPrice(item.IdTicketNavigation.About, item.IdTicketNavigation.ProcedureType, item.IdTicketNavigation.Quality, item.IdTicketNavigation.IdPersonNavigation.IdCountry, agent1),
                             });
@@ -181,7 +174,7 @@ namespace DRRCore.Application.Main.CoreApplication
 
         
 
-        public async Task<Response<bool>> UpdateAgentTicket(int idTicketHistory, string requestedName, string procedureType, string shippingDate)
+        public async Task<Response<bool>> UpdateAgentTicket(int idTicketHistory, string requestedName, string procedureType,  string shippingDate, string quality, bool hasBalance, int? idSpecialPrice)
         {
             var response = new Response<bool>();
             try
@@ -193,6 +186,14 @@ namespace DRRCore.Application.Main.CoreApplication
                     .FirstOrDefaultAsync();
                 if(ticketHistory != null)
                 {
+                    if(hasBalance == true && idSpecialPrice != null)
+                    {
+                        ticketHistory.IdTicketNavigation.IdSpecialAgentBalancePrice = idSpecialPrice != 0 ? idSpecialPrice : null;
+                    }
+                    if(ticketHistory.IdTicketNavigation.Quality.Trim() != quality.Trim())
+                    {
+                        ticketHistory.IdTicketNavigation.Quality = quality.Trim();
+                    }
                     ticketHistory.IdTicketNavigation.RequestedName = requestedName;
                     ticketHistory.IdTicketNavigation.ProcedureType = procedureType;
                     ticketHistory.IdTicketNavigation.UpdateDate = DateTime.Now;
@@ -453,7 +454,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     tickets = await context.Tickets
                         .Include(x => x.IdSubscriberNavigation)
                         .Include(x => x.IdCountryNavigation)
-                        .Where(x => x.DispatchtDate >= startDateTime && x.DispatchtDate <= endDateTime && x.IdInvoiceState == 1 &&
+                        .Where(x => x.DispatchtDate >= startDateTime && x.DispatchtDate <= endDateTime && x.IdInvoiceState == 1 && x.IdSubscriberNavigation.FacturationType == "FM" &&
                                     (x.IdStatusTicket == (int)TicketStatusEnum.Despachado || x.IdStatusTicket == (int)TicketStatusEnum.Despachado_con_Observacion))
                         .ToListAsync();
                 if (tickets != null && tickets.Any())
@@ -1057,6 +1058,90 @@ namespace DRRCore.Application.Main.CoreApplication
             var stringBody = await _mailFormatter.GetEmailBody(emailConfiguration.Name, emailConfiguration.Value, emailDataDto.Parameters, emailDataDto.Table);
             return stringBody.Replace(Constants.FOOTER, emailConfiguration.FlagFooter.Value ? emailConfigurationFooter.Value : string.Empty);
 
+        }
+        public async Task<Response<List<GetAgentInvoice>>> GetAgentInvoice(string code, string startDate, string endDate)
+        {
+            var response = new Response<List<GetAgentInvoice>>();
+            response.Data = new List<GetAgentInvoice>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var agentInvoiceList = context.Set<GetAgentInvoice>()
+                                    .FromSqlRaw("EXECUTE GetAgentInvoice @code = '" + code + "', @startDate = '" + startDate + "', @endDate = '" + endDate + "'")
+                               
+                                    .ToList();
+                response.Data = agentInvoiceList;
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
+
+        public async Task<Response<decimal>> GetAgentPrice(int idCountry, string asignedTo, string quality, string procedureType, bool hasBalance, int? idSpecialPrice)
+        {
+            var response = new Response<decimal>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var price = context.Set<PriceResult>().FromSqlRaw(
+                                "SELECT dbo.GetAgentPrice({0}, {1}, {2}, {3}, {4}, {5}) AS Price",
+                                idCountry, asignedTo, quality, procedureType, hasBalance, idSpecialPrice
+                            ).ToList();
+                decimal resultPrice = price.FirstOrDefault()?.Price ?? 0;
+                response.Data = resultPrice;
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
+
+        public async Task<Response<GetFileResponseDto>> GetExcelAgentInvoice(string code, string startDate, string endDate)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                string fileFormat = "{0}{1}";
+                string report = "LISTA_PEDIDOS_AGENTES_POR_FACTURAR";
+                var reportRenderType = StaticFunctions.GetReportRenderType("excel");
+                var extension = StaticFunctions.FileExtension(reportRenderType);
+                var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                var startDateD = StaticFunctions.VerifyDate(startDate);
+                var endDateD = StaticFunctions.VerifyDate(endDate);
+
+                string startDateString = startDateD?.ToString("MM/dd/yyyy");
+                string endDateString = endDateD?.ToString("MM/dd/yyyy");
+
+                var dictionary = new Dictionary<string, string>
+                {
+                    { "code", code },
+                    { "startDate", startDateString },
+                    { "endDate", endDateString },
+                    { "startDateS", startDate },
+                    { "endDateS", endDate }
+                };
+
+                var file = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary);
+                response.Data = new GetFileResponseDto
+                {
+                    File = file,
+                    ContentType = contentType,
+                    Name = string.Format(fileFormat, "Listado Por Facturar - "+code, extension)
+                };
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = ex.Message;
+            }
+            return response;
         }
     }
 }

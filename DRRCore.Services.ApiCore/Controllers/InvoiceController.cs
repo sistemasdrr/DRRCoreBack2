@@ -81,9 +81,9 @@ namespace DRRCore.Services.ApiCore.Controllers
         }
         [HttpPost()]
         [Route("UpdateAgentTicket")]
-        public async Task<ActionResult> UpdateAgentTicket(int idTicketHistory, string requestedName, string procedureType, string shippingDate)
+        public async Task<ActionResult> UpdateAgentTicket(int idTicketHistory, string requestedName, string procedureType, string shippingDate, string quality, bool hasBalance, int? idSpecialPrice)
         {
-            return Ok(await _invoiceApplication.UpdateAgentTicket(idTicketHistory, requestedName, procedureType, shippingDate));
+            return Ok(await _invoiceApplication.UpdateAgentTicket(idTicketHistory, requestedName, procedureType, shippingDate, quality,hasBalance, idSpecialPrice));
         }
         [HttpPost()]
         [Route("SaveAgentInvoice")]
@@ -120,6 +120,25 @@ namespace DRRCore.Services.ApiCore.Controllers
         public async Task<IActionResult> ReportEmployee(int idUser, string code, string type, string cycle)
         {
             return Ok(await _invoiceApplication.ReportEmployee(idUser, code, type, cycle));
+        }
+        [HttpGet()]
+        [Route("GetAgentInvoice")]
+        public async Task<IActionResult> GetAgentInvoice(string code, string startDate, string endDate)
+        {
+            return Ok(await _invoiceApplication.GetAgentInvoice(code, startDate, endDate));
+        }
+        [HttpGet()]
+        [Route("GetAgentPrice")]
+        public async Task<IActionResult> GetAgentPrice(int idCountry,string asignedTo, string quality, string procedureType, bool hasBalance, int? idSpecialPrice)
+        {
+            return Ok(await _invoiceApplication.GetAgentPrice(idCountry,asignedTo,quality,procedureType, hasBalance,idSpecialPrice));
+        }
+        [HttpGet()]
+        [Route("GetExcelAgentInvoice")]
+        public async Task<IActionResult> GetExcelAgentInvoice(string code, string startDate, string endDate)
+        {
+            var result = await _invoiceApplication.GetExcelAgentInvoice(code, startDate, endDate);
+            return File(result.Data.File, result.Data.ContentType, result.Data.Name);
         }
     }
 }

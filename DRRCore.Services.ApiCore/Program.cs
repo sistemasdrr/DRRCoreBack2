@@ -36,7 +36,7 @@ builder.Services.Configure<FormOptions>(options =>
     options.MultipartBodyLengthLimit = 104857600; // 100 MB
 });
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
-builder.Services.Configure<List<SpecialPriceAgent>>(builder.Configuration.GetSection("SpecialPricesAgent"));
+builder.Services.Configure<List<DRRCore.Transversal.Common.JsonReader.SpecialPriceAgent>>(builder.Configuration.GetSection("SpecialPricesAgent"));
 builder.Services.Configure<TicketPath>(builder.Configuration.GetSection("TicketPath"));
 builder.Services.AddHttpClient();
 builder.Services.AddControllers();
@@ -264,6 +264,7 @@ builder.Services.AddScoped<IApiApplication, ApiApplication>();
 builder.Services.AddScoped<ITokenValidationApplication, TokenValidationApplication>();
 builder.Services.AddScoped<IUserApplication, UserApplication>();
 builder.Services.AddScoped<IXmlApplication, XmlApplication>();
+builder.Services.AddScoped<IReportApplication, ReportApplication>();
 
 builder.Services.AddScoped<IEmailApplication, EmailApplication>();
 builder.Services.AddScoped<IInvoiceApplication, InvoiceApplication>();

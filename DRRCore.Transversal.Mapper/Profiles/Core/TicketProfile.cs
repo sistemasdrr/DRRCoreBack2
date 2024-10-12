@@ -226,6 +226,12 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                 .ForMember(dest => dest.StartDate, opt => opt?.MapFrom(src => StaticFunctions.DateTimeToString(src.StartDate)))
                 .ForMember(dest => dest.EndDate, opt => opt?.MapFrom(src => StaticFunctions.DateTimeToString(src.EndDate)))
                 .ForMember(dest => dest.References, opt => opt?.MapFrom(src => GetReferencesValue(src)))
+
+                .ForMember(dest => dest.IsComplement, opt => opt.MapFrom(src => src.IdTicketNavigation.IsComplement))
+                .ForMember(dest => dest.ComplementQuality, opt => opt.MapFrom(src => src.IdTicketNavigation.IsComplement == true ? src.IdTicketNavigation.IdTicketComplementNavigation.Quality : ""))
+                .ForMember(dest => dest.ComplementQualityTranslator, opt => opt.MapFrom(src => src.IdTicketNavigation.IsComplement == true ? src.IdTicketNavigation.IdTicketComplementNavigation.QualityTranslator : ""))
+                .ForMember(dest => dest.ComplementQualityTypist, opt => opt.MapFrom(src => src.IdTicketNavigation.IsComplement == true ? src.IdTicketNavigation.IdTicketComplementNavigation.QualityTypist : ""))
+
                   .ReverseMap();
             CreateMap<TicketHistory, GetListTicketResponseDto2>()
                 .ForMember(dest => dest.IsAgent, opt => opt.MapFrom(src =>  src.IdTicketNavigation.TicketHistories != null ? GetIsAgent(src.IdTicketNavigation.TicketHistories) : default))
@@ -261,6 +267,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                 .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.IdTicketNavigation.Address ?? string.Empty))
                 .ForMember(dest => dest.Telephone, opt => opt.MapFrom(src => src.IdTicketNavigation.Telephone ?? string.Empty))
                 .ForMember(dest => dest.ReportType, opt => opt.MapFrom(src => src.IdTicketNavigation.ReportType ?? string.Empty))
+                .ForMember(dest => dest.HasBalance, opt => opt.MapFrom(src => src.IdTicketNavigation.HasBalance ?? null))
                 .ForMember(dest => dest.DispatchDate, opt => opt.MapFrom(src => StaticFunctions.DateTimeToString(src.IdTicketNavigation.DispatchtDate) ?? string.Empty))
 
                 .ForMember(dest => dest.SubscriberCode, opt => opt.MapFrom(src => src.IdTicketNavigation.IdSubscriberNavigation.Code ?? string.Empty))
@@ -301,6 +308,10 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                 .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => StaticFunctions.DateTimeToString(src.EndDate)))
                 .ForMember(dest => dest.WebPage, opt => opt.MapFrom(src => src.IdTicketNavigation.About == "E" ? src.IdTicketNavigation.IdCompanyNavigation.WebPage ?? string.Empty : string.Empty))
 
+                .ForMember(dest => dest.IsComplement, opt => opt.MapFrom(src => src.IdTicketNavigation.IsComplement))
+                .ForMember(dest => dest.ComplementQuality, opt => opt.MapFrom(src => src.IdTicketNavigation.IsComplement == true ? src.IdTicketNavigation.IdTicketComplementNavigation.Quality : ""))
+                .ForMember(dest => dest.ComplementQualityTranslator, opt => opt.MapFrom(src => src.IdTicketNavigation.IsComplement == true ? src.IdTicketNavigation.IdTicketComplementNavigation.QualityTranslator : ""))
+                .ForMember(dest => dest.ComplementQualityTypist, opt => opt.MapFrom(src => src.IdTicketNavigation.IsComplement == true ? src.IdTicketNavigation.IdTicketComplementNavigation.QualityTypist : ""))
                 .ReverseMap();
 
 

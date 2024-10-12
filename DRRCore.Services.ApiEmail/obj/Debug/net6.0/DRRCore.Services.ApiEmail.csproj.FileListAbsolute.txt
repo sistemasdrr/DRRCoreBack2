@@ -297,9 +297,9 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\obj\De
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\obj\Debug\net6.0\ref\DRRCore.Services.ApiEmail.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\obj\Debug\net6.0\DRRCore.Services.ApiEmail.sourcelink.json
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiEmail\obj\Debug\net6.0\DRRCore..F119F5EB.Up2Date
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Services.ApiEmail\bin\Debug\net6.0\log4net.config
 C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Services.ApiEmail\bin\Debug\net6.0\appsettings.Development.json
 C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Services.ApiEmail\bin\Debug\net6.0\appsettings.json
-C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Services.ApiEmail\bin\Debug\net6.0\log4net.config
 C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Services.ApiEmail\bin\Debug\net6.0\DRRCore.Services.ApiEmail.exe
 C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Services.ApiEmail\bin\Debug\net6.0\DRRCore.Services.ApiEmail.deps.json
 C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Services.ApiEmail\bin\Debug\net6.0\DRRCore.Services.ApiEmail.runtimeconfig.json

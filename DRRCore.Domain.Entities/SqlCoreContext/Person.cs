@@ -7,8 +7,8 @@ public partial class Person
 {
     public int Id { get; set; }
 
-    public string? OldCode { get; set; }
     public virtual ICollection<Traduction> Traductions { get; set; } = new List<Traduction>();
+    public string? OldCode { get; set; }
 
     public string Fullname { get; set; } = null!;
 

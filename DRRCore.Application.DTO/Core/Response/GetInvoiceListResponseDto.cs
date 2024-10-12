@@ -83,6 +83,7 @@
         public int? IdAgent{ get; set; }
         public string? AgentName { get; set; }
         public string? AgentCode { get; set; }
+        public string? Quality { get; set; }
     }
 
 }

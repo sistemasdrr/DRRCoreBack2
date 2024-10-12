@@ -578,6 +578,32 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
+        public async Task<Response<List<GetComboValueResponseDto>>> GetSpecialPrice(int idAgent)
+        {
+            var response = new Response<List<GetComboValueResponseDto>>();
+            response.Data = new List<GetComboValueResponseDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var list = await context.SpecialAgentBalancePrices.Where(x => x.IdAgent == idAgent).ToListAsync();
+                foreach(var item in list)
+                {
+                    response.Data.Add(new GetComboValueResponseDto
+                    {
+                        Id = item.Id,
+                        Valor = item.Description
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
         public async Task<Response<List<GetComboValueResponseDto>>> GetSubscriberCategories()
         {
             var response = new Response<List<GetComboValueResponseDto>>();

@@ -101,9 +101,11 @@ public partial class Ticket
 
     public bool? IsComplement { get; set; }
 
-    public string? IdTicketComplement { get; set; }
-
     public string? NumberTicketComplement { get; set; }
+
+    public int? IdSpecialAgentBalancePrice { get; set; }
+
+    public int? IdTicketComplement { get; set; }
 
     public virtual Company? IdCompanyNavigation { get; set; }
 
@@ -115,11 +117,17 @@ public partial class Ticket
 
     public virtual Person? IdPersonNavigation { get; set; }
 
+    public virtual SpecialAgentBalancePrice? IdSpecialAgentBalancePriceNavigation { get; set; }
+
     public virtual StatusTicket? IdStatusTicketNavigation { get; set; }
 
     public virtual Subscriber? IdSubscriberNavigation { get; set; }
 
+    public virtual Ticket? IdTicketComplementNavigation { get; set; }
+
     public virtual ICollection<InternalInvoiceDetail> InternalInvoiceDetails { get; set; } = new List<InternalInvoiceDetail>();
+
+    public virtual ICollection<Ticket> InverseIdTicketComplementNavigation { get; set; } = new List<Ticket>();
 
     public virtual ICollection<ReferencesHistory> ReferencesHistories { get; set; } = new List<ReferencesHistory>();
 

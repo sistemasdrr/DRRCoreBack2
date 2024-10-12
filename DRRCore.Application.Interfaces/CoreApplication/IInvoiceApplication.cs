@@ -20,7 +20,7 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<List<GetInvoiceAgentListResponseDto>>> GetByBillInvoiceAgentList(string startDate, string endDate);
         Task<Response<List<GetAgentInvoiceListResponseDto>>> GetPaidsInvoiceAgentList(string startDate, string endDate);
         Task<Response<List<GetAgentInvoiceListResponseDto>>> GetToCollectInvoiceAgentList(string startDate, string endDate);
-        Task<Response<bool>> UpdateAgentTicket(int idTicketHistory, string requestedName, string procedureType, string shippingDate);
+        Task<Response<bool>> UpdateAgentTicket(int idTicketHistory, string requestedName, string procedureType, string shippingDate,string quality,bool hasBalance, int? idSpecialPrice);
 
         Task<Response<bool>> SaveAgentInvoice(AddOrUpdateAgentInvoiceRequestDto obj);
         Task<Response<bool>> UpdateInvoiceToCollect(int idAgentInvoice, int idAgentInvoiceDetails, string requestedName, string procedureType, string shippingDate, decimal price);
@@ -32,5 +32,10 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<bool>> SaveInternalInvoice(string type, string code, string currentCycle, decimal totalPrice, List<GetQueryTicket5_1_2ResponseDto>? tickets);
 
         Task<Response<bool>> ReportEmployee(int idUser, string code, string type, string cycle);
+
+        Task<Response<List<GetAgentInvoice>>> GetAgentInvoice(string code, string startDate, string endDate);
+        Task<Response<decimal>> GetAgentPrice(int idCountry, string asignedTo, string quality, string procedureType, bool hasBalance, int? idSpecialPrice);
+
+        Task<Response<GetFileResponseDto>> GetExcelAgentInvoice(string code, string startDate, string endDate);
     }
 }

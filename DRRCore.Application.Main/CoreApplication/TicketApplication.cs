@@ -1194,6 +1194,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     .Where(x => x.Id == int.Parse(userTo)).FirstOrDefaultAsync();
 
                    var  list = await context.TicketHistories
+                       .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdTicketComplementNavigation)
                        .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdSubscriberNavigation).ThenInclude(x => x.IdCountryNavigation)
                        .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdContinentNavigation)
                        .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCompanyNavigation)
@@ -1203,7 +1204,6 @@ namespace DRRCore.Application.Main.CoreApplication
                        .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCountryNavigation)
                        .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdStatusTicketNavigation)
                        .Include(x => x.IdStatusTicketNavigation)
-                       
                        .Include(x => x.IdTicketNavigation).ThenInclude(x => x.TicketQuery)
                        .Include(x => x.IdTicketNavigation).ThenInclude(x => x.TicketFiles)
                        .Include(x => x.IdTicketNavigation.TicketHistories.OrderByDescending(x => x.Id)).Where(x => x.Enable == true)
@@ -1824,7 +1824,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     var ticketHistoryFirst = await context.TicketHistories
                     .Include(x => x.IdStatusTicketNavigation)
                     .Include(x => x.IdTicketNavigation)
-                    .Where(x => x.IdTicket == int.Parse(ticketHistory.First().IdTicketNavigation.IdTicketComplement) && x.Enable == true)
+                    .Where(x => x.IdTicket == ticketHistory.First().IdTicketNavigation.IdTicketComplement && x.Enable == true)
                     .ToListAsync();
                     foreach (var item in ticketHistoryFirst)
                     {
@@ -2117,7 +2117,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                     newTicketHistory.StartDate = ticketHistory.StartDate;
                                     newTicketHistory.EndDate = ticketHistory.EndDate;
                                     newTicketHistory.AsignationType = ticketHistory.AsignationType;
-                                    newTicketHistory.Cycle = code;
+                                    newTicketHistory.Cycle = "";
 
                                     await context.TicketHistories.AddAsync(newTicketHistory);
                                 }
@@ -2174,10 +2174,11 @@ namespace DRRCore.Application.Main.CoreApplication
                                             context.Numerations.Update(numeration);
                                         }
 
-
+                                        ticket.HasBalance = item.HasBalance == null ? ticket.HasBalance : item.HasBalance;
                                         ticket.UpdateDate = DateTime.Now;
                                         ticket.IdStatusTicket = (int)TicketStatusEnum.Pre_Asignacion;
                                         history.Flag = true;
+                                        history.Cycle = code;
                                         history.ShippingDate = DateTime.Now;
                                         history.UpdateDate = DateTime.Now;
 
@@ -2198,7 +2199,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                             Observations=item.Observations,
                                             Balance=item.Balance,
                                             AsignationType = item.Type,
-                                            Cycle = code
+                                            Cycle = ""
                                         };
                                         await context.TicketHistories.AddAsync(newTicketHistory);
 
@@ -2231,9 +2232,11 @@ namespace DRRCore.Application.Main.CoreApplication
 
 
 
+                                        ticket.HasBalance = item.HasBalance == null ? ticket.HasBalance : item.HasBalance;
                                         ticket.UpdateDate = DateTime.Now;
                                         ticket.IdStatusTicket = (int)TicketStatusEnum.Asig_Reportero;
                                         history.Flag = true;
+                                        history.Cycle = code;
                                         history.ShippingDate = DateTime.Now;
                                         history.UpdateDate = DateTime.Now;
 
@@ -2256,7 +2259,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = item.Type,
-                                                Cycle = code,
+                                                Cycle = "",
                                                 References = item.References
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
@@ -2371,7 +2374,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = item.Type,
-                                                Cycle = code,
+                                                Cycle = "",
                                                 References = item.References
 
                                             };
@@ -2504,7 +2507,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = item.Type,
-                                                Cycle = code,
+                                                Cycle = "",
                                                 References = item.References
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
@@ -2536,9 +2539,11 @@ namespace DRRCore.Application.Main.CoreApplication
                                             context.Numerations.Update(numeration);
                                         }
 
-                                       
+
+                                        ticket.HasBalance = item.HasBalance == null ? ticket.HasBalance : item.HasBalance;
                                         ticket.UpdateDate = DateTime.Now;
                                         history.Flag = true;
+                                        history.Cycle = code;
                                         history.ShippingDate = DateTime.Now;
                                         history.UpdateDate = DateTime.Now;
 
@@ -2564,11 +2569,13 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 References = item.References,
-                                                Cycle = code
+                                                Cycle = ""
 
                                             };
+                                            ticket.HasBalance = item.HasBalance == null ? ticket.HasBalance : item.HasBalance;
                                             ticket.UpdateDate = DateTime.Now;
                                             history.Flag = true;
+                                            history.Cycle = code;
                                             history.ShippingDate = DateTime.Now;
                                             history.UpdateDate = DateTime.Now;
 
@@ -2592,7 +2599,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Balance = item.Balance,
                                                 References = item.References,
                                                 AsignationType = item.Type,
-                                                Cycle = code
+                                                Cycle = ""
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
                                         }
@@ -2828,12 +2835,14 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Balance = item.Balance,
                                                 References = item.References,
                                                 AsignationType = item.Type,
-                                                Cycle = code
+                                                Cycle = ""
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
                                         }
+                                        ticket.HasBalance = item.HasBalance == null ? ticket.HasBalance : item.HasBalance;
                                         ticket.UpdateDate = DateTime.Now;
                                         history.Flag = true;
+                                        history.Cycle = code;
                                         history.ShippingDate = DateTime.Now;
                                         history.UpdateDate = DateTime.Now;
 
@@ -2866,9 +2875,10 @@ namespace DRRCore.Application.Main.CoreApplication
                                             context.Numerations.Update(numeration);
                                         }
 
-
+                                        ticket.HasBalance = item.HasBalance == null ? ticket.HasBalance : item.HasBalance;
                                         ticket.UpdateDate = DateTime.Now;
                                         history.Flag = true;
+                                        history.Cycle = code;
                                         history.ShippingDate = DateTime.Now;
                                         history.UpdateDate = DateTime.Now;
 
@@ -2888,7 +2898,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = "RF",
-                                                Cycle = code,
+                                                Cycle = "",
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
                                         
@@ -2938,10 +2948,12 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = "DI",
-                                                Cycle = code
+                                                Cycle = ""
                                             };
+                                            ticket.HasBalance = item.HasBalance == null ? ticket.HasBalance : item.HasBalance;
                                             ticket.UpdateDate = DateTime.Now;
                                             history.Flag = true;
+                                            history.Cycle = code;
                                             history.ShippingDate = DateTime.Now;
                                             history.UpdateDate = DateTime.Now;
                                             await context.TicketHistories.AddAsync(newTicketHistory);
@@ -2972,8 +2984,10 @@ namespace DRRCore.Application.Main.CoreApplication
                                             }
 
 
+                                            ticket.HasBalance = item.HasBalance == null ? ticket.HasBalance : item.HasBalance;
                                             ticket.UpdateDate = DateTime.Now;
                                             history.Flag = true;
+                                            history.Cycle = code;
                                             history.ShippingDate = DateTime.Now;
                                             history.UpdateDate = DateTime.Now;
 
@@ -2993,7 +3007,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = item.Type,
-                                                Cycle = code
+                                                Cycle = ""
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
                                         }
@@ -3042,10 +3056,12 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = "TR",
-                                                Cycle = code
+                                                Cycle = ""
                                             };
+                                            ticket.HasBalance = item.HasBalance == null ? ticket.HasBalance : item.HasBalance;
                                             ticket.UpdateDate = DateTime.Now;
                                             history.Flag = true;
+                                            history.Cycle = code;
                                             history.ShippingDate = DateTime.Now;
                                             history.UpdateDate = DateTime.Now;
                                             await context.TicketHistories.AddAsync(newTicketHistory);
@@ -3089,14 +3105,16 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = "TR",
-                                                Cycle = code
+                                                Cycle = ""
 
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
                                         }
 
+                                        ticket.HasBalance = item.HasBalance == null ? ticket.HasBalance : item.HasBalance;
                                         ticket.UpdateDate = DateTime.Now;
                                         history.Flag = true;
+                                        history.Cycle = code;
                                         history.ShippingDate = DateTime.Now;
                                         history.UpdateDate = DateTime.Now;
 
@@ -3147,10 +3165,12 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = "SU",
-                                                Cycle = code
+                                                Cycle = ""
                                             };
+                                            ticket.HasBalance = item.HasBalance == null ? ticket.HasBalance : item.HasBalance;
                                             ticket.UpdateDate = DateTime.Now;
                                             history.Flag = true;
+                                            history.Cycle = code;
                                             history.ShippingDate = DateTime.Now;
                                             history.UpdateDate = DateTime.Now;
                                             await context.TicketHistories.AddAsync(newTicketHistory);
@@ -3180,8 +3200,10 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 context.Numerations.Update(numeration);
                                             }
 
+                                            ticket.HasBalance = item.HasBalance == null ? ticket.HasBalance : item.HasBalance;
                                             ticket.UpdateDate = DateTime.Now;
                                             history.Flag = true;
+                                            history.Cycle = code;
                                             history.ShippingDate = DateTime.Now;
                                             history.UpdateDate = DateTime.Now;  
 
@@ -3200,7 +3222,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = "SU",
-                                                Cycle = code
+                                                Cycle = ""
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
 
@@ -4254,7 +4276,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     else
                     {
                         context.TicketHistories.Remove(ticketHistory);
-                        var lastTicketHistory = await context.TicketHistories.Where(x => x.IdTicket == idTicket).OrderBy(x => x.CreationDate).ToListAsync();
+                        var lastTicketHistory = await context.TicketHistories.Where(x => x.IdTicket == idTicket && x.IdStatusTicket != (int)TicketStatusEnum.Asig_Referencista && x.IdStatusTicket != (int)TicketStatusEnum.Por_Referencia).OrderBy(x => x.CreationDate).ToListAsync();
                         var ticket = await context.Tickets.Where(x => x.Id == idTicket).FirstOrDefaultAsync();
                         if (lastTicketHistory != null && ticket != null)
                         {
@@ -4939,7 +4961,7 @@ namespace DRRCore.Application.Main.CoreApplication
 
 
                     IsComplement = true,
-                    IdTicketComplement = ticket.Id.ToString(),
+                    IdTicketComplement = ticket.Id,
                     NumberTicketComplement = ticket.Number.ToString("D6") + "*"
                 };
                 
@@ -5439,6 +5461,8 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             return response;
         }
+
+        
     }
 
 }

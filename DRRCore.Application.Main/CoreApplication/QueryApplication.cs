@@ -1676,6 +1676,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 var pendingTickets = await context.Tickets
                     .Where(x => x.IdStatusTicket != (int?)TicketStatusEnum.Despachado && x.IdStatusTicket != (int?)TicketStatusEnum.Despachado_con_Observacion && x.Enable == true)
                     .Include(x => x.IdStatusTicketNavigation)
+                    .Include(x => x.IdTicketComplementNavigation)
                     .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.IdCountryNavigation)
                     .Include(x => x.IdPersonNavigation).ThenInclude(x => x.IdCountryNavigation)
                     .ToListAsync();
@@ -1690,7 +1691,7 @@ namespace DRRCore.Application.Main.CoreApplication
                             subscriberTickets.Add(new GetQueryTicket5_1_1ResponseDto
                             {
                                 Id = item.Id,
-                                Number = item.Number.ToString("D6"),
+                                Number = item.IsComplement == true ? item.About + " - " + item.Number.ToString("D6") + " (C) " : item.About + " - " + item.Number.ToString("D6"),
                                 Language = item.Language,
                                 About = item.About,
                                 Status = item.IdStatusTicketNavigation.Abrev,
@@ -1722,6 +1723,12 @@ namespace DRRCore.Application.Main.CoreApplication
                                 WebPage = item.About == "E" ? item.IdCompanyNavigation.WebPage : "",
 
                                 IsComplement = item.IsComplement,
+                                Quality = item.Quality,
+                                QualityTraductor = item.QualityTranslator,
+                                QualityTypist = item.QualityTypist,
+                                ComplementQuality = item.IsComplement == true ? item.IdTicketComplementNavigation.Quality : "",
+                                ComplementQualityTraductor = item.IsComplement == true ? item.IdTicketComplementNavigation.QualityTranslator : "",
+                                ComplementQualityTypist = item.IsComplement == true ? item.IdTicketComplementNavigation.QualityTypist : "",
                                 OrderDate = StaticFunctions.DateTimeToString(item.OrderDate),
                                 ExpireDate = StaticFunctions.DateTimeToString(item.ExpireDate),
                                 RealExpireDate = StaticFunctions.DateTimeToString(item.RealExpireDate),
@@ -1862,6 +1869,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 using var context = new SqlCoreContext();
                 var ticketHistories = await context.TicketHistories
                     .Where(x => x.UserTo == idUser)
+                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdTicketComplementNavigation)
                     .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCountryNavigation)
                     .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCompanyNavigation).ThenInclude(x => x.IdCountryNavigation)
                     .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdPersonNavigation).ThenInclude(x => x.IdCountryNavigation)
@@ -1922,7 +1930,13 @@ namespace DRRCore.Application.Main.CoreApplication
                             RealExpireDate = StaticFunctions.DateTimeToString(item1.IdTicketNavigation.RealExpireDate),
                             ProcedureType = item1.IdTicketNavigation.ProcedureType,
                             ReportType = item1.IdTicketNavigation.ReportType,
-                            Flag = GetFlagDate(item1.IdTicketNavigation.ExpireDate)
+                            Flag = GetFlagDate(item1.IdTicketNavigation.ExpireDate),
+                            IsComplement = item1.IdTicketNavigation.IsComplement,
+                            QualityTraductor = item1.IdTicketNavigation.QualityTranslator ?? "",
+                            QualityTypist = item1.IdTicketNavigation.QualityTranslator ?? "",
+                            ComplementQuality = item1.IdTicketNavigation.IsComplement == true ? item1.IdTicketNavigation.IdTicketComplementNavigation.Quality : "",
+                            ComplementQualityTraductor = item1.IdTicketNavigation.IsComplement == true ? item1.IdTicketNavigation.IdTicketComplementNavigation.QualityTranslator : "",
+                            ComplementQualityTypist = item1.IdTicketNavigation.IsComplement == true ? item1.IdTicketNavigation.IdTicketComplementNavigation.QualityTypist : "",
                         });
                     }
                     response.Data.Add(new GetQuery5_1_2ResponseDto
@@ -1956,6 +1970,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 using var context = new SqlCoreContext();
                 var ticketHistories = await context.TicketHistories
                     .Where(x => x.UserTo == idUser && x.ShippingDate != null && x.ShippingDate.Value.Day == DateTime.Now.Day && x.ShippingDate.Value.Month == DateTime.Now.Month )
+                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdTicketComplementNavigation)
                     .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCountryNavigation)
                     .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCompanyNavigation).ThenInclude(x => x.IdCountryNavigation)
                     .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdPersonNavigation).ThenInclude(x => x.IdCountryNavigation)
@@ -1977,7 +1992,14 @@ namespace DRRCore.Application.Main.CoreApplication
                             IdCompany = item1.IdTicketNavigation.IdCompany,
                             IdPerson = item1.IdTicketNavigation.IdPerson,
                             IdStatusTicket = item1.IdTicketNavigation.IdStatusTicket,
+                            IsComplement = item1.IdTicketNavigation.IsComplement,
+
                             Quality = item1.IdTicketNavigation.Quality,
+                            QualityTypist = item1.IdTicketNavigation.QualityTypist,
+                            QualityTraductor = item1.IdTicketNavigation.QualityTranslator,
+                            ComplementQuality = item1.IdTicketNavigation.IsComplement == true ? item1.IdTicketNavigation.IdTicketComplementNavigation.Quality : "",
+                            ComplementQualityTraductor = item1.IdTicketNavigation.IsComplement == true ? item1.IdTicketNavigation.IdTicketComplementNavigation.QualityTranslator : "",
+                            ComplementQualityTypist = item1.IdTicketNavigation.IsComplement == true ? item1.IdTicketNavigation.IdTicketComplementNavigation.QualityTypist : "",
                             Number = item1.IdTicketNavigation.Number.ToString("D6"),
                             Language = item1.IdTicketNavigation.Language,
                             About = item1.IdTicketNavigation.About,
@@ -2049,6 +2071,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 using var context = new SqlCoreContext();
                 var ticketHistories = await context.TicketHistories
                     .Where(x => x.UserTo == idUser && x.ShippingDate != null && x.ShippingDate.Value.Month == month)
+                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdTicketComplementNavigation)
                     .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCountryNavigation)
                     .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCompanyNavigation).ThenInclude(x => x.IdCountryNavigation)
                     .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdPersonNavigation).ThenInclude(x => x.IdCountryNavigation)
@@ -2102,6 +2125,14 @@ namespace DRRCore.Application.Main.CoreApplication
                             Telephone = item1.IdTicketNavigation.About == "E" ? item1.IdTicketNavigation.IdCompanyNavigation.Telephone : item1.IdTicketNavigation.IdPersonNavigation.Cellphone,
                             WebPage = item1.IdTicketNavigation.About == "E" ? item1.IdTicketNavigation.IdCompanyNavigation.WebPage : "",
 
+                            IsComplement = item1.IdTicketNavigation.IsComplement,
+
+                            QualityTypist = item1.IdTicketNavigation.QualityTypist,
+                            QualityTraductor = item1.IdTicketNavigation.QualityTranslator,
+                            ComplementQuality = item1.IdTicketNavigation.IsComplement == true ? item1.IdTicketNavigation.IdTicketComplementNavigation.Quality : "",
+                            ComplementQualityTraductor = item1.IdTicketNavigation.IsComplement == true ? item1.IdTicketNavigation.IdTicketComplementNavigation.QualityTranslator : "",
+                            ComplementQualityTypist = item1.IdTicketNavigation.IsComplement == true ? item1.IdTicketNavigation.IdTicketComplementNavigation.QualityTypist : "",
+
 
                             OrderDate = StaticFunctions.DateTimeToString(item1.IdTicketNavigation.OrderDate),
                             ExpireDate = StaticFunctions.DateTimeToString(item1.IdTicketNavigation.ExpireDate),
@@ -2144,6 +2175,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 {
                     var referenceHistory = await context.ReferencesHistories.Where(x => x.IdUser == int.Parse(idUser) && x.Cycle == cycle && x.Code.Contains(code))
                         .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdStatusTicketNavigation)
+                        .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdTicketComplementNavigation)
                         .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCountryNavigation)
                         .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCompanyNavigation).ThenInclude(x => x.IdCountryNavigation)
                         .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdPersonNavigation).ThenInclude(x => x.IdCountryNavigation)
@@ -2171,9 +2203,17 @@ namespace DRRCore.Application.Main.CoreApplication
                                 IdCompany = item1.IdTicketNavigation.IdCompany,
                                 IdPerson = item1.IdTicketNavigation.IdPerson,
                                 IdStatusTicket = item1.IdTicketNavigation.IdStatusTicket,
+                                IsComplement = item1.IdTicketNavigation.IsComplement,
+
                                 Quality = item1.IdTicketNavigation.Quality,
                                 QualityTypist = item1.IdTicketNavigation.QualityTypist,
                                 QualityTraductor = item1.IdTicketNavigation.QualityTranslator,
+                                ComplementQuality = item1.IdTicketNavigation.IsComplement == true ? item1.IdTicketNavigation.IdTicketComplementNavigation.Quality : "",
+                                ComplementQualityTraductor = item1.IdTicketNavigation.IsComplement == true ? item1.IdTicketNavigation.IdTicketComplementNavigation.QualityTranslator : "",
+                                ComplementQualityTypist = item1.IdTicketNavigation.IsComplement == true ? item1.IdTicketNavigation.IdTicketComplementNavigation.QualityTypist : "",
+
+
+
                                 QualityReport = item1.IdTicketNavigation.About == "E" ? item1.IdTicketNavigation.IdCompanyNavigation.Quality : item1.IdTicketNavigation.IdPersonNavigation.Quality,
                                 Number = item1.IdTicketNavigation.Number.ToString("D6"),
                                 Language = item1.IdTicketNavigation.Language,
@@ -2205,7 +2245,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                 Address = item1.IdTicketNavigation.About == "E" ? item1.IdTicketNavigation.IdCompanyNavigation.Address : item1.IdTicketNavigation.IdPersonNavigation.Address,
                                 Telephone = item1.IdTicketNavigation.About == "E" ? item1.IdTicketNavigation.IdCompanyNavigation.Telephone : item1.IdTicketNavigation.IdPersonNavigation.Cellphone,
                                 WebPage = item1.IdTicketNavigation.About == "E" ? item1.IdTicketNavigation.IdCompanyNavigation.WebPage : "",
-                                IsComplement = item1.IdTicketNavigation.IsComplement,
+                               
 
                                 OrderDate = StaticFunctions.DateTimeToString(item1.IdTicketNavigation.OrderDate),
                                 ExpireDate = StaticFunctions.DateTimeToString(item1.IdTicketNavigation.ExpireDate),
@@ -2236,6 +2276,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     var ticketHistories = await context.TicketHistories
                     .Where(x => x.UserTo == idUser && x.ShippingDate != null && x.Flag == true && x.AsignedTo.Contains(code) && x.IdStatusTicket != 15 && x.Cycle.Contains(cycle) && (x.AsignationType == "RP" || x.AsignationType == "DI" || x.AsignationType == "TR"|| x.AsignationType == "AG") && x.AsignedTo.Contains("CR") == false)
                     .Include(x => x.IdStatusTicketNavigation)
+                    .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdTicketComplementNavigation)
                     .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCountryNavigation)
                     .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdCompanyNavigation).ThenInclude(x => x.IdCountryNavigation)
                     .Include(x => x.IdTicketNavigation).ThenInclude(x => x.IdPersonNavigation).ThenInclude(x => x.IdCountryNavigation)
@@ -2291,9 +2332,6 @@ namespace DRRCore.Application.Main.CoreApplication
                                 IdCompany = item1.IdTicketNavigation.IdCompany,
                                 IdPerson = item1.IdTicketNavigation.IdPerson,
                                 IdStatusTicket = item1.IdStatusTicket,
-                                Quality = item1.IdTicketNavigation.Quality,
-                                QualityTypist = item1.IdTicketNavigation.QualityTypist,
-                                QualityTraductor = item1.IdTicketNavigation.QualityTranslator,
                                 Number = item1.IdTicketNavigation.Number.ToString("D6"),
                                 Language = item1.IdTicketNavigation.Language,
                                 About = item1.IdTicketNavigation.About,
@@ -2325,7 +2363,14 @@ namespace DRRCore.Application.Main.CoreApplication
                                 Telephone = item1.IdTicketNavigation.About == "E" ? item1.IdTicketNavigation.IdCompanyNavigation.Telephone : item1.IdTicketNavigation.IdPersonNavigation.Cellphone,
                                 WebPage = item1.IdTicketNavigation.About == "E" ? item1.IdTicketNavigation.IdCompanyNavigation.WebPage : "",
                                 IsComplement = item1.IdTicketNavigation.IsComplement,
-                                
+
+                                Quality = item1.IdTicketNavigation.Quality,
+                                QualityTypist = item1.IdTicketNavigation.QualityTypist,
+                                QualityTraductor = item1.IdTicketNavigation.QualityTranslator,
+                                ComplementQuality = item1.IdTicketNavigation.IsComplement == true ? item1.IdTicketNavigation.IdTicketComplementNavigation.Quality : "",
+                                ComplementQualityTraductor = item1.IdTicketNavigation.IsComplement == true ? item1.IdTicketNavigation.IdTicketComplementNavigation.QualityTranslator : "",
+                                ComplementQualityTypist = item1.IdTicketNavigation.IsComplement == true ? item1.IdTicketNavigation.IdTicketComplementNavigation.QualityTypist : "",
+
                                 OrderDate = StaticFunctions.DateTimeToString(item1.StartDate),
                                 ExpireDate = StaticFunctions.DateTimeToString(item1.EndDate),
                                 RealExpireDate = StaticFunctions.DateTimeToString(item1.IdTicketNavigation.RealExpireDate),

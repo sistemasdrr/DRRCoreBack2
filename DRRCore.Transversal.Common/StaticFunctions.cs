@@ -91,7 +91,7 @@ namespace DRRCore.Transversal.Common
                 case ReportRenderType.Pdf:
                     return ".pdf";
                 case ReportRenderType.Excel:
-                    return "xls";
+                    return ".xls";
                 case ReportRenderType.Word:
                     return "application/msword";
                 default:

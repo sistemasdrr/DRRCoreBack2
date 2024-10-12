@@ -57,5 +57,7 @@ public partial class Agent
 
     public virtual ICollection<SpecialAgentBalancePrice> SpecialAgentBalancePrices { get; set; } = new List<SpecialAgentBalancePrice>();
 
+    public virtual ICollection<SpecialPriceAgent> SpecialPriceAgents { get; set; } = new List<SpecialPriceAgent>();
+
     public virtual ICollection<Subscriber> Subscribers { get; set; } = new List<Subscriber>();
 }
