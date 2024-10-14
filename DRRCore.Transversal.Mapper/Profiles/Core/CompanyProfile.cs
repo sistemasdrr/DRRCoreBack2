@@ -276,6 +276,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
             .ForMember(dest => dest.IdCompany, opt => opt?.MapFrom(src => src.IdCompany == 0 ? null : src.IdCompany))
             .ForMember(dest => dest.IdPerson, opt => opt?.MapFrom(src => src.IdPerson == 0 ? null : src.IdPerson))
             .ForMember(dest => dest.Profession, opt => opt?.MapFrom(src => src.Profession))
+            .ForMember(dest => dest.ProfessionEng, opt => opt?.MapFrom(src => src.ProfessionEng))
             .ForMember(dest => dest.StartDate, opt => opt?.MapFrom(src => StaticFunctions.DateTimeToString(src.StartDate)))
       .ReverseMap();
             CreateMap<CompanyPartner, GetListCompanyPartnersResponseDto>()
@@ -307,6 +308,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
              .ForMember(dest => dest.IdCompany, opt => opt?.MapFrom(src => src.IdCompany == 0 ? null : src.IdCompany))
             .ForMember(dest => dest.IdPerson, opt => opt?.MapFrom(src => src.IdPerson == 0 ? null : src.IdPerson))
             .ForMember(dest => dest.Profession, opt => opt?.MapFrom(src => src.Profession))
+            .ForMember(dest => dest.ProfessionEng, opt => opt?.MapFrom(src => src.ProfessionEng))
             .ForMember(dest => dest.Print, opt => opt?.MapFrom(src => src.Print))
             .ForMember(dest => dest.Numeration, opt => opt?.MapFrom(src => src.Numeration))
                  .ForMember(dest => dest.StartDate, opt => opt?.MapFrom(src => StaticFunctions.VerifyDate(src.StartDate)))

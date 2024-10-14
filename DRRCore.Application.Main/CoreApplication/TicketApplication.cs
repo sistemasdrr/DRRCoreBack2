@@ -3307,7 +3307,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     {
                         if(debug.Flag == true)
                         {
-                            emailDataDto.Subject = "PRUEBA_DESPACHO_" +ticket.ReferenceNumber +"_" + ticket.RequestedName + "_" + ticket.ReportType + "_" + DateTime.Now.ToString("dd-MM-yyyy");
+                            emailDataDto.Subject = ticket.IsComplement == true ? "UPDATED - " : "" + "PRUEBA_DESPACHO_" + ticket.ReferenceNumber +"_" + ticket.RequestedName + "_" + ticket.ReportType + "_" + DateTime.Now.ToString("dd-MM-yyyy");
                             emailDataDto.From =  userLogin.IdEmployeeNavigation.Email;
                             emailDataDto.UserName = emailDataDto.From;
                             emailDataDto.Password = userLogin.EmailPassword;
@@ -3324,7 +3324,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         }
                         else
                         {
-                            emailDataDto.Subject = ticket.ReferenceNumber+"_"+ticket.RequestedName + "_" + ticket.ReportType + "_" + DateTime.Now.ToString("dd-MM-yyyy");
+                            emailDataDto.Subject = ticket.IsComplement == true ? "UPDATED - " : "" + ticket.ReferenceNumber+"_"+ticket.RequestedName + "_" + ticket.ReportType + "_" + DateTime.Now.ToString("dd-MM-yyyy");
 
                             emailDataDto.From = userLogin.IdEmployeeNavigation.Email;
                             emailDataDto.UserName = emailDataDto.From;
@@ -4898,12 +4898,83 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<bool>> SendComplement(int idTicket, int idUser, bool digited, bool file, string observations)
+        public async Task<Response<List<string>>> GetUsersInTicket(int idTicket)
+        {
+            var response = new Response<List<string>>();
+            response.Data = new List<string>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var ticketHistories = await context.TicketHistories
+                    .Where(x => x.IdTicket == idTicket && x.AsignedTo != null && x.AsignedTo != "" && x.AsignedTo.Contains("CR") == false)
+                    .ToListAsync();
+                foreach(var item in ticketHistories)
+                {
+                    response.Data.Add(item.AsignedTo);
+                }
+            }catch(Exception ex)
+            {
+
+            }
+            return response;
+        }
+        public async Task<Response<bool>> SendComplement(int idTicket, int idUser, bool digited, bool file, string observations, string asignedTo)
         {
             var response = new Response<bool>();
             try
             {
                 using var context = new SqlCoreContext();
+                var cycle = "CP_" + DateTime.Now.Month.ToString("D2") + "_" + DateTime.Now.Year;
+                var productionClosure = await context.ProductionClosures.Where(x => x.Code.Contains(cycle)).FirstOrDefaultAsync();
+                if (productionClosure == null)
+                {
+                    DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1).AddDays(-1);
+                    await context.ProductionClosures.AddAsync(new ProductionClosure
+                    {
+                        EndDate = lastDayOfCurrentMonth,
+                        Code = cycle,
+                        Title = "Cierre de Producción " + DateTime.Now.Month.ToString("D2") + " - " + DateTime.Now.Year,
+                        Observations = ""
+                    });
+                }
+                else
+                {
+                    if (productionClosure.EndDate < DateTime.Now)
+                    {
+                        if (DateTime.Now.Month == 12)
+                        {
+                            cycle = "CP_" + (1).ToString("D2") + "_" + (DateTime.Now.Year + 1);
+                            var nextProductionClosureExistent = await context.ProductionClosures.Where(x => x.Code.Contains(cycle)).FirstOrDefaultAsync();
+                            if (nextProductionClosureExistent == null)
+                            {
+                                DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year + 1, 1, 1).AddMonths(1).AddDays(-1);
+                                await context.ProductionClosures.AddAsync(new ProductionClosure
+                                {
+                                    EndDate = lastDayOfCurrentMonth,
+                                    Code = cycle,
+                                    Title = "Cierre de Producción " + (1).ToString("D2") + " - " + DateTime.Today.Year + 1,
+                                    Observations = ""
+                                });
+                            }
+                        }
+                        else
+                        {
+                            cycle = "CP_" + (DateTime.Now.Month + 1).ToString("D2") + "_" + DateTime.Now.Year;
+                            var nextProductionClosureExistent = await context.ProductionClosures.Where(x => x.Code.Contains(cycle)).FirstOrDefaultAsync();
+                            if (nextProductionClosureExistent == null)
+                            {
+                                DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year, (DateTime.Today.Month + 1), 1).AddMonths(1).AddDays(-1);
+                                await context.ProductionClosures.AddAsync(new ProductionClosure
+                                {
+                                    EndDate = lastDayOfCurrentMonth,
+                                    Code = cycle,
+                                    Title = "Cierre de Producción " + (DateTime.Now.Month + 1).ToString("D2") + " - " + DateTime.Now.Year,
+                                    Observations = ""
+                                });
+                            }
+                        }
+                    }
+                }
                 var ticket = await context.Tickets.Where(x => x.Id == idTicket)
                     .Include(x => x.TicketFiles)
                     .FirstOrDefaultAsync();
@@ -4969,8 +5040,11 @@ namespace DRRCore.Application.Main.CoreApplication
                     IdTicket = newTicket.Id,
                     UserFrom = user.Id.ToString(),
                     UserTo = user.Id.ToString(),
+                    AsignedTo = asignedTo,
                     IdStatusTicket = (int)TicketStatusEnum.Pendiente,
-                    Flag = true
+                    ShippingDate = DateTime.Now,
+                    Flag = true,
+                    Cycle = cycle
                 };
                 var ticketHistory2 = new TicketHistory
                 {
@@ -4980,8 +5054,10 @@ namespace DRRCore.Application.Main.CoreApplication
                     AsignedTo = ticketHistory.AsignedTo,
                     AsignationType = ticketHistory.AsignationType,
                     IdStatusTicket = (int)TicketStatusEnum.Asig_Supervisor,
+                    ShippingDate = DateTime.Now,
                     Flag = false,
                     Observations = observations,
+                    Cycle = "",
                     StartDate = DateTime.Now,
                 };
                 newTicket.TicketHistories.Add(ticketHistory1);

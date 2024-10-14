@@ -11,6 +11,7 @@
         public bool? MainExecutive { get; set; }
 
         public string? Profession { get; set; }
+        public string? ProfessionEng { get; set; }
 
         public decimal? Participation { get; set; }
 

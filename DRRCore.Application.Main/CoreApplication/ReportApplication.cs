@@ -18,7 +18,7 @@ namespace DRRCore.Application.Main.CoreApplication
             _reportingDownload = reportingDownload;
 
         }
-        public async Task<Response<GetFileResponseDto>> DownloadReport6_1_5(int idSubscriber)
+        public async Task<Response<GetFileResponseDto>> DownloadReport6_1_5(int idSubscriber, string format)
         {
             var response = new Response<GetFileResponseDto>();
             try
@@ -26,7 +26,7 @@ namespace DRRCore.Application.Main.CoreApplication
 
                 string fileFormat = "{0}_{1}{2}";
                 string report = "REPORTES/ABONADOS/REPORTES_ABONADO_6.1.5";
-                var reportRenderType = StaticFunctions.GetReportRenderType("pdf");
+                var reportRenderType = StaticFunctions.GetReportRenderType(format);
                 var extension = StaticFunctions.FileExtension(reportRenderType);
                 var contentType = StaticFunctions.GetContentType(reportRenderType);
 
@@ -51,7 +51,7 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<GetFileResponseDto>> DownloadReport6_1_7(string orderBy)
+        public async Task<Response<GetFileResponseDto>> DownloadReport6_1_7(string orderBy, string format)
         {
             var response = new Response<GetFileResponseDto>();
             try
@@ -59,7 +59,7 @@ namespace DRRCore.Application.Main.CoreApplication
 
                 string fileFormat = "{0}_{1}{2}";
                 string report = "REPORTES/ABONADOS/REPORTES_ABONADO_6.1.7";
-                var reportRenderType = StaticFunctions.GetReportRenderType("pdf");
+                var reportRenderType = StaticFunctions.GetReportRenderType(format);
                 var extension = StaticFunctions.FileExtension(reportRenderType);
                 var contentType = StaticFunctions.GetContentType(reportRenderType);
 
@@ -83,7 +83,7 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             return response;
         }
-        public async Task<Response<GetFileResponseDto>> DownloadReport6_1_14(string type)
+        public async Task<Response<GetFileResponseDto>> DownloadReport6_1_14(string type, string format)
         {
             var response = new Response<GetFileResponseDto>();
             try
@@ -91,7 +91,7 @@ namespace DRRCore.Application.Main.CoreApplication
 
                 string fileFormat = "{0}_{1}{2}";
                 string report = "REPORTES/ABONADOS/REPORTES_ABONADO_6.1.14";
-                var reportRenderType = StaticFunctions.GetReportRenderType("pdf");
+                var reportRenderType = StaticFunctions.GetReportRenderType(format);
                 var extension = StaticFunctions.FileExtension(reportRenderType);
                 var contentType = StaticFunctions.GetContentType(reportRenderType);
 
@@ -105,6 +105,39 @@ namespace DRRCore.Application.Main.CoreApplication
                     File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
                     ContentType = contentType,
                     Name = string.Format(fileFormat, "REPORTE_ABONADO_6.1.14", "", extension)
+                };
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
+        public async Task<Response<GetFileResponseDto>> DownloadReport6_1_15(int idCountry, string format)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+
+                string fileFormat = "{0}_{1}{2}";
+                string report = "REPORTES/ABONADOS/REPORTES_ABONADO_6.1.15";
+                var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                var extension = StaticFunctions.FileExtension(reportRenderType);
+                var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                var dictionary = new Dictionary<string, string>
+                {
+                    { "idCountry", idCountry.ToString() }
+                };
+
+                response.Data = new GetFileResponseDto
+                {
+                    File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                    ContentType = contentType,
+                    Name = string.Format(fileFormat, "REPORTE_ABONADO_6.1.15", "", extension)
                 };
             }
             catch (Exception ex)
