@@ -4087,15 +4087,15 @@ namespace DRRCore.Application.Main.CoreApplication
                             sLDocument.SetCellValue("A75", "PRFT_SRPLS_AMT");
                             sLDocument.SetCellValue("B75", balance[0].POther ?? 0);
                             sLDocument.SetCellValue("A76", "PRVYY_AL_AST_AMT");
-                            sLDocument.SetCellValue("B76", balance[1].TotalAssets ?? 0);
+                            sLDocument.SetCellValue("B76", balance[0].TotalAssets ?? 0);
                             sLDocument.SetCellValue("A77", "PRVYY_BS_BASE_YYMM");
-                            sLDocument.SetCellValue("B77", balance[1].Date.Value.ToString("yyyyMM"));
+                            sLDocument.SetCellValue("B77", balance[0].Date.Value.ToString("yyyyMM"));
                             sLDocument.SetCellValue("A78", "PRVYY_NET_PRFT_AMT");
-                            sLDocument.SetCellValue("B78", balance[1].Utilities ?? 0);
+                            sLDocument.SetCellValue("B78", balance[0].Utilities ?? 0);
                             sLDocument.SetCellValue("A79", "PRVYY_PRFLOS_BIL_BASE_YYMM");
-                            sLDocument.SetCellValue("B79", balance[1].Date.Value.ToString("yyyyMM"));
+                            sLDocument.SetCellValue("B79", balance[0].Date.Value.ToString("yyyyMM"));
                             sLDocument.SetCellValue("A80", "PRVYY_SALE_AMT");
-                            sLDocument.SetCellValue("B80", balance[1].Sales ?? 0);
+                            sLDocument.SetCellValue("B80", balance[0].Sales ?? 0);
                             sLDocument.SetCellValue("A81", "SALE_AMT");
                             sLDocument.SetCellValue("B81", balance[0].Sales ?? 0);
                         }
