@@ -11,17 +11,7 @@
 using System;
 using System.Reflection;
 
-<<<<<<< HEAD:DRRCore.Services.ApiEmail/obj/Debug/net6.0/DRRCore.Services.ApiEmail.MvcApplicationPartsAssemblyInfo.cs
 [assembly: Microsoft.AspNetCore.Mvc.ApplicationParts.ApplicationPartAttribute("Swashbuckle.AspNetCore.SwaggerGen")]
-=======
-[assembly: System.Reflection.AssemblyCompanyAttribute("DRRCore.Services.ApiEmail")]
-[assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
-[assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4394d182bf99d2105a6e2c14f6fea4034ae466b8")]
-[assembly: System.Reflection.AssemblyProductAttribute("DRRCore.Services.ApiEmail")]
-[assembly: System.Reflection.AssemblyTitleAttribute("DRRCore.Services.ApiEmail")]
-[assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
->>>>>>> 4/10 3:DRRCore.Services.ApiEmail/obj/Debug/net6.0/DRRCore.Services.ApiEmail.AssemblyInfo.cs
 
 // Generado por la clase WriteCodeFragment de MSBuild.
 

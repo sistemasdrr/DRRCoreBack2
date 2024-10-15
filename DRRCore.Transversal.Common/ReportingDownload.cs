@@ -42,7 +42,6 @@ namespace DRRCore.Transversal.Common
                 throw new Exception(ex.Message, ex);
             }
         }
-
         public async Task<byte[]> GenerateSubReportAsync(string reportName, ReportRenderType render, Dictionary<string, string> parameters)
         {
             try

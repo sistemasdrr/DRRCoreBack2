@@ -181,6 +181,8 @@ public partial class SqlCoreContext : DbContext
 
     public virtual DbSet<SpecialAgentBalancePrice> SpecialAgentBalancePrices { get; set; }
 
+    public virtual DbSet<SpecialPriceAgent> SpecialPriceAgents { get; set; }
+
     public virtual DbSet<StatusTicket> StatusTickets { get; set; }
 
     public virtual DbSet<StatusTicketObservation> StatusTicketObservations { get; set; }
@@ -226,14 +228,15 @@ public partial class SqlCoreContext : DbContext
         if (!optionsBuilder.IsConfigured)
         {
             optionsBuilder.UseSqlServer(
-         //  "Data Source=200.58.123.184,14330;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
-           "Data Source=SD-4154134-W;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
+             "Data Source=200.58.123.184,14330;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
+            /* "Data Source=SD-4154134-W;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
 
-            , sqlServerOptions => sqlServerOptions.EnableRetryOnFailure(
-                maxRetryCount: 18,
-                maxRetryDelay: TimeSpan.FromSeconds(60),
-                errorNumbersToAdd: null)
-            );
+              , sqlServerOptions => sqlServerOptions.EnableRetryOnFailure(
+                  maxRetryCount: 18,
+                  maxRetryDelay: TimeSpan.FromSeconds(60),
+                  errorNumbersToAdd: null)
+              );*/
+
         }
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -247,6 +250,8 @@ public partial class SqlCoreContext : DbContext
         modelBuilder.Entity<TicketsInCurrentMonthSP>().ToSqlQuery("EXEC SP_TicketsInCurrentMonth").HasNoKey();
         modelBuilder.Entity<CompanyShareholderSP>().ToSqlQuery("EXEC ShareholderCompany").HasNoKey();
         modelBuilder.Entity<StaticsByCountry>().ToSqlQuery("EXEC SP_STATICS_BY_COUNTRY").HasNoKey();
+        modelBuilder.Entity<GetAgentInvoice>().ToSqlQuery("EXEC GetAgentInvoice").HasNoKey();
+        modelBuilder.Entity<PriceResult>().ToSqlQuery("EXEC GetAgentPrice").HasNoKey();
 
         modelBuilder.Entity<Agent>(entity =>
         {
@@ -4545,6 +4550,51 @@ public partial class SqlCoreContext : DbContext
                 .HasConstraintName("FK__SpecialAg__idAge__5AC46587");
         });
 
+        modelBuilder.Entity<SpecialPriceAgent>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__SpecialP__3213E83F6C4F55F5");
+
+            entity.ToTable("SpecialPriceAgent");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Code)
+                .HasMaxLength(4)
+                .IsUnicode(false)
+                .HasColumnName("code");
+            entity.Property(e => e.CreationDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("creationDate");
+            entity.Property(e => e.DeleteDate)
+                .HasColumnType("datetime")
+                .HasColumnName("deleteDate");
+            entity.Property(e => e.Enable)
+                .HasDefaultValueSql("((1))")
+                .HasColumnName("enable");
+            entity.Property(e => e.IdAgent).HasColumnName("idAgent");
+            entity.Property(e => e.PriceT1)
+                .HasColumnType("decimal(5, 2)")
+                .HasColumnName("priceT1");
+            entity.Property(e => e.PriceT2)
+                .HasColumnType("decimal(5, 2)")
+                .HasColumnName("priceT2");
+            entity.Property(e => e.PriceT3)
+                .HasColumnType("decimal(5, 2)")
+                .HasColumnName("priceT3");
+            entity.Property(e => e.Quality)
+                .HasMaxLength(1)
+                .IsUnicode(false)
+                .IsFixedLength()
+                .HasColumnName("quality");
+            entity.Property(e => e.UpdateDate)
+                .HasColumnType("datetime")
+                .HasColumnName("updateDate");
+
+            entity.HasOne(d => d.IdAgentNavigation).WithMany(p => p.SpecialPriceAgents)
+                .HasForeignKey(d => d.IdAgent)
+                .HasConstraintName("FK__SpecialPr__idAge__02D256E1");
+        });
+
         modelBuilder.Entity<StatusTicket>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__StatusTi__3213E83F548F6ACD");
@@ -5068,12 +5118,10 @@ public partial class SqlCoreContext : DbContext
                 .HasDefaultValueSql("((1))")
                 .HasColumnName("idInvoiceState");
             entity.Property(e => e.IdPerson).HasColumnName("idPerson");
+            entity.Property(e => e.IdSpecialAgentBalancePrice).HasColumnName("idSpecialAgentBalancePrice");
             entity.Property(e => e.IdStatusTicket).HasColumnName("idStatusTicket");
             entity.Property(e => e.IdSubscriber).HasColumnName("idSubscriber");
-            entity.Property(e => e.IdTicketComplement)
-                .HasMaxLength(10)
-                .IsUnicode(false)
-                .HasColumnName("idTicketComplement");
+            entity.Property(e => e.IdTicketComplement).HasColumnName("idTicketComplement");
             entity.Property(e => e.IsComplement)
                 .HasDefaultValueSql("((0))")
                 .HasColumnName("isComplement");
@@ -5192,6 +5240,10 @@ public partial class SqlCoreContext : DbContext
                 .HasForeignKey(d => d.IdPerson)
                 .HasConstraintName("FK__Ticket__idPerson__66161CA2");
 
+            entity.HasOne(d => d.IdSpecialAgentBalancePriceNavigation).WithMany(p => p.Tickets)
+                .HasForeignKey(d => d.IdSpecialAgentBalancePrice)
+                .HasConstraintName("FK__Ticket__idSpecia__03C67B1A");
+
             entity.HasOne(d => d.IdStatusTicketNavigation).WithMany(p => p.Tickets)
                 .HasForeignKey(d => d.IdStatusTicket)
                 .HasConstraintName("FK__Ticket__idStatus__058EC7FB");
@@ -5199,6 +5251,10 @@ public partial class SqlCoreContext : DbContext
             entity.HasOne(d => d.IdSubscriberNavigation).WithMany(p => p.Tickets)
                 .HasForeignKey(d => d.IdSubscriber)
                 .HasConstraintName("FK__Ticket__idSubscr__71BCD978");
+
+            entity.HasOne(d => d.IdTicketComplementNavigation).WithMany(p => p.InverseIdTicketComplementNavigation)
+                .HasForeignKey(d => d.IdTicketComplement)
+                .HasConstraintName("FK__Ticket__idTicket__088B3037");
         });
 
         modelBuilder.Entity<TicketAssignation>(entity =>

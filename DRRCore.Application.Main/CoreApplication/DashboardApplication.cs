@@ -49,7 +49,7 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 _logger.LogError(ex.Message);
                 response.IsSuccess = false;
-                response.Message = ex.Message;  // Opcional: Agregar mensaje de error en la respuesta
+                response.Message = ex.Message;
             }
             return response;
         }
@@ -295,6 +295,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                     details.Number = ticket.IdTicketNavigation.IsComplement != null && ticket.IdTicketNavigation.IsComplement == true ? ticket.IdTicketNavigation.About + " - " + ticket.IdTicketNavigation.Number.ToString("D6") + " (C) " : ticket.IdTicketNavigation.About + " - " + ticket.IdTicketNavigation.Number.ToString("D6");
                                     details.Country = ticket.IdTicketNavigation.IdCountryNavigation.Iso ?? "";
                                     details.FlagCountry = ticket.IdTicketNavigation.IdCountryNavigation.FlagIso ?? "";
+                                    details.OrderDate = StaticFunctions.DateTimeToString(ticket.StartDate);
                                     details.ExpireDate = StaticFunctions.DateTimeToString(ticket.IdTicketNavigation.ExpireDate);
                                     details.Flag = GetFlagDate(ticket.IdTicketNavigation.ExpireDate);
                                     pendingTaskPersonal.Details.Add(details);
@@ -340,6 +341,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                     details.Number = ticket.IdTicketNavigation.IsComplement != null && ticket.IdTicketNavigation.IsComplement == true ? ticket.IdTicketNavigation.About + " - " + ticket.IdTicketNavigation.Number.ToString("D6") + " (C) " : ticket.IdTicketNavigation.About + " - " + ticket.IdTicketNavigation.Number.ToString("D6");
                                     details.Country = ticket.IdTicketNavigation.IdCountryNavigation.Iso ?? "";
                                     details.FlagCountry = ticket.IdTicketNavigation.IdCountryNavigation.FlagIso ?? "";
+                                    details.OrderDate = StaticFunctions.DateTimeToString(ticket.StartDate);
                                     details.ExpireDate = StaticFunctions.DateTimeToString(ticket.IdTicketNavigation.ExpireDate);
                                     details.Flag = GetFlagDate(ticket.IdTicketNavigation.ExpireDate);
                                     pendingTaskTypist.Details.Add(details);
@@ -387,7 +389,8 @@ namespace DRRCore.Application.Main.CoreApplication
                                     details.RequestedName = ticket.IdTicketNavigation.RequestedName;
                                     details.Number = ticket.IdTicketNavigation.IsComplement != null && ticket.IdTicketNavigation.IsComplement == true ? ticket.IdTicketNavigation.About + " - " + ticket.IdTicketNavigation.Number.ToString("D6") + " (C) " : ticket.IdTicketNavigation.About + " - " + ticket.IdTicketNavigation.Number.ToString("D6");
                                     details.Country = ticket.IdTicketNavigation.IdCountryNavigation.Iso ?? "";
-                                    details.FlagCountry = ticket.IdTicketNavigation.IdCountryNavigation.FlagIso ?? "";
+                                    details.FlagCountry = ticket.IdTicketNavigation.IdCountryNavigation.FlagIso ?? ""; 
+                                    details.OrderDate = StaticFunctions.DateTimeToString(ticket.StartDate);
                                     details.ExpireDate = StaticFunctions.DateTimeToString(ticket.IdTicketNavigation.ExpireDate);
                                     details.Flag = GetFlagDate(ticket.IdTicketNavigation.ExpireDate);
                                     pendingTaskReferences.Details.Add(details);
@@ -435,6 +438,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                     details.Number = ticket.IdTicketNavigation.IsComplement != null && ticket.IdTicketNavigation.IsComplement == true ? ticket.IdTicketNavigation.About + " - " + ticket.IdTicketNavigation.Number.ToString("D6") + " (C) " : ticket.IdTicketNavigation.About + " - " + ticket.IdTicketNavigation.Number.ToString("D6");
                                     details.Country = ticket.IdTicketNavigation.IdCountryNavigation.Iso ?? "";
                                     details.FlagCountry = ticket.IdTicketNavigation.IdCountryNavigation.FlagIso ?? "";
+                                    details.OrderDate = StaticFunctions.DateTimeToString(ticket.StartDate);
                                     details.ExpireDate = StaticFunctions.DateTimeToString(ticket.IdTicketNavigation.ExpireDate);
                                     details.Flag = GetFlagDate(ticket.IdTicketNavigation.ExpireDate);
                                     pendingTaskTranslator.Details.Add(details);
@@ -561,6 +565,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                 details.Number = ticket.IdTicketNavigation.IsComplement != null && ticket.IdTicketNavigation.IsComplement == true ? ticket.IdTicketNavigation.About + " - " + ticket.IdTicketNavigation.Number.ToString("D6") + " (C) " : ticket.IdTicketNavigation.About + " - " + ticket.IdTicketNavigation.Number.ToString("D6");
                                 details.Country = ticket.IdTicketNavigation.IdCountryNavigation.Iso ?? "";
                                 details.FlagCountry = ticket.IdTicketNavigation.IdCountryNavigation.FlagIso ?? "";
+                                details.OrderDate = StaticFunctions.DateTimeToString(ticket.StartDate);
                                 details.ExpireDate = StaticFunctions.DateTimeToString(ticket.IdTicketNavigation.ExpireDate);
                                 details.Flag = GetFlagDate(ticket.IdTicketNavigation.ExpireDate);
                                 pendingTaskPersonal.Details.Add(details);

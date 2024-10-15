@@ -76,6 +76,11 @@
         public string? EndDate { get; set; }
         public int? References { get; set; }
 
+        public bool? IsComplement { get; set; }
+
+        public string? ComplementQuality { get; set; }
+        public string? ComplementQualityTypist { get; set; }
+        public string? ComplementQualityTranslator { get; set; }
     }
     public class GetListTicketResponseDto2
     {
@@ -142,6 +147,7 @@
         public string AsignedTo { get; set; }
         public List<UserCode>? OtherUserCode { get; set; }
         public bool? HasQuery { get; set; }
+        public bool? HasBalance { get; set; }
         public int? StatusQuery { get; set; }
         public int? Receptor { get; set; }
         public int? Receptor2 { get; set; }
@@ -157,6 +163,12 @@
         public string? EndDate { get; set; }
         public int? References { get; set; }
         public string? WebPage { get; set; }
+
+        public bool? IsComplement { get; set; }
+
+        public string? ComplementQuality { get; set; }
+        public string? ComplementQualityTypist { get; set; }
+        public string? ComplementQualityTranslator { get; set; }
 
     }
     public class UserCode

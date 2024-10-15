@@ -7,7 +7,6 @@ public partial class Company
 {
     public int Id { get; set; }
 
-    public virtual ICollection<Traduction> Traductions { get; set; } = new List<Traduction>();
     public string? OldCode { get; set; }
 
     public string Name { get; set; } = null!;
@@ -86,6 +85,7 @@ public partial class Company
 
     public string? Since { get; set; }
 
+    public virtual ICollection<Traduction> Traductions { get; set; } = new List<Traduction>();
     public virtual ICollection<BankDebt> BankDebts { get; set; } = new List<BankDebt>();
 
     public virtual ICollection<ComercialLatePayment> ComercialLatePayments { get; set; } = new List<ComercialLatePayment>();

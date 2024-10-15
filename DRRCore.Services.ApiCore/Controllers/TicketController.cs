@@ -137,6 +137,12 @@ namespace DRRCore.Services.ApiCore.Controllers
             return Ok(await _ticketApplication.GetTicketListToDispatchAsync());
         }
         [HttpGet()]
+        [Route("GetUsersInTicket")]
+        public async Task<ActionResult> GetUsersInTicket(int idTicket)
+        {
+            return Ok(await _ticketApplication.GetUsersInTicket(idTicket));
+        }
+        [HttpGet()]
         [Route("TicketToDispatch")]
         public async Task<ActionResult> TicketToDispatch(int idTicketHistory, int idTicket, string quality, string qualityTranslator, string qualityTypist)
         {
@@ -390,9 +396,9 @@ namespace DRRCore.Services.ApiCore.Controllers
         }
         [HttpGet()]
         [Route("SendComplement")]
-        public async Task<ActionResult> SendComplement(int idTicket, int idUser, bool digited, bool file, string observations)
+        public async Task<ActionResult> SendComplement(int idTicket, int idUser, bool digited, bool file, string observations, string asignedTo)
         {
-            return Ok(await _ticketApplication.SendComplement(idTicket, idUser , digited, file, observations));
+            return Ok(await _ticketApplication.SendComplement(idTicket, idUser , digited, file, observations, asignedTo));
         }
         [HttpPost()]
         [Route("SaveTicketCommentary")]
@@ -440,5 +446,6 @@ namespace DRRCore.Services.ApiCore.Controllers
         }
 
         
+
     }
 }

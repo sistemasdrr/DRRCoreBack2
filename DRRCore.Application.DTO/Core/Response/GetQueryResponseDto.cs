@@ -530,7 +530,14 @@
         public string? OrderDate { get; set; }
         public string? ExpireDate { get; set; }
         public string? RealExpireDate { get; set; }
+        public string? Quality { get; set; }
+        public string? QualityTypist { get; set; }
+        public string? QualityTraductor { get; set; }
+        public string? QualityReport { get; set; }
         public bool? IsComplement { get; set; }
+        public string? ComplementQuality { get; set; }
+        public string? ComplementQualityTypist { get; set; }
+        public string? ComplementQualityTraductor { get; set; }
         public int? Flag { get; set; }
     }
     public class GetQuery5_1_2ResponseDto
@@ -580,6 +587,10 @@
         public string? QualityTypist { get; set; }
         public string? QualityTraductor { get; set; }
         public string? QualityReport { get; set; }
+        public bool? IsComplement { get; set; }
+        public string? ComplementQuality { get; set; }
+        public string? ComplementQualityTypist { get; set; }
+        public string? ComplementQualityTraductor { get; set; }
 
         public bool? HasFiles { get; set; }
         public List<TicketFileResponseDto>? Files { get; set; } = new List<TicketFileResponseDto>();
@@ -591,7 +602,6 @@
         public string? Country { get; set; }
         public string? FlagCountry { get; set; }
 
-        public bool? IsComplement {  get; set; }
         //ABONADO
         public string? SubscriberCode { get; set; }
         public string? SubscriberName { get; set; }

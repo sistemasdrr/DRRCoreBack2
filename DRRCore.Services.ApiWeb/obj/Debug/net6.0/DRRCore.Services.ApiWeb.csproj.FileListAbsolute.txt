@@ -445,9 +445,9 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiWeb\obj\Debu
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiWeb\obj\Debug\net6.0\ref\DRRCore.Services.ApiWeb.dll
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiWeb\obj\Debug\net6.0\DRRCore.Services.ApiWeb.sourcelink.json
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Services.ApiWeb\obj\Debug\net6.0\DRRCore..16584DAE.Up2Date
+C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Services.ApiWeb\bin\Debug\net6.0\log4net.config
 C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Services.ApiWeb\bin\Debug\net6.0\appsettings.Development.json
 C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Services.ApiWeb\bin\Debug\net6.0\appsettings.json
-C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Services.ApiWeb\bin\Debug\net6.0\log4net.config
 C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Services.ApiWeb\bin\Debug\net6.0\DRRCore.Services.ApiWeb.exe
 C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Services.ApiWeb\bin\Debug\net6.0\DRRCore.Services.ApiWeb.deps.json
 C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Services.ApiWeb\bin\Debug\net6.0\DRRCore.Services.ApiWeb.runtimeconfig.json

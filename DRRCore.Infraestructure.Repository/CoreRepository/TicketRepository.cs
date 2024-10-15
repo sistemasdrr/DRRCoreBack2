@@ -138,6 +138,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
             {
                 using var context = new SqlCoreContext();
                 return await context.Tickets
+                    .Include(x => x.IdTicketComplementNavigation)
                     .Include(x=>x.IdSubscriberNavigation).ThenInclude(x => x.IdCountryNavigation)
                     .Include(x => x.IdContinentNavigation)
                     .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.IdCountryNavigation).ThenInclude(x => x.IdContinentNavigation)
@@ -164,7 +165,9 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
             try
             {
                 using var context = new SqlCoreContext();
-                var list= await context.Tickets.Include(x => x.IdSubscriberNavigation)
+                var list= await context.Tickets
+                    .Include(x => x.IdTicketComplementNavigation)
+                    .Include(x => x.IdSubscriberNavigation)
                     .Include(x => x.IdSubscriberNavigation.IdCountryNavigation)
                     .Include(x => x.IdContinentNavigation).Include(x => x.IdCompanyNavigation)
                     .Include(x => x.IdCompanyNavigation.IdCountryNavigation)
@@ -539,6 +542,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
             {
                 using var context = new SqlCoreContext();
                 var tickets = await context.Tickets
+                    .Include(x => x.IdTicketComplementNavigation)
                     .Include(x => x.IdSubscriberNavigation)
                     .Include(x => x.IdSubscriberNavigation.IdCountryNavigation)
                     .Include(x => x.IdContinentNavigation).Include(x => x.IdCompanyNavigation)
@@ -680,6 +684,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
             {
                 using var context = new SqlCoreContext();
                 var tickets = await context.Tickets
+                    .Include(x => x.IdTicketComplementNavigation)
                     .Include(x => x.IdSubscriberNavigation.IdCountryNavigation)
                     .Include(x => x.IdContinentNavigation).Include(x => x.IdCompanyNavigation)
                     .Include(x => x.IdCompanyNavigation.IdCountryNavigation)

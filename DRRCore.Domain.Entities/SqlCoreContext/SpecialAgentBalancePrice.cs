@@ -24,4 +24,6 @@ public partial class SpecialAgentBalancePrice
     public bool? Enable { get; set; }
 
     public virtual Agent? IdAgentNavigation { get; set; }
+
+    public virtual ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
 }

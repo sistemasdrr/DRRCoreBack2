@@ -70,6 +70,7 @@
         public string? RequestedName { get; set; }
         public string? Country { get; set; }
         public string? FlagCountry { get; set; }
+        public string? OrderDate { get; set; }
         public string? ExpireDate { get; set; }
         public int? Flag { get; set; }
 

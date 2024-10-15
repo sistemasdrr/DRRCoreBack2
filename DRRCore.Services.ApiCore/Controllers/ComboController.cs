@@ -20,6 +20,12 @@ namespace DRRCore.Services.ApiCore.Controllers
             return Ok(await _comboboxApplication.GetDocumentTypeNatural());
         }
         [HttpGet()]
+        [Route("GetSpecialPrice")]
+        public async Task<ActionResult> GetSpecialPrice(int idAgent)
+        {
+            return Ok(await _comboboxApplication.GetSpecialPrice(idAgent));
+        }
+        [HttpGet()]
         [Route("occupations")]
         public async Task<ActionResult> GetOccupations()
         {
