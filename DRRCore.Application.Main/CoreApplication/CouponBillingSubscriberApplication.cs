@@ -32,6 +32,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 {
                     var newHistory = _mapper.Map<CouponBillingSubscriberHistory>(obj);
                     newHistory.LastUpdateUser = 1;
+                    newHistory.Type = "I";
                     response.Data = await _couponBillingSubscriberHistoryDomain.AddAsync(newHistory);
                     if(response.Data == true)
                     {
