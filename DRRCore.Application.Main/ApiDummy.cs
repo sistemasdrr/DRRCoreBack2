@@ -108,7 +108,7 @@ namespace DRRCore.Application.DTO
                     TaxpayerRegistration = new DocumentTypeDto
                     {
                         TypeDocument = company.TaxTypeName == null ? "" : company.TaxTypeName,
-                        NumberDocument = company.TaxTypeCode.IsNullOrEmpty() == true ? "" : company.TaxTypeCode.Substring(0, Math.Min(company.TaxTypeCode.Length, 7))
+                        NumberDocument = company.TaxTypeCode.IsNullOrEmpty() == true ? "" : company.TaxTypeCode
                     },
                     TaxpayerSituation = new ValueDetailDto
                     {
@@ -178,20 +178,20 @@ namespace DRRCore.Application.DTO
                     {
                         IsoCurrency = company.FinancialBalances.OrderByDescending(x => x.Date).FirstOrDefault()?.IdCurrencyNavigation?.Abreviation == null ? "" : company.FinancialBalances.OrderByDescending(x => x.Date).FirstOrDefault()?.IdCurrencyNavigation?.Abreviation,//"PEN",
                         Amount = company.FinancialBalances.OrderByDescending(x => x.Date).FirstOrDefault()?.TotalPatrimony == null ? 0 : (double)company.FinancialBalances.OrderByDescending(x => x.Date).FirstOrDefault()?.TotalPatrimony,//4555555555,
-                        LastInformationDate = company.FinancialBalances.OrderByDescending(x => x.Date).FirstOrDefault()?.Date == null ? "" : StaticFunctions.DateTimeToString(company.FinancialBalances.OrderByDescending(x => x.Date).FirstOrDefault()?.Date)//"12/31/2020"
+                        LastInformationDate = company.FinancialBalances.OrderByDescending(x => x.Date).FirstOrDefault()?.Date == null ? "" : company.FinancialBalances.OrderByDescending(x => x.Date).FirstOrDefault()?.Date?.ToString(Constants.DateFormatEnglish)//"12/31/2020"
                     },
                     AnnualRevenues = new CurrencyAmountWithDateDto
                     {
                         IsoCurrency = company.FinancialBalances.OrderByDescending(x => x.Date).FirstOrDefault()?.IdCurrencyNavigation?.Abreviation == null ? "" : company.FinancialBalances.OrderByDescending(x => x.Date).FirstOrDefault()?.IdCurrencyNavigation?.Abreviation,//"PEN",
                         Amount = company.FinancialBalances.OrderByDescending(x => x.Date).FirstOrDefault()?.Sales == null ? 0 : (double)company.FinancialBalances.OrderByDescending(x => x.Date).FirstOrDefault()?.Sales,//66665989,
-                        LastInformationDate = company.FinancialBalances.OrderByDescending(x => x.Date).FirstOrDefault()?.Date == null ? "" : StaticFunctions.DateTimeToString(company.FinancialBalances.OrderByDescending(x => x.Date).FirstOrDefault()?.Date)//"12/31/2020"
+                        LastInformationDate = company.FinancialBalances.OrderByDescending(x => x.Date).FirstOrDefault()?.Date == null ? "" : company.FinancialBalances.OrderByDescending(x => x.Date).FirstOrDefault()?.Date?.ToString(Constants.DateFormatEnglish)//"12/31/2020"
 
                     },
                     Profits = new CurrencyAmountWithDateDto
                     {
                         IsoCurrency = company.FinancialBalances.OrderByDescending(x => x.Date).FirstOrDefault()?.IdCurrencyNavigation?.Abreviation == null ? "" : company.FinancialBalances.OrderByDescending(x => x.Date).FirstOrDefault()?.IdCurrencyNavigation?.Abreviation,//"PEN",
                         Amount = company.FinancialBalances.OrderByDescending(x => x.Date).FirstOrDefault()?.Utilities == null ? 0 : (double)company.FinancialBalances.OrderByDescending(x => x.Date).FirstOrDefault()?.Utilities ,//7655654654,
-                        LastInformationDate = company.FinancialBalances.OrderByDescending(x => x.Date).FirstOrDefault()?.Date == null ? "" : StaticFunctions.DateTimeToString(company.FinancialBalances.OrderByDescending(x => x.Date).FirstOrDefault()?.Date)//"12/31/2020"
+                        LastInformationDate = company.FinancialBalances.OrderByDescending(x => x.Date).FirstOrDefault()?.Date == null ? "" : company.FinancialBalances.OrderByDescending(x => x.Date).FirstOrDefault()?.Date?.ToString(Constants.DateFormatEnglish)//"12/31/2020"
                     },
                     Employees = company.CompanyBranches.FirstOrDefault()?.WorkerNumber == null ? 0 : (int)company.CompanyBranches.FirstOrDefault()?.WorkerNumber,//5000,
                     ChiefExecutive = "PEREZ GUBBINS, ALFREDO *****",
@@ -279,7 +279,7 @@ namespace DRRCore.Application.DTO
                     {
                         IsoCurrency = company.FinancialBalances.OrderByDescending(x => x.Date).FirstOrDefault().IdCurrencyNavigation.Abreviation == null ? "" : company.FinancialBalances.OrderByDescending(x => x.Date).FirstOrDefault().IdCurrencyNavigation.Abreviation,//"PEN",
                         Amount = company.FinancialBalances.OrderByDescending(x => x.Date).FirstOrDefault().TotalPatrimony == null ? 0 : (double)company.FinancialBalances.OrderByDescending(x => x.Date).FirstOrDefault().TotalPatrimony,//4555555555,
-                        LastInformationDate = company.FinancialBalances.OrderByDescending(x => x.Date).FirstOrDefault().Date == null ? "" : StaticFunctions.DateTimeToString(company.FinancialBalances.OrderByDescending(x => x.Date).FirstOrDefault().Date)//"12/31/2020"
+                       LastInformationDate = company.FinancialBalances.OrderByDescending(x => x.Date).FirstOrDefault().Date == null ? "" : company.FinancialBalances.OrderByDescending(x => x.Date).FirstOrDefault().Date?.ToString(Constants.DateFormatEnglish)//"12/31/2020"
                     },
                     ShareClass = "",//"Common",
                     StockExchangeListed = company.CompanyBackgrounds.FirstOrDefault().Traded == "Si" ? true : false,
@@ -313,7 +313,7 @@ namespace DRRCore.Application.DTO
                     {
                         Name = item.IdPersonNavigation.Fullname == null ? "" : item.IdPersonNavigation.Fullname,
                         Title = item.ProfessionEng == null ? "" : item.ProfessionEng,
-                        SinceDate = item.StartDate == null ? "" : StaticFunctions.DateTimeToString(item.StartDate)
+                        SinceDate = item.StartDate == null ? "" : item.StartDate?.ToString(Constants.DateFormatEnglish)
                     });
                     partipation += item.Participation;
                 }
@@ -587,12 +587,14 @@ namespace DRRCore.Application.DTO
                 using var context = new SqlCoreContext();
                 var company = await context.Companies.Where(x => x.Id == idCompany)
                     .Include(x => x.ImportsAndExports)
+                    .Include(x => x.FinancialBalances).ThenInclude(x => x.IdCurrencyNavigation)
+                  
                     .Include(x => x.CompanyBranches).ThenInclude(x => x.IdBranchSectorNavigation)
                     .Include(x => x.CompanyBranches).ThenInclude(x => x.IdBusinessBranchNavigation)
                     .Include(x => x.TraductionCompanies)
                     .FirstOrDefaultAsync();
                 var balancesGen = company.FinancialBalances.Where(x => x.BalanceType == "GENERAL").OrderByDescending(x => x.Date).ToList();
-                var balancesSit = company.FinancialBalances.Where(x => x.BalanceType == "SITUACIONAL").OrderByDescending(x => x.Date).FirstOrDefault();
+                var balancesSit = company.FinancialBalances.Where(x => x.BalanceType == "SITUACIONAL").OrderByDescending(x => x.Date).ToList();
                 var listBalGen = new List<BalanceSheetDto>();
                 var listBalSit = new List<BalanceSheetDto>();
 
@@ -605,43 +607,44 @@ namespace DRRCore.Application.DTO
                         WorkingCapital = balancesGen.Count > 0 ? (double)balancesGen.FirstOrDefault().WorkingCapital:0
                     };
 
-                    if (balancesSit != null)
-                    {
+                foreach (var balanceSit in balancesSit)
+                {
                         listBalSit.Add(new BalanceSheetDto
                         {
-                            Date = StaticFunctions.DateTimeToString(balancesSit.Date),
+                           IsCurrent=balancesSit.OrderByDescending(x => x.Date).FirstOrDefault().Date==balanceSit.Date,
+                            Date = balanceSit.Date?.ToString(Constants.DateFormatEnglish),
                             TypeBalanceSheet = "Interim",
-                            Period = balancesSit.DurationEng,
-                            IsoCurrency = balancesSit.IdCurrencyNavigation.Abreviation,
-                            ExchangeRate = balancesSit.ExchangeRate.ToString(),
+                            Period = balanceSit.DurationEng,
+                            IsoCurrency = balanceSit.IdCurrencyNavigation.Abreviation,
+                            ExchangeRate = balanceSit.ExchangeRate.ToString(),
                             Assets = new AssetsDto
                             {
-                                CashBanks = (double)balancesSit.ACashBoxBank,
-                                Receivables = (double)balancesSit.AToCollect,
-                                Inventory = (double)balancesSit.AInventory,
-                                OthersAssets = (double)balancesSit.AOtherCurrentAssets,
-                                CurrentAssets = (double)balancesSit.TotalCurrentAssets,
-                                Fixed = (double)balancesSit.AFixed,
-                                OthersCurrentAssets = (double)balancesSit.AOtherNonCurrentAssets,
-                                TotalAssets = (double)balancesSit.TotalAssets
+                                CashBanks = (double)balanceSit.ACashBoxBank,
+                                Receivables = (double)balanceSit.AToCollect,
+                                Inventory = (double)balanceSit.AInventory,
+                                OthersAssets = (double)balanceSit.AOtherCurrentAssets,
+                                CurrentAssets = (double)balanceSit.TotalCurrentAssets,
+                                Fixed = (double)balanceSit.AFixed,
+                                OthersCurrentAssets = (double)balanceSit.AOtherNonCurrentAssets,
+                                TotalAssets = (double)balanceSit.TotalAssets
                             },
                             Liabilities = new LiabilitiesDto
                             {
-                                BankSuppliers = (double)balancesSit.LCashBoxBank,
-                                OthersLiabilities = (double)balancesSit.LOtherCurrentLiabilities,
-                                CurrentLiabilities = (double)balancesSit.TotalCurrentLiabilities,
-                                OthersCurrentLiabilities = (double)balancesSit.LOtherNonCurrentLiabilities
+                                BankSuppliers = (double)balanceSit.LCashBoxBank,
+                                OthersLiabilities = (double)balanceSit.LOtherCurrentLiabilities,
+                                CurrentLiabilities = (double)balanceSit.TotalCurrentLiabilities,
+                                OthersCurrentLiabilities = (double)balanceSit.LOtherNonCurrentLiabilities
                             },
                             ShareholdersEquity = new ShareholdersEquityDto
                             {
-                                Capital = (double)balancesSit.PCapital,
-                                Reserves = (double)balancesSit.PStockPile,
-                                ProfitsLoots = (double)balancesSit.PUtilities,
-                                TotalLiabilitiesShareholderEquity = (double)balancesSit.TotalLiabilitiesPatrimony,
-                                TotalShareholderEquity = (double)balancesSit.TotalPatrimony
+                                Capital = (double)balanceSit.PCapital,
+                                Reserves = (double)balanceSit.PStockPile,
+                                ProfitsLoots = (double)balanceSit.PUtilities,
+                                TotalLiabilitiesShareholderEquity = (double)balanceSit.TotalLiabilitiesPatrimony,
+                                TotalShareholderEquity = (double)balanceSit.TotalPatrimony
                             },
-                            Sales = (double)balancesSit.Sales,
-                            ProfitLoss = (double)balancesSit.Utilities
+                            Sales = (double)balanceSit.Sales,
+                            ProfitLoss = (double)balanceSit.Utilities
                         });
                     
 
@@ -650,7 +653,8 @@ namespace DRRCore.Application.DTO
                 {
                     listBalGen.Add(new BalanceSheetDto
                     {
-                        Date = StaticFunctions.DateTimeToString(balance.Date),
+                        IsCurrent = balancesGen.OrderByDescending(x => x.Date).FirstOrDefault().Date == balance.Date,
+                        Date = balance.Date?.ToString(Constants.DateFormatEnglish),
                         TypeBalanceSheet = "General",
                         Period = balance.DurationEng == null ? "" : balance.DurationEng,
                         IsoCurrency = balance.IdCurrencyNavigation == null || balance.IdCurrencyNavigation.Abreviation == null ? "" : balance.IdCurrencyNavigation.Abreviation,
@@ -745,7 +749,7 @@ namespace DRRCore.Application.DTO
                 {
                     ExchangeRateSbs = company.CompanySbs.FirstOrDefault().ExchangeRate == null ? 0 : (double)company.CompanySbs.FirstOrDefault().ExchangeRate,//3.99,
                     RiskCenter = "No delinquency was reported to Credit Bureau.",
-                    RegisterDate = company.CompanySbs.FirstOrDefault().DebtRecordedDate == null ? "" : StaticFunctions.DateTimeToString(company.CompanySbs.FirstOrDefault().DebtRecordedDate),//"12/31/2021",
+                    RegisterDate = company.CompanySbs.FirstOrDefault().DebtRecordedDate == null ? "" : company.CompanySbs.FirstOrDefault().DebtRecordedDate?.ToString(Constants.DateFormatEnglish),//"12/31/2021",
                     MNTotal = company.CompanySbs.FirstOrDefault().GuaranteesOfferedNc == null ? 0 : (double)company.CompanySbs.FirstOrDefault().GuaranteesOfferedNc,//852364459,
                     MNGuaranteesOffered = 209663451,
 
