@@ -36,6 +36,8 @@ namespace DRRCore.Domain.Entities.SqlCoreContext
         public decimal? Price { get; set; }
         public bool? HasBalance { get; set; }
         public int? IdSpecialAgentBalancePrice{ get; set; }
+        public bool? IsComplement { get; set; }
+        public int? IdTicketComplement { get; set; }
     }
 
     public class PriceResult

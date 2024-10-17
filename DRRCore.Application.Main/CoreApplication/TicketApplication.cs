@@ -314,6 +314,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     request.RequestedName = request.RequestedName.Trim();
                     request.RequestedName = request.RequestedName.Replace("?", "");
                     var newTicket = _mapper.Map<Ticket>(request);
+                    newTicket.HasBalance = false;
                     newTicket.IdStatusTicket = (int?)TicketStatusEnum.Pendiente;
                     newTicket.TicketHistories.Add(new TicketHistory
                     {
@@ -5452,7 +5453,7 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 using var context = new SqlCoreContext();
                 var ticketHistories = await context.TicketHistories.Where(x => x.IdTicket == idTicket && 
-                ((x.AsignedTo.Contains("R")) || (x.AsignedTo.Contains("A")) || (x.AsignedTo.Contains("RC")) || (x.AsignedTo.Contains("D")) || (x.AsignedTo.Contains("T")))  && (!x.AsignedTo.Contains("CR") && !x.AsignedTo.Contains("PA") && !x.AsignedTo.Contains("S"))).ToListAsync();
+                ((x.AsignedTo.Contains("R")) || (x.AsignedTo.Contains("A")) || (x.AsignedTo.Contains("RC")) || (x.AsignedTo.Contains("D")) || (x.AsignedTo.Contains("T")))  && (!x.AsignedTo.Contains("CR") && !x.AsignedTo.Contains("PA") && !x.AsignedTo.Contains("S")) && x.AsignationType != null && x.AsignationType != "" ).ToListAsync();
                 if(ticketHistories == null)
                 {
                     throw new Exception("No se encontro el ticket");
