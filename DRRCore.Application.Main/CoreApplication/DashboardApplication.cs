@@ -201,7 +201,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 var subordinates = new List<Supervisor>();
                 if (supervisor != null && supervisor.IdEmployeeNavigation.Personals.FirstOrDefault() != null)
                 {
-                    if (supervisor.Id == 31 || supervisor.Id == 38 || supervisor.Id == 42 || supervisor.Id == 23) //GERENCIA
+                    if (supervisor.Id == 31 || supervisor.Id == 38 || supervisor.Id == 42 || supervisor.Id == 23 || supervisor.Id == 33 || supervisor.Id == 50) //GERENCIA
                     {
                         subordinates = await context.Supervisors
                             .Include(x => x.IdUserLoginNavigation).ThenInclude(x => x.IdEmployeeNavigation).ThenInclude(x => x.Personals)
