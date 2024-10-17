@@ -16,5 +16,9 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<GetFileResponseDto>> DownloadReport6_1_21(int month, int year, string orderBy, string format);
         Task<Response<GetFileResponseDto>> DownloadReport6_1_22(int year, string orderBy, string format);
         Task<Response<GetFileResponseDto>> DownloadReport6_1_25(string format);
+        Task<Response<GetFileResponseDto>> DownloadReport6_2_1(string startDate, string endDate, string code, string format);
+        Task<Response<GetFileResponseDto>> DownloadReport6_2_2(string code, string format);
+        Task<Response<GetFileResponseDto>> DownloadReport6_2_3(string startDate, string endDate, string code, string format);
+        Task<Response<GetFileResponseDto>> DownloadReport6_2_4(int month, int year, string orderBy, string format);
     }
 }

@@ -2562,7 +2562,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 UserTo = item.UserTo,
                                                 AsignedTo = item.AssignedToCode,
                                                 IdStatusTicket = (int)TicketStatusEnum.Asig_Agente,
-                                                NumberAssign = number,
+                                                NumberAssign = numeration.Number,
                                                 Flag = false,
                                                 StartDate = StaticFunctions.VerifyDate(item.StartDate),
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
