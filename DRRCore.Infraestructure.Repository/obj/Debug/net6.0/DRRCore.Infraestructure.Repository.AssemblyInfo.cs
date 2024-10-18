@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DRRCore.Infraestructure.Repository")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+85c2b41d495b7cea37d4f11640e176aabca051bd")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6e8ff68996faa422632d37ae3e0a89668449c1da")]
 [assembly: System.Reflection.AssemblyProductAttribute("DRRCore.Infraestructure.Repository")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DRRCore.Infraestructure.Repository")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
