@@ -20,5 +20,24 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<GetFileResponseDto>> DownloadReport6_2_2(string code, string format);
         Task<Response<GetFileResponseDto>> DownloadReport6_2_3(string startDate, string endDate, string code, string format);
         Task<Response<GetFileResponseDto>> DownloadReport6_2_4(int month, int year, string orderBy, string format);
+        Task<Response<GetFileResponseDto>> DownloadReport6_3_1(string format);
+        Task<Response<GetFileResponseDto>> DownloadReport6_3_10(string startDate, string endDate, string code, string format);
+        Task<Response<GetFileResponseDto>> DownloadReport6_3_20(string code, string format);
+        Task<Response<GetFileResponseDto>> DownloadReport6_3_30(string startDate, string endDate, string code, string format);
+        Task<Response<GetFileResponseDto>> DownloadReport6_3_40(int month, int year, string orderBy, string format);
+        Task<Response<GetFileResponseDto>> DownloadReport6_3_5(string format);
+        Task<Response<GetFileResponseDto>> DownloadReport6_3_6(string code, int year, string format);
+        Task<Response<GetFileResponseDto>> DownloadReport6_3_7(string code, int month, int year, string format);
+        Task<Response<GetFileResponseDto>> DownloadReport6_3_8(string type, int year, string format);
+        Task<Response<GetFileResponseDto>> DownloadReport6_3_11(string code, int year, string format);
+
+        Task<Response<GetFileResponseDto>> DownloadReport6_4_1(string startDate, string endDate, string code, string format);
+        Task<Response<GetFileResponseDto>> DownloadReport6_4_2(string code, string format);
+        Task<Response<GetFileResponseDto>> DownloadReport6_4_3(string startDate, string endDate, string code, string format);
+        Task<Response<GetFileResponseDto>> DownloadReport6_4_4(int month, int year, string orderBy, string format);
+        Task<Response<GetFileResponseDto>> DownloadReport6_5_1(string startDate, string endDate, string code, string format);
+        Task<Response<GetFileResponseDto>> DownloadReport6_5_2(string code, string format);
+        Task<Response<GetFileResponseDto>> DownloadReport6_5_3(string startDate, string endDate, string code, string format);
+        Task<Response<GetFileResponseDto>> DownloadReport6_5_4(int month, int year, string orderBy, string format);
     }
 }

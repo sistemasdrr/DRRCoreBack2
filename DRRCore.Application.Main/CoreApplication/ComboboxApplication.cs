@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DocumentFormat.OpenXml.Wordprocessing;
 using DRRCore.Application.DTO.Core.Response;
 using DRRCore.Application.Interfaces.CoreApplication;
 using DRRCore.Domain.Entities.SqlCoreContext;
@@ -604,7 +605,98 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             return response;
         }
+        public async Task<Response<List<GetComboNameValueResponseDto>>> GetDigitadores()
+        {
+            var response = new Response<List<GetComboNameValueResponseDto>>();
+            response.Data = new List<GetComboNameValueResponseDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var list = await context.Personals.Where(x => x.Enable == true && x.Type == "DI").Include(x => x.IdEmployeeNavigation).OrderBy(x => x.Code).ToListAsync();
+                foreach (var item in list)
+                {
+                    response.Data.Add(new GetComboNameValueResponseDto
+                    {
+                        Id = item.Id,
+                        Name = item.IdEmployeeNavigation.FirstName + " " + item.IdEmployeeNavigation.LastName,
+                        Valor = item.Code
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+        public async Task<Response<List<GetComboNameValueResponseDto>>> GetTraductores()
+        {
+            var response = new Response<List<GetComboNameValueResponseDto>>();
+            response.Data = new List<GetComboNameValueResponseDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var list = await context.Personals.Where(x => x.Enable == true && x.Type == "TR").Include(x => x.IdEmployeeNavigation).OrderBy(x => x.Code).ToListAsync();
+                foreach (var item in list)
+                {
+                    response.Data.Add(new GetComboNameValueResponseDto
+                    {
+                        Id = item.Id,
+                        Name = item.IdEmployeeNavigation.FirstName + " " + item.IdEmployeeNavigation.LastName,
+                        Valor = item.Code
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+        public async Task<Response<List<GetComboNameValueResponseDto>>> GetAgents()
+        {
+            var response = new Response<List<GetComboNameValueResponseDto>>();
+            response.Data = new List<GetComboNameValueResponseDto>();
+            try
+            {
 
+                using var context = new SqlCoreContext();
+                var list = await context.Agents.Where(x => x.Enable == true && x.State == true).ToListAsync();
+                foreach (var item in list)
+                {
+                    response.Data.Add(new GetComboNameValueResponseDto
+                    {
+                        Id = item.Id,
+                        Name = item.Name,
+                        Valor = item.Code
+                    });
+                }
+                var personal = await context.Personals.Where(x => x.Enable == true && x.Type == "AG").Include(x => x.IdEmployeeNavigation).OrderBy(x => x.Code).ToListAsync();
+                foreach (var item in personal)
+                {
+                    response.Data.Add(new GetComboNameValueResponseDto
+                    {
+                        Id = item.Id,
+                        Name = item.IdEmployeeNavigation.FirstName + " " + item.IdEmployeeNavigation.LastName,
+                        Valor = item.Code
+                    });
+                }
+
+                response.Data = response.Data.OrderBy(x => x.Valor).ToList();
+
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
         public async Task<Response<List<GetComboValueResponseDto>>> GetSpecialPrice(int idAgent)
         {
             var response = new Response<List<GetComboValueResponseDto>>();
