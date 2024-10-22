@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using DocumentFormat.OpenXml.Bibliography;
+using DocumentFormat.OpenXml.Wordprocessing;
 using DRRCore.Application.DTO.Core.Response;
 using DRRCore.Application.Interfaces.CoreApplication;
 using DRRCore.Transversal.Common;
@@ -368,6 +370,752 @@ namespace DRRCore.Application.Main.CoreApplication
                     File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
                     ContentType = contentType,
                     Name = string.Format(fileFormat, "REPORTE_ABONADO_6.1.25", "", extension)
+                };
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
+        public async Task<Response<GetFileResponseDto>> DownloadReport6_2_1(string startDate, string endDate, string code, string format)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+
+                string fileFormat = "{0}_{1}{2}";
+                string report = "REPORTES/REPORTEROS/REPORT_6.2.1";
+                var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                var extension = StaticFunctions.FileExtension(reportRenderType);
+                var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                var dictionary = new Dictionary<string, string>
+                {
+                    { "desde", startDate },
+                    { "hasta", endDate },
+                    { "code", code },
+                };
+
+                response.Data = new GetFileResponseDto
+                {
+                    File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                    ContentType = contentType,
+                    Name = string.Format(fileFormat, "REPORTE_6.2.1", "", extension)
+                };
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
+        public async Task<Response<GetFileResponseDto>> DownloadReport6_2_2(string code, string format)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+
+                string fileFormat = "{0}_{1}{2}";
+                string report = "REPORTES/REPORTEROS/REPORT_6.2.2";
+                var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                var extension = StaticFunctions.FileExtension(reportRenderType);
+                var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                var dictionary = new Dictionary<string, string>
+                {
+                    { "code", code },
+                };
+
+                response.Data = new GetFileResponseDto
+                {
+                    File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                    ContentType = contentType,
+                    Name = string.Format(fileFormat, "REPORTE_6.2.2", "", extension)
+                };
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
+        public async Task<Response<GetFileResponseDto>> DownloadReport6_2_3(string startDate, string endDate, string code, string format)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+
+                string fileFormat = "{0}_{1}{2}";
+                string report = "REPORTES/REPORTEROS/REPORT_6.2.3";
+                var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                var extension = StaticFunctions.FileExtension(reportRenderType);
+                var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                var dictionary = new Dictionary<string, string>
+                {
+                    { "desde", startDate },
+                    { "hasta", endDate },
+                    { "code", code },
+                };
+
+                response.Data = new GetFileResponseDto
+                {
+                    File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                    ContentType = contentType,
+                    Name = string.Format(fileFormat, "REPORTE_6.2.3", "", extension)
+                };
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
+        public async Task<Response<GetFileResponseDto>> DownloadReport6_2_4(int month, int year, string orderBy, string format)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+
+                string fileFormat = "{0}_{1}{2}";
+                string report = "REPORTES/REPORTEROS/REPORT_6.2.4";
+                var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                var extension = StaticFunctions.FileExtension(reportRenderType);
+                var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                var dictionary = new Dictionary<string, string>
+                {
+                    { "month", month.ToString() },
+                    { "year", year.ToString() },
+                    { "orderBy", orderBy },
+                };
+
+                response.Data = new GetFileResponseDto
+                {
+                    File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                    ContentType = contentType,
+                    Name = string.Format(fileFormat, "REPORTE_6.2.4", "", extension)
+                };
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+        public async Task<Response<GetFileResponseDto>> DownloadReport6_3_1(
+           string format)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+
+                string fileFormat = "{0}_{1}{2}";
+                string report = "REPORTES/AGENTES/REPORTES_AGENTES_1";
+                var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                var extension = StaticFunctions.FileExtension(reportRenderType);
+                var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                var dictionary = new Dictionary<string, string>
+                {
+                };
+
+                response.Data = new GetFileResponseDto
+                {
+                    File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                    ContentType = contentType,
+                    Name = string.Format(fileFormat, "REPORTE_6.3.1", "", extension)
+                };
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+        public async Task<Response<GetFileResponseDto>> DownloadReport6_3_5(string format)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+
+                string fileFormat = "{0}_{1}{2}";
+                string report = "REPORTES/AGENTES/REPORT_6.3.5";
+                var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                var extension = StaticFunctions.FileExtension(reportRenderType);
+                var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                var dictionary = new Dictionary<string, string>
+                {
+                };
+
+                response.Data = new GetFileResponseDto
+                {
+                    File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                    ContentType = contentType,
+                    Name = string.Format(fileFormat, "REPORTE_6.3.5", "", extension)
+                };
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+        public async Task<Response<GetFileResponseDto>> DownloadReport6_3_6(string code, int year, string format)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+
+                string fileFormat = "{0}_{1}{2}";
+                string report = "REPORTES/AGENTES/REPORT_6.3.6";
+                var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                var extension = StaticFunctions.FileExtension(reportRenderType);
+                var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                var dictionary = new Dictionary<string, string>
+                {
+                    { "code", code },
+                    { "year", year.ToString() },
+                };
+
+                response.Data = new GetFileResponseDto
+                {
+                    File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                    ContentType = contentType,
+                    Name = string.Format(fileFormat, "REPORTE_6.3.6", "", extension)
+                };
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+        public async Task<Response<GetFileResponseDto>> DownloadReport6_3_7(string code, int month, int year, string format)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+
+                string fileFormat = "{0}_{1}{2}";
+                string report = "REPORTES/AGENTES/REPORT_6.3.7";
+                var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                var extension = StaticFunctions.FileExtension(reportRenderType);
+                var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                var dictionary = new Dictionary<string, string>
+                {
+                    { "code", code },
+                    { "month", month.ToString() },
+                    { "year", year.ToString() },
+                };
+
+                response.Data = new GetFileResponseDto
+                {
+                    File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                    ContentType = contentType,
+                    Name = string.Format(fileFormat, "REPORTE_6.3.7", "", extension)
+                };
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+        public async Task<Response<GetFileResponseDto>> DownloadReport6_3_8(string type, int year, string format)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+
+                string fileFormat = "{0}_{1}{2}";
+                string report = "REPORTES/AGENTES/REPORT_6.3.8";
+                var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                var extension = StaticFunctions.FileExtension(reportRenderType);
+                var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                var dictionary = new Dictionary<string, string>
+                {
+                    { "type", type },
+                    { "year", year.ToString() },
+                };
+
+                response.Data = new GetFileResponseDto
+                {
+                    File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                    ContentType = contentType,
+                    Name = string.Format(fileFormat, "REPORTE_6.3.8", "", extension)
+                };
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+        public async Task<Response<GetFileResponseDto>> DownloadReport6_3_11(string code, int year, string format)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+
+                string fileFormat = "{0}_{1}{2}";
+                string report = "REPORTES/AGENTES/REPORT_6.3.11";
+                var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                var extension = StaticFunctions.FileExtension(reportRenderType);
+                var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                var dictionary = new Dictionary<string, string>
+                {
+                    { "code", code },
+                    { "year", year.ToString() },
+                };
+
+                response.Data = new GetFileResponseDto
+                {
+                    File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                    ContentType = contentType,
+                    Name = string.Format(fileFormat, "REPORTE_6.3.11", "", extension)
+                };
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+        public async Task<Response<GetFileResponseDto>> DownloadReport6_3_10(string startDate, string endDate, string code, string format)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+
+                string fileFormat = "{0}_{1}{2}";
+                string report = "REPORTES/AGENTES/REPORT_6.3.1";
+                var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                var extension = StaticFunctions.FileExtension(reportRenderType);
+                var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                var dictionary = new Dictionary<string, string>
+                {
+                    { "desde", startDate },
+                    { "hasta", endDate },
+                    { "code", code },
+                };
+
+                response.Data = new GetFileResponseDto
+                {
+                    File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                    ContentType = contentType,
+                    Name = string.Format(fileFormat, "REPORTE_6.3.1", "", extension)
+                };
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
+        public async Task<Response<GetFileResponseDto>> DownloadReport6_3_20(string code, string format)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+
+                string fileFormat = "{0}_{1}{2}";
+                string report = "REPORTES/AGENTES/REPORT_6.3.2";
+                var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                var extension = StaticFunctions.FileExtension(reportRenderType);
+                var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                var dictionary = new Dictionary<string, string>
+                {
+                    { "code", code },
+                };
+
+                response.Data = new GetFileResponseDto
+                {
+                    File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                    ContentType = contentType,
+                    Name = string.Format(fileFormat, "REPORTE_6.3.2", "", extension)
+                };
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
+        public async Task<Response<GetFileResponseDto>> DownloadReport6_3_30(string startDate, string endDate, string code, string format)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+
+                string fileFormat = "{0}_{1}{2}";
+                string report = "REPORTES/AGENTES/REPORT_6.3.3";
+                var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                var extension = StaticFunctions.FileExtension(reportRenderType);
+                var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                var dictionary = new Dictionary<string, string>
+                {
+                    { "desde", startDate },
+                    { "hasta", endDate },
+                    { "code", code },
+                };
+
+                response.Data = new GetFileResponseDto
+                {
+                    File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                    ContentType = contentType,
+                    Name = string.Format(fileFormat, "REPORTE_6.3.3", "", extension)
+                };
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
+        public async Task<Response<GetFileResponseDto>> DownloadReport6_3_40(int month, int year, string orderBy, string format)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+
+                string fileFormat = "{0}_{1}{2}";
+                string report = "REPORTES/AGENTES/REPORT_6.3.4";
+                var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                var extension = StaticFunctions.FileExtension(reportRenderType);
+                var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                var dictionary = new Dictionary<string, string>
+                {
+                    { "month", month.ToString() },
+                    { "year", year.ToString() },
+                    { "orderBy", orderBy },
+                };
+
+                response.Data = new GetFileResponseDto
+                {
+                    File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                    ContentType = contentType,
+                    Name = string.Format(fileFormat, "REPORTE_6.3.4", "", extension)
+                };
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+        public async Task<Response<GetFileResponseDto>> DownloadReport6_4_1(string startDate, string endDate, string code, string format)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+
+                string fileFormat = "{0}_{1}{2}";
+                string report = "REPORTES/DIGITADORES/REPORT_6.4.1";
+                var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                var extension = StaticFunctions.FileExtension(reportRenderType);
+                var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                var dictionary = new Dictionary<string, string>
+                {
+                    { "desde", startDate },
+                    { "hasta", endDate },
+                    { "code", code },
+                };
+
+                response.Data = new GetFileResponseDto
+                {
+                    File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                    ContentType = contentType,
+                    Name = string.Format(fileFormat, "REPORTE_6.4.1", "", extension)
+                };
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
+        public async Task<Response<GetFileResponseDto>> DownloadReport6_4_2(string code, string format)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+
+                string fileFormat = "{0}_{1}{2}";
+                string report = "REPORTES/DIGITADORES/REPORT_6.4.2";
+                var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                var extension = StaticFunctions.FileExtension(reportRenderType);
+                var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                var dictionary = new Dictionary<string, string>
+                {
+                    { "code", code },
+                };
+
+                response.Data = new GetFileResponseDto
+                {
+                    File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                    ContentType = contentType,
+                    Name = string.Format(fileFormat, "REPORTE_6.4.2", "", extension)
+                };
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
+        public async Task<Response<GetFileResponseDto>> DownloadReport6_4_3(string startDate, string endDate, string code, string format)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+
+                string fileFormat = "{0}_{1}{2}";
+                string report = "REPORTES/DIGITADORES/REPORT_6.4.3";
+                var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                var extension = StaticFunctions.FileExtension(reportRenderType);
+                var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                var dictionary = new Dictionary<string, string>
+                {
+                    { "desde", startDate },
+                    { "hasta", endDate },
+                    { "code", code },
+                };
+
+                response.Data = new GetFileResponseDto
+                {
+                    File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                    ContentType = contentType,
+                    Name = string.Format(fileFormat, "REPORTE_6.4.3", "", extension)
+                };
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
+        public async Task<Response<GetFileResponseDto>> DownloadReport6_4_4(int month, int year, string orderBy, string format)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+
+                string fileFormat = "{0}_{1}{2}";
+                string report = "REPORTES/DIGITADORES/REPORT_6.4.4";
+                var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                var extension = StaticFunctions.FileExtension(reportRenderType);
+                var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                var dictionary = new Dictionary<string, string>
+                {
+                    { "month", month.ToString() },
+                    { "year", year.ToString() },
+                    { "orderBy", orderBy },
+                };
+
+                response.Data = new GetFileResponseDto
+                {
+                    File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                    ContentType = contentType,
+                    Name = string.Format(fileFormat, "REPORTE_6.4.4", "", extension)
+                };
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
+        public async Task<Response<GetFileResponseDto>> DownloadReport6_5_1(string startDate, string endDate, string code, string format)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+
+                string fileFormat = "{0}_{1}{2}";
+                string report = "REPORTES/TRADUCTORES/REPORT_6.5.1";
+                var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                var extension = StaticFunctions.FileExtension(reportRenderType);
+                var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                var dictionary = new Dictionary<string, string>
+                {
+                    { "desde", startDate },
+                    { "hasta", endDate },
+                    { "code", code },
+                };
+
+                response.Data = new GetFileResponseDto
+                {
+                    File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                    ContentType = contentType,
+                    Name = string.Format(fileFormat, "REPORTE_6.5.1", "", extension)
+                };
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
+        public async Task<Response<GetFileResponseDto>> DownloadReport6_5_2(string code, string format)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+
+                string fileFormat = "{0}_{1}{2}";
+                string report = "REPORTES/TRADUCTORES/REPORT_6.5.2";
+                var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                var extension = StaticFunctions.FileExtension(reportRenderType);
+                var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                var dictionary = new Dictionary<string, string>
+                {
+                    { "code", code },
+                };
+
+                response.Data = new GetFileResponseDto
+                {
+                    File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                    ContentType = contentType,
+                    Name = string.Format(fileFormat, "REPORTE_6.5.2", "", extension)
+                };
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
+        public async Task<Response<GetFileResponseDto>> DownloadReport6_5_3(string startDate, string endDate, string code, string format)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+
+                string fileFormat = "{0}_{1}{2}";
+                string report = "REPORTES/TRADUCTORES/REPORT_6.5.3";
+                var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                var extension = StaticFunctions.FileExtension(reportRenderType);
+                var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                var dictionary = new Dictionary<string, string>
+                {
+                    { "desde", startDate },
+                    { "hasta", endDate },
+                    { "code", code },
+                };
+
+                response.Data = new GetFileResponseDto
+                {
+                    File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                    ContentType = contentType,
+                    Name = string.Format(fileFormat, "REPORTE_6.5.3", "", extension)
+                };
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
+        public async Task<Response<GetFileResponseDto>> DownloadReport6_5_4(int month, int year, string orderBy, string format)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+
+                string fileFormat = "{0}_{1}{2}";
+                string report = "REPORTES/TRADUCTORES/REPORT_6.5.4";
+                var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                var extension = StaticFunctions.FileExtension(reportRenderType);
+                var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                var dictionary = new Dictionary<string, string>
+                {
+                    { "month", month.ToString() },
+                    { "year", year.ToString() },
+                    { "orderBy", orderBy },
+                };
+
+                response.Data = new GetFileResponseDto
+                {
+                    File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                    ContentType = contentType,
+                    Name = string.Format(fileFormat, "REPORTE_6.5.4", "", extension)
                 };
             }
             catch (Exception ex)
