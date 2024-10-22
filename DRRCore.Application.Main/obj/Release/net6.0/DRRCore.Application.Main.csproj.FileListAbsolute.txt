@@ -87,3 +87,32 @@ C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Application.Main\obj\Release\net6.0\
 C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Application.Main\obj\Release\net6.0\refint\DRRCore.Application.Main.dll
 C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Application.Main\obj\Release\net6.0\DRRCore.Application.Main.pdb
 C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Application.Main\obj\Release\net6.0\ref\DRRCore.Application.Main.dll
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Main\bin\Release\net6.0\DRRCore.Application.Main.deps.json
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Main\bin\Release\net6.0\DRRCore.Application.Main.dll
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Main\bin\Release\net6.0\DRRCore.Application.Main.pdb
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Main\bin\Release\net6.0\DRRCore.Application.DTO.dll
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Main\bin\Release\net6.0\DRRCore.Application.Interfaces.dll
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Main\bin\Release\net6.0\DRRCore.Domain.Entities.dll
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Main\bin\Release\net6.0\DRRCore.Domain.Interfaces.dll
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Main\bin\Release\net6.0\DRRCore.Infraestructure.Configuration.dll
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Main\bin\Release\net6.0\DRRCore.Infraestructure.Interfaces.dll
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Main\bin\Release\net6.0\DRRCore.Transversal.Common.dll
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Main\bin\Release\net6.0\DRRCore.Transversal.Mapper.dll
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Main\bin\Release\net6.0\DRRCore.Application.DTO.pdb
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Main\bin\Release\net6.0\DRRCore.Application.Interfaces.pdb
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Main\bin\Release\net6.0\DRRCore.Domain.Interfaces.pdb
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Main\bin\Release\net6.0\DRRCore.Infraestructure.Configuration.pdb
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Main\bin\Release\net6.0\DRRCore.Transversal.Mapper.pdb
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Main\bin\Release\net6.0\DRRCore.Domain.Entities.pdb
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Main\bin\Release\net6.0\DRRCore.Infraestructure.Interfaces.pdb
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Main\bin\Release\net6.0\DRRCore.Transversal.Common.pdb
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Main\obj\Release\net6.0\DRRCore.Application.Main.csproj.AssemblyReference.cache
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Main\obj\Release\net6.0\DRRCore.Application.Main.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Main\obj\Release\net6.0\DRRCore.Application.Main.AssemblyInfoInputs.cache
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Main\obj\Release\net6.0\DRRCore.Application.Main.AssemblyInfo.cs
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Main\obj\Release\net6.0\DRRCore.Application.Main.csproj.CoreCompileInputs.cache
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Main\obj\Release\net6.0\DRRCore.Application.Main.csproj.CopyComplete
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Main\obj\Release\net6.0\DRRCore.Application.Main.dll
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Main\obj\Release\net6.0\refint\DRRCore.Application.Main.dll
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Main\obj\Release\net6.0\DRRCore.Application.Main.pdb
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Main\obj\Release\net6.0\ref\DRRCore.Application.Main.dll

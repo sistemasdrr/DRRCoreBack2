@@ -57,3 +57,22 @@ C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Application.Interfaces\obj\Release\n
 C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Application.Interfaces\obj\Release\net6.0\refint\DRRCore.Application.Interfaces.dll
 C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Application.Interfaces\obj\Release\net6.0\DRRCore.Application.Interfaces.pdb
 C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Application.Interfaces\obj\Release\net6.0\ref\DRRCore.Application.Interfaces.dll
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Interfaces\bin\Release\net6.0\DRRCore.Application.Interfaces.deps.json
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Interfaces\bin\Release\net6.0\DRRCore.Application.Interfaces.dll
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Interfaces\bin\Release\net6.0\DRRCore.Application.Interfaces.pdb
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Interfaces\bin\Release\net6.0\DRRCore.Application.DTO.dll
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Interfaces\bin\Release\net6.0\DRRCore.Domain.Entities.dll
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Interfaces\bin\Release\net6.0\DRRCore.Transversal.Common.dll
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Interfaces\bin\Release\net6.0\DRRCore.Application.DTO.pdb
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Interfaces\bin\Release\net6.0\DRRCore.Domain.Entities.pdb
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Interfaces\bin\Release\net6.0\DRRCore.Transversal.Common.pdb
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Interfaces\obj\Release\net6.0\DRRCore.Application.Interfaces.csproj.AssemblyReference.cache
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Interfaces\obj\Release\net6.0\DRRCore.Application.Interfaces.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Interfaces\obj\Release\net6.0\DRRCore.Application.Interfaces.AssemblyInfoInputs.cache
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Interfaces\obj\Release\net6.0\DRRCore.Application.Interfaces.AssemblyInfo.cs
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Interfaces\obj\Release\net6.0\DRRCore.Application.Interfaces.csproj.CoreCompileInputs.cache
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Interfaces\obj\Release\net6.0\DRRCore.Application.Interfaces.csproj.CopyComplete
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Interfaces\obj\Release\net6.0\DRRCore.Application.Interfaces.dll
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Interfaces\obj\Release\net6.0\refint\DRRCore.Application.Interfaces.dll
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Interfaces\obj\Release\net6.0\DRRCore.Application.Interfaces.pdb
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Application.Interfaces\obj\Release\net6.0\ref\DRRCore.Application.Interfaces.dll

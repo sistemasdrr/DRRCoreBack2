@@ -3936,7 +3936,8 @@ namespace DRRCore.Application.Main.CoreApplication
                             .ToListAsync();
                         foreach (var cr in companyRelations)
                         {
-                            data = data + i + ". " + cr.IdCompanyRelationNavigation.Name + " (" + cr.IdCompanyRelationNavigation.IdCountryNavigation.Name + " / " + cr.IdCompanyRelationNavigation.TaxTypeCode + " / " + cr.RelationEng + " )   ";
+                        var countryRelation = cr.IdCompanyRelationNavigation.IdCountryNavigation == null ? string.Empty : cr.IdCompanyRelationNavigation.IdCountryNavigation.Name;
+                            data = data + i + ". " + cr.IdCompanyRelationNavigation.Name + " (" + countryRelation + " / " + cr.IdCompanyRelationNavigation.TaxTypeCode + " / " + cr.RelationEng + " )   ";
                             i++;
                         }
                         foreach (var cs in companyShareholder)

@@ -1699,10 +1699,7 @@
           "Newtonsoft.Json": "13.0.3"
         },
         "runtime": {
-          "DRRCore.Application.DTO.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
-          }
+          "DRRCore.Application.DTO.dll": {}
         }
       },
       "DRRCore.Domain.Entities/1.0.0": {
@@ -1714,10 +1711,7 @@
           "Pomelo.EntityFrameworkCore.MySql": "7.0.0"
         },
         "runtime": {
-          "DRRCore.Domain.Entities.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
-          }
+          "DRRCore.Domain.Entities.dll": {}
         }
       },
       "DRRCore.Transversal.Common/1.0.0": {
@@ -1734,10 +1728,7 @@
           "log4net": "2.0.15"
         },
         "runtime": {
-          "DRRCore.Transversal.Common.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
-          }
+          "DRRCore.Transversal.Common.dll": {}
         }
       }
     }
