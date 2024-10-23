@@ -274,5 +274,33 @@ namespace DRRCore.Services.ApiCore.Controllers
             var result = await _reportApplication.DownloadReport6_5_4(month, year, orderBy, format);
             return File(result.Data.File, result.Data.ContentType, result.Data.Name);
         }
+        [HttpGet]
+        [Route("DownloadReport6_6_1")]
+        public async Task<ActionResult> DownloadReport6_6_1(string code, string format)
+        {
+            var result = await _reportApplication.DownloadReport6_6_1(code, format);
+            return File(result.Data.File, result.Data.ContentType, result.Data.Name);
+        }
+        [HttpGet]
+        [Route("DownloadReport5_1_2")]
+        public async Task<ActionResult> DownloadReport5_1_2(int year, string format)
+        {
+            var result = await _reportApplication.DownloadReport5_1_2(year, format);
+            return File(result.Data.File, result.Data.ContentType, result.Data.Name);
+        }
+        [HttpGet]
+        [Route("DownloadReport6_1_7Ger")]
+        public async Task<ActionResult> DownloadReport6_1_7(string orderBy, string type, string format)
+        {
+            var result = await _reportApplication.DownloadReport6_1_7(orderBy, type, format);
+            return File(result.Data.File, result.Data.ContentType, result.Data.Name);
+        }
+        [HttpGet]
+        [Route("DownloadReport6_3_10")]
+        public async Task<ActionResult> DownloadReport6_3_10(string code, int year, string format)
+        {
+            var result = await _reportApplication.DownloadReport6_3_10(code, year, format);
+            return File(result.Data.File, result.Data.ContentType, result.Data.Name);
+        }
     }
 }

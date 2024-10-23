@@ -40,6 +40,7 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<List<GetComboNameValueResponseDto>>> GetAgents();
         Task<Response<List<GetComboNameValueResponseDto>>> GetDigitadores();
         Task<Response<List<GetComboNameValueResponseDto>>> GetTraductores();
+        Task<Response<List<GetComboNameValueResponseDto>>> GetSupervisores();
 
 
     }
