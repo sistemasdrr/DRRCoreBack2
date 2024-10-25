@@ -683,6 +683,32 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             return response;
         }
+        public async Task<Response<List<GetComboNameValueResponseDto>>> GetAbonados()
+        {
+            var response = new Response<List<GetComboNameValueResponseDto>>();
+            response.Data = new List<GetComboNameValueResponseDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var list = await context.Subscribers.Where(x => x.Enable == true).OrderBy(x => x.Code).ToListAsync();
+                foreach (var item in list)
+                {
+                    response.Data.Add(new GetComboNameValueResponseDto
+                    {
+                        Id = item.Id,
+                        Name = item.Name,
+                        Valor = item.Code
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
         public async Task<Response<List<GetComboNameValueResponseDto>>> GetAgents()
         {
             var response = new Response<List<GetComboNameValueResponseDto>>();
