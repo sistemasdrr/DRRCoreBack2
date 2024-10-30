@@ -2630,7 +2630,7 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<GetFileResponseDto>> DownloadSubReportCompany(int? idCompany, string section, string language)
+        public async Task<Response<GetFileResponseDto>> DownloadSubReportCompany(int? idCompany, string section, string language, int idTicket)
         {
             var response = new Response<GetFileResponseDto>();
             try
@@ -2650,7 +2650,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     var dictionary = new Dictionary<string, string>
                     {
                         { "idCompany", idCompany.ToString() },
-                        { "idTicket", "" },
+                        { "idTicket", idTicket != 0 ? idTicket.ToString() : "" },
                         { "language", language }
                     };
 

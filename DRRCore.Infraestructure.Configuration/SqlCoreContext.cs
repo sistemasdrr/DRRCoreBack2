@@ -248,8 +248,11 @@ public partial class SqlCoreContext : DbContext
         modelBuilder.Entity<TicketsInCurrentMonthSP>().ToSqlQuery("EXEC SP_TicketsInCurrentMonth").HasNoKey();
         modelBuilder.Entity<CompanyShareholderSP>().ToSqlQuery("EXEC ShareholderCompany").HasNoKey();
         modelBuilder.Entity<StaticsByCountry>().ToSqlQuery("EXEC SP_STATICS_BY_COUNTRY").HasNoKey();
-        modelBuilder.Entity<GetAgentInvoice>().ToSqlQuery("EXEC GetAgentInvoice").HasNoKey();
+        modelBuilder.Entity<GetAgentInvoice>().ToSqlQuery("EXEC GetAgentInvoice").HasNoKey(); 
         modelBuilder.Entity<PriceResult>().ToSqlQuery("EXEC GetAgentPrice").HasNoKey();
+        modelBuilder.Entity<Report7_10_1>().ToSqlQuery("EXEC SP_REPORTES_7_10_1").HasNoKey();
+        modelBuilder.Entity<Report7_10_2_Main>().ToSqlQuery("EXEC SP_REPORTES_7_10_2").HasNoKey();
+        modelBuilder.Entity<Report7_10_2_Details>().ToSqlQuery("EXEC SP_REPORTES_7_10_2_Details").HasNoKey();
 
         modelBuilder.Entity<Agent>(entity =>
         {

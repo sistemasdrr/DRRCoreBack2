@@ -1,4 +1,5 @@
 ﻿using DRRCore.Application.DTO.Core.Response;
+using DRRCore.Domain.Entities.SqlCoreContext;
 using DRRCore.Transversal.Common;
 
 namespace DRRCore.Application.Interfaces.CoreApplication
@@ -46,6 +47,14 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<GetFileResponseDto>> DownloadReport7_1(int start, int end, string format);
         Task<Response<GetFileResponseDto>> DownloadReport7_3(int year, string code, string format);
         Task<Response<GetFileResponseDto>> DownloadReport7_4(int year, string format);
+        Task<Response<GetFileResponseDto>> DownloadReport7_5_1(int month, int year, string format);
+        Task<Response<GetFileResponseDto>> DownloadReport7_5_2(int month, int year, string code, string format);
+        Task<Response<GetFileResponseDto>> DownloadReport7_5_3(int year, string format);
+        Task<Response<GetFileResponseDto>> DownloadReport7_5_4(int year, string format);
+        Task<Response<GetFileResponseDto>> DownloadReport7_10_1(int number, string format);
+        Task<Response<List<Report7_10_1>>> GetReport7_10_1(int number);
+        Task<Response<GetFileResponseDto>> DownloadReport7_10_2(int id, string about, string format);
+        Task<Response<Report7_10_2>> GetReport7_10_2(int id, string about);
         Task<Response<GetFileResponseDto>> DownloadReport7_11(int year, string code, string format);
         Task<Response<GetFileResponseDto>> DownloadReport7_12_1(int month, int year, string code, string format);
         Task<Response<GetFileResponseDto>> DownloadReport7_12_2(int year, string code, string format);
