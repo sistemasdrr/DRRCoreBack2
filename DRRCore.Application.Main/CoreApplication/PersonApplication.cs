@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DocumentFormat.OpenXml.ExtendedProperties;
+using DocumentFormat.OpenXml.Office2013.Word;
 using DRRCore.Application.DTO.Core.Request;
 using DRRCore.Application.DTO.Core.Response;
 using DRRCore.Application.Interfaces.CoreApplication;
@@ -174,7 +175,7 @@ namespace DRRCore.Application.Main.CoreApplication
                             LastUpdaterUser = 1
                         });
                     }
-                    var newPerson = _mapper.Map<Person>(obj);
+                    var newPerson = _mapper.Map<Domain.Entities.SqlCoreContext.Person>(obj);
                     newPerson.Traductions = traductions;
                     response.Data = await _personDomain.AddPersonAsync(newPerson);
                 }
@@ -1156,23 +1157,81 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<List<GetListPersonResponseDto>>> GetListPerson(string fullname, string form, int idCountry, bool haveReport, string filterBy)
+        public async Task<Response<List<GetListPersonResponseDto>>> GetListPerson(string fullname, string form, int idCountry, bool haveReport, string filterBy, string quality)
         {
             var response = new Response<List<GetListPersonResponseDto>>();
             try
             {
-                if (filterBy != "S")
+                using var context = new SqlCoreContext();
+                var people = new List<Domain.Entities.SqlCoreContext.Person>();
+                if (filterBy == "N")
                 {
-                    var list = await _personDomain.GetAllByAsync(fullname, form, idCountry, haveReport,filterBy);
-                if (list == null)
+                    people = await context.People
+                        .Include(x => x.IdCreditRiskNavigation)
+                        .Include(x => x.IdDocumentTypeNavigation)
+                        .Include(x => x.IdCountryNavigation)
+                        .Include(x => x.TraductionPeople)
+                        .Where(x => (idCountry == 0 || x.IdCountry == idCountry)
+                        && (form == "C" ? x.Fullname.Contains(fullname) : form == "I" ? x.Fullname.StartsWith(fullname) : false)
+                        && (quality == "A" || quality == "B" || quality == "C" || quality == "D" ? x.Quality != null && x.Quality.Contains(quality) : quality == "X" ? (x.Quality == null || x.Quality == "") : true))                        
+                        .Take(100).ToListAsync();
+                    response.Data = _mapper.Map<List<GetListPersonResponseDto>>(people);
+                }
+                else if (filterBy == "C")
                 {
-                    response.IsSuccess = false;
-                    response.Message = Messages.MessageNoDataFound;
-                    _logger.LogError(response.Message);
+                    people = await context.People
+                        .Include(x => x.IdCreditRiskNavigation)
+                        .Include(x => x.IdDocumentTypeNavigation)
+                        .Include(x => x.IdCountryNavigation)
+                        .Include(x => x.TraductionPeople)
+                        .Where(x => (idCountry == 0 || x.IdCountry == idCountry)
+                        && (form == "C" ? x.TradeName.Contains(fullname) : form == "I" ? x.TradeName.StartsWith(fullname) : false)
+                        && (quality == "A" || quality == "B" || quality == "C" || quality == "D" ? x.Quality != null && x.Quality.Contains(quality) : quality == "X" ? (x.Quality == null || x.Quality == "") : true))
+                        .Take(100).ToListAsync();
+                    response.Data = _mapper.Map<List<GetListPersonResponseDto>>(people);
                 }
-                response.Data = _mapper.Map<List<GetListPersonResponseDto>>(list);
+                else if (filterBy == "D")
+                {
+                    people = await context.People
+                        .Include(x => x.IdCreditRiskNavigation)
+                        .Include(x => x.IdDocumentTypeNavigation)
+                        .Include(x => x.IdCountryNavigation)
+                        .Include(x => x.TraductionPeople)
+                        .Where(x => (idCountry == 0 || x.IdCountry == idCountry)
+                        && (form == "C" ? x.Address.Contains(fullname) : form == "I" ? x.Address.StartsWith(fullname) : false)
+                        && (quality == "A" || quality == "B" || quality == "C" || quality == "D" ? x.Quality != null && x.Quality.Contains(quality) : quality == "X" ? (x.Quality == null || x.Quality == "") : true))
+                        .Take(100).ToListAsync();
+                    response.Data = _mapper.Map<List<GetListPersonResponseDto>>(people);
                 }
-                else
+                else if (filterBy == "R")
+                {
+                    people = await context.People
+                        .Include(x => x.IdCreditRiskNavigation)
+                        .Include(x => x.IdDocumentTypeNavigation)
+                        .Include(x => x.IdCountryNavigation)
+                        .Include(x => x.TraductionPeople)
+                        .Where(x => (idCountry == 0 || x.IdCountry == idCountry)
+                        && (form == "C" ? x.TaxTypeCode.Contains(fullname) : form == "I" ? x.TaxTypeCode.StartsWith(fullname) : false)
+                        && (quality == "A" || quality == "B" || quality == "C" || quality == "D" ? x.Quality != null && x.Quality.Contains(quality) : quality == "X" ? (x.Quality == null || x.Quality == "") : true))
+                        .Take(100).ToListAsync();
+                    response.Data = _mapper.Map<List<GetListPersonResponseDto>>(people);
+                }
+                else if (filterBy == "T")
+                {
+                    people = await context.People
+                        .Include(x => x.IdCreditRiskNavigation)
+                        .Include(x => x.IdDocumentTypeNavigation)
+                        .Include(x => x.IdCountryNavigation)
+                        .Include(x => x.TraductionPeople)
+                        .Where(x => (idCountry == 0 || x.IdCountry == idCountry)
+                        && (form == "C" ? x.Cellphone.Contains(fullname) : form == "I" ? x.Cellphone.StartsWith(fullname) : false)
+                        && (quality == "A" || quality == "B" || quality == "C" || quality == "D" ? x.Quality != null && x.Quality.Contains(quality) : quality == "X" ? (x.Quality == null || x.Quality == "") : true))
+                        .Take(100).ToListAsync();
+
+                    response.Data = _mapper.Map<List<GetListPersonResponseDto>>(people);
+                }
+
+                else if(filterBy == "S")
                 {
                     var ticket = await _ticketDomain.GetByNameAsync(fullname, "P");
                     var mapper = _mapper.Map<List<GetListPersonResponseDto>>(ticket);

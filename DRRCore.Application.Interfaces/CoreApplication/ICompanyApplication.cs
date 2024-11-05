@@ -10,7 +10,7 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<List<GetListProviderResponseDto>>> GetListProviderHistoryByIdTicket(int idTicket);
         Task<Response<int>> AddOrUpdateAsync(AddOrUpdateCompanyRequestDto obj);
         Task<Response<GetCompanyResponseDto>> GetCompanyById(int id);
-        Task<Response<List<GetListCompanyResponseDto>>> GetAllCompanys(string name,string form,int idCountry,bool haveReport,string similar); 
+        Task<Response<List<GetListCompanyResponseDto>>> GetAllCompanys(string name, string form, int idCountry, bool haveReport, string similar, string quality);
         Task<Response<List<GetCompanySearchResponseDto>>> GetCompanySearch(string name, string taxCode, int idCountry);
         Task<Response<bool>> DeleteAsync(int id);
         Task<Response<int?>> AddOrUpdateCompanyBackGroundAsync(AddOrUpdateCompanyBackgroundRequestDto obj);

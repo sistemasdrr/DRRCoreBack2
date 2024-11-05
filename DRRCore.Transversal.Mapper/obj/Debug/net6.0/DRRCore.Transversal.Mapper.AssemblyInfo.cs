@@ -11,12 +11,12 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("DRRCore.Transversal.Common")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("DRRCore.Transversal.Mapper")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+93406f56c4eec80a1ac8c5a4337cc2ac4403f698")]
-[assembly: System.Reflection.AssemblyProductAttribute("DRRCore.Transversal.Common")]
-[assembly: System.Reflection.AssemblyTitleAttribute("DRRCore.Transversal.Common")]
+[assembly: System.Reflection.AssemblyProductAttribute("DRRCore.Transversal.Mapper")]
+[assembly: System.Reflection.AssemblyTitleAttribute("DRRCore.Transversal.Mapper")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 
 // Generado por la clase WriteCodeFragment de MSBuild.

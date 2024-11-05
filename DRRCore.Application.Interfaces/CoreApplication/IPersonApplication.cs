@@ -8,7 +8,7 @@ namespace DRRCore.Application.Interfaces.CoreApplication
     public interface IPersonApplication
     {
         Task<Response<GetPersonResponseDto>> GetPersonById(int id);
-        Task<Response<List<GetListPersonResponseDto>>> GetListPerson(string fullname, string form, int idCountry, bool haveReport, string filterBy);
+        Task<Response<List<GetListPersonResponseDto>>> GetListPerson(string fullname, string form, int idCountry, bool haveReport, string filterBy, string quality);
         Task<Response<int>> AddOrUpdatePerson(AddOrUpdatePersonRequestDto obj);
         Task<Response<bool>> DeletePerson(int id);
         Task<Response<bool>> ActivateWebPerson(int id);
