@@ -232,7 +232,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                     }
                     else
                     {
-                        companys = await context.Companies
+                         companys = await context.Companies
                         .Include(x => x.TraductionCompanies)
                        .Include(x => x.IdCreditRiskNavigation)
                        .Include(x => x.IdCountryNavigation)
