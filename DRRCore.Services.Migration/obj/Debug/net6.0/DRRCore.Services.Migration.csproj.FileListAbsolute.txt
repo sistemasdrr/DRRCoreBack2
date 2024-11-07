@@ -13,8 +13,6 @@ C:\Users\Usuario\Source\Repos\DRRCoreBack2024\DRRCore.Services.Migration\bin\Deb
 C:\Users\Usuario\Source\Repos\DRRCoreBack2024\DRRCore.Services.Migration\bin\Debug\net6.0\BouncyCastle.Cryptography.dll
 C:\Users\Usuario\Source\Repos\DRRCoreBack2024\DRRCore.Services.Migration\bin\Debug\net6.0\CoreFtp.dll
 C:\Users\Usuario\Source\Repos\DRRCoreBack2024\DRRCore.Services.Migration\bin\Debug\net6.0\Dapper.dll
-C:\Users\Usuario\Source\Repos\DRRCoreBack2024\DRRCore.Services.Migration\bin\Debug\net6.0\EntityFramework.SqlServer.dll
-C:\Users\Usuario\Source\Repos\DRRCoreBack2024\DRRCore.Services.Migration\bin\Debug\net6.0\EntityFramework.dll
 C:\Users\Usuario\Source\Repos\DRRCoreBack2024\DRRCore.Services.Migration\bin\Debug\net6.0\Google.Protobuf.dll
 C:\Users\Usuario\Source\Repos\DRRCoreBack2024\DRRCore.Services.Migration\bin\Debug\net6.0\itextsharp.dll
 C:\Users\Usuario\Source\Repos\DRRCoreBack2024\DRRCore.Services.Migration\bin\Debug\net6.0\K4os.Compression.LZ4.dll
@@ -435,3 +433,8 @@ C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Services.Migration\obj\Debug\net6.0\
 C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Services.Migration\obj\Debug\net6.0\DRRCore.Services.Migration.pdb
 C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Services.Migration\obj\Debug\net6.0\DRRCore.Services.Migration.genruntimeconfig.cache
 C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Services.Migration\obj\Debug\net6.0\ref\DRRCore.Services.Migration.dll
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Services.Migration\bin\Debug\net6.0\log4net.config
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Services.Migration\bin\Debug\net6.0\DocumentFormat.OpenXml.dll
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Services.Migration\bin\Debug\net6.0\SharpCompress.dll
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Services.Migration\bin\Debug\net6.0\SpreadsheetLight.dll
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Services.Migration\bin\Debug\net6.0\System.IO.Packaging.dll

@@ -282,7 +282,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                         .Include(x => x.CompanyPartners.Where(x => x.MainExecutive == true)).ThenInclude(x => x.IdPersonNavigation)
                         .Where(x => (idCountry == 0 || x.IdCountry == idCountry) &&
                                     (form == "C" ? x.Address.Contains(name) : form == "I" ? x.Address.StartsWith(name) : false) &&
-                                    x.HaveReport == true)
+                                   x.HaveReport == true)
                         .Take(100)
                         .ToListAsync();
                     }
