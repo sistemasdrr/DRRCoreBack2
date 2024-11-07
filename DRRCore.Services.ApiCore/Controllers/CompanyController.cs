@@ -43,11 +43,11 @@ namespace DRRCore.Services.ApiCore.Controllers
         }
         [HttpPost()]
         [Route("getbyname")]
-        public async Task<ActionResult> GetCompanyByName(string? name, string? form, int idCountry, bool haveReport, string filterBy)
+        public async Task<ActionResult> GetCompanyByName(string? name, string? form, int idCountry, bool haveReport, string filterBy, string quality,int indicador)
         {
             name ??= string.Empty;
             form ??= string.Empty;
-            return Ok(await _companyApplication.GetAllCompanys(name, form, idCountry, haveReport, filterBy));
+            return Ok(await _companyApplication.GetAllCompanys(name, form, idCountry, haveReport, filterBy, quality,indicador));
         }
         [HttpGet()]
         [Route("getCompanySearch")]
@@ -574,9 +574,9 @@ namespace DRRCore.Services.ApiCore.Controllers
         }
         [HttpGet()]
         [Route("DownloadSubReportCompany")]
-        public async Task<IActionResult> DownloadSubReportCompany(int? idCompany, string section, string language)
+        public async Task<IActionResult> DownloadSubReportCompany(int? idCompany, string section, string language, int idTicket)
         {
-            var result = await _companyApplication.DownloadSubReportCompany(idCompany, section, language);
+            var result = await _companyApplication.DownloadSubReportCompany(idCompany, section, language,idTicket);
 
             return File(result.Data.File, result.Data.ContentType, result.Data.Name);
         }

@@ -19,5 +19,11 @@
         public string Quality { get; set;} = string.Empty;
         public string Manager { get; set; } = string.Empty;
         public bool? OnWeb { get; set; }
+        public bool HaveReport { get; set; } = false;
+        public int Indicators { get; set; } = 0;
+        public bool DuplicateTax { get; set; } = false;
+        public int IdLegalRegisterSituation { get; set; } = 0;
+        public string TypeRegister { get; set; } = string.Empty;
+        
     }
 }

@@ -88,8 +88,8 @@ namespace DRRCore.Application.Main.CoreApplication
                         var list3 = new List<UserProcess>();
 
                         list1 = permissions.Where(x => x.IdProcessNavigation.Level == 1).ToList();
-                        list2 = permissions.Where(x => x.IdProcessNavigation.Level == 2).ToList();
-                        list3 = permissions.Where(x => x.IdProcessNavigation.Level == 3).ToList();
+                        list2 = permissions.Where(x => x.IdProcessNavigation.Level == 2).OrderBy(x => x.IdProcessNavigation.OrderItem).ToList();
+                        list3 = permissions.Where(x => x.IdProcessNavigation.Level == 3).OrderBy(x => x.IdProcessNavigation.OrderItem).ToList();
                         foreach (var item1 in list1)
                         {
                             if (item1.IdProcessNavigation.Menu == "Gerencia")

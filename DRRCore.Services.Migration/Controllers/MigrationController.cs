@@ -10,13 +10,25 @@ namespace DRRCore.Services.Migration.Controllers
       
         public MigrationController(IMigraUser migraUser)
         {
-            _migraUser = migraUser;            
+            _migraUser = migraUser;
         }
         [HttpPost()]
         [Route("arreglarNumeration")]
         public async Task<ActionResult> arreglarNumeration()
         {
             return Ok(await _migraUser.arreglarNumeration());
+        }
+        [HttpPost()]
+        [Route("AddOrUpdateCompany")]
+        public async Task<ActionResult> AddOrUpdateCompany(int migra)
+        {
+            return Ok(await _migraUser.AddOrUpdateCompany(migra));
+        }
+        [HttpPost()]
+        [Route("AddOrUpdatePerson")]
+        public async Task<ActionResult> AddOrUpdatePerson(int migra)
+        {
+            return Ok(await _migraUser.AddOrUpdatePerson(migra));
         }
         //[HttpPost()]
         //[Route("empresas")]

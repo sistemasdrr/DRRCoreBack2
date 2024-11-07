@@ -4,6 +4,7 @@ using DocumentFormat.OpenXml.InkML;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using DRRCore.Application.DTO.Core.Request;
 using DRRCore.Application.DTO.Core.Response;
+using DRRCore.Application.DTO.Enum;
 using DRRCore.Application.Interfaces.CoreApplication;
 using DRRCore.Domain.Entities.SqlCoreContext;
 using DRRCore.Domain.Interfaces.CoreDomain;
@@ -11,10 +12,13 @@ using DRRCore.Domain.Interfaces.EmailDomain;
 using DRRCore.Domain.Interfaces.MysqlDomain;
 using DRRCore.Transversal.Common;
 using DRRCore.Transversal.Common.Interface;
+using K4os.Hash.xxHash;
 using log4net.Config;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 
 namespace DRRCore.Application.Main.CoreApplication
@@ -251,28 +255,194 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<List<GetListCompanyResponseDto>>> GetAllCompanys(string name, string form, int idCountry, bool haveReport, string filterBy)
+        public async Task<Response<List<GetListCompanyResponseDto>>> GetAllCompanys(string name, string form, int idCountry, bool haveReport, string filterBy, string quality,int indicador )
         {
+            int take = 50;
             var response = new Response<List<GetListCompanyResponseDto>>();
             try
             {
-                if (filterBy != "S")
+                using var context = new SqlCoreContext();
+                var companys = new List<Domain.Entities.SqlCoreContext.Company>();
+                if (filterBy == "N")
                 {
-                    var company = await _companyDomain.GetByNameAsync(name, form, idCountry, haveReport, filterBy);
-                    if (company == null)
+                    if (haveReport)
                     {
-                        response.IsSuccess = true;
-                        response.Message = Messages.MessageNoDataFound;
-                        _logger.LogError(response.Message);
+                        companys = await context.Companies
+                        .Include(x => x.TraductionCompanies)
+                        .Include(x => x.IdCreditRiskNavigation)
+                        .Include(x => x.IdCountryNavigation)
+                        .Include(x => x.CompanyRelationIdCompanyRelationNavigations).Where(x => x.Enable==true)
+                        .Include(x => x.CompanyPartners.Where(x => x.MainExecutive == true)).ThenInclude(x => x.IdPersonNavigation)
+                        .Where(x => (idCountry == 0 || x.IdCountry == idCountry) &&
+                                    (form == "C" ? x.Name.Contains(name) : form == "I" && x.Name.StartsWith(name)) &&
+                                     (quality == "A" || quality == "B" || quality == "C" || quality == "D" ? x.Quality != null && x.Quality.Contains(quality) : quality == "X" ? (x.Quality == null || x.Quality == "") : true) &&
+                                    x.HaveReport == true)
+                        .Take(take)
+                        .ToListAsync();
                     }
-                    response.Data = _mapper.Map<List<GetListCompanyResponseDto>>(company);
-                }
-                else
-                {
-                    var ticket = await _ticketDomain.GetByNameAsync(name,"E");
-                    var mapper= _mapper.Map<List<GetListCompanyResponseDto>>(ticket);
+                    else
+                    {
+                        companys = await context.Companies
+                       .Include(x => x.TraductionCompanies)
+                      .Include(x => x.IdCreditRiskNavigation)
+                      .Include(x => x.IdCountryNavigation)
+                       .Include(x => x.CompanyRelationIdCompanyRelationNavigations).Where(x => x.Enable == true)
+                      .Include(x => x.CompanyPartners.Where(x => x.MainExecutive == true)).ThenInclude(x => x.IdPersonNavigation)
+                      .Where(x => (idCountry == 0 || x.IdCountry == idCountry) &&
+                                  (form == "C" ? x.Name.Contains(name) : form == "I" && x.Name.StartsWith(name)) &&
+                                   (quality == "A" || quality == "B" || quality == "C" || quality == "D" ? x.Quality != null && x.Quality.Contains(quality) : quality == "X" ? (x.Quality == null || x.Quality == "") : true))
+                      .Take(take)
+                      .ToListAsync();
+                    }
 
-                    var oldTicket = await _ticketDomain.GetSimilarByNameAsync(name,"E");
+                    response.Data = _mapper.Map<List<GetListCompanyResponseDto>>(companys);
+                }
+                else if (filterBy == "C")
+                {
+
+                    if (haveReport)
+                    {
+                        companys = await context.Companies
+                        .Include(x => x.TraductionCompanies)
+                        .Include(x => x.IdCreditRiskNavigation)
+                        .Include(x => x.IdCountryNavigation)
+                         .Include(x => x.CompanyRelationIdCompanyRelationNavigations).Where(x => x.Enable == true)
+                        .Include(x => x.CompanyPartners.Where(x => x.MainExecutive == true)).ThenInclude(x => x.IdPersonNavigation)
+                        .Where(x => (idCountry == 0 || x.IdCountry == idCountry) &&
+                                    (form == "C" ? x.SocialName.Contains(name) : form == "I" && x.SocialName.StartsWith(name)) &&
+                                     (quality == "A" || quality == "B" || quality == "C" || quality == "D" ? x.Quality != null && x.Quality.Contains(quality) : quality == "X" ? (x.Quality == null || x.Quality == "") : true) &&
+                                    x.HaveReport == true)
+                        .Take(take)
+                        .ToListAsync();
+                    }
+                    else
+                    {
+                        companys = await context.Companies
+                       .Include(x => x.TraductionCompanies)
+                      .Include(x => x.IdCreditRiskNavigation)
+                      .Include(x => x.IdCountryNavigation)
+                       .Include(x => x.CompanyRelationIdCompanyRelationNavigations).Where(x => x.Enable == true)
+                      .Include(x => x.CompanyPartners.Where(x => x.MainExecutive == true)).ThenInclude(x => x.IdPersonNavigation)
+                      .Where(x => (idCountry == 0 || x.IdCountry == idCountry) &&
+                                  (form == "C" ? x.SocialName.Contains(name) : form == "I" && x.SocialName.StartsWith(name)) &&
+                                   (quality == "A" || quality == "B" || quality == "C" || quality == "D" ? x.Quality != null && x.Quality.Contains(quality) : quality == "X" ? (x.Quality == null || x.Quality == "") : true))
+                      .Take(take)
+                      .ToListAsync();
+                    }
+
+                    response.Data = _mapper.Map<List<GetListCompanyResponseDto>>(companys);
+                }
+                else if (filterBy == "D")
+                {
+                    if (haveReport)
+                    {
+                        companys = await context.Companies
+                        .Include(x => x.TraductionCompanies)
+                        .Include(x => x.IdCreditRiskNavigation)
+                        .Include(x => x.IdCountryNavigation)
+                         .Include(x => x.CompanyRelationIdCompanyRelationNavigations).Where(x => x.Enable == true)
+                        .Include(x => x.CompanyPartners.Where(x => x.MainExecutive == true)).ThenInclude(x => x.IdPersonNavigation)
+                        .Where(x => (idCountry == 0 || x.IdCountry == idCountry) &&
+                                    (form == "C" ? x.Address.Contains(name) : form == "I" && x.Address.StartsWith(name)) &&
+                                     (quality == "A" || quality == "B" || quality == "C" || quality == "D" ? x.Quality != null && x.Quality.Contains(quality) : quality == "X" ? (x.Quality == null || x.Quality == "") : true) &&
+                                    x.HaveReport == true)
+                        .Take(take)
+                        .ToListAsync();
+                    }
+                    else
+                    {
+                        companys = await context.Companies
+                       .Include(x => x.TraductionCompanies)
+                      .Include(x => x.IdCreditRiskNavigation)
+                      .Include(x => x.IdCountryNavigation)
+                       .Include(x => x.CompanyRelationIdCompanyRelationNavigations).Where(x => x.Enable == true)
+                      .Include(x => x.CompanyPartners.Where(x => x.MainExecutive == true)).ThenInclude(x => x.IdPersonNavigation)
+                      .Where(x => (idCountry == 0 || x.IdCountry == idCountry) &&
+                                  (form == "C" ? x.Address.Contains(name) : form == "I" && x.Address.StartsWith(name)) &&
+                                   (quality == "A" || quality == "B" || quality == "C" || quality == "D" ? x.Quality != null && x.Quality.Contains(quality) : quality == "X" ? (x.Quality == null || x.Quality == "") : true))
+                      .Take(take)
+                      .ToListAsync();
+                    }
+
+
+                    response.Data = _mapper.Map<List<GetListCompanyResponseDto>>(companys);
+                }
+                else if (filterBy == "R")
+                {
+                    if (haveReport)
+                    {
+                        companys = await context.Companies
+                        .Include(x => x.TraductionCompanies)
+                        .Include(x => x.IdCreditRiskNavigation)
+                        .Include(x => x.IdCountryNavigation)
+                         .Include(x => x.CompanyRelationIdCompanyRelationNavigations).Where(x => x.Enable == true)
+                        .Include(x => x.CompanyPartners.Where(x => x.MainExecutive == true)).ThenInclude(x => x.IdPersonNavigation)
+                        .Where(x => (idCountry == 0 || x.IdCountry == idCountry) &&
+                                    (form == "C" ? x.TaxTypeCode.Contains(name) : form == "I" && x.TaxTypeCode.StartsWith(name)) &&
+                                     (quality == "A" || quality == "B" || quality == "C" || quality == "D" ? x.Quality != null && x.Quality.Contains(quality) : quality == "X" ? (x.Quality == null || x.Quality == "") : true) &&
+                                    x.HaveReport == true)
+                        .Take(take)
+                        .ToListAsync();
+                    }
+                    else
+                    {
+                        companys = await context.Companies
+                       .Include(x => x.TraductionCompanies)
+                      .Include(x => x.IdCreditRiskNavigation)
+                       .Include(x => x.CompanyRelationIdCompanyRelationNavigations).Where(x => x.Enable == true)
+                      .Include(x => x.IdCountryNavigation)
+                      .Include(x => x.CompanyPartners.Where(x => x.MainExecutive == true)).ThenInclude(x => x.IdPersonNavigation)
+                      .Where(x => (idCountry == 0 || x.IdCountry == idCountry) &&
+                                  (form == "C" ? x.TaxTypeCode.Contains(name) : form == "I" && x.TaxTypeCode.StartsWith(name)) &&
+                                   (quality == "A" || quality == "B" || quality == "C" || quality == "D" ? x.Quality != null && x.Quality.Contains(quality) : quality == "X" ? (x.Quality == null || x.Quality == "") : true))
+                      .Take(take)
+                      .ToListAsync();
+                    }
+
+                    response.Data = _mapper.Map<List<GetListCompanyResponseDto>>(companys);
+                }
+                else if (filterBy == "T")
+                {
+                    if (haveReport)
+                    {
+                        companys = await context.Companies
+                        .Include(x => x.TraductionCompanies)
+                        .Include(x => x.IdCreditRiskNavigation)
+                        .Include(x => x.IdCountryNavigation)
+                         .Include(x => x.CompanyRelationIdCompanyRelationNavigations).Where(x => x.Enable == true)
+                        .Include(x => x.CompanyPartners.Where(x => x.MainExecutive == true)).ThenInclude(x => x.IdPersonNavigation)
+                        .Where(x => (idCountry == 0 || x.IdCountry == idCountry) &&
+                                     ((form == "C" ? x.Telephone.Contains(name) : form == "I" && x.Telephone.StartsWith(name)) ||
+                                   (form == "C" ? x.Cellphone.Contains(name) : form == "I" && x.Cellphone.StartsWith(name))) &&
+                                     (quality == "A" || quality == "B" || quality == "C" || quality == "D" ? x.Quality != null && x.Quality.Contains(quality) : quality == "X" ? (x.Quality == null || x.Quality == "") : true) &&
+                                    x.HaveReport == true)
+                        .Take(take)
+                        .ToListAsync();
+                    }
+                    else
+                    {
+                        companys = await context.Companies
+                       .Include(x => x.TraductionCompanies)
+                      .Include(x => x.IdCreditRiskNavigation)
+                       .Include(x => x.CompanyRelationIdCompanyRelationNavigations).Where(x => x.Enable == true)
+                      .Include(x => x.IdCountryNavigation)
+                      .Include(x => x.CompanyPartners.Where(x => x.MainExecutive == true)).ThenInclude(x => x.IdPersonNavigation)
+                      .Where(x => (idCountry == 0 || x.IdCountry == idCountry) &&
+                                  ((form == "C" ? x.Telephone.Contains(name) : form == "I" && x.Telephone.StartsWith(name)) ||
+                                   (form == "C" ? x.Cellphone.Contains(name) : form == "I" && x.Cellphone.StartsWith(name)))
+                                  && (quality == "A" || quality == "B" || quality == "C" || quality == "D" ? x.Quality != null && x.Quality.Contains(quality) : quality == "X" ? (x.Quality == null || x.Quality == "") : true))
+                      .Take(take)
+                      .ToListAsync();
+                    }
+
+                    response.Data = _mapper.Map<List<GetListCompanyResponseDto>>(companys);
+                }
+                else if (filterBy == "S")
+                {
+                    var ticket = await _ticketDomain.GetByNameAsync(name, "E");
+                    var mapper = _mapper.Map<List<GetListCompanyResponseDto>>(ticket);
+
+                    var oldTicket = await _ticketDomain.GetSimilarByNameAsync(name, "E");
                     if (oldTicket.Any())
                     {
                         foreach (var item in oldTicket)
@@ -286,17 +456,34 @@ namespace DRRCore.Application.Main.CoreApplication
                                     DispatchedName = item.NombreDespachado,
                                     Language = item.Idioma,
                                     Id = company.Id,
-                                    Country =company.IdCountryNavigation.Name,
-                                    IsoCountry= company.IdCountryNavigation.Iso,
-                                    FlagCountry=company.IdCountryNavigation.FlagIso,
-                                    Code=company.OldCode
+                                    Country = company.IdCountryNavigation.Name,
+                                    IsoCountry = company.IdCountryNavigation.Iso,
+                                    FlagCountry = company.IdCountryNavigation.FlagIso,
+                                    Code = company.OldCode
                                 });
                             }
                         }
-                    }    
-                    mapper = mapper.DistinctBy(x=>x.Name).DistinctBy(x => x.Code).ToList();
+                    }
+                    mapper = mapper.DistinctBy(x => x.Name).DistinctBy(x => x.Code).ToList();
                     response.Data = mapper;
                 }
+                foreach (var item in response.Data)
+                {
+                    item.Indicators = await GetIndicator(item);
+                    item.DuplicateTax=await GetDuplicateTax(item);
+                }
+                if (indicador > 0)
+                {
+                    if (indicador != 6)
+                    {
+                        response.Data = response.Data.Where(x => x.Indicators == indicador).ToList();
+                    }
+                    else
+                    {
+                        response.Data = response.Data.Where(x => x.DuplicateTax == true).ToList();
+                    }
+                }
+                
             }
             catch (Exception ex)
             {
@@ -305,6 +492,51 @@ namespace DRRCore.Application.Main.CoreApplication
                 _logger.LogError(response.Message, ex);
             }
             return response;
+        }
+
+        private async Task<bool> GetDuplicateTax(GetListCompanyResponseDto item)
+        {
+            var context = new SqlCoreContext();
+            var duplicate = await context.Companies.Where(x => x.TaxTypeCode == item.TaxNumber && item.TaxNumber!= null && item.TaxNumber!="").CountAsync();
+
+            return duplicate > 1;
+        }
+
+        private async Task<int> GetIndicator(GetListCompanyResponseDto item)
+        {           
+            var context = new SqlCoreContext();
+
+            if (item.IdLegalRegisterSituation == 1)
+            {
+                if (item.TypeRegister == "PJ")
+                {
+
+                    if (item.HaveReport)
+                    {
+                        return (int)IndicatorEnum.Tiene_Reporte;
+                    }
+                    else
+                    {
+                        var relation = await context.CompanyRelations.AnyAsync(x => x.IdCompanyRelation == item.Id);
+
+                        if (relation)
+                        {
+                            return (int)IndicatorEnum.Empresa_Relacionada;
+                        }
+                        else
+                        {
+                            return (int)IndicatorEnum.Solo_Datos;
+                        }
+                    }
+                }
+                else
+                {
+                    return (int)IndicatorEnum.Persona_Natural_Con_Negocio;
+                }
+            }
+            
+            return (int)IndicatorEnum.Empresas_Eliminadas;
+            
         }
 
         public async Task<Response<GetCompanyResponseDto>> GetCompanyById(int id)
@@ -2630,7 +2862,7 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<GetFileResponseDto>> DownloadSubReportCompany(int? idCompany, string section, string language)
+        public async Task<Response<GetFileResponseDto>> DownloadSubReportCompany(int? idCompany, string section, string language, int idTicket)
         {
             var response = new Response<GetFileResponseDto>();
             try
@@ -2650,7 +2882,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     var dictionary = new Dictionary<string, string>
                     {
                         { "idCompany", idCompany.ToString() },
-                        { "idTicket", "" },
+                        { "idTicket", idTicket != 0 ? idTicket.ToString() : "" },
                         { "language", language }
                     };
 

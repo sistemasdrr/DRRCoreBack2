@@ -223,5 +223,17 @@ namespace DRRCore.Services.ApiCore.Controllers
         {
             return Ok(await _comboboxApplication.GetTraductores());
         }
+        [HttpGet()]
+        [Route("supervisores")]
+        public async Task<ActionResult> GetSupervisores()
+        {
+            return Ok(await _comboboxApplication.GetSupervisores());
+        }
+        [HttpGet()]
+        [Route("abonados")]
+        public async Task<ActionResult> GetAbonados()
+        {
+            return Ok(await _comboboxApplication.GetAbonados());
+        }
     }
 }

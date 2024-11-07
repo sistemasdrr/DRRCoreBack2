@@ -11,6 +11,7 @@ using System.Text;
 using System.Xml.Linq;
 using System.Xml;
 using Microsoft.IdentityModel.Tokens;
+using System.Globalization;
 
 namespace DRRCore.Application.Main.CoreApplication
 {
@@ -585,12 +586,12 @@ namespace DRRCore.Application.Main.CoreApplication
                     // Crear el nodo raíz
                     XmlElement rootElement = xmlDoc.CreateElement("CompanyReport");
                     xmlDoc.AppendChild(rootElement);
-
+                    CultureInfo ci = new CultureInfo("en-US");
                     //Client_Data
                     XmlElement clientDataElement = xmlDoc.CreateElement("Client_Data");
                     rootElement.AppendChild(clientDataElement);
                     AddCDataElement(xmlDoc, clientDataElement, "Client", ticket.IdSubscriberNavigation.Code);
-                    AddCDataElement(xmlDoc, clientDataElement, "FecInf", ticket.OrderDate.ToString("dddd, MMMM dd, yyyy"));
+                    AddCDataElement(xmlDoc, clientDataElement, "FecInf", ticket.OrderDate.ToString("dddd, MMMM dd, yyyy",ci));
                     AddCDataElement(xmlDoc, clientDataElement, "Status", ticket.IdSubscriberNavigation.Enable == true ? "Active" : "Inactive");
                     AddCDataElement(xmlDoc, clientDataElement, "Status_Desde", ticket.IdSubscriberNavigation.Code);
                     AddCDataElement(xmlDoc, clientDataElement, "Ordered_On", ticket.OrderDate.ToString("dddd, MMMM dd, yyyy"));
@@ -631,7 +632,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     }
                     if (company.IdCountry != 0 && company.IdCountry != null)
                     {
-                        AddCDataElement(xmlDoc, identificationElement, "Country", company.IdCountryNavigation.EnglishName);
+                        AddCDataElement(xmlDoc, identificationElement, "Country", company.IdCountryNavigation.EnglishName.ToUpper());
                     }
                     if (!company.Telephone.IsNullOrEmpty())
                     {

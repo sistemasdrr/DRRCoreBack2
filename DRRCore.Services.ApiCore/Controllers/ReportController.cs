@@ -92,7 +92,7 @@ namespace DRRCore.Services.ApiCore.Controllers
         [Route("DownloadReport6_1_22")]
         public async Task<ActionResult> DownloadReport6_1_21(int year, string orderBy, string format)
         {
-            var result = await _reportApplication.DownloadReport6_1_22( year, orderBy, format);
+            var result = await _reportApplication.DownloadReport6_1_22(year, orderBy, format);
 
             return File(result.Data.File, result.Data.ContentType, result.Data.Name);
         }
@@ -272,6 +272,154 @@ namespace DRRCore.Services.ApiCore.Controllers
         public async Task<ActionResult> DownloadReport6_5_4(int month, int year, string orderBy, string format)
         {
             var result = await _reportApplication.DownloadReport6_5_4(month, year, orderBy, format);
+            return File(result.Data.File, result.Data.ContentType, result.Data.Name);
+        }
+        [HttpGet]
+        [Route("DownloadReport6_6_1")]
+        public async Task<ActionResult> DownloadReport6_6_1(string code, string format)
+        {
+            var result = await _reportApplication.DownloadReport6_6_1(code, format);
+            return File(result.Data.File, result.Data.ContentType, result.Data.Name);
+        }
+        [HttpGet]
+        [Route("DownloadReport5_1_2")]
+        public async Task<ActionResult> DownloadReport5_1_2(int year, string format)
+        {
+            var result = await _reportApplication.DownloadReport5_1_2(year, format);
+            return File(result.Data.File, result.Data.ContentType, result.Data.Name);
+        }
+        [HttpGet]
+        [Route("DownloadReport6_1_7Ger")]
+        public async Task<ActionResult> DownloadReport6_1_7(string orderBy, string type, string format)
+        {
+            var result = await _reportApplication.DownloadReport6_1_7(orderBy, type, format);
+            return File(result.Data.File, result.Data.ContentType, result.Data.Name);
+        }
+        [HttpGet]
+        [Route("DownloadReport6_3_10")]
+        public async Task<ActionResult> DownloadReport6_3_10(string code, int year, string format)
+        {
+            var result = await _reportApplication.DownloadReport6_3_100(code, year, format);
+            return File(result.Data.File, result.Data.ContentType, result.Data.Name);
+        }
+
+        [HttpGet]
+        [Route("DownloadReport7_1")]
+        public async Task<ActionResult> DownloadReport7_1(int start, int end, string format)
+        {
+            var result = await _reportApplication.DownloadReport7_1(start, end, format);
+            return File(result.Data.File, result.Data.ContentType, result.Data.Name);
+        }
+        [HttpGet]
+        [Route("DownloadReport7_3")]
+        public async Task<ActionResult> DownloadReport7_3(int year, string code, string format)
+        {
+            var result = await _reportApplication.DownloadReport7_3(year, code, format);
+            return File(result.Data.File, result.Data.ContentType, result.Data.Name);
+        }
+        [HttpGet]
+        [Route("DownloadReport7_4")]
+        public async Task<ActionResult> DownloadReport7_4(int year, string format)
+        {
+            var result = await _reportApplication.DownloadReport7_4(year, format);
+            return File(result.Data.File, result.Data.ContentType, result.Data.Name);
+        }
+        [HttpGet]
+        [Route("DownloadReport7_5_1")]
+        public async Task<ActionResult> DownloadReport7_5_1(int month, int year, string format)
+        {
+            var result = await _reportApplication.DownloadReport7_5_1(month, year, format);
+            return File(result.Data.File, result.Data.ContentType, result.Data.Name);
+        }
+        [HttpGet]
+        [Route("DownloadReport7_5_2")]
+        public async Task<ActionResult> DownloadReport7_5_2(int month, int year, string code, string format)
+        {
+            var result = await _reportApplication.DownloadReport7_5_2(month, year, code, format);
+            return File(result.Data.File, result.Data.ContentType, result.Data.Name);
+        }
+        [HttpGet]
+        [Route("DownloadReport7_5_3")]
+        public async Task<ActionResult> DownloadReport7_5_3(int year, string format)
+        {
+            var result = await _reportApplication.DownloadReport7_5_3(year, format);
+            return File(result.Data.File, result.Data.ContentType, result.Data.Name);
+        }
+        [HttpGet]
+        [Route("DownloadReport7_5_4")]
+        public async Task<ActionResult> DownloadReport7_5_4(int year, string format)
+        {
+            var result = await _reportApplication.DownloadReport7_5_4(year, format);
+            return File(result.Data.File, result.Data.ContentType, result.Data.Name);
+        }
+        [HttpGet]
+        [Route("DownloadReport7_10_1")]
+        public async Task<ActionResult> DownloadReport7_10_1(int number, string format)
+        {
+            var result = await _reportApplication.DownloadReport7_10_1(number, format);
+            return File(result.Data.File, result.Data.ContentType, result.Data.Name);
+        }
+        [HttpGet]
+        [Route("GetReport7_10_1")]
+        public async Task<ActionResult> GetReport7_10_1(int number)
+        {
+
+            return Ok(await _reportApplication.GetReport7_10_1(number));
+        }
+        [HttpGet]
+        [Route("DownloadReport7_10_2")]
+        public async Task<ActionResult> DownloadReport7_10_2(int id, string about, string format)
+        {
+            var result = await _reportApplication.DownloadReport7_10_2(id, about, format);
+            return File(result.Data.File, result.Data.ContentType, result.Data.Name);
+        }
+        [HttpGet]
+        [Route("GetReport7_10_2")]
+        public async Task<ActionResult> GetReport7_10_2(int id, string about)
+        {
+
+            return Ok(await _reportApplication.GetReport7_10_2(id, about));
+        }
+        [HttpGet]
+        [Route("DownloadReport7_11")]
+        public async Task<ActionResult> DownloadReport7_11(int year, string code, string format)
+        {
+            var result = await _reportApplication.DownloadReport7_11(year, code, format);
+            return File(result.Data.File, result.Data.ContentType, result.Data.Name);
+        }
+        [HttpGet]
+        [Route("DownloadReport7_12_1")]
+        public async Task<ActionResult> DownloadReport7_12_1(int month, int year, string code, string format)
+        {
+            var result = await _reportApplication.DownloadReport7_12_1(month, year, code, format);
+            return File(result.Data.File, result.Data.ContentType, result.Data.Name);
+        }
+        [HttpGet]
+        [Route("DownloadReport7_12_2")]
+        public async Task<ActionResult> DownloadReport7_12_2(int year, string code, string format)
+        {
+            var result = await _reportApplication.DownloadReport7_12_2(year, code, format);
+            return File(result.Data.File, result.Data.ContentType, result.Data.Name);
+        }
+        [HttpGet]
+        [Route("DownloadReport7_13_1")]
+        public async Task<ActionResult> DownloadReport7_13_1(int month, int year, string code, string format)
+        {
+            var result = await _reportApplication.DownloadReport7_13_1(month, year, code, format);
+            return File(result.Data.File, result.Data.ContentType, result.Data.Name);
+        }
+        [HttpGet]
+        [Route("DownloadReport7_13_2")]
+        public async Task<ActionResult> DownloadReport7_13_2(int year, string code, string format)
+        {
+            var result = await _reportApplication.DownloadReport7_13_2(year, code, format);
+            return File(result.Data.File, result.Data.ContentType, result.Data.Name);
+        }
+        [HttpGet]
+        [Route("DownloadReport7_15")]
+        public async Task<ActionResult> DownloadReport7_15(string format)
+        {
+            var result = await _reportApplication.DownloadReport7_15(format);
             return File(result.Data.File, result.Data.ContentType, result.Data.Name);
         }
     }

@@ -18,6 +18,34 @@ namespace DRRCore.Domain.Entities.SqlCoreContext
         public int SinQ { get; set; }
     }
 
+    public class Report7_10_1
+    {
+        public int Id { get; set; }
+        public string? Name { get; set; }
+        public string? Country { get; set; }
+        public string? FlagCountry { get; set; }
+        public int? Counting { get; set; }
+        public string? About { get; set; }
+        public string? LastSearched { get; set; }
+    }
+    public class Report7_10_2
+    {
+        public List<Report7_10_2_Main> Main { get; set; } = new List<Report7_10_2_Main>();
+        public List<Report7_10_2_Details> Details { get; set; } = new List<Report7_10_2_Details>();
+    }
+
+    public class Report7_10_2_Main
+    {
+        public string? OrderDate { get; set; }
+        public string? DispatchtDate { get; set; }
+        public string? Name { get; set; }
+        public string? ProcedureType { get; set; }
+    }
+    public class Report7_10_2_Details
+    {
+        public string? Name { get; set; }
+        public int? Counting { get; set; }
+    }
     public class GetAgentInvoice
     {
         public int IdTicketHistory { get; set; }

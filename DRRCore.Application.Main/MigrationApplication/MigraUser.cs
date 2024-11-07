@@ -1,17 +1,14 @@
-﻿using DRRCore.Application.DTO.Core.Response;
-using DRRCore.Application.Interfaces.MigrationApplication;
+﻿using DRRCore.Application.Interfaces.MigrationApplication;
 using DRRCore.Domain.Entities.MYSQLContext;
+using DRRCore.Domain.Entities.MySqlContextFotos;
+using DRRCore.Domain.Entities.SqlContext;
 using DRRCore.Domain.Entities.SqlCoreContext;
 using DRRCore.Domain.Interfaces.CoreDomain;
 using DRRCore.Domain.Interfaces.MysqlDomain;
 using DRRCore.Transversal.Common;
 using DRRCore.Transversal.Common.Interface;
 using Microsoft.EntityFrameworkCore;
-using DRRCore.Domain.Entities.MySqlContextFotos;
 using Microsoft.IdentityModel.Tokens;
-using DRRCore.Domain.Entities.SqlContext;
-using DocumentFormat.OpenXml.InkML;
-
 namespace DRRCore.Application.Main.MigrationApplication
 {
     public class MigraUser : IMigraUser
@@ -89,6 +86,7 @@ namespace DRRCore.Application.Main.MigrationApplication
             _personSBSDomain = personSBSDomain;
         }
 
+
         public async Task<bool> MigrateCompany()
         {
             var empresas = await _mempresaDomain.GetNotMigratedEmpresa();
@@ -107,7 +105,7 @@ namespace DRRCore.Application.Main.MigrationApplication
                     try
                     {
                         var reputacion = await _mempresaDomain.GetmEmpresaReputacionByCodigoAsync(empresa.EmCodigo);
-                        int idReputacion = 0;
+                        int? idReputacion = null;
                         if (reputacion != null)
                         {
                             idReputacion = ObtenerReputacion(reputacion.RcCodigo);
@@ -198,7 +196,7 @@ namespace DRRCore.Application.Main.MigrationApplication
                     try
                     {
                         var reputacion = await _mempresaDomain.GetmEmpresaReputacionByCodigoAsync(empresa.EmCodigo);
-                        int idReputacion = 0;
+                        int? idReputacion = 0;
                         if (reputacion != null)
                         {
                             idReputacion = ObtenerReputacion(reputacion.RcCodigo);
@@ -270,9 +268,9 @@ namespace DRRCore.Application.Main.MigrationApplication
             return true;
         }
 
-        private async Task<List<CompanyImage>> GetCompanyImage(string oldCode)
+        private async Task<List<Domain.Entities.SqlCoreContext.CompanyImage>> GetCompanyImage(string oldCode)
         {
-            var images = new List<CompanyImage>();
+            var images = new List<Domain.Entities.SqlCoreContext.CompanyImage>();
             try
             {
                 await using (var imageMysqlContext = new FotoContext())
@@ -281,7 +279,7 @@ namespace DRRCore.Application.Main.MigrationApplication
 
                     if (image != null)
                     {
-                        images.Add(new CompanyImage
+                        images.Add(new Domain.Entities.SqlCoreContext.CompanyImage
                         {
                             Img1 = image.EfLocal.IsNullOrEmpty() == false ? Convert.ToBase64String(image.EfLocal) : "",
                             ImgDesc1 = image.EfLocaltxt.IsNullOrEmpty() == false ? image.EfLocaltxt : "",
@@ -306,7 +304,7 @@ namespace DRRCore.Application.Main.MigrationApplication
             catch(Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return new List<CompanyImage>();    
+                return new List<Domain.Entities.SqlCoreContext.CompanyImage>();    
             }
             return images;
         }
@@ -1641,7 +1639,7 @@ namespace DRRCore.Application.Main.MigrationApplication
             CalCodigo == "7" ? "D" : "";
         }
 
-        private int ObtenerReputacion(string RcCodigo)
+        private int? ObtenerReputacion(string RcCodigo)
         {
             return RcCodigo == "EAD" ? 1 : RcCodigo == "ECC" ? 25 : RcCodigo == "EDJ" ? 33 :
                     RcCodigo == "EJA" ? 34 : RcCodigo == "ELQ" ? 39 : RcCodigo == "EMO" ? 42 :
@@ -1672,7 +1670,7 @@ namespace DRRCore.Application.Main.MigrationApplication
                     RcCodigo == "EQC" ? 77 : RcCodigo == "EQD" ? 78 : RcCodigo == "EQO" ? 79 :
                     RcCodigo == "EAR" ? 80 : RcCodigo == "EFS" ? 81 : RcCodigo == "ETP" ? 82 :
                     RcCodigo == "ETC" ? 83 : RcCodigo == "EAQ" ? 84 : RcCodigo == "ETO" ? 85 :
-                    RcCodigo == "EDF" ? 86 : 0;
+                    RcCodigo == "EDF" ? 86 : null;
         }
 
         public async Task<bool> MigratePerson()
@@ -1691,14 +1689,14 @@ namespace DRRCore.Application.Main.MigrationApplication
                 foreach (var persona in personas)
                 {
                     var reputacion = await _impersonaDomain.GetmPersonaReputacionByCodigoAsync(persona.PeCodigo);
-                    int idReputacion = 0;
+                    int? idReputacion = 0;
                     if (reputacion != null)
                     {
                         idReputacion = ObtenerReputacion(reputacion.RcCodigo);
                     }
                     try
                     {
-                        var newPerson = new Person
+                        var newPerson = new Domain.Entities.SqlCoreContext.Person
                         {
                             Id = 0,
                             OldCode = persona.PeCodigo,
@@ -2532,7 +2530,7 @@ namespace DRRCore.Application.Main.MigrationApplication
                 int idPerson = 0;
                 bool success = false;
                 var reputacion = await _impersonaDomain.GetmPersonaReputacionByCodigoAsync(persona.PeCodigo);
-                int idReputacion = 0;
+                int? idReputacion = 0;
                 if (reputacion != null)
                 {
                     idReputacion = ObtenerReputacion(reputacion.RcCodigo);
@@ -2544,7 +2542,7 @@ namespace DRRCore.Application.Main.MigrationApplication
                     if (existingPerson != null)
                     {
 
-                        var existinggPerson = new Person
+                        var existinggPerson = new Domain.Entities.SqlCoreContext.Person
                         {
                             Id = existingPerson.Id,
                             OldCode = persona.PeCodigo,
@@ -2626,7 +2624,7 @@ namespace DRRCore.Application.Main.MigrationApplication
                     }
                     else
                     {
-                        var newPerson = new Person
+                        var newPerson = new Domain.Entities.SqlCoreContext.Person
                         {
                             OldCode = persona.PeCodigo,
                             Fullname = persona.PeNombre ?? "",
@@ -2723,7 +2721,7 @@ namespace DRRCore.Application.Main.MigrationApplication
                 var employee = await contextSql.Employees.Where(x => x.Email == item.PerEmail).FirstOrDefaultAsync();
                 if (!item.PerCoddig.IsNullOrEmpty())
                 {
-                    await contextSql.Personals.AddAsync(new Personal
+                    await contextSql.Personals.AddAsync(new Domain.Entities.SqlCoreContext.Personal
                     {
                         IdEmployee = employee != null ? employee.Id : null,
                         Type = "DI",
@@ -2733,7 +2731,7 @@ namespace DRRCore.Application.Main.MigrationApplication
                 }
                 if (!item.PerCodrep.IsNullOrEmpty())
                 {
-                    await contextSql.Personals.AddAsync(new Personal
+                    await contextSql.Personals.AddAsync(new Domain.Entities.SqlCoreContext.Personal
                     {
                         IdEmployee = employee != null ? employee.Id : null,
                         Type = "RP",
@@ -2743,7 +2741,7 @@ namespace DRRCore.Application.Main.MigrationApplication
                 }
                 if (!item.PerCodtra.IsNullOrEmpty())
                 {
-                    await contextSql.Personals.AddAsync(new Personal
+                    await contextSql.Personals.AddAsync(new Domain.Entities.SqlCoreContext.Personal
                     {
                         IdEmployee = employee != null ? employee.Id : null,
                         Type = "TR",
@@ -2753,7 +2751,7 @@ namespace DRRCore.Application.Main.MigrationApplication
                 }
                 if (!item.PerCodsup.IsNullOrEmpty())
                 {
-                    await contextSql.Personals.AddAsync(new Personal
+                    await contextSql.Personals.AddAsync(new Domain.Entities.SqlCoreContext.Personal
                     {
                         IdEmployee = employee != null ? employee.Id : null,
                         Type = "SU",
@@ -2763,7 +2761,7 @@ namespace DRRCore.Application.Main.MigrationApplication
                 }
                 if (!item.PerCodref.IsNullOrEmpty())
                 {
-                    await contextSql.Personals.AddAsync(new Personal
+                    await contextSql.Personals.AddAsync(new Domain.Entities.SqlCoreContext.Personal
                     {
                         IdEmployee = employee != null ? employee.Id : null,
                         Type = "RF",
@@ -3308,7 +3306,7 @@ namespace DRRCore.Application.Main.MigrationApplication
             {
                 
                 var reputacion = await _mempresaDomain.GetmEmpresaReputacionByCodigoAsync(empresa.EmCodigo);
-                int idReputacion = 0;
+                int? idReputacion = 0;
                 if (reputacion != null)
                 {
                     idReputacion = ObtenerReputacion(reputacion.RcCodigo);
@@ -3476,6 +3474,642 @@ namespace DRRCore.Application.Main.MigrationApplication
             catch (Exception ex)
             {
                 return false;
+            }
+            return true;
+        }
+
+        public async Task<bool> AddOrUpdateCompany(int migra)
+        {
+            using var context = new SqlCoreContext();
+            using var mysqlContext = new MySqlContext();
+            for (int i = 0; i < 360; i++)
+            {
+                try
+                {
+                    var empresas = await mysqlContext.MEmpresas.Where(x => x.Migra == migra && x.EmNombre != null).Take(100).ToListAsync();
+                    foreach (var empresa in empresas)
+                    {
+                        finanzas = new REmpVsInfFin();
+                        ramo = new REmpVsRamNeg();
+                        aval = new TCabEmpAval();
+                        antecedentes = new REmpVsAspLeg();
+                        var company = await context.Companies
+                            .Where(x => x.OldCode == empresa.EmCodigo)
+                            .Include(x => x.CompanyGeneralInformations)
+                            .Include(x => x.WorkersHistories)
+                            .FirstOrDefaultAsync();
+                        var reputacion = await _mempresaDomain.GetmEmpresaReputacionByCodigoAsync(empresa.EmCodigo);
+                        int? idReputacion = null;
+                        if (reputacion != null)
+                        {
+                            idReputacion = ObtenerReputacion(reputacion.RcCodigo);
+                        }
+
+                        if (company != null)
+                        {
+                            company.Name = empresa.EmNombre;
+                            company.SocialName = empresa.EmSiglas;
+                            company.LastSearched = empresa.EmFecinf;
+                            company.Language = Dictionary.LanguageMigra[empresa.IdiCodigo.Value];
+                            company.TypeRegister = empresa.EmTipper == 0 ? "PJ" : "PN";
+                            company.YearFundation = empresa.EmAnofun;
+                            company.Quality = ObtenerCalidad(empresa.CalCodigo);
+                            company.IdLegalPersonType = ObtenerPersoneriaLegal(empresa.JuCodigo);
+                            company.TaxTypeCode = empresa.EmRegtri;
+                            company.IdCountry = ObtenerCodigoPais(empresa.PaiCodigo);
+                            company.HaveReport = ObtenerReportes(empresa.EmCodigo);
+                            company.IdLegalRegisterSituation = GetLegalRegisterSituation(empresa.SitCodigo);
+                            company.Address = empresa.EmDirecc;
+                            company.Place = empresa.EmCiudad;
+                            company.Telephone = empresa.EmTelef1;
+                            company.SubTelephone = empresa.EmPrftlf;
+                            company.Cellphone = empresa.EmPrffax;
+                            company.PostalCode = empresa.EmCodpos;
+                            company.WhatsappPhone = empresa.EmFax;
+                            company.Email = empresa.EmEmail;
+                            company.WebPage = empresa.EmPagweb;
+                            company.IdCreditRisk = GetCreditRisk(empresa.CrCodigo);
+                            company.IdPaymentPolicy = GetPaymentPolicy(empresa.PaCodigo);
+                            company.IdReputation = idReputacion != 0 ? idReputacion : null;
+                            company.NewsComentary = string.IsNullOrEmpty(empresa.EmPrensa) ? empresa.EmPrensasel : empresa.EmPrensa;
+                            company.IdentificacionCommentary = empresa.EmComide;
+                            company.Enable = empresa.EmActivo == 1;
+                            company.LastUpdaterUser = 1;
+                            company.OnWeb = empresa.EmOnline == "SI";
+                            company.ReputationComentary = empresa.EmComrep;
+                            company.Print = empresa.EmLogpre == 1;
+                            //background
+                            var background = await context.CompanyBackgrounds.Where(x => x.IdCompany == company.Id).FirstOrDefaultAsync();
+                            if (background != null)
+                            {
+                                antecedentes = await _mempresaDomain.GetmEmpresaAspLegByCodigoAsync(company.OldCode);
+                                if (antecedentes != null)
+                                {
+                                    background.ConstitutionDate = antecedentes.EmFecest;
+                                    background.StartFunctionYear = antecedentes.EmIniope;
+                                    background.OperationDuration = antecedentes.EmDuraci;
+                                    background.RegisterPlace = antecedentes.EmRegen;
+                                    background.NotaryRegister = antecedentes.EmNotari;
+                                    background.PublicRegister = antecedentes.EmRegist;
+                                    background.CurrentPaidCapitalComentary = antecedentes.EmCapac1;
+                                    background.Origin = antecedentes.EmOrigen;
+                                    background.IncreaceDateCapital = antecedentes.EmFecaum;
+                                    background.Traded = antecedentes.EmCotbol == "SI" ? "Si" : antecedentes.EmCotbol == "Si" ? "Si" : antecedentes.EmCotbol == "SÍ" ? "Si" :
+                                    antecedentes.EmCotbol == "Sí" ? "Si" : antecedentes.EmCotbol == "NO" ? "No" : antecedentes.EmCotbol == "No" ? "No" : "";
+                                    background.TradedBy = antecedentes.EmTipfecaum;
+                                    background.TradedByEng = antecedentes.EmTipfecaumIng;
+                                    background.CurrentExchangeRate = antecedentes.EmTipcam;
+                                    background.LastQueryRrpp = StaticFunctions.VerifyDate(antecedentes.EmRrppFecha);
+                                    background.LastQueryRrppBy = antecedentes.EmRrppPor;
+                                    background.Background = antecedentes.EmComent;
+                                    background.History = antecedentes.EmAntece;
+                                    context.CompanyBackgrounds.Update(background);
+                                }
+
+                            }
+
+                            //branch
+                            var branchs = await context.CompanyBranches.Where(x => x.IdCompany == company.Id).FirstOrDefaultAsync();
+                            if (branchs != null)
+                            {
+                                ramo = await _mempresaDomain.GetmEmpresaRamoByCodigoAsync(company.OldCode);
+                                if (ramo != null)
+                                {
+                                    branchs.IdBranchSector = ramo.EmCatciiu1 == "A" ? 3 : ramo.EmCatciiu1 == "B" ? 4 : ramo.EmCatciiu1 == "C" ? 5 : null;
+                                    branchs.IdBusinessBranch = ramo.CsCodigo == "0" ? 1 : ramo.CsCodigo == "1" ? 3 : ramo.CsCodigo == "2" ? 4 : ramo.CsCodigo == "3" ? 5 :
+                                        ramo.CsCodigo == "4" ? 6 : ramo.CsCodigo == "5" ? 7 : ramo.CsCodigo == "6" ? 8 : ramo.CsCodigo == "7" ? 9 : ramo.CsCodigo == "8" ? 10 :
+                                        ramo.CsCodigo == "9" ? 11 : ramo.CsCodigo == "10" ? 12 : ramo.CsCodigo == "11" ? 13 : ramo.CsCodigo == "12" ? 14 : ramo.CsCodigo == "13" ? 15 :
+                                        ramo.CsCodigo == "14" ? 16 : ramo.CsCodigo == "15" ? 17 : ramo.CsCodigo == "16" ? 18 : ramo.CsCodigo == "17" ? 19 : ramo.CsCodigo == "18" ? 20 :
+                                        ramo.CsCodigo == "19" ? 21 : ramo.CsCodigo == "20" ? 22 : ramo.CsCodigo == "21" ? 23 : ramo.CsCodigo == "22" ? 24 : ramo.CsCodigo == "23" ? 25 :
+                                        ramo.CsCodigo == "24" ? 26 : ramo.CsCodigo == "25" ? 27 : ramo.CsCodigo == "26" ? 28 : ramo.CsCodigo == "27" ? 29 : ramo.CsCodigo == "28" ? 30 :
+                                        ramo.CsCodigo == "29" ? 31 : ramo.CsCodigo == "30" ? 32 : null;
+                                    branchs.SpecificActivities = await _mempresaDomain.GetActividadesByCodigo(company.OldCode);
+                                    branchs.Import = ramo.EmLogimp == "Si" ? true : ramo.EmLogimp == "No" ? false : null;
+                                    branchs.Export = ramo.EmLogexp == "Si" ? true : ramo.EmLogexp == "No" ? false : null;
+                                    branchs.CountriesImport = ramo.EmImport1;
+                                    branchs.CountriesExport = ramo.EmExport1;
+                                    branchs.CountriesImportEng = ramo.EmImport1Ing;
+                                    branchs.CountriesExportEng = ramo.EmExport1Ing;
+                                    branchs.CashSaleComentary = ramo.EmVencon;
+                                    branchs.CreditSaleComentary = ramo.EmVencre;
+                                    branchs.TerritorySaleComentary = ramo.EmTervta;
+                                    branchs.AbroadSaleComentary = ramo.EmVtaext;
+                                    branchs.NationalPurchasesComentary = ramo.EmComnac;
+                                    branchs.InternationalPurchasesComentary = ramo.EmComext;
+                                    branchs.WorkerNumber = GetWorkers(ramo.EmTraba1);
+                                    company.WorkersHistories.Add(new Domain.Entities.SqlCoreContext.WorkersHistory
+                                    {
+                                        NumberYear = DateTime.Now.Year,
+                                        NumberWorker = company.CompanyBranches.FirstOrDefault().WorkerNumber,
+                                        Observations = ""
+                                    });
+                                    branchs.IdLandOwnership = ramo.EmTiploc == "Alquilado" ? 2 : ramo.EmTiploc == "Comodato" ? 3 :
+                                     ramo.EmTiploc == "Compartido" ? 4 : ramo.EmTiploc == "No Revelado" ? 5 : ramo.EmTiploc == "Oficina Virtual" ? 6 :
+                                     ramo.EmTiploc == "Propio Cancelado" ? 7 : ramo.EmTiploc == "Propio Pagandolo" ? 8 : null;
+                                    branchs.TotalArea = ramo.EmArea;
+                                    branchs.OtherLocations = ramo.EmObserv;
+                                    branchs.PreviousAddress = ramo.EmDomant;
+                                    branchs.ActivityDetailCommentary = ramo.EmActivi;
+                                    branchs.AditionalCommentary = ramo.EmComen;
+                                    branchs.TabCommentary = ramo.EmComenTab;
+                                    context.CompanyBranches.Update(branchs);
+                                }
+                            }
+
+                            //CompanyFinancialInformations
+                            var financial = await context.CompanyFinancialInformations.Where(x => x.IdCompany == company.Id).FirstOrDefaultAsync();
+                            if (financial != null)
+                            {
+                                finanzas = await _mempresaDomain.GetmEmpresaFinanzasByCodigoAsync(company.OldCode);
+                                if (finanzas != null)
+                                {
+                                    financial.Interviewed = finanzas.EmEntrev;
+                                    financial.WorkPosition = finanzas.EmCargos;
+                                    financial.IdCollaborationDegree = finanzas.GcCodigo == 1 ? 1 : finanzas.GcCodigo == 2 ? 3 : finanzas.GcCodigo == 3 ? 4 :
+                                        finanzas.GcCodigo == 4 ? 5 : finanzas.GcCodigo == 5 ? 6 : finanzas.GcCodigo == 6 ? 7 : finanzas.GcCodigo == 7 ? 10 :
+                                        finanzas.GcCodigo == 8 ? 8 : finanzas.GcCodigo == 9 ? 9 : finanzas.GcCodigo == 13 ? 2 : null;
+                                    financial.InterviewCommentary = finanzas.EmConinf;
+                                    financial.Auditors = empresa.EmAudito;
+                                    financial.IdFinancialSituacion = finanzas.SfCodigo == "00" ? 8 : finanzas.SfCodigo == "01" ? 9 : finanzas.SfCodigo == "02" ? 10 :
+                                        finanzas.SfCodigo == "03" ? 11 : finanzas.SfCodigo == "04" ? 12 : finanzas.SfCodigo == "05" ? 13 : finanzas.SfCodigo == "06" ? 14 :
+                                        finanzas.SfCodigo == "07" ? 15 : null;
+                                    financial.FinancialCommentarySelected = finanzas.EmSitfin;
+                                    financial.MainFixedAssets = finanzas.EmPropie;
+                                    financial.AnalystCommentary = finanzas.EmAnalista;
+                                    context.CompanyFinancialInformations.Update(financial);
+                                }
+                            }
+                            //CompanySbs
+                            var sbs = await context.CompanySbs.Where(x => x.IdCompany == company.Id).FirstOrDefaultAsync();
+                            if (sbs != null)
+                            {
+                                aval = await _mempresaDomain.GetmEmpresaAvalByCodigoAsync(empresa.EmCodigo);
+                                string? endorsement = aval == null ? "" : aval.AvObservacion;
+                                sbs.IdOpcionalCommentarySbs = 1;
+                                sbs.AditionalCommentaryRiskCenter = empresa.EmCenrie;
+                                sbs.DebtRecordedDate = StaticFunctions.VerifyDate(empresa.EmFecreg); //*
+                                sbs.ExchangeRate = empresa.EmTcsbs == null ? null : (decimal)empresa.EmTcsbs;
+                                sbs.BankingCommentary = empresa.EmSupban;
+                                sbs.EndorsementsObservations = endorsement;
+                                sbs.ReferentOrAnalyst = empresa.PerCodref;
+                                sbs.Date = StaticFunctions.VerifyDate(empresa.EmFecref);
+                                sbs.LitigationsCommentary = empresa.EmComlit;
+                                sbs.CreditHistoryCommentary = empresa.EmAntcre;
+                                sbs.GuaranteesOfferedNc = empresa.EmGaomn == null ? null : (decimal)empresa.EmGaomn;
+                                sbs.GuaranteesOfferedFc = empresa.EmGaome == null ? null : (decimal)empresa.EmGaome;
+                            }
+                            //CompanyCreditOpinions
+                            var credit = await context.CompanyCreditOpinions.Where(x => x.IdCompany == company.Id).FirstOrDefaultAsync();
+                            if (credit == null)
+                            {
+                                credit.CreditRequest = true;
+                                credit.ConsultedCredit = empresa.EmMtopcr;
+                                credit.SuggestedCredit = empresa.EmCrerec;
+                                credit.CurrentCommentary = empresa.EmOcDescri;
+                                credit.PreviousCommentary = empresa.EmOpicre;
+                                context.CompanyCreditOpinions.Update(credit);
+                            }
+                            //CompanyGeneralInformations
+                            if (company.CompanyGeneralInformations.FirstOrDefault() == null)
+                            {
+                                company.CompanyGeneralInformations.FirstOrDefault().GeneralInfo = empresa.EmInfgen;
+                            }
+                            //FinancialBalances
+
+                            var balances = await context.FinancialBalances.Where(x => x.IdCompany == company.Id).ToListAsync();
+                            foreach (var balance in balances)
+                            {
+                                context.FinancialBalances.Remove(balance);
+                            }
+                            company.FinancialBalances = new List<FinancialBalance>();
+                            company.FinancialBalances = await GetFinancialBalances(company.OldCode);
+                            //SalesHistories
+                            var sales = await context.SalesHistories.Where(x => x.IdCompany == company.Id).ToListAsync();
+                            foreach (var sale in sales)
+                            {
+                                context.SalesHistories.Remove(sale);
+                            }
+                            company.SalesHistories = new List<SalesHistory>();
+                            company.SalesHistories = await GetSalesHistories(company.OldCode);
+                            //ImportsAndExports
+                            var imports = await context.ImportsAndExports.Where(x => x.IdCompany == company.Id).ToListAsync();
+                            foreach (var import in imports)
+                            {
+                                context.ImportsAndExports.Remove(import);
+                            }
+                            company.ImportsAndExports = new List<ImportsAndExport>();
+                            company.ImportsAndExports = await GetImportsAndExports(company.OldCode);
+                            //Providers
+                            var providers = await context.Providers.Where(x => x.IdCompany == company.Id).ToListAsync();
+                            foreach (var provider in providers)
+                            {
+                                context.Providers.Remove(provider);
+                            }
+                            company.Providers = new List<Provider>();
+                            company.Providers = await GetProviders(company.OldCode);
+
+                            //ComercialLatePayments
+                            var comercials = await context.ComercialLatePayments.Where(x => x.IdCompany == company.Id).ToListAsync();
+                            foreach (var comercial in comercials)
+                            {
+                                context.ComercialLatePayments.Remove(comercial);
+                            }
+                            company.ComercialLatePayments = new List<ComercialLatePayment>();
+                            company.ComercialLatePayments = await GetComercialLatePayments(company.OldCode);
+                            //BankDebts
+                            var debts = await context.BankDebts.Where(x => x.IdCompany == company.Id).ToListAsync();
+                            foreach (var debt in debts)
+                            {
+                                context.BankDebts.Remove(debt);
+                            }
+                            company.BankDebts = new List<BankDebt>();
+                            company.BankDebts = await GetBankDebts(company.OldCode);
+                            //CompanyImages
+                            var images = await context.CompanyImages.Where(x => x.IdCompany == company.Id).ToListAsync();
+                            foreach (var image in images)
+                            {
+                                context.CompanyImages.Remove(image);
+                            }
+                            company.CompanyImages = new List<Domain.Entities.SqlCoreContext.CompanyImage>();
+                            company.CompanyImages = await GetCompanyImage(company.OldCode);
+                            //TraductionCompanies
+                            var traductions = await context.TraductionCompanies.Where(x => x.IdCompany == company.Id).ToListAsync();
+
+                            foreach (var traductionCompany in traductions)
+                            {
+                                context.TraductionCompanies.Remove(traductionCompany);
+                            }
+                            company.TraductionCompanies = new List<TraductionCompany>();
+                            company.TraductionCompanies = await GetAllTraductions(empresa);
+
+                            context.Companies.Update(company);
+                            await context.SaveChangesAsync();
+
+                            empresa.Migra = 100;
+                            mysqlContext.MEmpresas.Update(empresa);
+                            await mysqlContext.SaveChangesAsync();
+                        }
+                        else
+                        {
+                            var newCompany = new Company
+                            {
+                                OldCode = empresa.EmCodigo,
+                                Name = empresa.EmNombre,
+                                SocialName = empresa.EmSiglas,
+                                LastSearched = empresa.EmFecinf,
+                                Language = Dictionary.LanguageMigra[empresa.IdiCodigo.Value],
+                                TypeRegister = empresa.EmTipper == 0 ? "PJ" : "PN",
+                                YearFundation = empresa.EmAnofun,
+                                Quality = ObtenerCalidad(empresa.CalCodigo),
+                                IdLegalPersonType = ObtenerPersoneriaLegal(empresa.JuCodigo),
+                                TaxTypeCode = empresa.EmRegtri,
+                                IdCountry = ObtenerCodigoPais(empresa.PaiCodigo),
+                                HaveReport = ObtenerReportes(empresa.EmCodigo),
+                                IdLegalRegisterSituation = GetLegalRegisterSituation(empresa.SitCodigo),
+                                Address = empresa.EmDirecc,
+                                Place = empresa.EmCiudad,
+                                Telephone = empresa.EmTelef1,
+                                SubTelephone = empresa.EmPrftlf,
+                                Cellphone = empresa.EmPrffax,
+                                PostalCode = empresa.EmCodpos,
+                                WhatsappPhone = empresa.EmFax,
+                                Email = empresa.EmEmail,
+                                WebPage = empresa.EmPagweb,
+                                IdCreditRisk = GetCreditRisk(empresa.CrCodigo),
+                                IdPaymentPolicy = GetPaymentPolicy(empresa.PaCodigo),
+                                IdReputation = idReputacion != 0 ? idReputacion : null,
+                                NewsComentary = string.IsNullOrEmpty(empresa.EmPrensa) ? empresa.EmPrensasel : empresa.EmPrensa,
+                                IdentificacionCommentary = empresa.EmComide,
+                                Enable = empresa.EmActivo == 1,
+                                LastUpdaterUser = 1,
+                                OnWeb = empresa.EmOnline == "SI",
+                                ReputationComentary = empresa.EmComrep,
+                                Print = empresa.EmLogpre == 1,
+                                CompanyBackgrounds = await GetCompanyBackground(empresa.EmCodigo),
+                                CompanyBranches = await GetCompanyBranch(empresa.EmCodigo),
+                                CompanyFinancialInformations = await GetCompanyFinancialInformations(empresa.EmCodigo, empresa.EmAudito ?? string.Empty),
+                                CompanySbs = await GetCompanySbs(empresa),
+                                CompanyCreditOpinions = await GetCompanyCreditOpinions(empresa),
+                                CompanyGeneralInformations = await GetCompanyGeneralInformation(empresa.EmInfgen, empresa.EmCodigo),
+                                FinancialBalances = await GetFinancialBalances(empresa.EmCodigo),
+                                SalesHistories = await GetSalesHistories(empresa.EmCodigo),
+                                ImportsAndExports = await GetImportsAndExports(empresa.EmCodigo),
+                                Providers = await GetProviders(empresa.EmCodigo),
+                                ComercialLatePayments = await GetComercialLatePayments(empresa.EmCodigo),
+                                BankDebts = await GetBankDebts(empresa.EmCodigo),
+                                WorkersHistories = await GetWorkersHistories(empresa),
+                                CompanyImages = await GetCompanyImage(empresa.EmCodigo),
+                                TraductionCompanies = await GetAllTraductions(empresa),
+
+                            };
+                            await context.Companies.AddAsync(newCompany);
+                            await context.SaveChangesAsync();
+                            empresa.Migra = 100;
+                            mysqlContext.MEmpresas.Update(empresa);
+                            await mysqlContext.SaveChangesAsync();
+                        }
+                    }
+
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    continue;
+                }
+               
+            }
+            
+            return true;
+        }
+
+        public async Task<bool> AddOrUpdatePerson(int migra)
+        {
+            using var context = new SqlCoreContext();
+            using var mysqlContext = new MySqlContext();
+            for (int i = 0; i < 360; i++)
+            {
+                try
+                {
+                    var personas = await mysqlContext.MPersonas.Where(x => x.Migra == migra && x.PeNombre != null).Take(100).ToListAsync();
+                    foreach (var persona in personas)
+                    {
+                        var reputacion = await _impersonaDomain.GetmPersonaReputacionByCodigoAsync(persona.PeCodigo);
+                        int? idReputacion = 0;
+                        if (reputacion != null)
+                        {
+                            idReputacion = ObtenerReputacion(reputacion.RcCodigo);
+                        }
+                        var person = await context.People.Where(x => x.OldCode == persona.PeCodigo).FirstOrDefaultAsync();
+                        if(person != null)
+                        {
+                            person.Fullname = persona.PeNombre ?? "";
+                            person.LastSearched = persona.PeFecinf;
+                            person.Language = Dictionary.LanguageMigra[persona.IdiCodigo.Value];
+                            person.Quality = ObtenerCalidad(persona.CalCodigoPer);
+                            person.Nationality = persona.PeNacion ?? "";
+                            person.BirthDate = persona.PeFecnac ?? "";
+                            person.BirthPlace = persona.PeLugnac ?? "";
+                            person.IdDocumentType = persona.TiCodigo == "CExt" ? 2 : persona.TiCodigo == "C.I." ? 6 :
+                                    persona.TiCodigo == "C.C." ? 7 : persona.TiCodigo == "CPF/MF" ? 9 :
+                                    persona.TiCodigo == "CURP" ? 10 : persona.TiCodigo == "D.I." ? 11 :
+                                    persona.TiCodigo == "DNI" ? 1 : persona.TiCodigo == "DPI" ? 12 :
+                                    persona.TiCodigo == "DUI" ? 13 : persona.TiCodigo == "IDEH" ? 14 :
+                                    persona.TiCodigo == "LE" ? 15 : persona.TiCodigo == "LC" ? 16 :
+                                    persona.TiCodigo == "Pas." ? 4 : persona.TiCodigo == "RUT" ? 20 :
+                                    persona.TiCodigo == "S.S." ? 17 : persona.TiCodigo == "RUN" ? 18 :
+                                    persona.TiCodigo == "T.I." ? 19 : persona.TiCodigo == "DIM" ? 21 : null;
+                            person.CodeDocumentType = persona.PeDocide == null ? "" : persona.PeDocide;
+                            person.TaxTypeCode = persona.PeRegtri == null ? "" : persona.PeRegtri;
+                            person.IdPersonSituation = persona.EsCodigo == "01" ? null : persona.EsCodigo == "02" ? 1 :
+                                    persona.EsCodigo == "05" ? 2 : persona.EsCodigo == "03" ? 3 :
+                                    persona.EsCodigo == "04" ? 4 : persona.EsCodigo == "06" ? 5 :
+                                    persona.EsCodigo == "07" ? 6 : null;
+                            person.IdLegalRegisterSituation = persona.ErCodigo == "" ? null : persona.ErCodigo == "AC" ? 1 :
+                                    persona.ErCodigo == "BP" ? 4 : persona.ErCodigo == "BD" ? 3 :
+                                    persona.ErCodigo == "ST" ? 16 : persona.ErCodigo == "NL" ? 13 :
+                                    persona.ErCodigo == "BO" ? 2 : persona.ErCodigo == "IN" ? 10 : null;
+                            person.Address = persona.PeDirecc == null ? "" : persona.PeDirecc;
+                            person.Cp = persona.PeCodpos == null ? "" : persona.PeCodpos;
+                            person.City = persona.PeCiudad == null ? "" : persona.PeCiudad;
+                            person.OtherDirecctions = persona.PeDireccCome == null ? "" : persona.PeDireccCome;
+                            person.TradeName = persona.PeNombreCome == null ? "" : persona.PeNombreCome;
+                            person.IdCountry = ObtenerCodigoPais(persona.PaiCodigo);
+                            person.CodePhone = persona.PePrftlf == null ? "" : persona.PePrftlf;
+                            person.NumberPhone = persona.PeTelefo == null ? "" : persona.PeTelefo;
+                            person.IdCivilStatus = persona.EcCodigo == "01" ? 5 : persona.EcCodigo == "02" ? 2 :
+                                    persona.EcCodigo == "03" ? 1 : persona.EcCodigo == "04" ? 4 :
+                                    persona.EcCodigo == "05" ? 6 : persona.EcCodigo == "06" ? 3 : null;
+                            person.RelationshipWith = persona.PeRelciv == null ? "" : persona.PeRelciv;
+                            person.RelationshipDocumentType = string.IsNullOrEmpty(persona.PeRelcivDni) ? 1 : null;
+                            person.RelationshipCodeDocument = persona.PeRelcivDni == null ? "" : persona.PeRelcivDni;
+                            person.FatherName = persona.PePadre == null ? "" : persona.PePadre;
+                            person.MotherName = persona.PeMadre == null ? "" : persona.PeMadre;
+                            person.Email = persona.PeEmail == null ? "" : persona.PeEmail;
+                            person.Cellphone = persona.PeCelula == null ? "" : persona.PeCelula;
+                            person.ClubMember = persona.PeClub == null ? "" : persona.PeClub;
+                            person.Insurance = persona.PeAsegur == null ? "" : persona.PeAsegur;
+                            person.NewsCommentary = persona.PePrensasel == null ? "" : persona.PePrensasel;
+                            person.PrintNewsCommentary = persona.PeLogpre == 1 ? true : false;
+                            person.PrivateCommentary = persona.PeCompri == null ? "" : persona.PeCompri;
+                            person.ReputationCommentary = persona.PeComRep == null ? "" : persona.PeComRep;
+                            person.IdCreditRisk = GetCreditRisk(persona.CrCodigo);
+                            person.IdPaymentPolicy = GetPaymentPolicy(persona.PaCodigo);
+                            person.IdReputation = idReputacion != 0 ? idReputacion : null;
+                            person.Profession = persona.PfNombre == null ? "" : persona.PfNombre;
+
+                            //PersonActivity
+                            var activity = await context.PersonActivities.Where(x => x.IdPerson == person.Id).FirstOrDefaultAsync();
+                            if(activity != null)
+                            {
+                                activity.ActivitiesCommentary = persona.PeOtrrec ?? "";
+                                context.PersonActivities.Update(activity);
+                            }
+                            //PersonGeneralInformations
+                            var generalInfo = await context.PersonGeneralInformations.Where(x => x.IdPerson == person.Id).FirstOrDefaultAsync();
+                            if (generalInfo != null)
+                            {
+                                generalInfo.GeneralInformation = persona.PeObserv ?? "";
+                                context.PersonGeneralInformations.Update(generalInfo);
+                            }
+                            //PersonHistories
+                            var history = await context.PersonHistories.Where(x => x.IdPerson == person.Id).FirstOrDefaultAsync();
+                            if (history != null)
+                            {
+                                history.HistoryCommentary = persona.PeAntece == null ? "" : persona.PeAntece;
+                                context.PersonHistories.Update(history);
+                            }
+                            //PersonHomes
+                            var home = await context.PersonHomes.Where(x => x.IdPerson == person.Id).FirstOrDefaultAsync();
+                            if (home != null)
+                            {
+                                home.OwnHome = persona.PeTipdom == null || persona.PeTipdom == "" ? null : persona.PeTipdom == "Si" || persona.PeTipdom == "Propia" ? true : false;
+                                home.Value = persona.PeValdom == null ? "" : persona.PeValdom;
+                                home.HomeCommentary = persona.PeCondoc == null ? "" : persona.PeCondoc;
+                                context.PersonHomes.Update(home);
+                            }
+                            //PersonProperties
+                            var properties = await context.PersonProperties.Where(x => x.IdPerson == person.Id).FirstOrDefaultAsync();
+                            if (properties != null)
+                            {
+                                properties.PropertiesCommentary = persona.PeCombie == null ? "" : persona.PeCombie;
+                                context.PersonProperties.Update(properties);
+                            }
+                            //PersonSbs
+                            var sbs = await context.PersonSbs.Where(x => x.IdPerson == person.Id).FirstOrDefaultAsync();
+                            if (sbs != null)
+                            {
+                                sbs.AditionalCommentaryRiskCenter = persona.PeCenrie == null ? "" : persona.PeCenrie;
+                                sbs.DebtRecordedDate = persona.PeFecreg == null ? "" : persona.PeFecreg;
+                                sbs.ExchangeRate = persona.PeTcsbs == null ? 0 : (decimal)persona.PeTcsbs;
+                                sbs.BankingCommentary = persona.PeSubacu == null ? "" : persona.PeSubacu;
+                                sbs.ReferentOrAnalyst = persona.PerCodref == null ? "" : persona.PerCodref;
+                                sbs.Date = StaticFunctions.VerifyDate(persona.PeFecref);
+                                sbs.LitigationsCommentary = persona.PeComlit == null ? "" : persona.PeComlit;
+                                sbs.CreditHistoryCommentary = persona.PeAntcred == null ? "" : persona.PeAntcred;
+                                sbs.GuaranteesOfferedNc = persona.PeGaomn == null ? 0 : (decimal)persona.PeGaomn;
+                                sbs.GuaranteesOfferedFc = persona.PeGaome == null ? 0 : (decimal)persona.PeGaome;
+                                sbs.SbsCommentary = persona.PeSupban == null ? "" : persona.PeSupban;
+                                context.PersonSbs.Update(sbs);
+                            }
+                            //PersonJobs
+                            var job = await context.PersonJobs.Where(x => x.IdPerson == person.Id).FirstOrDefaultAsync();
+                            if (job != null)
+                            {
+                                var trabajo = await mysqlContext.RPerVsTrabs.Where(x => x.PeCodigo == persona.PeCodigo).FirstOrDefaultAsync();
+                                if (trabajo != null)
+                                {
+                                    var jobCompany = await context.Companies.Where(x => x.OldCode == trabajo.EmCodigo).FirstOrDefaultAsync();
+                                    if(jobCompany != null)
+                                    {
+                                        job.IdCompany = jobCompany.Id;
+                                    }
+                                    else
+                                    {
+                                        job.IdCompany = null;
+                                    }
+                                    job.OldCode = trabajo.EmCodigo == null ? "" : trabajo.EmCodigo;
+                                    job.CurrentJob = trabajo.CaNombre;
+                                    job.StartDate = trabajo.PtFecing;
+                                    job.EndDate = trabajo.PtFecces;
+                                    job.MonthlyIncome = trabajo.PtEstadi + "";
+                                    job.AnnualIncome = trabajo.PtInganu;
+                                    job.JobDetails = trabajo.PtDetall;
+                                   
+                                }
+                                context.PersonJobs.Update(job);
+                            }
+                            //Providers
+                            var providers = await context.Providers.Where(x => x.IdPerson == person.Id).ToListAsync();
+                            foreach (var provider in providers)
+                            {
+                                context.Providers.Remove(provider);
+                            }
+                            person.Providers = new List<Provider>();
+                            person.Providers = await GetPersonProviders(persona);
+
+                            //ComercialLatePayments
+                            var comercials = await context.ComercialLatePayments.Where(x => x.IdPerson == person.Id).ToListAsync();
+                            foreach (var comercial in comercials)
+                            {
+                                context.ComercialLatePayments.Remove(comercial);
+                            }
+                            person.ComercialLatePayments = new List<ComercialLatePayment>();
+                            person.ComercialLatePayments = await GetPersonCommercialLate(persona);
+                            //BankDebts
+                            var debts = await context.BankDebts.Where(x => x.IdPerson == person.Id).ToListAsync();
+                            foreach (var debt in debts)
+                            {
+                                context.BankDebts.Remove(debt);
+                            }
+                            person.BankDebts = new List<BankDebt>();
+                            person.BankDebts = await GetPersonBankDebt(persona);
+                            //PhotoPeople
+                            var images = await context.PhotoPeople.Where(x => x.IdPerson == person.Id).ToListAsync();
+                            foreach (var image in images)
+                            {
+                                context.PhotoPeople.Remove(image);
+                            }
+                            person.PhotoPeople = new List<Domain.Entities.SqlCoreContext.PhotoPerson>();
+                            person.PhotoPeople = await GetPersonPhoto(persona);
+                            //TraductionPeople
+                            var traductions = await context.TraductionPeople.Where(x => x.IdPerson == person.Id).ToListAsync();
+                            foreach (var traduction in traductions)
+                            {
+                                context.TraductionPeople.Remove(traduction);
+                            }
+                            person.TraductionPeople = new List<Domain.Entities.SqlCoreContext.TraductionPerson>();
+                            person.TraductionPeople = await GetPersonTraductions(persona);
+
+                            context.People.Update(person);
+                        }
+                        else
+                        {
+                            var newPerson = new Domain.Entities.SqlCoreContext.Person
+                            {
+                                Id = 0,
+                                OldCode = persona.PeCodigo,
+                                Fullname = persona.PeNombre ?? "",
+                                LastSearched = persona.PeFecinf,
+                                Language = Dictionary.LanguageMigra[persona.IdiCodigo.Value],
+                                Quality = ObtenerCalidad(persona.CalCodigoPer),
+                                Nationality = persona.PeNacion ?? "",
+                                BirthDate = persona.PeFecnac ?? "",
+                                BirthPlace = persona.PeLugnac ?? "",
+                                IdDocumentType = persona.TiCodigo == "CExt" ? 2 : persona.TiCodigo == "C.I." ? 6 :
+                                        persona.TiCodigo == "C.C." ? 7 : persona.TiCodigo == "CPF/MF" ? 9 :
+                                        persona.TiCodigo == "CURP" ? 10 : persona.TiCodigo == "D.I." ? 11 :
+                                        persona.TiCodigo == "DNI" ? 1 : persona.TiCodigo == "DPI" ? 12 :
+                                        persona.TiCodigo == "DUI" ? 13 : persona.TiCodigo == "IDEH" ? 14 :
+                                        persona.TiCodigo == "LE" ? 15 : persona.TiCodigo == "LC" ? 16 :
+                                        persona.TiCodigo == "Pas." ? 4 : persona.TiCodigo == "RUT" ? 20 :
+                                        persona.TiCodigo == "S.S." ? 17 : persona.TiCodigo == "RUN" ? 18 :
+                                        persona.TiCodigo == "T.I." ? 19 : persona.TiCodigo == "DIM" ? 21 : null,
+                                CodeDocumentType = persona.PeDocide == null ? "" : persona.PeDocide,
+                                TaxTypeCode = persona.PeRegtri == null ? "" : persona.PeRegtri,
+                                IdPersonSituation = persona.EsCodigo == "01" ? null : persona.EsCodigo == "02" ? 1 :
+                                        persona.EsCodigo == "05" ? 2 : persona.EsCodigo == "03" ? 3 :
+                                        persona.EsCodigo == "04" ? 4 : persona.EsCodigo == "06" ? 5 :
+                                        persona.EsCodigo == "07" ? 6 : null,
+                                IdLegalRegisterSituation = persona.ErCodigo == "" ? null : persona.ErCodigo == "AC" ? 1 :
+                                        persona.ErCodigo == "BP" ? 4 : persona.ErCodigo == "BD" ? 3 :
+                                        persona.ErCodigo == "ST" ? 16 : persona.ErCodigo == "NL" ? 13 :
+                                        persona.ErCodigo == "BO" ? 2 : persona.ErCodigo == "IN" ? 10 : null,
+                                Address = persona.PeDirecc == null ? "" : persona.PeDirecc,
+                                Cp = persona.PeCodpos == null ? "" : persona.PeCodpos,
+                                City = persona.PeCiudad == null ? "" : persona.PeCiudad,
+                                OtherDirecctions = persona.PeDireccCome == null ? "" : persona.PeDireccCome,
+                                TradeName = persona.PeNombreCome == null ? "" : persona.PeNombreCome,
+                                IdCountry = ObtenerCodigoPais(persona.PaiCodigo),
+                                CodePhone = persona.PePrftlf == null ? "" : persona.PePrftlf,
+                                NumberPhone = persona.PeTelefo == null ? "" : persona.PeTelefo,
+                                IdCivilStatus = persona.EcCodigo == "01" ? 5 : persona.EcCodigo == "02" ? 2 :
+                                        persona.EcCodigo == "03" ? 1 : persona.EcCodigo == "04" ? 4 :
+                                        persona.EcCodigo == "05" ? 6 : persona.EcCodigo == "06" ? 3 : null,
+                                RelationshipWith = persona.PeRelciv == null ? "" : persona.PeRelciv,
+                                RelationshipDocumentType = string.IsNullOrEmpty(persona.PeRelcivDni) ? 1 : null,
+                                RelationshipCodeDocument = persona.PeRelcivDni == null ? "" : persona.PeRelcivDni,
+                                FatherName = persona.PePadre == null ? "" : persona.PePadre,
+                                MotherName = persona.PeMadre == null ? "" : persona.PeMadre,
+                                Email = persona.PeEmail == null ? "" : persona.PeEmail,
+                                Cellphone = persona.PeCelula == null ? "" : persona.PeCelula,
+                                ClubMember = persona.PeClub == null ? "" : persona.PeClub,
+                                Insurance = persona.PeAsegur == null ? "" : persona.PeAsegur,
+                                NewsCommentary = persona.PePrensasel == null ? "" : persona.PePrensasel,
+                                PrintNewsCommentary = persona.PeLogpre == 1 ? true : false,
+                                PrivateCommentary = persona.PeCompri == null ? "" : persona.PeCompri,
+                                ReputationCommentary = persona.PeComRep == null ? "" : persona.PeComRep,
+                                IdCreditRisk = GetCreditRisk(persona.CrCodigo),
+                                IdPaymentPolicy = GetPaymentPolicy(persona.PaCodigo),
+                                IdReputation = idReputacion != 0 ? idReputacion : null,
+                                Profession = persona.PfNombre == null ? "" : persona.PfNombre,
+                                PersonActivities = await GetPersonActivities(persona),
+                                PersonGeneralInformations = await GetPersonGeneralInformation(persona),
+                                PersonHistories = await GetPersonHistory(persona),
+                                PersonHomes = await GetPersonHome(persona),
+                                PersonProperties = await GetPersonProperty(persona),
+                                PersonSbs = await GetPersonSBS(persona),
+                                PersonJobs = await GetPersonJob(persona),
+                                PhotoPeople = await GetPersonPhoto(persona),
+                                BankDebts = await GetPersonBankDebt(persona),
+                                ComercialLatePayments = await GetPersonCommercialLate(persona),
+                                Providers = await GetPersonProviders(persona),
+                                TraductionPeople = await GetPersonTraductions(persona)
+                            };
+                            await context.People.AddAsync(newPerson);
+                        }
+                        await context.SaveChangesAsync();
+                        persona.Migra = 100;
+                        mysqlContext.MPersonas.Update(persona);
+                        await mysqlContext.SaveChangesAsync();
+                    }
+
+                }
+                catch(Exception ex)
+                {
+                    _logger.LogError(ex.Message);
+                    continue;
+                }
             }
             return true;
         }

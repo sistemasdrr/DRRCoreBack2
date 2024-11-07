@@ -3344,9 +3344,9 @@ namespace DRRCore.Application.Main.CoreApplication
                     emailDataDto.EmailKey = ticket.IdSubscriberNavigation.Language == "E" ? "DRR_WORKFLOW_ESP_0027" : "DRR_WORKFLOW_ENG_0027";
                     emailDataDto.BeAuthenticated = true;
                     
-                  
                     emailDataDto.IsBodyHTML = true;
                     emailDataDto.Parameters.Add(ticket.IdSubscriberNavigation.Name);
+                    emailDataDto.Parameters.Add(ticket.RequestedName);
                     emailDataDto.Parameters.Add(userLogin.IdEmployeeNavigation.FirstName + " " + userLogin.IdEmployeeNavigation.LastName);
                     emailDataDto.Parameters.Add(userLogin.IdEmployeeNavigation.Email);
                     emailDataDto.BodyHTML = emailDataDto.IsBodyHTML ? await GetBodyHtml(emailDataDto) : emailDataDto.BodyHTML;

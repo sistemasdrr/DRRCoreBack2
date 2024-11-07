@@ -91,6 +91,9 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                 //Falta implementar
                 .ForMember(dest => dest.TraductionPercentage, opt => opt?.MapFrom(src => GetTraductionCompanyPercentage(src.TraductionCompanies.FirstOrDefault())))
                 .ForMember(dest => dest.Manager, opt => opt?.MapFrom(src => src.CompanyPartners.FirstOrDefault().IdPersonNavigation.Fullname))
+                .ForMember(dest => dest.HaveReport, opt => opt?.MapFrom(src => src.HaveReport))
+                .ForMember(dest => dest.IdLegalRegisterSituation, opt => opt?.MapFrom(src => src.IdLegalRegisterSituation))
+                .ForMember(dest => dest.TypeRegister, opt => opt?.MapFrom(src => src.TypeRegister))
                 .ReverseMap();
 
             CreateMap<Ticket, GetListCompanyResponseDto>()
