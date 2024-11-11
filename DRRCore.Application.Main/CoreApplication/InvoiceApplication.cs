@@ -473,6 +473,57 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             return response;
         }
+        public async Task<Response<List<GetInvoiceSubscriberCCListByBillResponseDto>>> GetInvoiceSubscriberCCListByBill(int month, int year)
+        {
+            var response = new Response<List<GetInvoiceSubscriberCCListByBillResponseDto>>();
+            response.Data = new List<GetInvoiceSubscriberCCListByBillResponseDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+
+                var subscribers = await context.CouponBillingSubscribers
+                    .Include(x => x.CouponBillingSubscriberHistories)
+                    .Include(x => x.IdSubscriberNavigation).ThenInclude(x => x.IdCountryNavigation)
+                    .Where(x => x.CouponBillingSubscriberHistories.Any(x => x.Type == "I" && x.PurchaseDate.Value.Month == month && x.PurchaseDate.Value.Year == year && x.State == "PF"))
+                    .ToListAsync();
+
+                foreach (var subscriber in subscribers)
+                {
+                    var list = new List<InvoiceSubscriberCCHistory>();
+                    foreach(var history in subscriber.CouponBillingSubscriberHistories)
+                    {
+                        if(history.Type == "I" && history.PurchaseDate.Value.Month == month && history.PurchaseDate.Value.Year == year && history.State == "PF")
+                        {
+                            list.Add(new InvoiceSubscriberCCHistory
+                            {
+                                Id = history.Id,
+                                CouponAmount = history.CouponAmount,
+                                UnitPrice = history.TotalPrice,
+                                TotalPrice = history.TotalPrice,
+                                PurchaseDate = StaticFunctions.DateTimeToString(history.PurchaseDate)
+                            });
+
+                        }
+                      
+                    }
+                    response.Data.Add(new GetInvoiceSubscriberCCListByBillResponseDto
+                    {
+                        IdSubscriber = subscriber.IdSubscriber,
+                        Name = subscriber.IdSubscriberNavigation.Name,
+                        Code = subscriber.IdSubscriberNavigation.Code,
+                        Country = subscriber.IdSubscriberNavigation.IdCountryNavigation.Iso ?? "",
+                        FlagCountry = subscriber.IdSubscriberNavigation.IdCountryNavigation.FlagIso ?? "",
+                        History = list
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                _logger.LogError(ex.Message);
+            }
+            return response;
+        }
 
         public async Task<Response<List<GetInvoiceSubscriberListToCollectResponseDto>>> GetInvoiceSubscriberListToCollect(int month, int year)
         {
@@ -482,7 +533,7 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 using var context = new SqlCoreContext();
                 var subscriberInvoices = await context.SubscriberInvoices
-                    .Where(x => x.InvoiceEmitDate.Value.Month == month && x.InvoiceEmitDate.Value.Year == year && x.IdInvoiceState == 2)
+                    .Where(x => x.InvoiceEmitDate.Value.Month == month && x.InvoiceEmitDate.Value.Year == year && x.IdInvoiceState == 2 && x.Type == "FM")
                     .Include(x => x.SubscriberInvoiceDetails).ThenInclude(x => x.IdTicketNavigation).ThenInclude(x => x.IdSubscriberNavigation)
                     .Include(x => x.SubscriberInvoiceDetails).ThenInclude(x => x.IdTicketNavigation).ThenInclude(x => x.IdCountryNavigation)
                     .ToListAsync();
@@ -530,6 +581,41 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             return response;
         }
+        public async Task<Response<List<GetInvoiceSubscriberCCListToCollectResponseDto>>> GetInvoiceSubscriberCCListToCollect(int month, int year)
+        {
+            var response = new Response<List<GetInvoiceSubscriberCCListToCollectResponseDto>>();
+            response.Data = new List<GetInvoiceSubscriberCCListToCollectResponseDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var subscriberInvoices = await context.SubscriberInvoices
+                    .Where(x => x.InvoiceEmitDate.Value.Month == month && x.InvoiceEmitDate.Value.Year == year && x.IdInvoiceState == 2 && x.Type == "CC")
+                    .Include(x => x.IdSubscriberNavigation)
+                    .ToListAsync();
+                foreach (var subscriber in subscriberInvoices)
+                {
+                    response.Data.Add(new GetInvoiceSubscriberCCListToCollectResponseDto
+                    {
+                        Id = subscriber.Id,
+                        IdCurrency = subscriber.IdCurrency,
+                        IdSubscriber = subscriber.IdSubscriber,
+                        InvoiceCode = subscriber.InvoiceCode,
+                        SubscriberCode = subscriber.IdSubscriberNavigation.Code,
+                        SubscriberName = subscriber.IdSubscriberNavigation.Name,
+                        InvoiceEmitDate = subscriber.InvoiceEmitDate,
+                        Quantity = subscriber.Quantity,
+                        TotalPrice = subscriber.TotalAmount
+                    });
+                }
+
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                _logger.LogError(ex.Message);
+            }
+            return response;
+        }
         public async Task<Response<List<GetInvoiceSubscriberListPaidsResponseDto>>> GetInvoiceSubscriberListPaids(int month, int year)
         {
             var response = new Response<List<GetInvoiceSubscriberListPaidsResponseDto>>();
@@ -538,7 +624,7 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 using var context = new SqlCoreContext();
                 var subscriberInvoices = await context.SubscriberInvoices
-                    .Where(x => x.InvoiceCancelDate.Value.Month == month && x.InvoiceCancelDate.Value.Year == year && x.IdInvoiceState == 3)
+                    .Where(x => x.InvoiceCancelDate.Value.Month == month && x.InvoiceCancelDate.Value.Year == year && x.IdInvoiceState == 3 && x.Type == "FM")
                     .Include(x => x.SubscriberInvoiceDetails).ThenInclude(x => x.IdTicketNavigation).ThenInclude(x => x.IdSubscriberNavigation)
                     .Include(x => x.SubscriberInvoiceDetails).ThenInclude(x => x.IdTicketNavigation).ThenInclude(x => x.IdCountryNavigation)
                     .ToListAsync();
@@ -585,6 +671,42 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             return response;
         }
+        public async Task<Response<List<GetInvoiceSubscriberccListPaidsResponseDto>>> GetInvoiceSubscriberCCListPaids(int month, int year)
+        {
+            var response = new Response<List<GetInvoiceSubscriberccListPaidsResponseDto>>();
+            response.Data = new List<GetInvoiceSubscriberccListPaidsResponseDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var subscriberInvoices = await context.SubscriberInvoices
+                    .Where(x => x.InvoiceEmitDate.Value.Month == month && x.InvoiceEmitDate.Value.Year == year && x.IdInvoiceState == 3 && x.Type == "CC")
+                    .Include(x => x.IdSubscriberNavigation)
+                    .ToListAsync();
+                foreach (var subscriber in subscriberInvoices)
+                {
+                    response.Data.Add(new GetInvoiceSubscriberccListPaidsResponseDto
+                    {
+                        Id = subscriber.Id,
+                        IdCurrency = subscriber.IdCurrency,
+                        IdSubscriber = subscriber.IdSubscriber,
+                        InvoiceCode = subscriber.InvoiceCode,
+                        SubscriberCode = subscriber.IdSubscriberNavigation.Code,
+                        SubscriberName = subscriber.IdSubscriberNavigation.Name,
+                        InvoiceEmitDate = subscriber.InvoiceEmitDate,
+                        InvoiceCancelDate = subscriber.InvoiceCancelDate,
+                        Quantity = subscriber.Quantity,
+                        TotalPrice = subscriber.TotalAmount
+                    });
+                }
+
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                _logger.LogError(ex.Message);
+            }
+            return response;
+        }
 
         public async Task<Response<bool>> SaveSubscriberInvoice(AddOrUpdateSubscriberInvoiceRequestDto obj)
         {
@@ -619,9 +741,46 @@ namespace DRRCore.Application.Main.CoreApplication
                     IdCurrency = obj.IdCurrency,
                     Quantity = obj.InvoiceSubscriberList.Count(),
                     TotalAmount = totalAmount,
+                    Type = "FM",
                     SubscriberInvoiceDetails = invoiceSubscriberDetails
                 });
                 await context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                _logger.LogError(ex.Message);
+            }
+            return response;
+        }
+        public async Task<Response<bool>> SaveSubscriberInvoiceCC(AddOrUpdateSubscriberInvoiceCCRequestDto obj)
+        {
+            var response = new Response<bool>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                foreach (var ob in obj.Details)
+                {
+                    var history = await context.CouponBillingSubscriberHistories.Where(x => x.Id == ob.Id).FirstOrDefaultAsync();
+                    if(history != null)
+                    {
+                        history.State = "PC";
+                        context.CouponBillingSubscriberHistories.Update(history);
+                    }
+                }
+                await context.SubscriberInvoices.AddAsync(new SubscriberInvoice
+                {
+                    IdInvoiceState = 2,
+                    InvoiceCode = obj.InvoiceCode,
+                    InvoiceEmitDate = obj.InvoiceDate,
+                    IdSubscriber = obj.IdSubscriber,
+                    IdCurrency = obj.IdCurrency,
+                    Quantity = obj.Quantity,
+                    TotalAmount = obj.TotalPrice,
+                    Type = "CC"
+                });
+                await context.SaveChangesAsync();
+                response.Data = true;
             }
             catch (Exception ex)
             {
@@ -706,6 +865,29 @@ namespace DRRCore.Application.Main.CoreApplication
         }
 
         public async Task<Response<bool>> CancelSubscriberInvoiceToCollect(int idSubscriberInvoice, string cancelDate)
+        {
+            var response = new Response<bool>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var subscriberInvoice = await context.SubscriberInvoices.Where(x => x.Id == idSubscriberInvoice).FirstOrDefaultAsync();
+                if (subscriberInvoice != null)
+                {
+                    subscriberInvoice.IdInvoiceState = 3;
+                    subscriberInvoice.InvoiceCancelDate = StaticFunctions.VerifyDate(cancelDate);
+                    subscriberInvoice.UpdateDate = DateTime.Now;
+                    context.SubscriberInvoices.Update(subscriberInvoice);
+                    await context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                response.IsSuccess = false;
+            }
+            return response;
+        }
+        public async Task<Response<bool>> CancelSubscriberInvoiceCCToCollect(int idSubscriberInvoice, string cancelDate)
         {
             var response = new Response<bool>();
             try

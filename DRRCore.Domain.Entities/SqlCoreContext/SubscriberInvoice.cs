@@ -35,6 +35,8 @@ public partial class SubscriberInvoice
 
     public bool? Enable { get; set; }
 
+    public string? Type { get; set; }
+
     public virtual Currency? IdCurrencyNavigation { get; set; }
 
     public virtual InvoiceState? IdInvoiceStateNavigation { get; set; }

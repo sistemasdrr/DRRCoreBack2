@@ -742,6 +742,11 @@ namespace DRRCore.Application.Main.CoreApplication
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
 
+            if(user.HasHolder == true)
+            {
+                user.Id = (int)user.IdHolder;
+            }
+
             var claims = new[]
             {
                 new Claim("IdUser",user.Id.ToString()),

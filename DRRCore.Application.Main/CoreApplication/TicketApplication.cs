@@ -1871,7 +1871,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         newTimeLine.IdStatusTicket = item.IdStatusTicket;
                         newTimeLine.Status = item.IdStatusTicket == 1 && item.UserTo == null && item.AsignedTo == null ? "Creación del Pedido" : item.IdStatusTicketNavigation.Description;
                         newTimeLine.Color = item.IdStatusTicket == 1 && item.UserTo == null && item.AsignedTo == null ? "label-success" : item.IdStatusTicketNavigation.Color;
-
+                        newTimeLine.Flag = item.Flag;
                         response.Data.Add(newTimeLine);
                     }
                     var newTimeLineFirst = new GetTimeLineTicketHistoryResponseDto();
@@ -1884,6 +1884,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     newTimeLineFirst.IdStatusTicket = 0;
                     newTimeLineFirst.Status = "Complemento del Pedido";
                     newTimeLineFirst.Color = "label-success";
+
 
                     response.Data.Add(newTimeLineFirst);
                 }
@@ -1934,7 +1935,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         newTimeLine.IdStatusTicket = item.IdStatusTicket;
                         newTimeLine.Status = item.IdStatusTicket == 1 && item.UserTo == null && item.AsignedTo == null ? "Creación del Pedido" : item.IdStatusTicketNavigation.Description;
                         newTimeLine.Color = item.IdStatusTicket == 1 && item.UserTo == null && item.AsignedTo == null ? "label-success" : item.IdStatusTicketNavigation.Color;
-
+                        newTimeLine.Flag = item.Flag;
                         response.Data.Add(newTimeLine);
                     }
                 }

@@ -82,6 +82,10 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                 var user = await context.UserLogins.FirstOrDefaultAsync(x => x.IdEmployee == idEmployee);
                 if(user != null)
                 {
+                    if(user.HasHolder == true)
+                    {
+                        return user.IdHolder;
+                    }
                     return user.Id;
                 }else
                 {

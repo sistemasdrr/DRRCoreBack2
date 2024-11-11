@@ -229,11 +229,8 @@ public partial class SqlCoreContext : DbContext
         {
             optionsBuilder.UseSqlServer(
 
-             "Data Source=200.58.123.184,14330;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
-            //"Data Source=SD-4154134-W;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
-
-
-
+            // "Data Source=200.58.123.184,14330;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
+            "Data Source=SD-4154134-W;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
 
         }
     }
@@ -248,7 +245,7 @@ public partial class SqlCoreContext : DbContext
         modelBuilder.Entity<TicketsInCurrentMonthSP>().ToSqlQuery("EXEC SP_TicketsInCurrentMonth").HasNoKey();
         modelBuilder.Entity<CompanyShareholderSP>().ToSqlQuery("EXEC ShareholderCompany").HasNoKey();
         modelBuilder.Entity<StaticsByCountry>().ToSqlQuery("EXEC SP_STATICS_BY_COUNTRY").HasNoKey();
-        modelBuilder.Entity<GetAgentInvoice>().ToSqlQuery("EXEC GetAgentInvoice").HasNoKey(); 
+        modelBuilder.Entity<GetAgentInvoice>().ToSqlQuery("EXEC GetAgentInvoice").HasNoKey();
         modelBuilder.Entity<PriceResult>().ToSqlQuery("EXEC GetAgentPrice").HasNoKey();
         modelBuilder.Entity<Report7_10_1>().ToSqlQuery("EXEC SP_REPORTES_7_10_1").HasNoKey();
         modelBuilder.Entity<Report7_10_2_Main>().ToSqlQuery("EXEC SP_REPORTES_7_10_2").HasNoKey();
@@ -1956,6 +1953,10 @@ public partial class SqlCoreContext : DbContext
             entity.Property(e => e.PurchaseDate)
                 .HasColumnType("datetime")
                 .HasColumnName("purchaseDate");
+            entity.Property(e => e.State)
+                .HasMaxLength(2)
+                .IsUnicode(false)
+                .HasColumnName("state");
             entity.Property(e => e.TotalPrice)
                 .HasColumnType("decimal(10, 2)")
                 .HasColumnName("totalPrice");
@@ -4913,6 +4914,10 @@ public partial class SqlCoreContext : DbContext
             entity.Property(e => e.TotalAmount)
                 .HasColumnType("decimal(10, 2)")
                 .HasColumnName("totalAmount");
+            entity.Property(e => e.Type)
+                .HasMaxLength(2)
+                .IsUnicode(false)
+                .HasColumnName("type");
             entity.Property(e => e.UpdateDate)
                 .HasColumnType("datetime")
                 .HasColumnName("updateDate");
@@ -5838,7 +5843,9 @@ public partial class SqlCoreContext : DbContext
             entity.Property(e => e.Enable)
                 .HasDefaultValueSql("((1))")
                 .HasColumnName("enable");
+            entity.Property(e => e.HasHolder).HasColumnName("hasHolder");
             entity.Property(e => e.IdEmployee).HasColumnName("idEmployee");
+            entity.Property(e => e.IdHolder).HasColumnName("idHolder");
             entity.Property(e => e.Password)
                 .HasMaxLength(20)
                 .IsUnicode(false)

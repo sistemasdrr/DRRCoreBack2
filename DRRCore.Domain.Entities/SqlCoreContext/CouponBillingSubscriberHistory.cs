@@ -33,5 +33,7 @@ public partial class CouponBillingSubscriberHistory
 
     public int? IdTicket { get; set; }
 
+    public string? State { get; set; }
+
     public virtual CouponBillingSubscriber? IdCouponBillingNavigation { get; set; }
 }

@@ -23,6 +23,10 @@ public partial class UserLogin
 
     public string? EmailPassword { get; set; }
 
+    public bool? HasHolder { get; set; }
+
+    public int? IdHolder { get; set; }
+
     public virtual Employee? IdEmployeeNavigation { get; set; }
 
     public virtual ICollection<Supervisor> Supervisors { get; set; } = new List<Supervisor>();

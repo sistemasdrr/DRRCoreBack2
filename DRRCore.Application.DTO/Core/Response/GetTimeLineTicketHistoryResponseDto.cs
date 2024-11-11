@@ -10,5 +10,6 @@
         public int? IdStatusTicket { get; set; }
         public string? Status { get; set; }
         public string? Color { get; set; }
+        public bool? Flag{ get; set; }
     }
 }

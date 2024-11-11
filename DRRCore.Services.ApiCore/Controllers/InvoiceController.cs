@@ -22,10 +22,22 @@ namespace DRRCore.Services.ApiCore.Controllers
             return Ok(await _invoiceApplication.GetInvoiceSubscriberListByBill(startDate, endDate));
         }
         [HttpGet()]
-        [Route("GetInvoiceSubscriberListToCollect")] 
+        [Route("GetInvoiceSubscriberCCListByBill")]
+        public async Task<ActionResult> GetInvoiceSubscriberCCListByBill(int month, int year)
+        {
+            return Ok(await _invoiceApplication.GetInvoiceSubscriberCCListByBill(month, year));
+        }
+        [HttpGet()]
+        [Route("GetInvoiceSubscriberListToCollect")]
         public async Task<ActionResult> GetInvoiceSubscriberListToCollect(int month, int year)
         {
             return Ok(await _invoiceApplication.GetInvoiceSubscriberListToCollect(month, year));
+        }
+        [HttpGet()]
+        [Route("GetInvoiceSubscriberCCListToCollect")]
+        public async Task<ActionResult> GetInvoiceSubscriberCCListToCollect(int month, int year)
+        {
+            return Ok(await _invoiceApplication.GetInvoiceSubscriberCCListToCollect(month, year));
         }
         [HttpGet()]
         [Route("GetInvoiceSubscriberListPaids")]
@@ -33,11 +45,23 @@ namespace DRRCore.Services.ApiCore.Controllers
         {
             return Ok(await _invoiceApplication.GetInvoiceSubscriberListPaids(month, year));
         }
+        [HttpGet()]
+        [Route("GetInvoiceSubscriberCCListPaids")]
+        public async Task<ActionResult> GetInvoiceSubscriberCCListPaids(int month, int year)
+        {
+            return Ok(await _invoiceApplication.GetInvoiceSubscriberCCListPaids(month, year));
+        }
         [HttpPost()]
         [Route("UpdateSubscriberTicket")]
         public async Task<ActionResult> UpdateSubscriberTicket(int idTicket, string requestedName, string procedureType, string dispatchDate, decimal price)
         {
             return Ok(await _invoiceApplication.UpdateSubscriberTicket(idTicket, requestedName, procedureType, dispatchDate,price));
+        }
+        [HttpPost()]
+        [Route("SaveSubscriberInvoiceCC")]
+        public async Task<ActionResult> SaveSubscriberInvoiceCC(AddOrUpdateSubscriberInvoiceCCRequestDto obj)
+        {
+            return Ok(await _invoiceApplication.SaveSubscriberInvoiceCC(obj));
         }
         [HttpPost()]
         [Route("SaveSubscriberInvoice")]
@@ -57,7 +81,12 @@ namespace DRRCore.Services.ApiCore.Controllers
         {
             return Ok(await _invoiceApplication.CancelSubscriberInvoiceToCollect(idSubscriberInvoice, cancelDate));
         }
-
+        [HttpPost()]
+        [Route("CancelSubscriberInvoiceCCToCollect")]
+        public async Task<ActionResult> CancelSubscriberInvoiceCCToCollect(int idSubscriberInvoice, string cancelDate)
+        {
+            return Ok(await _invoiceApplication.CancelSubscriberInvoiceCCToCollect(idSubscriberInvoice, cancelDate));
+        }
 
 
 

@@ -2793,16 +2793,65 @@ namespace DRRCore.Application.Main.MigrationApplication
                     var agentePrecios = await mysqlcontext.TPrecioAgentes.Where(x => x.AgeCodigo == agente.AgeCodigo).ToListAsync();
                     foreach (var item in agentePrecios)
                     {
+                        int? idCountry = ObtenerCodigoPais(item.PaiCodigo);
+                        int? idContinent = 0;
+                        if (idCountry != null)
+                        {
+                            var country = await context.Countries.Where(x => x.Id == idCountry).FirstOrDefaultAsync();
+                            idContinent = country != null ? country.IdContinent : null;
+                        }
+                        var t1 = item.PaPrenor.Trim().Replace(" ", "").Replace("-", "").Split("/");
+                        var t2 = item.PaPreurg.Trim().Replace(" ", "").Replace("-", "").Split("/");
+                        var t3 = item.PaPresup.Trim().Replace(" ", "").Replace("-", "").Split("/");
+
+
                         newAgentPrice.Add(new AgentPrice
                         {
+                            IdCountry = idCountry,
+                            IdContinent = idContinent,
+                            IdCurrency = item.MonCodigo == "002" ? 1 : item.MonCodigo == "003" ? 2 : null,
+                            Date = item.PaFecha,
+                            PriceT1 = int.Parse(t1[0]),
+                            DayT1 = int.Parse(t1[1]),
+                            PriceT2 = int.Parse(t2[0]),
+                            DayT2 = int.Parse(t2[1]),
+                            PriceT3 = int.Parse(t3[0]),
+                            DayT3 = int.Parse(t3[1]),
                             
                         });
                     }
+                    bool internalVar = false;
+                    if (agente.AgeCodigo == "A17" || agente.AgeCodigo == "A60" || agente.AgeCodigo == "A30" || agente.AgeCodigo == "A101")
+                    {
+                        internalVar = true;
+                    }
+                    newAgent.Id = 0;
+                    newAgent.StartDate = agente.AgeFecing;
+                    newAgent.Language = agente.IdiCodigo == "001" ? "I" : agente.IdiCodigo == "002" ? "E" : "";
+                    newAgent.State = agente.AgeActivo == 1 ? true : false;
+                    newAgent.SpecialCase = agente.AgeExcepc == "1" ? true : false;
+                    newAgent.Code = agente.AgeCodigo;
+                    newAgent.Name = agente.AgeNombre;
+                    newAgent.Address = agente.AgeDirecc;
+                    newAgent.Telephone = agente.AgeTelefo;
+                    newAgent.Email = agente.AgeEmail;
+                    newAgent.Fax = agente.AgeFax;
+                    newAgent.Supervisor = agente.AgeEncarga;
+                    newAgent.Observations = agente.AgeObserv;
+                    newAgent.IdCountry = ObtenerCodigoPais(agente.PaiCodigo);
+                    newAgent.AgentSubscriber = agente.AgeAbo == "Si" ? true : false;
+                    newAgent.Internal = internalVar;
+                    newAgent.AgentPrices = newAgentPrice;
+
+                    await context.Agents.AddAsync(newAgent);
+                    await context.SaveChangesAsync();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 throw new Exception("Error: " + ex.Message);
+
             }
             return true;
         }
@@ -3081,64 +3130,6 @@ namespace DRRCore.Application.Main.MigrationApplication
                     _logger.LogError(ex.Message);
                     continue;
                 }
-                //try
-                //{
-                //    var list = await mysqlcontext.REmpVsPes.Where(x => x.Migra == migra).Take(100).ToListAsync();
-                //    foreach (var item in list)
-                //    {
-                //        var company = await context.Companies.Where(x => x.OldCode == item.EmCodigo).Take(1).FirstOrDefaultAsync();
-                //        if(company != null)
-                //        {
-                //            var person = await context.People.Where(x => x.OldCode == item.PeCodigo).Take(1).FirstOrDefaultAsync();
-                //            if(person != null)
-                //            {
-                //                await context.CompanyPartners.AddAsync(new CompanyPartner
-                //                {
-                //                    Id = 0,
-                //                    IdCompany = company.Id,
-                //                    IdPerson = person.Id,
-                //                    Profession = item.EpCargo,
-                //                    ProfessionEng = item.EpCargoIng,
-                //                    StartDate = StaticFunctions.VerifyDate(item.EpDesde),
-                //                    MainExecutive = item.EpPrinci == 0 ? false : true
-                //                });
-                //                await context.SaveChangesAsync();
-                //                item.Migra = 1;
-                //                mysqlcontext.REmpVsPes.Update(item); 
-                //                await mysqlcontext.SaveChangesAsync();
-                //            }
-                //            else
-                //            {
-                //                var listPerson= await mysqlcontext.REmpVsPes.Where(x => x.PeCodigo == item.PeCodigo && x.Migra == 0).ToListAsync();
-                //                foreach (var item1 in listPerson)
-                //                {
-                //                    item1.Migra = 2;
-                //                    mysqlcontext.REmpVsPes.Update(item1);
-                //                }
-                //                item.Migra = 1;
-                //                mysqlcontext.REmpVsPes.Update(item);
-                //                await mysqlcontext.SaveChangesAsync();
-                //            }
-                //        }
-                //        else
-                //        {
-                //            var listCompany = await mysqlcontext.REmpVsPes.Where(x => x.EmCodigo == item.EmCodigo && x.Migra == 0).ToListAsync();
-                //            foreach (var item1 in listCompany)
-                //            {
-                //                item1.Migra = 2;
-                //                mysqlcontext.REmpVsPes.Update(item1);
-                //            }
-                //            item.Migra = 1;
-                //            mysqlcontext.REmpVsPes.Update(item);
-                //            await mysqlcontext.SaveChangesAsync();
-                //        }
-                //    }
-                //}
-                //catch (Exception ex)
-                //{
-                //    _logger.LogError(ex.Message);
-                //    continue;
-                //}
             }
             return true;
         }
