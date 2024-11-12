@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DRRCore.Application.DTO.Core.Response;
 using Microsoft.EntityFrameworkCore;
 
 namespace DRRCore.Domain.Entities.SqlCoreContext;
@@ -246,6 +247,7 @@ public partial class SqlCoreContext : DbContext
         modelBuilder.Entity<CompanyShareholderSP>().ToSqlQuery("EXEC ShareholderCompany").HasNoKey();
         modelBuilder.Entity<StaticsByCountry>().ToSqlQuery("EXEC SP_STATICS_BY_COUNTRY").HasNoKey();
         modelBuilder.Entity<GetAgentInvoice>().ToSqlQuery("EXEC GetAgentInvoice").HasNoKey();
+        modelBuilder.Entity<GetListCompanyQuery>().ToSqlQuery("EXEC SP_COMPANY_QUERY").HasNoKey();
         modelBuilder.Entity<PriceResult>().ToSqlQuery("EXEC GetAgentPrice").HasNoKey();
         modelBuilder.Entity<Report7_10_1>().ToSqlQuery("EXEC SP_REPORTES_7_10_1").HasNoKey();
         modelBuilder.Entity<Report7_10_2_Main>().ToSqlQuery("EXEC SP_REPORTES_7_10_2").HasNoKey();

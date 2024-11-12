@@ -90,12 +90,12 @@ namespace DRRCore.Services.Migration.Controllers
         //{
         //    return Ok(await _migraUser.MigrateOldTicket());
         //}
-        //[HttpPost()]
-        //[Route("country")]
-        //public async Task<ActionResult> MigrateCountry()
-        //{
-        //    return Ok(await _migraUser.MigrateCountry());
-        //}
+        [HttpPost()]
+        [Route("country")]
+        public async Task<ActionResult> MigrateCountry()
+        {
+            return Ok(await _migraUser.MigrateCountry());
+        }
         [HttpPost()]
         [Route("empresasOther")]
         public async Task<ActionResult> MigrarEmpresasOther(int migra)

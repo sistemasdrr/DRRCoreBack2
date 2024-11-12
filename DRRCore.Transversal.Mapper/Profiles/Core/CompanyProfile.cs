@@ -88,13 +88,35 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                 .ForMember(dest => dest.IsoCountry, opt => opt?.MapFrom(src => src.IdCountryNavigation != null ? src.IdCountryNavigation.Iso : string.Empty))
                 .ForMember(dest => dest.FlagCountry, opt => opt?.MapFrom(src => src.IdCountryNavigation != null ? src.IdCountryNavigation.FlagIso : string.Empty))
                 .ForMember(dest => dest.Quality, opt => opt?.MapFrom(src => src.Quality))
-                //Falta implementar
                 .ForMember(dest => dest.TraductionPercentage, opt => opt?.MapFrom(src => GetTraductionCompanyPercentage(src.TraductionCompanies.FirstOrDefault())))
                 .ForMember(dest => dest.Manager, opt => opt?.MapFrom(src => src.CompanyPartners.FirstOrDefault().IdPersonNavigation.Fullname))
                 .ForMember(dest => dest.HaveReport, opt => opt?.MapFrom(src => src.HaveReport))
                 .ForMember(dest => dest.IdLegalRegisterSituation, opt => opt?.MapFrom(src => src.IdLegalRegisterSituation))
                 .ForMember(dest => dest.TypeRegister, opt => opt?.MapFrom(src => src.TypeRegister))
                 .ReverseMap();
+
+            CreateMap<GetListCompanyQuery, GetListCompanyResponseDto>()
+               .ForMember(dest => dest.Id, opt => opt?.MapFrom(src => src.Id))
+               .ForMember(dest => dest.Language, opt => opt?.MapFrom(src => src.Language))
+               .ForMember(dest => dest.Name, opt => opt?.MapFrom(src => src.Name))
+               .ForMember(dest => dest.SocialName, opt => opt?.MapFrom(src => src.SocialName))
+                .ForMember(dest => dest.Code, opt => opt?.MapFrom(src =>  src.Id.ToString("D10")))           
+              
+               .ForMember(dest => dest.Telephone, opt => opt?.MapFrom(src => src.Telephone + (string.IsNullOrEmpty(src.Telephone)?"":"/")+src.CellPhone))
+                .ForMember(dest => dest.Cellphone, opt => opt?.MapFrom(src => src.CellPhone))
+               .ForMember(dest => dest.TaxNumber, opt => opt?.MapFrom(src => src.TaxTypeCode))
+               .ForMember(dest => dest.LastReportDate, opt => opt?.MapFrom(src => StaticFunctions.DateTimeToString(src.LastSearched)))              
+               .ForMember(dest => dest.IsoCountry, opt => opt?.MapFrom(src => src.Iso))
+               .ForMember(dest => dest.FlagCountry, opt => opt?.MapFrom(src => src.FlagIso))
+               .ForMember(dest => dest.Quality, opt => opt?.MapFrom(src => src.Quality))               
+               .ForMember(dest => dest.Manager, opt => opt?.MapFrom(src => src.MainExecutive))
+               .ForMember(dest => dest.HaveReport, opt => opt?.MapFrom(src => src.HaveReport))               
+               .ForMember(dest => dest.TypeRegister, opt => opt?.MapFrom(src => src.TypeRegister))
+               .ForMember(dest => dest.Address, opt => opt?.MapFrom(src => src.Address))
+               .ForMember(dest => dest.Place, opt => opt?.MapFrom(src => src.Place))
+               .ForMember(dest => dest.Status, opt => opt?.MapFrom(src => src.Status))
+               .ForMember(dest => dest.TaxStatus, opt => opt?.MapFrom(src => src.TaxStatus))
+               .ReverseMap();
 
             CreateMap<Ticket, GetListCompanyResponseDto>()
                .ForMember(dest => dest.Id, opt => opt?.MapFrom(src => src.IdCompany))
