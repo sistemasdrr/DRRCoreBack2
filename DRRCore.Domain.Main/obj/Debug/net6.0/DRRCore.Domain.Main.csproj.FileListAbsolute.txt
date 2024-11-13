@@ -109,3 +109,31 @@ C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Main\obj\Debug\net6.0\DRRCore
 C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Main\obj\Debug\net6.0\refint\DRRCore.Domain.Main.dll
 C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Main\obj\Debug\net6.0\DRRCore.Domain.Main.pdb
 C:\Users\Jean\Desktop\DRR CORE\BACK\DRRCore.Domain.Main\obj\Debug\net6.0\ref\DRRCore.Domain.Main.dll
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Main\bin\Debug\net6.0\DRRCore.Domain.Main.deps.json
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Main\bin\Debug\net6.0\DRRCore.Domain.Main.dll
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Main\bin\Debug\net6.0\DRRCore.Domain.Main.pdb
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Main\bin\Debug\net6.0\DRRCore.Application.DTO.dll
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Main\bin\Debug\net6.0\DRRCore.Domain.Entities.dll
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Main\bin\Debug\net6.0\DRRCore.Domain.Interfaces.dll
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Main\bin\Debug\net6.0\DRRCore.Infraestructure.Configuration.dll
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Main\bin\Debug\net6.0\DRRCore.Infraestructure.Interfaces.dll
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Main\bin\Debug\net6.0\DRRCore.Infraestructure.Repository.dll
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Main\bin\Debug\net6.0\DRRCore.Transversal.Common.dll
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Main\bin\Debug\net6.0\DRRCore.Domain.Interfaces.pdb
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Main\bin\Debug\net6.0\DRRCore.Infraestructure.Interfaces.pdb
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Main\bin\Debug\net6.0\DRRCore.Infraestructure.Repository.pdb
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Main\bin\Debug\net6.0\DRRCore.Application.DTO.pdb
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Main\bin\Debug\net6.0\DRRCore.Domain.Entities.pdb
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Main\bin\Debug\net6.0\DRRCore.Infraestructure.Configuration.pdb
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Main\bin\Debug\net6.0\DRRCore.Transversal.Common.pdb
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Main\obj\Debug\net6.0\DRRCore.Domain.Main.csproj.AssemblyReference.cache
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Main\obj\Debug\net6.0\DRRCore.Domain.Main.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Main\obj\Debug\net6.0\DRRCore.Domain.Main.AssemblyInfoInputs.cache
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Main\obj\Debug\net6.0\DRRCore.Domain.Main.AssemblyInfo.cs
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Main\obj\Debug\net6.0\DRRCore.Domain.Main.csproj.CoreCompileInputs.cache
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Main\obj\Debug\net6.0\DRRCore.Domain.Main.sourcelink.json
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Main\obj\Debug\net6.0\DRRCore..C01FAACA.Up2Date
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Main\obj\Debug\net6.0\DRRCore.Domain.Main.dll
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Main\obj\Debug\net6.0\refint\DRRCore.Domain.Main.dll
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Main\obj\Debug\net6.0\DRRCore.Domain.Main.pdb
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Main\obj\Debug\net6.0\ref\DRRCore.Domain.Main.dll
