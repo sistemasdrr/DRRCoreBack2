@@ -9,6 +9,9 @@ using DRRCore.Transversal.Common;
 using DRRCore.Transversal.Common.Interface;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
+
 namespace DRRCore.Application.Main.MigrationApplication
 {
     public class MigraUser : IMigraUser
@@ -713,7 +716,8 @@ namespace DRRCore.Application.Main.MigrationApplication
 
                     var objeto = new Provider
                     {
-                        IdCountry = ObtenerCodigoPais(item.PaiCodigo),
+                        //IdCountry = ObtenerCodigoPais(item.PaiCodigo),
+                        IdCountry = await GetIdCountry(item.PaiCodigo),
                         Name = item.ProvNombre,
                         Qualification = item.CumCodigo == "02" ? "Puntual" : item.CumCodigo == "03" ? "Lento Eventual" :
                      item.CumCodigo == "04" ? "Lento Siempre" : item.CumCodigo == "05" ? "Moroso" :
@@ -1502,8 +1506,9 @@ namespace DRRCore.Application.Main.MigrationApplication
             }
         }
 
-        private int? ObtenerCodigoPais(string? PaiCodigo)
+        private  int? ObtenerCodigoPais(string? PaiCodigo)
         {
+
             return PaiCodigo == "001" ? 11 : PaiCodigo == "002" ? 29 : PaiCodigo == "003" ? 34 :
             PaiCodigo == "004" ? 54 : PaiCodigo == "005" ? 57 : PaiCodigo == "006" ? 49 :
             PaiCodigo == "007" ? 70 : PaiCodigo == "008" ? 72 : PaiCodigo == "009" ? 100 :
@@ -1579,6 +1584,26 @@ namespace DRRCore.Application.Main.MigrationApplication
             PaiCodigo == "233" ? 60 : PaiCodigo == "234" ? 30 : PaiCodigo == "235" ? 217 :
             PaiCodigo == "236" ? 231 : PaiCodigo == "237" ? 30 : PaiCodigo == "238" ? 30 :
             PaiCodigo == "239" ? 18 : PaiCodigo == "240" ? 207 : PaiCodigo == "241" ? 155 : null;
+        }
+
+        private async Task<int?> GetIdCountry(string paiCodigo)
+        {
+            using var context = new SqlCoreContext();
+            using var mysqlcontext = new MySqlContext();
+            var tpais = await mysqlcontext.TPais.Where(x => x.PaiCodigo == paiCodigo).FirstOrDefaultAsync();
+            if (tpais != null)
+            {
+                var country = await context.Countries.Where(x => x.Iso == tpais.PaiAbreviatura).FirstOrDefaultAsync();
+                if (country != null)
+                {
+                    return country.Id;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            return null;
         }
 
         private int? ObtenerPersoneriaLegal(string? JuCodigo)
@@ -2089,7 +2114,8 @@ namespace DRRCore.Application.Main.MigrationApplication
                         var provider = new Provider
                         {
                             IdCompany = null,
-                            IdCountry = ObtenerCodigoPais(proveedor.PaiCodigo),
+                            //IdCountry = ObtenerCodigoPais(proveedor.PaiCodigo),
+                            IdCountry = await GetIdCountry(proveedor.PaiCodigo),
                             Name = proveedor.ProvNombre == null ? "" : proveedor.ProvNombre,
                             Qualification = proveedor.CumCodigo == "02" ? "Puntual" : proveedor.CumCodigo == "03" ? "Lento Eventual" :
                                      proveedor.CumCodigo == "04" ? "Lento Siempre" : proveedor.CumCodigo == "05" ? "Moroso" :
@@ -2278,14 +2304,15 @@ namespace DRRCore.Application.Main.MigrationApplication
         }
         public async Task<bool> MigrateSubscriber()
         {
-            try
-            {
+            
                 var mysqlContext = new MySqlContext();
                 var sqlContext = new SqlCoreContext();
                 var subscriberCategory = await sqlContext.SubscriberCategories.ToListAsync();
-                var abonados = await mysqlContext.MAbonados.Where(x => x.Migra == 0).ToListAsync();
+                var abonados = await mysqlContext.MAbonados.ToListAsync();
                 foreach (var item in abonados)
                 {
+                    try
+                    {
                     var success = false;
                     var newSubscriber = new Subscriber
                     {
@@ -2342,19 +2369,21 @@ namespace DRRCore.Application.Main.MigrationApplication
                     success = true;
                     if (success == true)
                     {
-                        var precios = await mysqlContext.TPrecioAbonados.Where(x => x.AboCodigo == item.AboCodigo && x.Migra == 0).ToListAsync();
+                        var precios = await mysqlContext.TPrecioAbonados.Where(x => x.AboCodigo == item.AboCodigo).ToListAsync();
                         if (precios.Count > 0)
                         {
                             foreach (var precio in precios)
                             {
+                                var idCountry = await GetIdCountry(precio.PaiCodigo);
+
                                 var t1 = precio.PaPrenor.Split("/");
                                 var t2 = precio.PaPreurg.Split("/");
                                 var t3 = precio.PaPresup.Split("/");
                                 var newSubscriberPrice = new SubscriberPrice();
                                 newSubscriberPrice.IdSubscriber = newSubscriber.Id;
                                 newSubscriberPrice.Date = precio.PaFecha;
-                                newSubscriberPrice.IdContinent = sqlContext.Countries.Where(x => x.Id == ObtenerCodigoPais(precio.PaiCodigo)).FirstOrDefault() != null ? sqlContext.Countries.Where(x => x.Id == ObtenerCodigoPais(precio.PaiCodigo)).FirstOrDefault().IdContinent : null;
-                                newSubscriberPrice.IdCountry = ObtenerCodigoPais(precio.PaiCodigo);
+                                newSubscriberPrice.IdContinent = sqlContext.Countries.Where(x => x.Id == idCountry).FirstOrDefault() != null ? sqlContext.Countries.Where(x => x.Id == idCountry).FirstOrDefault().IdContinent : null;
+                                newSubscriberPrice.IdCountry = idCountry;
                                 newSubscriberPrice.IdCurrency = precio.MonCodigo == "002" ? 1 : precio.MonCodigo == "001" ? 31 : precio.MonCodigo == "003" ? 2 : null;
                                 newSubscriberPrice.PriceT1 = decimal.Parse(t1[0].Trim().IsNullOrEmpty() ? "0" : t1[0].Trim());
                                 newSubscriberPrice.DayT1 = int.Parse(t1[1].Trim().IsNullOrEmpty() ? "0" : t1[1].Trim());
@@ -2376,13 +2405,15 @@ namespace DRRCore.Application.Main.MigrationApplication
                     mysqlContext.MAbonados.Update(item);
                     await mysqlContext.SaveChangesAsync();
                 }
-                return true;
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex.Message);
+                        continue;
+                    }
+
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return false;
-            }
+            return true;
+
         }
         static DateTime ConvertStringToDateTime(string dateString)
         {
@@ -2715,7 +2746,7 @@ namespace DRRCore.Application.Main.MigrationApplication
         {
             using var contextSql = new SqlCoreContext();
             using var contextMysql = new MySqlContext();
-            var personal = await contextMysql.MPersonals.Where(x => x.Migra == 0).ToListAsync();
+            var personal = await contextMysql.MPersonals.ToListAsync();
             foreach (var item in personal)
             {
                 var employee = await contextSql.Employees.Where(x => x.Email == item.PerEmail).FirstOrDefaultAsync();
@@ -2790,61 +2821,71 @@ namespace DRRCore.Application.Main.MigrationApplication
                 var newAgentPrice = new List<AgentPrice>();
                 foreach (var agente in agentes)
                 {
-                    var agentePrecios = await mysqlcontext.TPrecioAgentes.Where(x => x.AgeCodigo == agente.AgeCodigo).ToListAsync();
-                    foreach (var item in agentePrecios)
+                    try
                     {
-                        int? idCountry = ObtenerCodigoPais(item.PaiCodigo);
-                        int? idContinent = 0;
-                        if (idCountry != null)
+                        var agentePrecios = await mysqlcontext.TPrecioAgentes.Where(x => x.AgeCodigo == agente.AgeCodigo).ToListAsync();
+                        foreach (var item in agentePrecios)
                         {
-                            var country = await context.Countries.Where(x => x.Id == idCountry).FirstOrDefaultAsync();
-                            idContinent = country != null ? country.IdContinent : null;
+                            int? idCountry = await GetIdCountry(item.PaiCodigo);
+                            int? idContinent = null;
+                            if (idCountry != null)
+                            {
+                                var country = await context.Countries.Where(x => x.Id == idCountry).FirstOrDefaultAsync();
+                                idContinent = country != null ? country.IdContinent : null;
+                            }
+                            var t1 = item.PaPrenor.Trim().Replace(" ", "").Replace("-", "").Split("/");
+                            var t2 = item.PaPreurg.Trim().Replace(" ", "").Replace("-", "").Split("/");
+                            var t3 = item.PaPresup.Trim().Replace(" ", "").Replace("-", "").Split("/");
+
+                            int ExtractFirstNumber(string input)
+                            {
+                                var match = Regex.Match(input, @"\d+");
+                                return match.Success ? int.Parse(match.Value) : 0;
+                            }
+                            var agentPrice = new AgentPrice();
+                            agentPrice.IdCountry = idCountry;
+                            agentPrice.IdContinent = idContinent;
+                            agentPrice.IdCurrency = item.MonCodigo == "002" ? 1 : item.MonCodigo == "003" ? 2 : null;
+                            agentPrice.Date = item.PaFecha;
+                            agentPrice.PriceT1 = ExtractFirstNumber(t1[0]);
+                            agentPrice.DayT1 = ExtractFirstNumber(t1[1]);
+                                agentPrice.PriceT2 = ExtractFirstNumber(t2[0]);
+                                agentPrice.DayT2 = ExtractFirstNumber(t2[1]);
+                            agentPrice.PriceT3 = ExtractFirstNumber(t3[0]);
+                            agentPrice.DayT3 = ExtractFirstNumber(t3[1]);
+                            newAgentPrice.Add(agentPrice);
                         }
-                        var t1 = item.PaPrenor.Trim().Replace(" ", "").Replace("-", "").Split("/");
-                        var t2 = item.PaPreurg.Trim().Replace(" ", "").Replace("-", "").Split("/");
-                        var t3 = item.PaPresup.Trim().Replace(" ", "").Replace("-", "").Split("/");
-
-
-                        newAgentPrice.Add(new AgentPrice
+                        bool internalVar = false;
+                        if (agente.AgeCodigo == "A17" || agente.AgeCodigo == "A60" || agente.AgeCodigo == "A30" || agente.AgeCodigo == "A101")
                         {
-                            IdCountry = idCountry,
-                            IdContinent = idContinent,
-                            IdCurrency = item.MonCodigo == "002" ? 1 : item.MonCodigo == "003" ? 2 : null,
-                            Date = item.PaFecha,
-                            PriceT1 = int.Parse(t1[0]),
-                            DayT1 = int.Parse(t1[1]),
-                            PriceT2 = int.Parse(t2[0]),
-                            DayT2 = int.Parse(t2[1]),
-                            PriceT3 = int.Parse(t3[0]),
-                            DayT3 = int.Parse(t3[1]),
-                            
-                        });
-                    }
-                    bool internalVar = false;
-                    if (agente.AgeCodigo == "A17" || agente.AgeCodigo == "A60" || agente.AgeCodigo == "A30" || agente.AgeCodigo == "A101")
-                    {
-                        internalVar = true;
-                    }
-                    newAgent.Id = 0;
-                    newAgent.StartDate = agente.AgeFecing;
-                    newAgent.Language = agente.IdiCodigo == "001" ? "I" : agente.IdiCodigo == "002" ? "E" : "";
-                    newAgent.State = agente.AgeActivo == 1 ? true : false;
-                    newAgent.SpecialCase = agente.AgeExcepc == "1" ? true : false;
-                    newAgent.Code = agente.AgeCodigo;
-                    newAgent.Name = agente.AgeNombre;
-                    newAgent.Address = agente.AgeDirecc;
-                    newAgent.Telephone = agente.AgeTelefo;
-                    newAgent.Email = agente.AgeEmail;
-                    newAgent.Fax = agente.AgeFax;
-                    newAgent.Supervisor = agente.AgeEncarga;
-                    newAgent.Observations = agente.AgeObserv;
-                    newAgent.IdCountry = ObtenerCodigoPais(agente.PaiCodigo);
-                    newAgent.AgentSubscriber = agente.AgeAbo == "Si" ? true : false;
-                    newAgent.Internal = internalVar;
-                    newAgent.AgentPrices = newAgentPrice;
+                            internalVar = true;
+                        }
+                        newAgent.Id = 0;
+                        newAgent.StartDate = agente.AgeFecing;
+                        newAgent.Language = agente.IdiCodigo == "001" ? "I" : agente.IdiCodigo == "002" ? "E" : "";
+                        newAgent.State = agente.AgeActivo == 1 ? true : false;
+                        newAgent.SpecialCase = agente.AgeExcepc == "1" ? true : false;
+                        newAgent.Code = agente.AgeCodigo;
+                        newAgent.Name = agente.AgeNombre;
+                        newAgent.Address = agente.AgeDirecc;
+                        newAgent.Telephone = agente.AgeTelefo;
+                        newAgent.Email = agente.AgeEmail;
+                        newAgent.Fax = agente.AgeFax;
+                        newAgent.Supervisor = agente.AgeEncarga;
+                        newAgent.Observations = agente.AgeObserv;
+                        newAgent.IdCountry = await GetIdCountry(agente.PaiCodigo);
+                        newAgent.AgentSubscriber = agente.AgeAbo == "Si" ? true : false;
+                        newAgent.Internal = internalVar;
+                        newAgent.AgentPrices = newAgentPrice;
 
-                    await context.Agents.AddAsync(newAgent);
-                    await context.SaveChangesAsync();
+                        await context.Agents.AddAsync(newAgent);
+                        await context.SaveChangesAsync();
+                    }
+                    catch(Exception exx)
+                    {
+
+                        continue;
+                    }
                 }
             }
             catch (Exception ex)
@@ -3507,7 +3548,8 @@ namespace DRRCore.Application.Main.MigrationApplication
                             company.Quality = ObtenerCalidad(empresa.CalCodigo);
                             company.IdLegalPersonType = ObtenerPersoneriaLegal(empresa.JuCodigo);
                             company.TaxTypeCode = empresa.EmRegtri;
-                            company.IdCountry = ObtenerCodigoPais(empresa.PaiCodigo);
+                            //company.IdCountry = ObtenerCodigoPais(empresa.PaiCodigo);
+                            company.IdCountry = await GetIdCountry(empresa.PaiCodigo);
                             company.HaveReport = ObtenerReportes(empresa.EmCodigo);
                             company.IdLegalRegisterSituation = GetLegalRegisterSituation(empresa.SitCodigo);
                             company.Address = empresa.EmDirecc;
@@ -3754,7 +3796,8 @@ namespace DRRCore.Application.Main.MigrationApplication
                                 Quality = ObtenerCalidad(empresa.CalCodigo),
                                 IdLegalPersonType = ObtenerPersoneriaLegal(empresa.JuCodigo),
                                 TaxTypeCode = empresa.EmRegtri,
-                                IdCountry = ObtenerCodigoPais(empresa.PaiCodigo),
+                                //IdCountry = ObtenerCodigoPais(empresa.PaiCodigo),
+                                IdCountry = await GetIdCountry(empresa.PaiCodigo),
                                 HaveReport = ObtenerReportes(empresa.EmCodigo),
                                 IdLegalRegisterSituation = GetLegalRegisterSituation(empresa.SitCodigo),
                                 Address = empresa.EmDirecc,
@@ -3865,7 +3908,8 @@ namespace DRRCore.Application.Main.MigrationApplication
                             person.City = persona.PeCiudad == null ? "" : persona.PeCiudad;
                             person.OtherDirecctions = persona.PeDireccCome == null ? "" : persona.PeDireccCome;
                             person.TradeName = persona.PeNombreCome == null ? "" : persona.PeNombreCome;
-                            person.IdCountry = ObtenerCodigoPais(persona.PaiCodigo);
+                            //person.IdCountry = ObtenerCodigoPais(persona.PaiCodigo);
+                            person.IdCountry = await GetIdCountry(persona.PaiCodigo);
                             person.CodePhone = persona.PePrftlf == null ? "" : persona.PePrftlf;
                             person.NumberPhone = persona.PeTelefo == null ? "" : persona.PeTelefo;
                             person.IdCivilStatus = persona.EcCodigo == "01" ? 5 : persona.EcCodigo == "02" ? 2 :
@@ -4051,7 +4095,8 @@ namespace DRRCore.Application.Main.MigrationApplication
                                 City = persona.PeCiudad == null ? "" : persona.PeCiudad,
                                 OtherDirecctions = persona.PeDireccCome == null ? "" : persona.PeDireccCome,
                                 TradeName = persona.PeNombreCome == null ? "" : persona.PeNombreCome,
-                                IdCountry = ObtenerCodigoPais(persona.PaiCodigo),
+                                //IdCountry = ObtenerCodigoPais(persona.PaiCodigo),
+                                IdCountry = await GetIdCountry(persona.PaiCodigo),
                                 CodePhone = persona.PePrftlf == null ? "" : persona.PePrftlf,
                                 NumberPhone = persona.PeTelefo == null ? "" : persona.PeTelefo,
                                 IdCivilStatus = persona.EcCodigo == "01" ? 5 : persona.EcCodigo == "02" ? 2 :
