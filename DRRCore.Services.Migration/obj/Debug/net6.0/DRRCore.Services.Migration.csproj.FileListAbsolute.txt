@@ -568,7 +568,6 @@ C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Services.Migration\obj\Deb
 C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Services.Migration\obj\Debug\net6.0\DRRCore.Services.Migration.AssemblyInfoInputs.cache
 C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Services.Migration\obj\Debug\net6.0\DRRCore.Services.Migration.AssemblyInfo.cs
 C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Services.Migration\obj\Debug\net6.0\DRRCore.Services.Migration.csproj.CoreCompileInputs.cache
-C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Services.Migration\obj\Debug\net6.0\DRRCore.Services.Migration.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Services.Migration\obj\Debug\net6.0\DRRCore.Services.Migration.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Services.Migration\obj\Debug\net6.0\DRRCore.Services.Migration.sourcelink.json
 C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Services.Migration\obj\Debug\net6.0\staticwebassets.build.json

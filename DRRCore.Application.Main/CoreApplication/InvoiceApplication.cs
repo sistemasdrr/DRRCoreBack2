@@ -740,7 +740,9 @@ namespace DRRCore.Application.Main.CoreApplication
                     IdSubscriber= obj.IdSubscriber,
                     IdCurrency = obj.IdCurrency,
                     Quantity = obj.InvoiceSubscriberList.Count(),
+                    IgvAmount = obj.Igv,
                     TotalAmount = totalAmount,
+                    IgvFlag = obj.Igv > 0 ? true : false,
                     Type = "FM",
                     SubscriberInvoiceDetails = invoiceSubscriberDetails
                 });
@@ -1324,6 +1326,787 @@ namespace DRRCore.Application.Main.CoreApplication
                 response.Message = ex.Message;
             }
             return response;
+        }
+        public string LetrasCastellano(string numero)
+        {
+            string palabras = "", entero = "", dec = "", flag = "N";
+            int num = 0;
+
+            // Si el número comienza con un signo negativo, lo manejamos
+            if (numero.StartsWith("-"))
+            {
+                numero = numero.Substring(1);
+                palabras = "MENOS ";
+            }
+
+            // Separar el número en parte entera y decimal
+            numero = numero.TrimStart('0');
+            string[] partes = numero.Split('.');
+
+            entero = partes[0];  // Parte entera
+            dec = partes.Length > 1 ? partes[1] : "";  // Parte decimal, si existe
+
+            // Si la parte decimal tiene solo un dígito, agregar un "0" al final
+            if (dec.Length == 1)
+            {
+                dec += "0";
+            }
+
+            // Convertir a entero y verificar que no exceda el límite
+            if (int.TryParse(entero, out num) && num <= 999999999)
+            {
+                // Convertir la parte entera en palabras
+                for (int y = entero.Length; y > 0; y--)
+                {
+                    int pos = entero.Length - y;
+                    switch (y)
+                    {
+                        case 3:
+                        case 6:
+                        case 9:
+                            switch (entero[pos].ToString())
+                            {
+                                case "1":
+                                    if (entero.Length > pos + 1 && entero[pos + 1] == '0' && entero[pos + 2] == '0')
+                                        palabras += "CIEN ";
+                                    else
+                                        palabras += "CIENTO ";
+                                    break;
+                                case "2":
+                                    palabras += "DOSCIENTOS ";
+                                    break;
+                                case "3":
+                                    palabras += "TRESCIENTOS ";
+                                    break;
+                                case "4":
+                                    palabras += "CUATROCIENTOS ";
+                                    break;
+                                case "5":
+                                    palabras += "QUINIENTOS ";
+                                    break;
+                                case "6":
+                                    palabras += "SEISCIENTOS ";
+                                    break;
+                                case "7":
+                                    palabras += "SETECIENTOS ";
+                                    break;
+                                case "8":
+                                    palabras += "OCHOCIENTOS ";
+                                    break;
+                                case "9":
+                                    palabras += "NOVECIENTOS ";
+                                    break;
+                            }
+                            break;
+
+                        case 2:
+                        case 5:
+                        case 8:
+                            switch (entero[pos].ToString())
+                            {
+                                case "1":
+                                    if (entero.Length > pos + 1 && "012345".Contains(entero[pos + 1].ToString()))
+                                    {
+                                        flag = "S";
+                                        switch (entero[pos + 1])
+                                        {
+                                            case '0': palabras += "DIEZ "; break;
+                                            case '1': palabras += "ONCE "; break;
+                                            case '2': palabras += "DOCE "; break;
+                                            case '3': palabras += "TRECE "; break;
+                                            case '4': palabras += "CATORCE "; break;
+                                            case '5': palabras += "QUINCE "; break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        flag = "N";
+                                        palabras += "DIECI";
+                                    }
+                                    break;
+
+                                case "2":
+                                    if (entero.Length > pos + 1 && entero[pos + 1] == '0')
+                                    {
+                                        palabras += "VEINTE ";
+                                        flag = "S";
+                                    }
+                                    else
+                                    {
+                                        palabras += "VEINTI";
+                                        flag = "N";
+                                    }
+                                    break;
+
+                                case "3": palabras += entero.Length > pos + 1 && entero[pos + 1] == '0' ? "TREINTA " : "TREINTA Y "; break;
+                                case "4": palabras += entero.Length > pos + 1 && entero[pos + 1] == '0' ? "CUARENTA " : "CUARENTA Y "; break;
+                                case "5": palabras += entero.Length > pos + 1 && entero[pos + 1] == '0' ? "CINCUENTA " : "CINCUENTA Y "; break;
+                                case "6": palabras += entero.Length > pos + 1 && entero[pos + 1] == '0' ? "SESENTA " : "SESENTA Y "; break;
+                                case "7": palabras += entero.Length > pos + 1 && entero[pos + 1] == '0' ? "SETENTA " : "SETENTA Y "; break;
+                                case "8": palabras += entero.Length > pos + 1 && entero[pos + 1] == '0' ? "OCHENTA " : "OCHENTA Y "; break;
+                                case "9": palabras += entero.Length > pos + 1 && entero[pos + 1] == '0' ? "NOVENTA " : "NOVENTA Y "; break;
+                            }
+                            break;
+
+                        case 1:
+                        case 4:
+                        case 7:
+                            switch (entero[pos].ToString())
+                            {
+                                case "1":
+                                    if (flag == "N")
+                                        palabras += y == 1 ? "UNO " : "UN ";
+                                    break;
+                                case "2": palabras += flag == "N" ? "DOS " : ""; break;
+                                case "3": palabras += flag == "N" ? "TRES " : ""; break;
+                                case "4": palabras += flag == "N" ? "CUATRO " : ""; break;
+                                case "5": palabras += flag == "N" ? "CINCO " : ""; break;
+                                case "6": palabras += flag == "N" ? "SEIS " : ""; break;
+                                case "7": palabras += flag == "N" ? "SIETE " : ""; break;
+                                case "8": palabras += flag == "N" ? "OCHO " : ""; break;
+                                case "9": palabras += flag == "N" ? "NUEVE " : ""; break;
+                            }
+                            break;
+                    }
+
+                    if (y == 4)
+                    {
+                        if (entero.Length <= 6 && entero.Substring(0, 3) == "000")
+                            palabras += "MIL ";
+                    }
+                    if (y == 7)
+                    {
+                        if (entero.Length == 7 && entero[0] == '1')
+                            palabras += "MILLON ";
+                        else
+                            palabras += "MILLONES ";
+                    }
+                }
+
+                // Manejar la parte decimal, si existe
+                if (!string.IsNullOrEmpty(dec))
+                {
+                    return palabras + "Y " + dec + "/100";
+                }
+                else
+                {
+                    return palabras + "Y 00/100";
+                }
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
+
+
+        public async Task<Response<bool>> GetTramo(AddOrUpdateSubscriberInvoiceRequestDto obj)
+        {
+            var response = new Response<bool>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var country = await context.Countries.Where(x => x.Id == (int)obj.IdCountry).FirstOrDefaultAsync();
+                var currency = await context.Currencies.Where(x => x.Id == obj.IdCurrency).FirstOrDefaultAsync();
+                var subscriber = await context.Subscribers.Where(x => x.Code == obj.SubscriberCode).FirstOrDefaultAsync();
+                var cuenta = "";
+
+                string CODIGO_PAIS_EXPORTACION = "", NRO_DOC_ADQUIRIENTE = "", TIPO_OPERACION = "";
+                string Mone = "", TOTAL_OPERACIONES_GRAV = "0.00", TOTAL_OPERACIONES_EXPORTACION = "0.00", MONTO_TOTAL_IGV = "0.00", Letras = "", INDICADOR_AFECTACION_ITEM = "";
+
+                string labTipo = "";
+                decimal? lblValorVenta = 0;
+                foreach (var ob in obj.InvoiceSubscriberList)
+                {
+                    lblValorVenta += ob.Price;
+                }
+
+
+                if (obj.IdCurrency == 1)
+                {
+                    Mone = "USD";
+                    Letras = LetrasCastellano((lblValorVenta + obj.Igv) + "").ToString() + " DOLARES AMERICANOS";
+                }
+                else if (obj.IdCurrency == 2)
+                {
+                    Mone = "EUR";
+                    Letras = LetrasCastellano((lblValorVenta + obj.Igv) + "").ToString() + " EUROS";
+                }
+                else if (obj.IdCurrency == 31)
+                {
+                    Mone = "PEN";
+                    Letras = LetrasCastellano((lblValorVenta + obj.Igv) + "").ToString() + " SOLES";
+                }
+
+                if (subscriber.TaxRegistration.Trim().Length == 11)
+                {
+                    if (subscriber.TaxRegistration.Substring(0, 2) == "10" || subscriber.TaxRegistration.Substring(0, 2) == "20")
+                    {
+                        labTipo = "06";
+                    }
+                    else
+                    {
+                        labTipo = "00";
+                    }
+                }
+                else
+                {
+                    labTipo = "00";
+                }
+
+                if (labTipo == "06")
+                {
+                    TOTAL_OPERACIONES_GRAV = (lblValorVenta + obj.Igv) + "";
+                    TOTAL_OPERACIONES_EXPORTACION = "0";
+                    if (obj.Igv == 0)
+                    {
+                        MONTO_TOTAL_IGV = obj.Igv + "";
+                    }
+                    else
+                    {
+
+                        MONTO_TOTAL_IGV = "0";
+                    }
+                    INDICADOR_AFECTACION_ITEM = "10";
+                    NRO_DOC_ADQUIRIENTE = obj.TaxTypeCode?.Trim();
+                }
+                else
+                {
+                    TOTAL_OPERACIONES_GRAV = "0.00";
+                    TOTAL_OPERACIONES_EXPORTACION = lblValorVenta + "";
+                    MONTO_TOTAL_IGV = "0.00";
+                    INDICADOR_AFECTACION_ITEM = "40";
+                    NRO_DOC_ADQUIRIENTE = "-";
+                    CODIGO_PAIS_EXPORTACION = Codigo_Pais(country.OldCode);
+                }
+
+
+                if (obj.SubscriberCode == "1031" || obj.SubscriberCode == "1050" || obj.SubscriberCode == "1105" || obj.SubscriberCode == "2065" || obj.SubscriberCode == "3008" ||
+                    obj.SubscriberCode == "3012" || obj.SubscriberCode == "1077" || obj.SubscriberCode == "3008" || obj.SubscriberCode == "2001" || obj.SubscriberCode == "2002" ||
+                    obj.SubscriberCode == "2024" || obj.SubscriberCode == "3008")
+                {
+                    cuenta = "BANCO INTERNACIONAL DEL PERU SAA - INTERBANK.,Calle Villaran 140 La Victoria -PERU,Cta.Cte.USD. # 2593001863534,Swift: BINPPEPL,Beneficiario: DEL RISCO REPORTS EIRL";
+                }
+                else if (obj.SubscriberCode == "0135" || obj.SubscriberCode == "1026" || obj.SubscriberCode == "2057" || obj.SubscriberCode == "1037" || obj.SubscriberCode == "1104")
+                {
+                    cuenta = "BBVA PERU,Calle Emilio Cavenecia con esquina Tudela y Varela San Isidro - PERU,Cta. Cte.  USD. # 0011-0179-0100063330-93,Swift: BCONPEPL,Beneficiario: DEL RISCO REPORTS EIRL";
+                }
+                else
+                {
+                    if (obj.SubscriberCode == "0112" || obj.SubscriberCode == "0156" || obj.SubscriberCode == "0107")
+                    {
+                        cuenta = "SCOTIABANK,No. Cuenta corriente Soles 000-1480324,CCI 009-213-000001480324-01,Beneficiario DEL RISCO REPORTS";
+                    }
+                    else
+                    {
+                        cuenta = "SCOTIABANK PERU SAA.,Calle Miguel Dasso 250 Lima 27 - PERU,Cta. Cte.  USD. # 000-4592669,Swift: BSUDPEPL,Beneficiario: DEL RISCO REPORTS EIRL";
+                    }
+                }
+
+                decimal? PV = 0;
+                int EXISTE_GRAVADA = 0;
+                int EXISTE_INAFECTA = 0;
+                int EXISTE_EXONERADA = 0;
+                int EXISTE_GRATUITA = 0;
+                int EXISTE_EXPORTACION = 0;
+
+                decimal? lblGeneral = lblValorVenta + decimal.Parse(MONTO_TOTAL_IGV);
+                if (obj.IdCountry == 182)
+                {
+                    PV = lblValorVenta + decimal.Parse(MONTO_TOTAL_IGV);
+                    EXISTE_GRAVADA = 1;
+                    EXISTE_INAFECTA = 0;
+                    EXISTE_EXONERADA = 0;
+                    EXISTE_GRATUITA = 0;
+                    EXISTE_EXPORTACION = 0;
+                    TIPO_OPERACION = "0101";
+                }
+                else
+                {
+                    PV = decimal.Parse(TOTAL_OPERACIONES_EXPORTACION);
+                    EXISTE_GRAVADA = 0;
+                    EXISTE_INAFECTA = 0;
+                    EXISTE_EXONERADA = 0;
+                    EXISTE_GRATUITA = 0;
+                    EXISTE_EXPORTACION = 1;
+                    TIPO_OPERACION = "0201";
+                }
+
+
+                decimal? EVALUAR = 0;
+                decimal? Monto_Detracc = 0;
+                string Trama = "";
+                if (labTipo == "06")
+                {
+                    if (obj.IdCountry == 182 && obj.IdCurrency == 1)
+                    {
+                        EVALUAR = PV * obj.ExchangeRate;
+                    }
+                    else
+                    {
+                        EVALUAR = PV;
+                    }
+
+                    if (PV > 700)
+                    {
+                        if (obj.IdCurrency == 1)
+                        {
+                            Monto_Detracc = PV * 0.12m * obj.ExchangeRate;
+                        }
+                        else
+                        {
+                            Monto_Detracc = PV * 0.12m * 1;
+                        }
+
+                        Trama = "ACTION:Registrar~FEC_ED:" + obj.InvoiceDate.Value.ToString("yyyy-MM-dd") + "|RUC_EMISOR:20504166318|TIP_DOC_EMISOR:06|APAMNO_RAZON_SOCIAL_EMISOR:DEL RISCO REPORTS E.I.R.L." +
+                        "|UBIGEO_EMISOR:150120|DIRECCION_EMISOR:Jr. Tomas Ramsey Nro. 930 Dpto. 603|URBANIZACION_EMISOR:|DEPARTAMENTO_EMISOR:LIMA|PROVINCIA_EMISOR:LIMA" +
+                        "|DISTRITO_EMISOR:MAGDALENA|CODIGO_PAIS_EMISOR:PE|NOMBRE_COMERCIAL_EMISOR:DEL RISCO REPORTS|TIP_DOC:01|NRO_SERIE:F005|NRO_DOC:" + obj.InvoiceCode +
+                        "|NRO_DOC_ADQUIRIENTE:" + NRO_DOC_ADQUIRIENTE + "|TIP_DOC_ADQUIRIENTE:" + labTipo.Trim() + "|APAMNO_RAZON_SOCIAL_ADQUIRIENTE:" + subscriber.Name +
+                        "|MONEDA:" + Mone + "|TOTAL_OPERACIONES_GRAV:" + Decimal.Parse(TOTAL_OPERACIONES_GRAV).ToString("0.00") + "|TOTAL_OPERACIONES_INF:0.00|TOTAL_OPERACIONES_EXONERADAS:0.00|TOTAL_OPERACIONES_EXPORTACION:0.00|MONTO_TOTAL_OPERACIONES_GRAT:0.00" + "|MONTO_DESCUENTOS_GLOBALES:0.00|MONTO_TOTAL_IGV:" + Decimal.Parse(MONTO_TOTAL_IGV).ToString("0.00") + "|MONTO_PAGAR:" +
+                        lblGeneral?.ToString("0.00") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:" + "1001" + "|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
+                        "|VALOR_VENTA:" + lblValorVenta?.ToString("0.00") + "|PRECIO_VENTA:" + PV?.ToString("0.00") +
+                        "|EXISTE_GRAVADA:" + EXISTE_GRAVADA + "|EXISTE_INAFECTA:" + EXISTE_INAFECTA + "|EXISTE_EXONERADA:" + EXISTE_EXONERADA + "|EXISTE_GRATUITA:" + EXISTE_GRATUITA + "|EXISTE_EXPORTACION:" + EXISTE_EXPORTACION +
+                        "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToShortDateString + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + (PV - (PV * 12 / 100))?.ToString("0.00") +
+                        "|IA_40:" + subscriber.Code + " - " + subscriber.Name + "|IA_41:" + obj.Address + "|IA_42:" + obj.AttendedBy + "|IA_43:" + "" + "|IA_44:PAGO POR TRANSFERENCIA BANCARIA" + "|IA_45:" + cuenta + "" + "|IA_46:" + obj.ExchangeRate +
+                        "|PORCENTAJE_DETRACC:" + "12.00" + "|MONTO_DETRACC:" + Monto_Detracc?.ToString("0.00") + "|COD_SUNAT_PAGO_DETRACC:001" + "|TASA_IGV:18.00" + "|BB_SS_CODIGO_SUJETO_A_DETRACC:037|BB_SS_DESCRIPCION_SUJETO_A_DETRACC:DEMAS SERVICIOS GRAVADOS CON EL IGV|NUMERO_CTA_BANCO_NACION_DETRACC:00000812773" + "~";
+                    }
+                    else
+                    {
+                        Trama = "ACTION:Registrar~FEC_ED:" + obj.InvoiceDate.Value.ToString("yyyy-MM-dd") + "|RUC_EMISOR:20504166318|TIP_DOC_EMISOR:06|APAMNO_RAZON_SOCIAL_EMISOR:DEL RISCO REPORTS E.I.R.L." +
+                        "|UBIGEO_EMISOR:150120|DIRECCION_EMISOR:Jr. Tomas Ramsey Nro. 930 Dpto. 603|URBANIZACION_EMISOR:|DEPARTAMENTO_EMISOR:LIMA|PROVINCIA_EMISOR:LIMA" +
+                        "|DISTRITO_EMISOR:MAGDALENA|CODIGO_PAIS_EMISOR:PE|NOMBRE_COMERCIAL_EMISOR:DEL RISCO REPORTS|TIP_DOC:01|NRO_SERIE:F005|NRO_DOC:" + obj.InvoiceCode +
+                        "|NRO_DOC_ADQUIRIENTE:" + NRO_DOC_ADQUIRIENTE + "|TIP_DOC_ADQUIRIENTE:" + labTipo.Trim() + "|APAMNO_RAZON_SOCIAL_ADQUIRIENTE:" + subscriber.Name +
+                        "|MONEDA:" + Mone + "|TOTAL_OPERACIONES_GRAV:" + Decimal.Parse(TOTAL_OPERACIONES_GRAV).ToString("0.00") + "|TOTAL_OPERACIONES_INF:0.00|TOTAL_OPERACIONES_EXONERADAS:0.00|TOTAL_OPERACIONES_EXPORTACION:0.00|MONTO_TOTAL_OPERACIONES_GRAT:0.00" + "|MONTO_DESCUENTOS_GLOBALES:0.00|MONTO_TOTAL_IGV:" + Decimal.Parse(MONTO_TOTAL_IGV).ToString("0.00") + "|MONTO_PAGAR:" +
+                        lblGeneral?.ToString("0.00") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:" + TIPO_OPERACION + "|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
+                        "|VALOR_VENTA:" + lblValorVenta?.ToString("0.00") + "|PRECIO_VENTA:" + PV?.ToString("0.00") +
+                        "|EXISTE_GRAVADA:" + EXISTE_GRAVADA + "|EXISTE_INAFECTA:" + EXISTE_INAFECTA + "|EXISTE_EXONERADA:" + EXISTE_EXONERADA + "|EXISTE_GRATUITA:" + EXISTE_GRATUITA + "|EXISTE_EXPORTACION:" + EXISTE_EXPORTACION +
+                        "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToShortDateString + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + PV + "|TASA_IGV:18.00" +
+                        "|IA_40:" + subscriber.Code + " - " + subscriber.Name + "|IA_41:" + obj.Address + "|IA_42:" + obj.AttendedBy + "|IA_43:" + "" + "|IA_44:PAGO POR TRANSFERENCIA BANCARIA" + "|IA_45:" + cuenta + "~";
+
+                    }
+                }
+                else
+                {
+                    Trama = "ACTION:Registrar~FEC_ED:" + obj.InvoiceDate.Value.ToString("yyyy-MM-dd") + "|RUC_EMISOR:20504166318|TIP_DOC_EMISOR:06|APAMNO_RAZON_SOCIAL_EMISOR:DEL RISCO REPORTS E.I.R.L." +
+                    "|UBIGEO_EMISOR:150120|DIRECCION_EMISOR:Jr. Tomas Ramsey Nro. 930 Dpto. 603|URBANIZACION_EMISOR:|DEPARTAMENTO_EMISOR:LIMA|PROVINCIA_EMISOR:LIMA" +
+                    "|DISTRITO_EMISOR:MAGDALENA|CODIGO_PAIS_EMISOR:PE|NOMBRE_COMERCIAL_EMISOR:DEL RISCO REPORTS|TIP_DOC:01|NRO_SERIE:F005|NRO_DOC:" + obj.InvoiceCode +
+                    "|NRO_DOC_ADQUIRIENTE:" + NRO_DOC_ADQUIRIENTE + "|TIP_DOC_ADQUIRIENTE:" + labTipo.Trim() + "|APAMNO_RAZON_SOCIAL_ADQUIRIENTE:" + subscriber.Name +
+                    "|MONEDA:" + Mone + "|TOTAL_OPERACIONES_GRAV:" + Decimal.Parse(TOTAL_OPERACIONES_GRAV).ToString("0.00") + "|TOTAL_OPERACIONES_INF:0.00|TOTAL_OPERACIONES_EXONERADAS:0.00|TOTAL_OPERACIONES_EXPORTACION:" +
+                    Decimal.Parse(TOTAL_OPERACIONES_EXPORTACION).ToString("0.00") + "|MONTO_TOTAL_OPERACIONES_GRAT:0.00" + "|MONTO_DESCUENTOS_GLOBALES:0.00|MONTO_TOTAL_IGV:" + Decimal.Parse(MONTO_TOTAL_IGV).ToString("0.00") + "|MONTO_PAGAR:" +
+                    lblGeneral?.ToString("0.00") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:" + TIPO_OPERACION + "|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
+                    "|VALOR_VENTA:" + Decimal.Parse(TOTAL_OPERACIONES_EXPORTACION).ToString("0.00") + "|PRECIO_VENTA:" + PV?.ToString("0.00") +
+                    "|EXISTE_GRAVADA:" + EXISTE_GRAVADA + "|EXISTE_INAFECTA:" + EXISTE_INAFECTA + "|EXISTE_EXONERADA:" + EXISTE_EXONERADA + "|EXISTE_GRATUITA:" + EXISTE_GRATUITA + "|EXISTE_EXPORTACION:" + EXISTE_EXPORTACION +
+                    "|CODIGO_PAIS_EXPORTACION:" + CODIGO_PAIS_EXPORTACION +
+                    "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToShortDateString + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + PV + "|TASA_IGV:18.00" +
+                    "|IA_40:" + subscriber.Code + " - " + subscriber.Name + "|IA_41:" + obj.Address + "|IA_42:" + obj.AttendedBy + "|IA_43:" + "" + "|IA_44:PAGO POR TRANSFERENCIA BANCARIA" + "|IA_45:" + cuenta + "~";
+                }
+
+                int Vueltas = 0;
+                string T1 = "", T2 = "", T3 = "", PRECIO_VENTA_UNITARIO_ITEM = "", VALOR_ITEM = "", IGV_TOTAL_ITEM = "";
+
+
+                decimal? T1a = 0;
+                foreach (var item in obj.InvoiceSubscriberList.Where(x => x.ProcedureType == "T1"))
+                {
+                    T1a += item.Price;
+                }
+                if (obj.InvoiceSubscriberList.Where(x => x.ProcedureType == "T1").Count() > 0)
+                {
+                    T1a = T1a / obj.InvoiceSubscriberList.Where(x => x.ProcedureType == "T1").Count();
+                }
+
+
+                decimal? T1b = 0;
+                foreach (var item in obj.InvoiceSubscriberList.Where(x => x.ProcedureType == "T1"))
+                {
+                    T1b++;
+                }
+
+                decimal? T1c = 0;
+                foreach (var item in obj.InvoiceSubscriberList.Where(x => x.ProcedureType == "T1"))
+                {
+                    T1c += item.Price;
+                }
+
+                if (obj.InvoiceSubscriberList.Where(x => x.ProcedureType == "T1").ToList().Count == 0)
+                {
+                    T1 = "";
+                }
+                else
+                {
+                    Vueltas = Vueltas + 1;
+
+                    if (labTipo == "06")
+                    {
+                        PRECIO_VENTA_UNITARIO_ITEM = (T1c / T1b * 118 / 100) + "";
+                        VALOR_ITEM = T1c?.ToString("0.00");
+                        IGV_TOTAL_ITEM = (T1c * 118 / 100)?.ToString("0.00");
+                    }
+                    else if (labTipo == "00")
+                    {
+                        PRECIO_VENTA_UNITARIO_ITEM = T1a?.ToString("0.00");
+                        VALOR_ITEM = T1c?.ToString("0.00");
+                        IGV_TOTAL_ITEM = "0.00";
+                    }
+                    T1 = "ID_ITEM:" + Vueltas + "|COD_PROD_SERV_ITEM:T1|DESRIP_ITEM:T1(Informes-Normales)|COD_UNIDAD_MEDIDA_ITEM:NIU|INDICADOR_PS_ITEM:S|INDICADOR_TRANS_GRAT:0|INDICADOR_AFECTACION_ITEM:" +
+                    INDICADOR_AFECTACION_ITEM + "|VALOR_VENTA_UNITARIA:" + T1a?.ToString("0.00") +
+                    "|PRECIO_VENTA_UNITARIO_ITEM:" + PRECIO_VENTA_UNITARIO_ITEM + "|CANTIDAD_ITEM:" + T1b?.ToString("0.00") + "|DESCUENTO_ITEM:0.00|" +
+                    "VALOR_ITEM:" + VALOR_ITEM +
+                    "|IGV_TOTAL_ITEM:" + (labTipo == "06" ? (decimal.Parse(VALOR_ITEM) * 18 / 100).ToString("0.00") : "0") +
+                    "|TOTAL_ITEM:" + (labTipo == "06" ? (decimal.Parse(VALOR_ITEM) + (decimal.Parse(VALOR_ITEM) * 18 / 100)).ToString("0.00") : (decimal.Parse(VALOR_ITEM)).ToString("0.00")) + "^";
+                }
+
+
+                decimal? T2a = 0;
+                foreach (var item in obj.InvoiceSubscriberList.Where(x => x.ProcedureType == "T2"))
+                {
+                    T2a += item.Price;
+                }
+                if (obj.InvoiceSubscriberList.Where(x => x.ProcedureType == "T2").Count() > 0)
+                {
+                    T2a = T2a / obj.InvoiceSubscriberList.Where(x => x.ProcedureType == "T2").Count();
+                }
+
+
+                decimal? T2b = 0;
+                foreach (var item in obj.InvoiceSubscriberList.Where(x => x.ProcedureType == "T2"))
+                {
+                    T2b++;
+                }
+
+                decimal? T2c = 0;
+                foreach (var item in obj.InvoiceSubscriberList.Where(x => x.ProcedureType == "T2"))
+                {
+                    T2c += item.Price;
+                }
+                if (obj.InvoiceSubscriberList.Where(x => x.ProcedureType == "T2").ToList().Count == 0)
+                {
+                    T2 = "";
+                }
+                else
+                {
+                    Vueltas = Vueltas + 1;
+
+                    if (labTipo == "06")
+                    {
+                        PRECIO_VENTA_UNITARIO_ITEM = (T2c / T2b * 118 / 100) + "";
+                        VALOR_ITEM = T2c?.ToString("0.00");
+                        IGV_TOTAL_ITEM = (T2c * 118 / 100)?.ToString("0.00");
+                    }
+                    else if (labTipo == "00")
+                    {
+                        PRECIO_VENTA_UNITARIO_ITEM = T2a?.ToString("0.00");
+                        VALOR_ITEM = T2c?.ToString("0.00");
+                        IGV_TOTAL_ITEM = "0.00";
+                    }
+                       T2 = T2 + "ID_ITEM:" + Vueltas + 
+                         "|COD_PROD_SERV_ITEM:T2|DESRIP_ITEM:T2(Informes-Normales)|COD_UNIDAD_MEDIDA_ITEM:NIU|INDICADOR_PS_ITEM:S|INDICADOR_TRANS_GRAT:0|INDICADOR_AFECTACION_ITEM:" +
+                         INDICADOR_AFECTACION_ITEM + 
+                         "|VALOR_VENTA_UNITARIA:" + T2a?.ToString("0.00") +
+                         "|PRECIO_VENTA_UNITARIO_ITEM:" + PRECIO_VENTA_UNITARIO_ITEM + 
+                         "|CANTIDAD_ITEM:" + T2b?.ToString("0.00") + 
+                         "|DESCUENTO_ITEM:0.00|" +
+                         "VALOR_ITEM:" + VALOR_ITEM +
+                         "|IGV_TOTAL_ITEM:" + (labTipo == "06" ? (decimal.Parse(VALOR_ITEM) * 18 / 100).ToString("0.00") : "0") +
+                         "|TOTAL_ITEM:" + (labTipo == "06" ? 
+                        (decimal.Parse(VALOR_ITEM) + (decimal.Parse(VALOR_ITEM) * 18 / 100)).ToString("0.00") : 
+                        (decimal.Parse(VALOR_ITEM)).ToString("0.00")) + "^";
+
+                }
+
+                decimal? T3a = 0;
+                foreach (var item in obj.InvoiceSubscriberList.Where(x => x.ProcedureType == "T3"))
+                {
+                    T3a += item.Price;
+                }
+                if(obj.InvoiceSubscriberList.Where(x => x.ProcedureType == "T3").Count() > 0)
+                {
+                    T3a = T3a / obj.InvoiceSubscriberList.Where(x => x.ProcedureType == "T3").Count();
+                }
+
+
+                decimal? T3b = 0;
+                foreach (var item in obj.InvoiceSubscriberList.Where(x => x.ProcedureType == "T3"))
+                {
+                    T3b++;
+                }
+
+                decimal? T3c = 0;
+                foreach (var item in obj.InvoiceSubscriberList.Where(x => x.ProcedureType == "T3"))
+                {
+                    T3c += item.Price;
+                }
+                if (obj.InvoiceSubscriberList.Where(x => x.ProcedureType == "T3").ToList().Count == 0)
+                {
+                    T3 = "";
+                }
+                else
+                {
+                    Vueltas = Vueltas + 1;
+
+                    if (labTipo == "06")
+                    {
+                        PRECIO_VENTA_UNITARIO_ITEM = (T3c / T3b * 118 / 100) + "";
+                        VALOR_ITEM = T3c?.ToString("0.00");
+                        IGV_TOTAL_ITEM = (T3c * 118 / 100)?.ToString("0.00");
+                    }
+                    else if (labTipo == "00")
+                    {
+                        PRECIO_VENTA_UNITARIO_ITEM = T3a?.ToString("0.00");
+                        VALOR_ITEM = T3c?.ToString("0.00");
+                        IGV_TOTAL_ITEM = "0.00";
+                    }
+                       T3 = T3 + "ID_ITEM:" + Vueltas + 
+                         "|COD_PROD_SERV_ITEM:T3|DESRIP_ITEM:T3(Informes-Normales)|COD_UNIDAD_MEDIDA_ITEM:NIU|INDICADOR_PS_ITEM:S|INDICADOR_TRANS_GRAT:0|INDICADOR_AFECTACION_ITEM:" +
+                         INDICADOR_AFECTACION_ITEM + 
+                         "|VALOR_VENTA_UNITARIA:" + T3a?.ToString("0.00") +
+                         "|PRECIO_VENTA_UNITARIO_ITEM:" + PRECIO_VENTA_UNITARIO_ITEM + 
+                         "|CANTIDAD_ITEM:" + T3b?.ToString("0.00") + 
+                         "|DESCUENTO_ITEM:0.00|" +
+                         "VALOR_ITEM:" + VALOR_ITEM +
+                         "|IGV_TOTAL_ITEM:" + (labTipo == "06" ? (decimal.Parse(VALOR_ITEM) * 18 / 100).ToString("0.00") : "0") +
+                         "|TOTAL_ITEM:" + (labTipo == "06" ? 
+                        (decimal.Parse(VALOR_ITEM) + (decimal.Parse(VALOR_ITEM) * 18 / 100)).ToString("0.00") : 
+                        (decimal.Parse(VALOR_ITEM)).ToString("0.00")) + "^";
+
+                }
+
+                string Detalles = Trama + T1 + T2 + T3;
+
+                var facRuta = await context.Parameters.Where(x => x.Key == "FAC_RUTA").FirstOrDefaultAsync();
+                var facSerie = await context.Parameters.Where(x => x.Key == "FAC_SERIE").FirstOrDefaultAsync();
+
+
+                string fileDirectory = System.IO.Path.Combine(facRuta.Value, facSerie.Value+obj.InvoiceCode+".txt");
+
+                try
+                {
+                    File.WriteAllText(fileDirectory, Detalles);
+                    Console.WriteLine("Archivo exportado exitosamente a: " + fileDirectory);
+                }
+                catch (Exception ex)
+                {
+                    
+                    Console.WriteLine("Error al escribir el archivo: " + ex.Message);
+                }
+                response.Data = true;
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return response;
+        }
+        private string Codigo_Pais(string codigo)
+        {
+            switch (codigo)
+            {
+                case "152": return "AF";
+                case "185": return "AL";
+                case "36": return "DE";
+                case "186": return "AD";
+                case "105": return "AO";
+                case "59": return "AI";
+                case "63": return "AG";
+                case "81": return "AN";
+                case "174": return "SA";
+                case "97": return "DZ";
+                case "1": return "AR";
+                case "153": return "AM";
+                case "43": return "AW";
+                case "37": return "AU";
+                case "44": return "AT";
+                case "154": return "AZ";
+                case "155": return "BH";
+                case "156": return "BD";
+                case "38": return "BB";
+                case "45": return "BE";
+                case "32": return "BZ";
+                case "106": return "BJ";
+                case "46": return "BM";
+                case "2": return "BO";
+                case "187": return "BA";
+                case "107": return "BW";
+                case "3": return "BR";
+                case "158": return "BN";
+                case "188": return "BG";
+                case "108": return "BF";
+                case "109": return "BI";
+                case "157": return "BT";
+                case "160": return "KH";
+                case "110": return "CM";
+                case "31": return "CA";
+                case "113": return "TD";
+                case "6": return "CL";
+                case "61": return "CN";
+                case "161": return "CY";
+                case "4": return "CO";
+                case "114": return "KM";
+                case "221": return "KP";
+                case "54": return "KR";
+                case "5": return "CR";
+                case "190": return "HR";
+                case "40": return "CU";
+                case "65": return "DK";
+                case "115": return "DJ";
+                case "47": return "DM";
+                case "7": return "EC";
+                case "116": return "EG";
+                case "8": return "SV";
+                case "95": return "AE";
+                case "118": return "ER";
+                case "205": return "SK";
+                case "206": return "SI";
+                case "41": return "ES";
+                case "191": return "EE";
+                case "119": return "ET";
+                case "210": return "FJ";
+                case "35": return "PH";
+                case "68": return "FI";
+                case "48": return "FR";
+                case "120": return "GA";
+                case "121": return "GM";
+                case "99": return "GE";
+                case "122": return "GH";
+                case "91": return "GI";
+                case "49": return "GD";
+                case "100": return "GR";
+                case "24": return "GP";
+                case "213": return "GU";
+                case "9": return "GT";
+                case "219": return "GF";
+                case "117": return "GN";
+                case "123": return "GW";
+                case "25": return "GY";
+                case "22": return "HT";
+                case "50": return "NL";
+                case "10": return "HN";
+                case "51": return "HK";
+                case "193": return "HU";
+                case "86": return "IN";
+                case "162": return "ID";
+                case "163": return "IR";
+                case "164": return "IQ";
+                case "195": return "IE";
+                case "194": return "IS";
+                case "26": return "KY";
+                case "192": return "FO";
+                case "212": return "MH";
+                case "208": return "SB";
+                case "80": return "TC";
+                case "30": return "VG";
+                case "29": return "VI";
+                case "87": return "IL";
+                case "52": return "IT";
+                case "34": return "JM";
+                case "53": return "JP";
+                case "64": return "JO";
+                case "96": return "KZ";
+                case "124": return "KE";
+                case "166": return "KG";
+                case "167": return "KW";
+                case "85": return "LV";
+                case "101": return "LB";
+                case "125": return "LR";
+                case "126": return "LY";
+                case "103": return "LI";
+                case "89": return "LT";
+                case "197": return "LU";
+                case "225": return "MO";
+                case "127": return "MG";
+                case "92": return "MY";
+                case "128": return "MW";
+                case "129": return "ML";
+                case "199": return "MT";
+                case "132": return "MA";
+                case "23": return "MQ";
+                case "60": return "MU";
+                case "130": return "MR";
+                case "39": return "MX";
+                case "200": return "MD";
+                case "201": return "MC";
+                case "169": return "MN";
+                case "76": return "MS";
+                case "133": return "MZ";
+                case "134": return "NA";
+                case "211": return "NR";
+                case "170": return "NP";
+                case "12": return "NI";
+                case "135": return "NG";
+                case "11": return "NU";
+                case "69": return "NO";
+                case "28": return "NC";
+                case "90": return "NZ";
+                case "171": return "OM";
+                case "104": return "PK";
+                case "215": return "PW";
+                case "172": return "PS";
+                case "13": return "PA";
+                case "14": return "PY";
+                case "15": return "PE";
+                case "217": return "PF";
+                case "88": return "PL";
+                case "42": return "PT";
+                case "16": return "PR";
+                case "173": return "QA";
+                case "73": return "GB";
+                case "111": return "CF";
+                case "17": return "DO";
+                case "70": return "CZ";
+                case "136": return "RW";
+                case "202": return "RO";
+                case "71": return "RU";
+                case "137": return "EH";
+                case "214": return "WS";
+                case "55": return "KN";
+                case "203": return "SM";
+                case "56": return "LC";
+                case "139": return "SN";
+                case "204": return "CS";
+                case "140": return "SL";
+                case "102": return "SG";
+                case "176": return "SY";
+                case "141": return "SO";
+                case "175": return "LK";
+                case "143": return "SZ";
+                case "98": return "ZA";
+                case "142": return "SD";
+                case "84": return "SE";
+                case "83": return "CH";
+                case "58": return "SR";
+                case "178": return "TH";
+                case "62": return "TW";
+                case "177": return "TJ";
+                case "33": return "BS";
+                case "145": return "TG";
+                case "216": return "TO";
+                case "18": return "TT";
+                case "66": return "TN";
+                case "179": return "TM";
+                case "93": return "TR";
+                case "20": return "US";
+                case "72": return "UA";
+                case "147": return "UG";
+                case "19": return "UY";
+                case "181": return "UZ";
+                case "209": return "VU";
+                case "21": return "VE";
+                case "182": return "VN";
+                case "183": return "YE";
+                case "148": return "CD";
+                case "149": return "ZM";
+                case "150": return "ZW";
+                case "226": return "CI";
+                case "227": return "PG";
+                case "229": return "MV";
+                case "230": return "SC";
+                case "231": return "CG";
+                case "235": return "GS";
+                case "236": return "TZ";
+                case "239": return "BS";
+                case "67": return "PRK";
+                default: return ".";
+            }
         }
     }
 }

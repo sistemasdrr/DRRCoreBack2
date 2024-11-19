@@ -54,4 +54,6 @@
         public string? Quality { get; set; } = string.Empty;
 
     }
+
+
 }

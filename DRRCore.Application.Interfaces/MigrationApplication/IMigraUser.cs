@@ -31,5 +31,6 @@
         Task<bool> UpdateSubscriber();
         Task<bool> MigrateOccupation();
         Task<bool> arreglarNumeration();
+        Task<bool> MigrationCountryOldCode();
     }
 }

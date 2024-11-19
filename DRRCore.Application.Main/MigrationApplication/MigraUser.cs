@@ -4149,5 +4149,33 @@ namespace DRRCore.Application.Main.MigrationApplication
             }
             return true;
         }
+
+        public async Task<bool> MigrationCountryOldCode()
+        {
+            using var context = new SqlCoreContext();
+            using var mysqlContext = new MySqlContext();
+
+            var paises = await mysqlContext.TPais.ToListAsync();
+            foreach(var pais in paises)
+            {
+                try
+                {
+                    var country = await context.Countries.Where(x => x.Iso == pais.PaiAbreviatura).FirstOrDefaultAsync();
+                    if(country != null)
+                    {
+                        country.OldCode = pais.PaiCodigo;
+                        context.Countries.Update(country);
+                        await context.SaveChangesAsync();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    continue;
+
+                }
+            }
+          
+            return true;
+        }
     }
 }

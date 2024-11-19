@@ -169,5 +169,12 @@ namespace DRRCore.Services.ApiCore.Controllers
             var result = await _invoiceApplication.GetExcelAgentInvoice(code, startDate, endDate);
             return File(result.Data.File, result.Data.ContentType, result.Data.Name);
         }
+
+        [HttpPost()]
+        [Route("GetTramo")]
+        public async Task<IActionResult> GetTramo(AddOrUpdateSubscriberInvoiceRequestDto obj)
+        {
+            return Ok(await _invoiceApplication.GetTramo(obj));
+        }
     }
 }

@@ -31,12 +31,12 @@ namespace DRRCore.Services.Migration.Controllers
         {
             return Ok(await _migraUser.AddOrUpdatePerson(migra));
         }
-        [HttpPost()]
-        [Route("MigratePersonal")]
-        public async Task<ActionResult> MigratePersonal()
-        {
-            return Ok(await _migraUser.MigratePersonal());
-        }
+        //[HttpPost()]
+        //[Route("MigratePersonal")]
+        //public async Task<ActionResult> MigratePersonal()
+        //{
+        //    return Ok(await _migraUser.MigratePersonal());
+        //}
         //[HttpPost()]
         //[Route("empresas")]
         //public async Task<ActionResult> MigrarEmpresas()
@@ -61,12 +61,12 @@ namespace DRRCore.Services.Migration.Controllers
         {
             return Ok(await _migraUser.MigratePersonByMigra(migra));
         }
-        [HttpPost()]
-        [Route("MigrateOccupation")]
-        public async Task<ActionResult> MigrateOccupation()
-        {
-            return Ok(await _migraUser.MigrateOccupation());
-        }
+        //[HttpPost()]
+        //[Route("MigrateOccupation")]
+        //public async Task<ActionResult> MigrateOccupation()
+        //{
+        //    return Ok(await _migraUser.MigrateOccupation());
+        //}
         //[HttpPost()]
         //[Route("correcMigra")]
         //public async Task<ActionResult> correcMigra(int migra)
@@ -103,24 +103,24 @@ namespace DRRCore.Services.Migration.Controllers
         {
             return Ok(await _migraUser.MigrateCountry());
         }
-        [HttpPost()]
-        [Route("empresasOther")]
-        public async Task<ActionResult> MigrarEmpresasOther(int migra)
-        {
-            return Ok(await _migraUser.MigrateCompanyOthers(migra));
-        }
-        [HttpPost()]
-        [Route("empresasOtherImages")]
-        public async Task<ActionResult> empresasOtherImages(int migra)
-        {
-            return Ok(await _migraUser.MigrateCompanyImageOthers(migra));
-        }
-        [HttpPost()]
-        [Route("empresasImagesByOldCode")]
-        public async Task<ActionResult> empresasImagesByOldCode(string oldCode)
-        {
-            return Ok(await _migraUser.MigrateCompanyImageByOldCode(oldCode));
-        }
+        //[HttpPost()]
+        //[Route("empresasOther")]
+        //public async Task<ActionResult> MigrarEmpresasOther(int migra)
+        //{
+        //    return Ok(await _migraUser.MigrateCompanyOthers(migra));
+        //}
+        //[HttpPost()]
+        //[Route("empresasOtherImages")]
+        //public async Task<ActionResult> empresasOtherImages(int migra)
+        //{
+        //    return Ok(await _migraUser.MigrateCompanyImageOthers(migra));
+        //}
+        //[HttpPost()]
+        //[Route("empresasImagesByOldCode")]
+        //public async Task<ActionResult> empresasImagesByOldCode(string oldCode)
+        //{
+        //    return Ok(await _migraUser.MigrateCompanyImageByOldCode(oldCode));
+        //}
         //[HttpPost()]
         //[Route("modificarEmpresa")]
         //public async Task<ActionResult> ModificarEmpresa(int migra,int nivel)
@@ -150,6 +150,12 @@ namespace DRRCore.Services.Migration.Controllers
         public async Task<ActionResult> MigrateCompanyRelated(int migra)
         {
             return Ok(await _migraUser.MigrateCompanyRelationated(migra));
+        }
+        [HttpPost()]
+        [Route("MigrationCountryOldCode")]
+        public async Task<ActionResult> MigrationCountryOldCode()
+        {
+            return Ok(await _migraUser.MigrationCountryOldCode());
         }
         
         [HttpPost()]

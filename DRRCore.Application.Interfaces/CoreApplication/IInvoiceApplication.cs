@@ -42,6 +42,7 @@ namespace DRRCore.Application.Interfaces.CoreApplication
 
         Task<Response<GetFileResponseDto>> GetExcelAgentInvoice(string code, string startDate, string endDate);
 
+        Task<Response<bool>> GetTramo(AddOrUpdateSubscriberInvoiceRequestDto obj);
 
     }
 }

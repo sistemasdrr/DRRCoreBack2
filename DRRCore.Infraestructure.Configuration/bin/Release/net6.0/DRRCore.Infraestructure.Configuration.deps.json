@@ -1738,6 +1738,7 @@
       },
       "DRRCore.Domain.Entities/1.0.0": {
         "dependencies": {
+          "DRRCore.Application.DTO": "1.0.0",
           "Microsoft.EntityFrameworkCore": "7.0.9",
           "Microsoft.EntityFrameworkCore.SqlServer": "7.0.9",
           "MySql.Data": "8.3.0",

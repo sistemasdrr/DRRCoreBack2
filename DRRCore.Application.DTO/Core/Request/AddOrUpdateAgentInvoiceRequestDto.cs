@@ -17,13 +17,21 @@ namespace DRRCore.Application.DTO.Core.Request
     }
     public class AddOrUpdateSubscriberInvoiceRequestDto
     {
+        
         public string? InvoiceCode { get; set; }
         public DateTime? InvoiceDate { get; set; }
         public string? Language { get; set; }
         public int? IdCurrency { get; set; }
+        public int? IdCountry { get; set; }
         public int? IdSubscriber { get; set; }
+        public decimal? ExchangeRate { get; set; }
+        public string? SubscriberCode { get; set; }
         public string? AttendedByName { get; set; }
         public string? AttendedByEmail { get; set; }
+        public string? TaxTypeCode { get; set; }
+        public decimal? Igv { get; set; }
+        public string? Address { get; set; }
+        public string? AttendedBy { get; set; }
         public List<GetInvoiceSubscriberListByBillResponseDto>? InvoiceSubscriberList { get; set; }
         
     }

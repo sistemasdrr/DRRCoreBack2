@@ -31,6 +31,8 @@ public partial class Country
 
     public string? CodePhone { get; set; }
 
+    public string? OldCode { get; set; }
+
     public virtual ICollection<AgentPrice> AgentPrices { get; set; } = new List<AgentPrice>();
 
     public virtual ICollection<Agent> Agents { get; set; } = new List<Agent>();

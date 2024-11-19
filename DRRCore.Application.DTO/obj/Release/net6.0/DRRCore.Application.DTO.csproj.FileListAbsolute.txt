@@ -82,3 +82,5 @@ C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Application.DTO\obj\Releas
 C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Application.DTO\obj\Release\net6.0\refint\DRRCore.Application.DTO.dll
 C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Application.DTO\obj\Release\net6.0\DRRCore.Application.DTO.pdb
 C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Application.DTO\obj\Release\net6.0\ref\DRRCore.Application.DTO.dll
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Application.DTO\bin\Release\net6.0\DRRCore.Infraestructure.Configuration.dll
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Application.DTO\bin\Release\net6.0\DRRCore.Infraestructure.Configuration.pdb

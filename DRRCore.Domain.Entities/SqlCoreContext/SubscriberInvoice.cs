@@ -37,6 +37,10 @@ public partial class SubscriberInvoice
 
     public string? Type { get; set; }
 
+    public decimal? IgvAmount { get; set; }
+
+    public bool? IgvFlag { get; set; }
+
     public virtual Currency? IdCurrencyNavigation { get; set; }
 
     public virtual InvoiceState? IdInvoiceStateNavigation { get; set; }

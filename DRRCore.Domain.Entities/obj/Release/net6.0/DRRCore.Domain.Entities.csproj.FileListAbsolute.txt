@@ -71,3 +71,8 @@ C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Entities\obj\Releas
 C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Entities\obj\Release\net6.0\DRRCore.Domain.Entities.pdb
 C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Entities\obj\Release\net6.0\DRRCore.Domain.Entities.genruntimeconfig.cache
 C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Entities\obj\Release\net6.0\ref\DRRCore.Domain.Entities.dll
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Entities\bin\Release\net6.0\DRRCore.Application.DTO.dll
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Entities\bin\Release\net6.0\DRRCore.Transversal.Common.dll
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Entities\bin\Release\net6.0\DRRCore.Application.DTO.pdb
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Entities\bin\Release\net6.0\DRRCore.Transversal.Common.pdb
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Entities\obj\Release\net6.0\DRRCore..CEB7AE4D.Up2Date

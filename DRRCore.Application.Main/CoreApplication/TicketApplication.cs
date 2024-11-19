@@ -3,6 +3,7 @@ using AutoMapper;
 using CoreFtp;
 using DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml.Math;
+using DocumentFormat.OpenXml.Office2013.Excel;
 using DocumentFormat.OpenXml.Wordprocessing;
 using DRRCore.Application.DTO.Core.Request;
 using DRRCore.Application.DTO.Core.Response;
@@ -10,6 +11,7 @@ using DRRCore.Application.DTO.Email;
 using DRRCore.Application.DTO.Enum;
 using DRRCore.Application.Interfaces.CoreApplication;
 using DRRCore.Application.Interfaces.EmailApplication;
+using DRRCore.Domain.Entities.MYSQLContext;
 using DRRCore.Domain.Entities.SQLContext;
 using DRRCore.Domain.Entities.SqlCoreContext;
 using DRRCore.Domain.Interfaces.CoreDomain;
@@ -98,6 +100,8 @@ namespace DRRCore.Application.Main.CoreApplication
             _mailSender = mailSender;
             _emailHistoryDomain = emailHistoryDomain;
         }
+      
+
         public async Task<Response<List<GetTicketFileResponseDto>>> GetTicketFilesByIdTicket(int idTicket)
         {
             var response = new Response<List<GetTicketFileResponseDto>>();

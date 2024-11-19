@@ -230,8 +230,11 @@ public partial class SqlCoreContext : DbContext
         {
             optionsBuilder.UseSqlServer(
 
-            "Data Source=200.58.123.184,14331;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
-            // "Data Source=SD-4154134-W;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
+            // "Data Source=200.58.123.184,14330;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
+            "Data Source=SD-4154134-W;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
+
+            //migracion
+            //"Data Source=SD-4154134-W/DRRSQLSERVER;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
 
         }
     }
@@ -1869,6 +1872,10 @@ public partial class SqlCoreContext : DbContext
                 .HasMaxLength(70)
                 .IsUnicode(false)
                 .HasColumnName("name");
+            entity.Property(e => e.OldCode)
+                .HasMaxLength(5)
+                .IsUnicode(false)
+                .HasColumnName("oldCode");
             entity.Property(e => e.TaxTypeName)
                 .HasMaxLength(10)
                 .IsUnicode(false)
@@ -4897,6 +4904,12 @@ public partial class SqlCoreContext : DbContext
             entity.Property(e => e.IdCurrency).HasColumnName("idCurrency");
             entity.Property(e => e.IdInvoiceState).HasColumnName("idInvoiceState");
             entity.Property(e => e.IdSubscriber).HasColumnName("idSubscriber");
+            entity.Property(e => e.IgvAmount)
+                .HasColumnType("decimal(7, 2)")
+                .HasColumnName("igvAmount");
+            entity.Property(e => e.IgvFlag)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("igvFlag");
             entity.Property(e => e.InvoiceCancelDate)
                 .HasColumnType("datetime")
                 .HasColumnName("invoiceCancelDate");

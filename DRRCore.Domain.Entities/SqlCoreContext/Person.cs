@@ -6,7 +6,6 @@ namespace DRRCore.Domain.Entities.SqlCoreContext;
 public partial class Person
 {
     public int Id { get; set; }
-    public virtual ICollection<Traduction> Traductions { get; set; } = new List<Traduction>();
 
     public string? OldCode { get; set; }
 
@@ -25,6 +24,7 @@ public partial class Person
     public int? IdDocumentType { get; set; }
 
     public string? CodeDocumentType { get; set; }
+    public virtual ICollection<Traduction> Traductions { get; set; } = new List<Traduction>();
 
     public string? TaxTypeName { get; set; }
 
