@@ -2540,6 +2540,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                         }
                                         else
                                         {
+                                            number = numeration.Number++;
                                             numeration.Number++;
                                             numeration.UpdateDate = DateTime.Now;
                                             context.Numerations.Update(numeration);
@@ -2567,7 +2568,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 UserTo = item.UserTo,
                                                 AsignedTo = item.AssignedToCode,
                                                 IdStatusTicket = (int)TicketStatusEnum.Asig_Agente,
-                                                NumberAssign = numeration.Number,
+                                                NumberAssign = number,
                                                 Flag = false,
                                                 StartDate = StaticFunctions.VerifyDate(item.StartDate),
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
