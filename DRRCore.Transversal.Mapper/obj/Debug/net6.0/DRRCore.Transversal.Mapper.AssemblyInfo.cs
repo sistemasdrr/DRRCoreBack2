@@ -14,11 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DRRCore.Transversal.Mapper")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-<<<<<<< HEAD
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
-=======
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+78ae273b4fbdc332d34ecd05bbb8933f0b28bb91")]
->>>>>>> 19/11
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e1ef8f9b8cba525ac0fa9545d48b7ecb99898606")]
 [assembly: System.Reflection.AssemblyProductAttribute("DRRCore.Transversal.Mapper")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DRRCore.Transversal.Mapper")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
