@@ -301,10 +301,8 @@ namespace DRRCore.Application.Main.CoreApplication
             CultureInfo provider = CultureInfo.InvariantCulture;
             var startDateStr=startDate.Day.ToString("D2")+"/"+startDate.Month.ToString("D2")+"/"+DateTime.Now.Year.ToString();
 
-            var days= (DateTime.Now-DateTime.ParseExact(startDateStr,"dd/MM/yyyy",provider)).Days;
-            var abs=Math.Abs(days);
-            var around = abs <= 7;
-            return around;
+            var days= (DateTime.ParseExact(startDateStr, "dd/MM/yyyy", provider)-DateTime.Now).Days;           
+            return days<=7 && days>=0;
         }
     }
 }
