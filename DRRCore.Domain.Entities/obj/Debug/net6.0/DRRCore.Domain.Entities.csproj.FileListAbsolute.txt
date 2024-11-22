@@ -77,3 +77,8 @@ C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Entities\bin\Debug\
 C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Entities\bin\Debug\net6.0\DRRCore.Application.DTO.pdb
 C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Entities\bin\Debug\net6.0\DRRCore.Transversal.Common.pdb
 C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Domain.Entities\obj\Debug\net6.0\DRRCore..CEB7AE4D.Up2Date
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Entities\bin\Debug\net6.0\DRRCore.Application.DTO.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Entities\bin\Debug\net6.0\DRRCore.Transversal.Common.dll
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Entities\bin\Debug\net6.0\DRRCore.Application.DTO.pdb
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Entities\bin\Debug\net6.0\DRRCore.Transversal.Common.pdb
+C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Entities\obj\Debug\net6.0\DRRCore..CEB7AE4D.Up2Date
