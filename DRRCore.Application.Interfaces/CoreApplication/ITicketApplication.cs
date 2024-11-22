@@ -63,8 +63,9 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<bool>> FinishTicketObservation(int idTicketObservation, string? conclusion, bool dr, bool ag, bool cl);
         Task<Response<List<string>>> GetOtherUserCode(int idUser);
         Task<Response<List<GetTicketHistoryResponseDto>>> getCountAsignation();
-        Task<Response<bool>> TicketToDispatch(int idTicketHistory,int idTicket,string quality, string qualityTranslator, string qualityTypist);
+        Task<Response<bool>> TicketToDispatch(int idTicketHistory,int idTicket,string quality, string qualityTranslator, string qualityTypist, List<UserCode> otherUsers);
         Task<Response<string>> GetSupervisorTicket(int idTicket);
+        Task<Response<string>> GetSupervisorCodeTicket(int idTicket);
         Task<Response<bool>> DeleteTicketHistoryById(int idTicket);
         Task<Response<GetFileDto>> DownloadZipByIdTicket(int idTicket);
         Task<Response<GetFileResponseDto>> GetExcel(int idTicket);

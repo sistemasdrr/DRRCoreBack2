@@ -1248,6 +1248,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                 item.OtherUserCode.Add(new UserCode
                                 {
                                     Code = item1.Code,
+                                    Type = item1.Type,
                                     Active = false
                                 });
                             }
@@ -1256,6 +1257,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                 item.OtherUserCode.Add(new UserCode
                                 {
                                     Code = item1.Code,
+                                    Type = item1.Type,
                                     Active = true
                                 });
                             }
@@ -3503,9 +3505,16 @@ namespace DRRCore.Application.Main.CoreApplication
                         emailDataDto.Attachments.Add(attachmentsSelected);
                     }
 
+                    if(ticket.About == "E")
+                    {
+                        ticket.IdCompanyNavigation.LastSearched = DateTime.Now;
+                    }
+                    else
+                    {
 
+                        ticket.IdPersonNavigation.LastSearched = DateTime.Now;
+                    }
 
-                    ticket.IdCompanyNavigation.LastSearched = DateTime.Now;
 
                     ticket.IdStatusTicket = (int?)TicketStatusEnum.Despachado;
                     ticket.DispatchtDate = DateTime.Now;
@@ -4790,13 +4799,67 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<bool>> TicketToDispatch(int idTicketHistory,int idTicket,string quality,string qualityTranslator,string qualityTypist)
+        public async Task<Response<bool>> TicketToDispatch(int idTicketHistory,int idTicket,string quality,string qualityTranslator,string qualityTypist, List<UserCode> otherUsers)
         {
             var response = new Response<bool>();
             try
             {
                 using var context = new SqlCoreContext();
-                var ticket = await context.Tickets.Where(x => x.Id == idTicket).FirstOrDefaultAsync();
+
+                var code = "CP_" + DateTime.Now.Month.ToString("D2") + "_" + DateTime.Now.Year;
+                var productionClosure = await context.ProductionClosures.Where(x => x.Code.Contains(code)).FirstOrDefaultAsync();
+                if (productionClosure == null)
+                {
+
+                    DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1).AddDays(-1);
+                    await context.ProductionClosures.AddAsync(new Domain.Entities.SqlCoreContext.ProductionClosure
+                    {
+                        EndDate = lastDayOfCurrentMonth,
+                        Code = code,
+                        Title = "Cierre de Producción " + DateTime.Now.Month.ToString("D2") + " - " + DateTime.Now.Year,
+                        Observations = ""
+                    });
+                }
+                else
+                {
+                    if (productionClosure.EndDate < DateTime.Now)
+                    {
+                        if (DateTime.Now.Month == 12)
+                        {
+                            code = "CP_" + (1).ToString("D2") + "_" + (DateTime.Now.Year + 1);
+                            var nextProductionClosureExistent = await context.ProductionClosures.Where(x => x.Code.Contains(code)).FirstOrDefaultAsync();
+                            if (nextProductionClosureExistent == null)
+                            {
+                                DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year + 1, 1, 1).AddMonths(1).AddDays(-1);
+                                await context.ProductionClosures.AddAsync(new ProductionClosure
+                                {
+                                    EndDate = lastDayOfCurrentMonth,
+                                    Code = code,
+                                    Title = "Cierre de Producción " + (1).ToString("D2") + " - " + DateTime.Today.Year + 1,
+                                    Observations = ""
+                                });
+                            }
+                        }
+                        else
+                        {
+                            code = "CP_" + (DateTime.Now.Month + 1).ToString("D2") + "_" + DateTime.Now.Year;
+                            var nextProductionClosureExistent = await context.ProductionClosures.Where(x => x.Code.Contains(code)).FirstOrDefaultAsync();
+                            if (nextProductionClosureExistent == null)
+                            {
+                                DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1).AddDays(-1);
+                                await context.ProductionClosures.AddAsync(new ProductionClosure
+                                {
+                                    EndDate = lastDayOfCurrentMonth,
+                                    Code = code,
+                                    Title = "Cierre de Producción " + (DateTime.Now.Month + 1).ToString("D2") + " - " + DateTime.Now.Year,
+                                    Observations = ""
+                                });
+                            }
+                        }
+                    }
+                }
+
+                var ticket = await context.Tickets.Where(x => x.Id == idTicket).Include(x => x.TicketHistories).FirstOrDefaultAsync();
                 if(ticket != null)
                 {
                     ticket.IdStatusTicket = 18;
@@ -4804,13 +4867,28 @@ namespace DRRCore.Application.Main.CoreApplication
                     ticket.QualityTranslator = qualityTranslator;
                     ticket.QualityTypist = qualityTypist;
 
-                    var ticketHistory = await context.TicketHistories.Where(x => x.Id == idTicketHistory).FirstOrDefaultAsync();
-                    if(ticketHistory != null)
+                    ticket.TicketHistories.Where(x => x.Id == idTicketHistory).FirstOrDefault().Flag = true;
+                    ticket.TicketHistories.Where(x => x.Id == idTicketHistory).FirstOrDefault().ShippingDate = DateTime.Today;
+
+                    foreach (var item in otherUsers.Where(x => x.Active == true).ToList())
                     {
-                        ticketHistory.Flag = true;
-                        ticketHistory.ShippingDate = DateTime.Today;
-                        context.TicketHistories.Update(ticketHistory);
+                        var personal = await context.Personals.Where(x => x.Code == item.Code).Include(x => x.IdEmployeeNavigation).ThenInclude(x => x.UserLogins).FirstOrDefaultAsync();
+                        ticket.TicketHistories.Add(new TicketHistory{
+                            IdTicket =idTicket,
+                            UserFrom = personal.IdEmployeeNavigation.UserLogins.FirstOrDefault().Id + "",
+                            UserTo = personal.IdEmployeeNavigation.UserLogins.FirstOrDefault().Id + "",
+                            AsignationType = item.Type,
+                            AsignedTo = item.Code,
+                            StartDate = DateTime.Now,
+                            EndDate = DateTime.Now,
+                            ShippingDate = DateTime.Now,
+                            FlagInvoice = false,
+                            Flag = true,
+                            Cycle = code,
+                            IdStatusTicket = GetIdStatusTicket(item.Type)
+                        });
                     }
+
                 }
                 context.Tickets.Update(ticket);
                 await context.SaveChangesAsync();
@@ -4822,7 +4900,41 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             return response;
         }
-
+        public int? GetIdStatusTicket(string type)
+        {
+            if(type == "AG")
+            {
+                return (int)TicketStatusEnum.Asig_Agente;
+            }
+            else if (type == "DI")
+            {
+                return (int)TicketStatusEnum.Asig_Digitidor;
+            }
+            else if (type == "PA")
+            {
+                return (int)TicketStatusEnum.Pre_Asignacion;
+            }
+            else if (type == "RF")
+            {
+                return (int)TicketStatusEnum.Asig_Referencista;
+            }
+            else if (type == "RP")
+            {
+                return (int)TicketStatusEnum.Asig_Reportero;
+            }
+            else if (type == "SU")
+            {
+                return (int)TicketStatusEnum.Asig_Supervisor;
+            }
+            else if (type == "TR")
+            {
+                return (int)TicketStatusEnum.Asig_Traductor;
+            }
+            else
+            {
+                return null;
+            }
+        }
         public async Task<Response<string>> GetSupervisorTicket(int idTicket)
         {
             var response = new Response<string>();
@@ -4839,6 +4951,33 @@ namespace DRRCore.Application.Main.CoreApplication
                     }
                 }
             }catch  (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                response.IsSuccess = false;
+            }
+            return response;
+        }
+        public async Task<Response<string>> GetSupervisorCodeTicket(int idTicket)
+        {
+            var response = new Response<string>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var ticketHistory = await context.TicketHistories.Where(x => x.IdTicket == idTicket && x.AsignationType == "SU" && x.AsignedTo.Contains("S") && x.Flag == true ).FirstOrDefaultAsync();
+                if (ticketHistory != null)
+                {
+                    var user = await context.UserLogins.Where(x => x.Id == int.Parse(ticketHistory.UserTo)).Include(x => x.IdEmployeeNavigation).FirstOrDefaultAsync();
+                    if (user != null)
+                    {
+                        response.Data = ticketHistory.AsignedTo;
+                    }
+                }
+                else
+                {
+                    response.Data = "";
+                }
+            }
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 response.IsSuccess = false;

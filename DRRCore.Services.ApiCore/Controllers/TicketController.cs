@@ -142,11 +142,11 @@ namespace DRRCore.Services.ApiCore.Controllers
         {
             return Ok(await _ticketApplication.GetUsersInTicket(idTicket));
         }
-        [HttpGet()]
+        [HttpPost()]
         [Route("TicketToDispatch")]
-        public async Task<ActionResult> TicketToDispatch(int idTicketHistory, int idTicket, string quality, string qualityTranslator, string qualityTypist)
+        public async Task<ActionResult> TicketToDispatch(int idTicketHistory, int idTicket, string quality, string qualityTranslator, string qualityTypist, List<UserCode> otherUsers)
         {
-            return Ok(await _ticketApplication.TicketToDispatch(idTicketHistory, idTicket,quality,qualityTranslator,qualityTypist));
+            return Ok(await _ticketApplication.TicketToDispatch(idTicketHistory, idTicket,quality,qualityTranslator,qualityTypist, otherUsers));
         }
         [HttpPost()]
         [Route("DispatchTicket")]
@@ -378,6 +378,12 @@ namespace DRRCore.Services.ApiCore.Controllers
         public async Task<ActionResult> GetSupervisorTicket(int idTicket)
         {
             return Ok(await _ticketApplication.GetSupervisorTicket(idTicket));
+        }
+        [HttpGet()]
+        [Route("GetSupervisorCodeTicket")]
+        public async Task<ActionResult> GetSupervisorCodeTicket(int idTicket)
+        {
+            return Ok(await _ticketApplication.GetSupervisorCodeTicket(idTicket));
         }
         [HttpGet()]
         [Route("DownloadZipByIdTicket")]

@@ -174,6 +174,7 @@
     public class UserCode
     {
         public string? Code { get; set; }
+        public string? Type { get; set; }
         public bool Active { get; set; }
     }
     public class SpecialAgentBalancePrice
