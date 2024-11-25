@@ -460,7 +460,8 @@ namespace DRRCore.Application.Main.CoreApplication
             {
 
                 string fileFormat = "{0}_{1}{2}";
-                string report = "REPORTES/REPORTEROS/REPORT_6.2.3";
+                //string report = "REPORTES/REPORTEROS/REPORT_6.2.3";
+                string report = "REPORTES/REPORTEROS/REPORT_6.2.3_NEW";
                 var reportRenderType = StaticFunctions.GetReportRenderType(format);
                 var extension = StaticFunctions.FileExtension(reportRenderType);
                 var contentType = StaticFunctions.GetContentType(reportRenderType);
@@ -930,7 +931,8 @@ namespace DRRCore.Application.Main.CoreApplication
             {
 
                 string fileFormat = "{0}_{1}{2}";
-                string report = "REPORTES/DIGITADORES/REPORT_6.4.3";
+                //string report = "REPORTES/DIGITADORES/REPORT_6.4.3";
+                string report = "REPORTES/DIGITADORES/REPORT_6.4.3_NEW";
                 var reportRenderType = StaticFunctions.GetReportRenderType(format);
                 var extension = StaticFunctions.FileExtension(reportRenderType);
                 var contentType = StaticFunctions.GetContentType(reportRenderType);
@@ -1068,7 +1070,8 @@ namespace DRRCore.Application.Main.CoreApplication
             {
 
                 string fileFormat = "{0}_{1}{2}";
-                string report = "REPORTES/TRADUCTORES/REPORT_6.5.3";
+                //string report = "REPORTES/TRADUCTORES/REPORT_6.5.3";
+                string report = "REPORTES/TRADUCTORES/REPORT_6.5.3_NEW";
                 var reportRenderType = StaticFunctions.GetReportRenderType(format);
                 var extension = StaticFunctions.FileExtension(reportRenderType);
                 var contentType = StaticFunctions.GetContentType(reportRenderType);

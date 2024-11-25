@@ -1164,6 +1164,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         emailDataDto.CC = new List<string>
                         {
                             "diego.rodriguez@del-risco.com",
+                            "crodriguez@del-risco.com"
                              //user.IdEmployeeNavigation.Email,
                             // "crc@del-risco.com"
                         };

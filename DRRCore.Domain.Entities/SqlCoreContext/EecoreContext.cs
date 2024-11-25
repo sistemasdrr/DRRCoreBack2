@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using DRRCore.Application.DTO.Core.Response;
 using Microsoft.EntityFrameworkCore;
 
 namespace DRRCore.Domain.Entities.SqlCoreContext;
@@ -230,8 +229,8 @@ public partial class EecoreContext : DbContext
         {
             optionsBuilder.UseSqlServer(
 
-            "Data Source=200.58.123.184,14330;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
-            // "Data Source=SD-4154134-W;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
+            // "Data Source=200.58.123.184,14330;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
+            "Data Source=SD-4154134-W;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
 
             //migracion
             //"Data Source=SD-4154134-W/DRRSQLSERVER;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
@@ -973,6 +972,12 @@ public partial class EecoreContext : DbContext
             entity.Property(e => e.Migra)
                 .HasDefaultValueSql("((0))")
                 .HasColumnName("migra");
+            entity.Property(e => e.MigrateCompanyPerson)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("migrateCompanyPerson");
+            entity.Property(e => e.MigrateCompanyRelation)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("migrateCompanyRelation");
             entity.Property(e => e.Name)
                 .IsUnicode(false)
                 .HasColumnName("name");
@@ -3389,6 +3394,12 @@ public partial class EecoreContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("lastSearched");
             entity.Property(e => e.LastUpdateUser).HasColumnName("lastUpdateUser");
+            entity.Property(e => e.MigratePersonCompany)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("migratePersonCompany");
+            entity.Property(e => e.MigratePersonRelation)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("migratePersonRelation");
             entity.Property(e => e.MotherName)
                 .HasMaxLength(150)
                 .IsUnicode(false)
