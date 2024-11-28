@@ -125,8 +125,6 @@ public partial class Ticket
 
     public virtual Ticket? IdTicketComplementNavigation { get; set; }
 
-    public virtual ICollection<InternalInvoiceDetail> InternalInvoiceDetails { get; set; } = new List<InternalInvoiceDetail>();
-
     public virtual ICollection<Ticket> InverseIdTicketComplementNavigation { get; set; } = new List<Ticket>();
 
     public virtual ICollection<ReferencesHistory> ReferencesHistories { get; set; } = new List<ReferencesHistory>();

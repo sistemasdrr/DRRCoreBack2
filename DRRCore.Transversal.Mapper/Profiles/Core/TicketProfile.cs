@@ -107,6 +107,8 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                 .ForMember(dest => dest.Code, opt => opt?.MapFrom(src => src.AsignedTo))
                 .ReverseMap();
             CreateMap<Ticket, GetListTicketResponseDto>()
+                 .ForMember(dest => dest.Id, opt => opt?.MapFrom(src => src.Id))
+                 .ForMember(dest => dest.IdTicket, opt => opt?.MapFrom(src => src.Id))
                  .ForMember(dest => dest.IdSubscriber, opt => opt?.MapFrom(src => src.IdSubscriber == null ? 0 : src.IdSubscriber))
                  .ForMember(dest => dest.ProcedureType, opt => opt?.MapFrom(src => src.ProcedureType == null ? string.Empty : src.ProcedureType.Trim()))
                  .ForMember(dest => dest.IdContinent, opt => opt?.MapFrom(src => src.IdContinent == null ? 0 : src.IdContinent))
@@ -165,7 +167,8 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
 
                   .ReverseMap();
             CreateMap<TicketHistory, GetListTicketResponseDto>()
-                .ForMember(dest => dest.Id, opt => opt?.MapFrom(src => src.IdTicket))
+                 .ForMember(dest => dest.IdTicket, opt => opt?.MapFrom(src => src.IdTicket))
+                 .ForMember(dest => dest.Id, opt => opt?.MapFrom(src => src.IdTicket))
                  .ForMember(dest => dest.IdSubscriber, opt => opt?.MapFrom(src => src.IdTicketNavigation.IdSubscriber == null ? 0 : src.IdTicketNavigation.IdSubscriber))
                  .ForMember(dest => dest.ProcedureType, opt => opt?.MapFrom(src => src.IdTicketNavigation.ProcedureType == null ? string.Empty : src.IdTicketNavigation.ProcedureType.Trim()))
                  .ForMember(dest => dest.IdContinent, opt => opt?.MapFrom(src => src.IdTicketNavigation.IdContinent == null ? 0 : src.IdTicketNavigation.IdContinent))
@@ -239,6 +242,8 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                 .ForMember(dest => dest.ComplementQualityTypist, opt => opt.MapFrom(src => src.IdTicketNavigation.IsComplement == true ? src.IdTicketNavigation.IdTicketComplementNavigation.QualityTypist : ""))
 
                   .ReverseMap();
+        
+
             CreateMap<TicketHistory, GetListTicketResponseDto2>()
                 .ForMember(dest => dest.IsAgent, opt => opt.MapFrom(src =>  src.IdTicketNavigation.TicketHistories != null ? GetIsAgent(src.IdTicketNavigation.TicketHistories) : default))
                 .ForMember(dest => dest.AgentFrom, opt => opt.MapFrom(src => src.IdTicketNavigation.TicketHistories != null ? GetAgentFrom(src.IdTicketNavigation.TicketHistories) : default))

@@ -24,6 +24,7 @@ namespace DRRCore.Application.DTO.Core.Request
         public int? IdCurrency { get; set; }
         public int? IdCountry { get; set; }
         public int? IdSubscriber { get; set; }
+
         public decimal? ExchangeRate { get; set; }
         public string? SubscriberCode { get; set; }
         public string? AttendedByName { get; set; }
@@ -41,9 +42,17 @@ namespace DRRCore.Application.DTO.Core.Request
         public DateTime? InvoiceDate { get; set; }
         public string? Language { get; set; }
         public int? IdCurrency { get; set; }
+        public int? IdCountry{ get; set; }
         public int? IdSubscriber { get; set; }
+
+        public decimal? ExchangeRate { get; set; }
+        public string? SubscriberCode { get; set; }
         public string? AttendedByName { get; set; }
         public string? AttendedByEmail { get; set; }
+        public string? TaxTypeCode { get; set; }
+        public decimal? Igv { get; set; }
+        public string? Address { get; set; }
+        public string? AttendedBy { get; set; }
         public int? Quantity { get; set; }
         public decimal? TotalPrice { get; set; }
         public List<InvoiceSubscriberCCHistory> Details { get; set; }

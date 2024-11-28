@@ -2319,7 +2319,7 @@ namespace DRRCore.Application.Main.CoreApplication
                             }
                             if(internalInvoice != null && internalInvoice.InternalInvoiceDetails.Count > 0)
                             {
-                                amount = internalInvoice.InternalInvoiceDetails.Where(x => x.IdTicket == item1.IdTicket).FirstOrDefault().Price;
+                                amount = internalInvoice.InternalInvoiceDetails.Where(x => x.IdTicketHistory == item1.Id).FirstOrDefault().Price;
                             }
                             subscriberTickets.Add(new GetQueryTicket5_1_2ResponseDto
                             {

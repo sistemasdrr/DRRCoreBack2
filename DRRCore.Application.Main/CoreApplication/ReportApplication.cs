@@ -453,7 +453,7 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<GetFileResponseDto>> DownloadReport6_2_3(string startDate, string endDate, string code, string format)
+        public async Task<Response<GetFileResponseDto>> DownloadReport6_2_3(string cycle, string code, string format)
         {
             var response = new Response<GetFileResponseDto>();
             try
@@ -468,8 +468,7 @@ namespace DRRCore.Application.Main.CoreApplication
 
                 var dictionary = new Dictionary<string, string>
                 {
-                    { "desde", startDate },
-                    { "hasta", endDate },
+                    { "cycle", cycle },
                     { "code", code },
                 };
 
@@ -924,7 +923,7 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<GetFileResponseDto>> DownloadReport6_4_3(string startDate, string endDate, string code, string format)
+        public async Task<Response<GetFileResponseDto>> DownloadReport6_4_3(string cycle, string code, string format)
         {
             var response = new Response<GetFileResponseDto>();
             try
@@ -939,8 +938,7 @@ namespace DRRCore.Application.Main.CoreApplication
 
                 var dictionary = new Dictionary<string, string>
                 {
-                    { "desde", startDate },
-                    { "hasta", endDate },
+                    { "cycle", cycle },
                     { "code", code },
                 };
 
@@ -1063,7 +1061,7 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<GetFileResponseDto>> DownloadReport6_5_3(string startDate, string endDate, string code, string format)
+        public async Task<Response<GetFileResponseDto>> DownloadReport6_5_3(string cycle, string code, string format)
         {
             var response = new Response<GetFileResponseDto>();
             try
@@ -1078,8 +1076,7 @@ namespace DRRCore.Application.Main.CoreApplication
 
                 var dictionary = new Dictionary<string, string>
                 {
-                    { "desde", startDate },
-                    { "hasta", endDate },
+                    { "cycle", cycle },
                     { "code", code },
                 };
 

@@ -450,7 +450,18 @@ namespace DRRCore.Services.ApiCore.Controllers
         {
             return Ok(await _ticketApplication.ValidateQuality(idTicket));
         }
-
+        [HttpGet()]
+        [Route("GetTicketObservedByIdEmployee")]
+        public async Task<IActionResult> GetTicketObservedByIdEmployee(int idEmployee)
+        {
+            return Ok(await _ticketApplication.GetTicketObservedByIdEmployee(idEmployee));
+        }
+        [HttpPost()]
+        [Route("TicketToDispatchById")]
+        public async Task<IActionResult> TicketToDispatchById(int idTicket, bool hasObs)
+        {
+            return Ok(await _ticketApplication.TicketToDispatchById(idTicket, hasObs));
+        }
         
     }
 }

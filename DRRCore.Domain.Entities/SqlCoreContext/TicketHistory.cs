@@ -56,4 +56,6 @@ public partial class TicketHistory
     public virtual StatusTicket? IdStatusTicketNavigation { get; set; }
 
     public virtual Ticket? IdTicketNavigation { get; set; }
+
+    public virtual ICollection<InternalInvoiceDetail> InternalInvoiceDetails { get; set; } = new List<InternalInvoiceDetail>();
 }

@@ -88,11 +88,13 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
            .ForMember(dest => dest.IdCouponBilling, opt => opt?.MapFrom(src => src.IdCouponBilling == 0 ? null : src.IdCouponBilling))
            .ForMember(dest => dest.IdEmployee, opt => opt?.MapFrom(src => src.IdEmployee == 0 ? null : src.IdEmployee))
            .ForMember(dest => dest.CouponAmount, opt => opt?.MapFrom(src => src.CouponAmount))
+            .ForMember(dest => dest.State, opt => opt?.MapFrom(src => src.State))
            .ForMember(dest => dest.CouponUnitPrice, opt => opt?.MapFrom(src => src.CouponUnitPrice))
            .ForMember(dest => dest.TotalPrice, opt => opt?.MapFrom(src => src.TotalPrice))
         .ReverseMap();
             CreateMap<AddOrUpdateCouponBillingSubscriberHistoryRequestDto, CouponBillingSubscriberHistory>()
             .ForMember(dest => dest.IdCouponBilling, opt => opt?.MapFrom(src => src.IdCouponBilling == 0 ? null : src.IdCouponBilling))
+            .ForMember(dest => dest.State, opt => opt?.MapFrom(src => src.State))
             .ForMember(dest => dest.PurchaseDate, opt => opt?.MapFrom(src => StaticFunctions.VerifyDate(src.PurchaseDate)))
         .ReverseMap();
             CreateMap<AddOrUpdateCouponBillingSubscriberRequestDto, CouponBillingSubscriber>()

@@ -82,5 +82,10 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<int>> ValidateQuality(int idTicket);
         Task<Response<List<string>>> GetUsersInTicket(int idTicket);
 
-         }
+        //GetListTicketResponseDto2
+        Task<Response<List<GetListTicketResponseDto>>> GetTicketObservedByIdEmployee(int idEmployee);
+        Task<Response<bool>> TicketToDispatchById(int idTicket, bool hasObs);
+
+
+    }
 }

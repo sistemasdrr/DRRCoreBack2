@@ -9,8 +9,6 @@ public partial class InternalInvoiceDetail
 
     public int? IdInternalInvoice { get; set; }
 
-    public int? IdTicket { get; set; }
-
     public bool? IsComplement { get; set; }
 
     public string? Quality { get; set; }
@@ -25,7 +23,9 @@ public partial class InternalInvoiceDetail
 
     public bool? Enable { get; set; }
 
+    public int? IdTicketHistory { get; set; }
+
     public virtual InternalInvoice? IdInternalInvoiceNavigation { get; set; }
 
-    public virtual Ticket? IdTicketNavigation { get; set; }
+    public virtual TicketHistory? IdTicketHistoryNavigation { get; set; }
 }

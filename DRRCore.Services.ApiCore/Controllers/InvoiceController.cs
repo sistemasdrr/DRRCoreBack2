@@ -176,5 +176,12 @@ namespace DRRCore.Services.ApiCore.Controllers
         {
             return Ok(await _invoiceApplication.GetTramo(obj));
         }
+
+        [HttpPost()]
+        [Route("GetTramoCC")]
+        public async Task<IActionResult> GetTramoCC(AddOrUpdateSubscriberInvoiceCCRequestDto obj)
+        {
+            return Ok(await _invoiceApplication.GetTramoCC(obj));
+        }
     }
 }

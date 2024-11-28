@@ -23,6 +23,8 @@
        Por_Digitar = 20,
        Por_Traducir = 21,
        En_Observacion = 22,
-       Despachado_con_Observacion = 23
+       Despachado_con_Observacion = 23,
+       Por_Supervisar_Falta_Referencia = 24,
+       Por_Despachar_Con_Observaciones = 26,
     }
 }

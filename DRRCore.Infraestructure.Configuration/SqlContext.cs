@@ -34,8 +34,8 @@ public partial class SqlContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
 
-        //  optionsBuilder.UseSqlServer("Data Source=200.58.123.184,14330;Initial Catalog=admindrr;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
-        optionsBuilder.UseSqlServer("Data Source=SD-4154134-W;Initial Catalog=admindrr;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
+        optionsBuilder.UseSqlServer("Data Source=200.58.123.184,14330;Initial Catalog=admindrr;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
+        //optionsBuilder.UseSqlServer("Data Source=SD-4154134-W;Initial Catalog=admindrr;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
 
 
 

@@ -9,6 +9,7 @@
         public int? IdEmployee { get; set; }
 
         public string? PurchaseDate { get; set; }
+        public string? State { get; set; }
 
         public string? CouponAmount { get; set; }
 

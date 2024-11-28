@@ -915,7 +915,38 @@ namespace DRRCore.Application.Main.CoreApplication
                 Password = "drrti2023"
             };
         }
-
+        public async Task<Response<bool>> TicketToDispatchById(int idTicket, bool hasObs)
+        {
+            var response = new Response<bool>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var ticket = await context.Tickets.Where(x => x.Id == idTicket).FirstOrDefaultAsync();
+                if(ticket != null)
+                {
+                    if(hasObs == true)
+                    {
+                        ticket.IdStatusTicket = (int)TicketStatusEnum.Por_Despachar_Con_Observaciones;
+                    }
+                    else
+                    {
+                        ticket.IdStatusTicket = (int)TicketStatusEnum.Por_Despachar;
+                    }
+                    context.Tickets.Update(ticket);
+                    await context.SaveChangesAsync();
+                    response.Data = true;
+                }
+                else
+                {
+                    response.Data = false;
+                }
+               
+            }catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            return response;
+        }
         public async Task<Response<List<GetListTicketResponseDto>>> GetTicketListByAsync(string ticket, string name, string subscriber, string type, string procedure)
         {
             var response = new Response<List<GetListTicketResponseDto>>();
@@ -4689,8 +4720,13 @@ namespace DRRCore.Application.Main.CoreApplication
                         AsignedDate = obj.AsignedDate,
                         EndDate = obj.EndDate,
                         SolutionDate =  null,
-                        DetailsTicketObservations = details
+                        DetailsTicketObservations = details,
                     };
+                    var ticket = await context.Tickets.Where(x => x.Id == obj.IdTicket).FirstOrDefaultAsync();
+                    if (ticket != null)
+                    {
+                        ticket.IdStatusTicket = (int)TicketStatusEnum.En_Observacion;
+                    }
                     await context.TicketObservations.AddAsync(insert);
                    
                     await context.SaveChangesAsync();
@@ -5685,7 +5721,47 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        
+        public async Task<Response<List<GetListTicketResponseDto>>> GetTicketObservedByIdEmployee(int idEmployee)
+        {
+            var response = new Response<List<GetListTicketResponseDto>>();
+            response.Data = new List<GetListTicketResponseDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var listTicket = new List<Ticket>();
+                var personal = await context.Personals.Where(x => x.IdEmployee == idEmployee).ToListAsync();
+                foreach (var item in personal)
+                {
+                    var listTicketObservations = await context.DetailsTicketObservations
+                        .Include(x => x.IdTicketObservationsNavigation).ThenInclude(x => x.IdTicketNavigation).ThenInclude(x => x.IdCompanyNavigation)
+                        .Include(x => x.IdTicketObservationsNavigation).ThenInclude(x => x.IdTicketNavigation).ThenInclude(x => x.IdTicketComplementNavigation)
+                        .Include(x => x.IdTicketObservationsNavigation).ThenInclude(x => x.IdTicketNavigation).ThenInclude(x => x.IdSubscriberNavigation).ThenInclude(x => x.IdCountryNavigation)
+                        .Include(x => x.IdTicketObservationsNavigation).ThenInclude(x => x.IdTicketNavigation).ThenInclude(x => x.IdContinentNavigation)
+                        .Include(x => x.IdTicketObservationsNavigation).ThenInclude(x => x.IdTicketNavigation).ThenInclude(x => x.IdCompanyNavigation).ThenInclude(x => x.IdCountryNavigation).ThenInclude(x => x.IdContinentNavigation)
+                        .Include(x => x.IdTicketObservationsNavigation).ThenInclude(x => x.IdTicketNavigation).ThenInclude(x => x.IdPersonNavigation).ThenInclude(x => x.IdCountryNavigation).ThenInclude(x => x.IdContinentNavigation)
+                        .Include(x => x.IdTicketObservationsNavigation).ThenInclude(x => x.IdTicketNavigation).ThenInclude(x => x.IdCountryNavigation)
+                        .Include(x => x.IdTicketObservationsNavigation).ThenInclude(x => x.IdTicketNavigation).ThenInclude(x => x.IdStatusTicketNavigation)
+                        .Include(x => x.IdTicketObservationsNavigation).ThenInclude(x => x.IdTicketNavigation).ThenInclude(x => x.TicketAssignation).ThenInclude(x => x.IdEmployeeNavigation)
+                        .Include(x => x.IdTicketObservationsNavigation).ThenInclude(x => x.IdTicketNavigation).ThenInclude(x => x.TicketQuery)
+                        .Include(x => x.IdTicketObservationsNavigation).ThenInclude(x => x.IdTicketNavigation).ThenInclude(x => x.TicketFiles)
+                        .Include(x => x.IdTicketObservationsNavigation).ThenInclude(x => x.IdTicketNavigation).ThenInclude(x => x.TicketHistories.OrderByDescending(x => x.Id)).Where(x => x.Enable == true)
+                        .Where(x => x.AssignedTo.Contains(item.Code) && x.IdTicketObservationsNavigation.IdStatusTicketObservations == 1).ToListAsync();
+                    foreach(var ticket in listTicketObservations)
+                    {
+                        listTicket.Add(ticket.IdTicketObservationsNavigation.IdTicketNavigation);
+                    }
+                }
+
+                response.Data = _mapper.Map<List<GetListTicketResponseDto>>(listTicket);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                response.IsSuccess = true;
+            }
+            return response;
+        }
     }
 
 }

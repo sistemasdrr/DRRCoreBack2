@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DRRCore.Transversal.Common")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9963bc278e9f54000c445110c65d996ddf6a8e33")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4668d69955c91d34d62feafb005de80f2f8a9aef")]
 [assembly: System.Reflection.AssemblyProductAttribute("DRRCore.Transversal.Common")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DRRCore.Transversal.Common")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DRRCore.Application.DTO.Core.Response;
 using Microsoft.EntityFrameworkCore;
 
 namespace DRRCore.Domain.Entities.SqlCoreContext;
@@ -229,8 +230,8 @@ public partial class EecoreContext : DbContext
         {
             optionsBuilder.UseSqlServer(
 
-            // "Data Source=200.58.123.184,14330;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
-            "Data Source=SD-4154134-W;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
+            "Data Source=200.58.123.184,14330;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
+            // "Data Source=SD-4154134-W;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
 
             //migracion
             //"Data Source=SD-4154134-W/DRRSQLSERVER;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
@@ -2746,7 +2747,7 @@ public partial class EecoreContext : DbContext
                 .HasDefaultValueSql("((1))")
                 .HasColumnName("enable");
             entity.Property(e => e.IdInternalInvoice).HasColumnName("idInternalInvoice");
-            entity.Property(e => e.IdTicket).HasColumnName("idTicket");
+            entity.Property(e => e.IdTicketHistory).HasColumnName("idTicketHistory");
             entity.Property(e => e.IsComplement).HasColumnName("isComplement");
             entity.Property(e => e.Price)
                 .HasColumnType("decimal(6, 2)")
@@ -2763,9 +2764,9 @@ public partial class EecoreContext : DbContext
                 .HasForeignKey(d => d.IdInternalInvoice)
                 .HasConstraintName("FK__InternalI__idInt__3F1C4B12");
 
-            entity.HasOne(d => d.IdTicketNavigation).WithMany(p => p.InternalInvoiceDetails)
-                .HasForeignKey(d => d.IdTicket)
-                .HasConstraintName("FK__InternalI__idTic__40106F4B");
+            entity.HasOne(d => d.IdTicketHistoryNavigation).WithMany(p => p.InternalInvoiceDetails)
+                .HasForeignKey(d => d.IdTicketHistory)
+                .HasConstraintName("FK__InternalI__idTic__68DD7AB4");
         });
 
         modelBuilder.Entity<InvoiceState>(entity =>
@@ -4625,7 +4626,7 @@ public partial class EecoreContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Abrev)
-                .HasMaxLength(20)
+                .HasMaxLength(40)
                 .IsUnicode(false)
                 .HasColumnName("abrev");
             entity.Property(e => e.Color)
