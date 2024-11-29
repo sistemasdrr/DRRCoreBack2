@@ -22,6 +22,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<SftpSettings>(builder.Configuration.GetSection("SftpSettings"));
 
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 // Add services to the container.
 
 builder.Services.AddControllers();

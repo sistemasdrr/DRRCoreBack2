@@ -744,3 +744,8 @@ C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Services.ApiWeb\obj\Debug\
 C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Services.ApiWeb\obj\Debug\net6.0\DRRCore.Services.ApiWeb.pdb
 C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Services.ApiWeb\obj\Debug\net6.0\DRRCore.Services.ApiWeb.genruntimeconfig.cache
 C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Services.ApiWeb\obj\Debug\net6.0\ref\DRRCore.Services.ApiWeb.dll
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Services.ApiWeb\bin\Debug\net6.0\DRRCore.Services.ApiWeb.staticwebassets.endpoints.json
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Services.ApiWeb\obj\Debug\net6.0\DRRCore.Services.ApiWeb.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Services.ApiWeb\obj\Debug\net6.0\staticwebassets.build.endpoints.json
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Services.ApiWeb\obj\Debug\net6.0\staticwebassets\msbuild.DRRCore.Services.ApiWeb.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Services.ApiWeb\obj\Debug\net6.0\staticwebassets.upToDateCheck.txt

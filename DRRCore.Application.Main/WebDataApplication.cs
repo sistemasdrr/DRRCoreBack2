@@ -313,7 +313,7 @@ namespace DRRCore.Application.Main
                 };
                 emailDataDto.CC = new List<string>
                 {
-                     "diego.rodriguez@del-risco.com",
+                    "diego.rodriguez@del-risco.com",
                 };
 
                 var subjectName = (obj.Language == "C" ? "Pedido : " : "Order : ") + obj.TransactionCode + " - " + obj.RequestedName;
