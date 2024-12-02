@@ -1,15 +1,18 @@
 ﻿using AspNetCore.Reporting;
 using AutoMapper;
+using AutoMapper.Execution;
 using DocumentFormat.OpenXml.Bibliography;
 using DocumentFormat.OpenXml.ExtendedProperties;
 using DocumentFormat.OpenXml.Math;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DRRCore.Application.DTO.Core.Response;
 using DRRCore.Application.DTO.Email;
+using DRRCore.Application.DTO.Enum;
 using DRRCore.Application.DTO.Web;
 using DRRCore.Application.Interfaces;
 using DRRCore.Domain.Entities.SQLContext;
 using DRRCore.Domain.Entities.SqlCoreContext;
+using DRRCore.Domain.Entities.SqlCoreContext2;
 using DRRCore.Domain.Interfaces;
 using DRRCore.Domain.Interfaces.EmailDomain;
 using DRRCore.Transversal.Common;
@@ -227,7 +230,7 @@ namespace DRRCore.Application.Main
             try
             {
                 using var context = new SqlCoreContext();
-                var company = await context.Companies.Where(x => x.OldCode.Contains(obj.OldCode.Trim())).FirstOrDefaultAsync();
+                var company = await context.Companies.Where(x => x.OldCode.Contains(obj.OldCode.Trim())).Include(x => x.IdCountryNavigation).FirstOrDefaultAsync();
 
                 var reportName = "";
                 var language = obj.Language == "C" ? "E" : "I";
@@ -309,7 +312,7 @@ namespace DRRCore.Application.Main
 
                 emailDataDto.To = new List<string>
                 {
-                    "jfernandez@del-risco.com",
+                    "jfernandez@del-risco.com"
                 };
                 emailDataDto.CC = new List<string>
                 {
@@ -337,10 +340,44 @@ namespace DRRCore.Application.Main
                 emailDataDto.Attachments.Add(attachment);
 
                 var result = await _mailSender.SendMailAsync(_mapper.Map<EmailValues>(emailDataDto));
+                if (result == true)
+                {
+                    var emailHistory = _mapper.Map<EmailHistory>(emailDataDto);
+                    emailHistory.Success = result;
+                    response.Data = await _emailHistoryDomain.AddAsync(emailHistory);
 
-                var emailHistory = _mapper.Map<EmailHistory>(emailDataDto);
-                emailHistory.Success = result;
-                response.Data = await _emailHistoryDomain.AddAsync(emailHistory);
+                    var numeration = await context.Numerations.Where(x => x.Name == "NUM_TICKET").FirstOrDefaultAsync();
+                    numeration.Number++;
+                    var subscriber = await context.Subscribers.Where(x => x.Code == "0001").FirstOrDefaultAsync();
+                    var ticket = new Domain.Entities.SqlCoreContext.Ticket();
+                    ticket.Number = (int)(numeration.Number);
+                    ticket.IdSubscriber = subscriber.Id;
+                    ticket.RevealName = subscriber.RevealName;
+                    ticket.ReferenceNumber = "";
+                    ticket.Language = obj.Language == "C" ? "E" : "I";
+                    ticket.About = "E";
+                    ticket.OrderDate = DateTime.Now;
+                    ticket.ExpireDate = DateTime.Now;
+                    ticket.RealExpireDate = DateTime.Now;
+                    ticket.DispatchtDate = DateTime.Now;
+                    ticket.IdCountry = company.IdCountry;
+                    ticket.IdContinent = company.IdCountryNavigation.IdContinent;
+                    ticket.RequestedName = obj.RequestedName;
+                    ticket.DispatchedName = obj.RequestedName;
+                    ticket.Quality = obj.Quality;
+                    ticket.Price = obj.Price;
+                    ticket.ProcedureType = "T5";
+                    ticket.IdStatusTicket = (int)TicketStatusEnum.Despachado;
+                    ticket.IsComplement = false;
+                    ticket.IdInvoiceState = 1;
+                    ticket.Web = true;
+                    ticket.ReportType = "RV";
+
+                    context.Numerations.Update(numeration);
+                    context.Tickets.AddAsync(ticket);
+                    await context.SaveChangesAsync();
+                }
+
                 _logger.LogInformation(Messages.MailSuccessSend);
             }
             catch (Exception ex)
