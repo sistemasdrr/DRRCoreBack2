@@ -889,7 +889,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     await context.ProductionClosures.AddAsync(new ProductionClosure
                     {
                         EndDate = lastDayOfCurrentMonth,
-                        Code = code,
+                        Code = cycleCode,
                         Title = "Cierre de Producción " + DateTime.Now.Month.ToString("D2") + " - " + DateTime.Now.Year,
                         Observations = ""
                     });
@@ -900,7 +900,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     {
                         if (DateTime.Now.Month == 12)
                         {
-                            code = "CP_" + (1).ToString("D2") + "_" + (DateTime.Now.Year + 1);
+                            cycleCode = "CP_" + (1).ToString("D2") + "_" + (DateTime.Now.Year + 1);
                             var nextProductionClosureExistent = await context.ProductionClosures.Where(x => x.Code.Contains(code)).FirstOrDefaultAsync();
                             if (nextProductionClosureExistent == null)
                             {
@@ -908,7 +908,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                 await context.ProductionClosures.AddAsync(new ProductionClosure
                                 {
                                     EndDate = lastDayOfCurrentMonth,
-                                    Code = code,
+                                    Code = cycleCode,
                                     Title = "Cierre de Producción " + (1).ToString("D2") + " - " + DateTime.Today.Year + 1,
                                     Observations = ""
                                 });
@@ -916,7 +916,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         }
                         else
                         {
-                            code = "CP_" + (DateTime.Now.Month + 1).ToString("D2") + "_" + DateTime.Now.Year;
+                            cycleCode = "CP_" + (DateTime.Now.Month + 1).ToString("D2") + "_" + DateTime.Now.Year;
                             var nextProductionClosureExistent = await context.ProductionClosures.Where(x => x.Code.Contains(code)).FirstOrDefaultAsync();
                             if (nextProductionClosureExistent == null)
                             {
@@ -924,7 +924,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                 await context.ProductionClosures.AddAsync(new ProductionClosure
                                 {
                                     EndDate = lastDayOfCurrentMonth,
-                                    Code = code,
+                                    Code = cycleCode,
                                     Title = "Cierre de Producción " + (DateTime.Now.Month + 1).ToString("D2") + " - " + DateTime.Now.Year,
                                     Observations = ""
                                 });
@@ -935,12 +935,14 @@ namespace DRRCore.Application.Main.CoreApplication
 
                 var internalInvoice = await context.InternalInvoices
                     .Where(x => x.Code == code && x.Cycle == currentCycle && x.Type == type)
-                    .Include(x => x.InternalInvoiceDetails)
+                    //.Include(x => x.InternalInvoiceDetails)
                     .FirstOrDefaultAsync();
                 decimal? totalPrice1 = 0;
-                if (internalInvoice != null)
-                {
-                    foreach (var details in internalInvoice.InternalInvoiceDetails)
+                if (internalInvoice != null) { 
+
+                    var internalInvoiceDetails = await context.InternalInvoiceDetails.Where(x => x.IdInternalInvoice == internalInvoice.Id).ToListAsync();
+
+                    foreach (var details in internalInvoiceDetails)
                     {
                         context.InternalInvoiceDetails.Remove(details);
                     }
