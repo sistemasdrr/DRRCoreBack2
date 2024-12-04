@@ -5,6 +5,7 @@
         public int IdTicket { get; set; }
         public string? Number { get; set; }
         public string? RequestedName { get; set; }
+        public string? ReferenceNumber { get; set; }
         public string? DispatchedName { get; set; }
         public string? OrderDate { get; set; }
         public string? ExpireDate { get; set; }

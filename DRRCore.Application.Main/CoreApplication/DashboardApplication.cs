@@ -121,7 +121,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         {
                             AsignedTo = item1.AssignedTo,
                             IdTicket = item1.IdTicketObservationsNavigation.IdTicket,
-                            Ticket = item1.IdTicketObservationsNavigation.IdTicketNavigation.Number.ToString("D6")
+                            Ticket = item1.IdTicketObservationsNavigation.IdTicketNavigation.IsComplement == true ? "(C) - " : "" + item1.IdTicketObservationsNavigation.IdTicketNavigation.Number.ToString("D6")
                         });
                     }
 

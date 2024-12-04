@@ -1,11 +1,12 @@
 {
   "Version": 1,
-  "Hash": "su9xZ5Binqm/r9vQoZ0u0rxcJQYsPuEamhQITX0KIuw=",
+  "Hash": "lz8M1XgBl8oSYT89kplcmc0cXNh0vX7n3mhqB9ajQ8U=",
   "Source": "DRRCore.Services.ApiWeb",
   "BasePath": "_content/DRRCore.Services.ApiWeb",
   "Mode": "Default",
   "ManifestType": "Publish",
   "ReferencedProjectsConfiguration": [],
   "DiscoveryPatterns": [],
-  "Assets": []
+  "Assets": [],
+  "Endpoints": []
 }

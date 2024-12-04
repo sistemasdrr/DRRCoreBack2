@@ -3079,6 +3079,8 @@ namespace DRRCore.Application.Main.MigrationApplication
                         }
 
                         item.Migra = 1;
+                        item.MigrateCompanyRelation = true;
+                        item.MigrateCompanyPerson = true;
                         context.Companies.Update(item);
                         await context.SaveChangesAsync();
                     }
@@ -3161,6 +3163,7 @@ namespace DRRCore.Application.Main.MigrationApplication
                                 });
                             }
                         }
+                        item.MigrateCompanyPerson = true;
                         item.Migra = 1;
                         context.Companies.Update(item);
                         await context.SaveChangesAsync();
@@ -3571,6 +3574,8 @@ namespace DRRCore.Application.Main.MigrationApplication
                             company.OnWeb = empresa.EmOnline == "SI";
                             company.ReputationComentary = empresa.EmComrep;
                             company.Print = empresa.EmLogpre == 1;
+                            company.MigrateCompanyPerson = false;
+                            company.MigrateCompanyRelation = false;
                             //background
                             var background = await context.CompanyBackgrounds.Where(x => x.IdCompany == company.Id).FirstOrDefaultAsync();
                             if (background != null)
@@ -3834,7 +3839,9 @@ namespace DRRCore.Application.Main.MigrationApplication
                                 WorkersHistories = await GetWorkersHistories(empresa),
                                 CompanyImages = await GetCompanyImage(empresa.EmCodigo),
                                 TraductionCompanies = await GetAllTraductions(empresa),
-
+                                MigrateCompanyRelation = false,
+                                MigrateCompanyPerson = false,
+                                
                             };
                             await context.Companies.AddAsync(newCompany);
                             await context.SaveChangesAsync();
@@ -3932,7 +3939,8 @@ namespace DRRCore.Application.Main.MigrationApplication
                             person.IdPaymentPolicy = GetPaymentPolicy(persona.PaCodigo);
                             person.IdReputation = idReputacion != 0 ? idReputacion : null;
                             person.Profession = persona.PfNombre == null ? "" : persona.PfNombre;
-
+                            person.MigratePersonCompany = false;
+                            person.MigratePersonRelation = false;
                             //PersonActivity
                             var activity = await context.PersonActivities.Where(x => x.IdPerson == person.Id).FirstOrDefaultAsync();
                             if(activity != null)
@@ -4130,7 +4138,9 @@ namespace DRRCore.Application.Main.MigrationApplication
                                 BankDebts = await GetPersonBankDebt(persona),
                                 ComercialLatePayments = await GetPersonCommercialLate(persona),
                                 Providers = await GetPersonProviders(persona),
-                                TraductionPeople = await GetPersonTraductions(persona)
+                                TraductionPeople = await GetPersonTraductions(persona),
+                                MigratePersonCompany = false,
+                                MigratePersonRelation = false
                             };
                             await context.People.AddAsync(newPerson);
                         }

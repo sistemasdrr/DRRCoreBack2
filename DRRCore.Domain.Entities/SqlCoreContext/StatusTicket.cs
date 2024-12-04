@@ -9,7 +9,7 @@ public partial class StatusTicket
 
     public string Description { get; set; } = null!;
 
-    public string Abrev { get; set; } = null!;
+    public string? Abrev { get; set; }
 
     public string Color { get; set; } = null!;
 

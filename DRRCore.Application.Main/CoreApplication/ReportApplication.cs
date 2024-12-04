@@ -453,22 +453,22 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<GetFileResponseDto>> DownloadReport6_2_3(string startDate, string endDate, string code, string format)
+        public async Task<Response<GetFileResponseDto>> DownloadReport6_2_3(string cycle, string code, string format)
         {
             var response = new Response<GetFileResponseDto>();
             try
             {
 
                 string fileFormat = "{0}_{1}{2}";
-                string report = "REPORTES/REPORTEROS/REPORT_6.2.3";
+                //string report = "REPORTES/REPORTEROS/REPORT_6.2.3";
+                string report = "REPORTES/REPORTEROS/REPORT_6.2.3_NEW";
                 var reportRenderType = StaticFunctions.GetReportRenderType(format);
                 var extension = StaticFunctions.FileExtension(reportRenderType);
                 var contentType = StaticFunctions.GetContentType(reportRenderType);
 
                 var dictionary = new Dictionary<string, string>
                 {
-                    { "desde", startDate },
-                    { "hasta", endDate },
+                    { "cycle", cycle },
                     { "code", code },
                 };
 
@@ -923,22 +923,22 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<GetFileResponseDto>> DownloadReport6_4_3(string startDate, string endDate, string code, string format)
+        public async Task<Response<GetFileResponseDto>> DownloadReport6_4_3(string cycle, string code, string format)
         {
             var response = new Response<GetFileResponseDto>();
             try
             {
 
                 string fileFormat = "{0}_{1}{2}";
-                string report = "REPORTES/DIGITADORES/REPORT_6.4.3";
+                //string report = "REPORTES/DIGITADORES/REPORT_6.4.3";
+                string report = "REPORTES/DIGITADORES/REPORT_6.4.3_NEW";
                 var reportRenderType = StaticFunctions.GetReportRenderType(format);
                 var extension = StaticFunctions.FileExtension(reportRenderType);
                 var contentType = StaticFunctions.GetContentType(reportRenderType);
 
                 var dictionary = new Dictionary<string, string>
                 {
-                    { "desde", startDate },
-                    { "hasta", endDate },
+                    { "cycle", cycle },
                     { "code", code },
                 };
 
@@ -1061,22 +1061,22 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<GetFileResponseDto>> DownloadReport6_5_3(string startDate, string endDate, string code, string format)
+        public async Task<Response<GetFileResponseDto>> DownloadReport6_5_3(string cycle, string code, string format)
         {
             var response = new Response<GetFileResponseDto>();
             try
             {
 
                 string fileFormat = "{0}_{1}{2}";
-                string report = "REPORTES/TRADUCTORES/REPORT_6.5.3";
+                //string report = "REPORTES/TRADUCTORES/REPORT_6.5.3";
+                string report = "REPORTES/TRADUCTORES/REPORT_6.5.3_NEW";
                 var reportRenderType = StaticFunctions.GetReportRenderType(format);
                 var extension = StaticFunctions.FileExtension(reportRenderType);
                 var contentType = StaticFunctions.GetContentType(reportRenderType);
 
                 var dictionary = new Dictionary<string, string>
                 {
-                    { "desde", startDate },
-                    { "hasta", endDate },
+                    { "cycle", cycle },
                     { "code", code },
                 };
 

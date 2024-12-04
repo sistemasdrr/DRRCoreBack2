@@ -973,6 +973,12 @@ public partial class EecoreContext : DbContext
             entity.Property(e => e.Migra)
                 .HasDefaultValueSql("((0))")
                 .HasColumnName("migra");
+            entity.Property(e => e.MigrateCompanyPerson)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("migrateCompanyPerson");
+            entity.Property(e => e.MigrateCompanyRelation)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("migrateCompanyRelation");
             entity.Property(e => e.Name)
                 .IsUnicode(false)
                 .HasColumnName("name");
@@ -2741,7 +2747,7 @@ public partial class EecoreContext : DbContext
                 .HasDefaultValueSql("((1))")
                 .HasColumnName("enable");
             entity.Property(e => e.IdInternalInvoice).HasColumnName("idInternalInvoice");
-            entity.Property(e => e.IdTicket).HasColumnName("idTicket");
+            entity.Property(e => e.IdTicketHistory).HasColumnName("idTicketHistory");
             entity.Property(e => e.IsComplement).HasColumnName("isComplement");
             entity.Property(e => e.Price)
                 .HasColumnType("decimal(6, 2)")
@@ -2758,9 +2764,9 @@ public partial class EecoreContext : DbContext
                 .HasForeignKey(d => d.IdInternalInvoice)
                 .HasConstraintName("FK__InternalI__idInt__3F1C4B12");
 
-            entity.HasOne(d => d.IdTicketNavigation).WithMany(p => p.InternalInvoiceDetails)
-                .HasForeignKey(d => d.IdTicket)
-                .HasConstraintName("FK__InternalI__idTic__40106F4B");
+            entity.HasOne(d => d.IdTicketHistoryNavigation).WithMany(p => p.InternalInvoiceDetails)
+                .HasForeignKey(d => d.IdTicketHistory)
+                .HasConstraintName("FK__InternalI__idTic__68DD7AB4");
         });
 
         modelBuilder.Entity<InvoiceState>(entity =>
@@ -3389,6 +3395,12 @@ public partial class EecoreContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("lastSearched");
             entity.Property(e => e.LastUpdateUser).HasColumnName("lastUpdateUser");
+            entity.Property(e => e.MigratePersonCompany)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("migratePersonCompany");
+            entity.Property(e => e.MigratePersonRelation)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("migratePersonRelation");
             entity.Property(e => e.MotherName)
                 .HasMaxLength(150)
                 .IsUnicode(false)
@@ -4614,7 +4626,7 @@ public partial class EecoreContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Abrev)
-                .HasMaxLength(20)
+                .HasMaxLength(40)
                 .IsUnicode(false)
                 .HasColumnName("abrev");
             entity.Property(e => e.Color)

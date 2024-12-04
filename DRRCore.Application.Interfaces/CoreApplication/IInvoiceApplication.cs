@@ -43,6 +43,10 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<GetFileResponseDto>> GetExcelAgentInvoice(string code, string startDate, string endDate);
 
         Task<Response<bool>> GetTramo(AddOrUpdateSubscriberInvoiceRequestDto obj);
+        Task<Response<bool>> GetTramoCC(AddOrUpdateSubscriberInvoiceCCRequestDto obj);
+        Task<Response<int?>> GetInvoiceNumber();
+
+        Task<Response<GetSubscriberPricesDto>> GetSubscriberPriceByTicket(int idSubscriber, int idCountry);
 
     }
 }

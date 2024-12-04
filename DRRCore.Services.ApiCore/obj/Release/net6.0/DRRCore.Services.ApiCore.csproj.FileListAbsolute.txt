@@ -737,3 +737,7 @@ C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Services.ApiCore\obj\Relea
 C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Services.ApiCore\obj\Release\net6.0\DRRCore.Services.ApiCore.pdb
 C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Services.ApiCore\obj\Release\net6.0\DRRCore.Services.ApiCore.genruntimeconfig.cache
 C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Services.ApiCore\obj\Release\net6.0\ref\DRRCore.Services.ApiCore.dll
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Services.ApiCore\bin\Release\net6.0\DRRCore.Services.ApiCore.staticwebassets.endpoints.json
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Services.ApiCore\obj\Release\net6.0\staticwebassets.build.endpoints.json
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Services.ApiCore\obj\Release\net6.0\staticwebassets\msbuild.DRRCore.Services.ApiCore.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
+C:\Users\Jean\Source\Repos\DRRCoreBack2_nuevo\DRRCore.Services.ApiCore\obj\Release\net6.0\staticwebassets.upToDateCheck.txt

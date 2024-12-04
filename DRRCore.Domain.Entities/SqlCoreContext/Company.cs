@@ -85,6 +85,10 @@ public partial class Company
 
     public string? Since { get; set; }
 
+    public bool? MigrateCompanyRelation { get; set; }
+
+    public bool? MigrateCompanyPerson { get; set; }
+
     public virtual ICollection<Traduction> Traductions { get; set; } = new List<Traduction>();
     public virtual ICollection<BankDebt> BankDebts { get; set; } = new List<BankDebt>();
 

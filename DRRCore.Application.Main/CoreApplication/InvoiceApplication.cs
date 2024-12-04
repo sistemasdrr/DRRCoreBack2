@@ -498,7 +498,7 @@ namespace DRRCore.Application.Main.CoreApplication
                             {
                                 Id = history.Id,
                                 CouponAmount = history.CouponAmount,
-                                UnitPrice = history.TotalPrice,
+                                UnitPrice = history.TotalPrice / history.CouponAmount,
                                 TotalPrice = history.TotalPrice,
                                 PurchaseDate = StaticFunctions.DateTimeToString(history.PurchaseDate)
                             });
@@ -708,90 +708,8 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<bool>> SaveSubscriberInvoice(AddOrUpdateSubscriberInvoiceRequestDto obj)
-        {
-            var response = new Response<bool>();
-            try
-            {
-                using var context = new SqlCoreContext();
-                var invoiceSubscriberDetails = new List<SubscriberInvoiceDetail>();
-                decimal? totalAmount = 0;
-                foreach (var item in obj.InvoiceSubscriberList)
-                {
-                    totalAmount += item.Price;
-                    invoiceSubscriberDetails.Add(new SubscriberInvoiceDetail
-                    {
-                        Id = 0,
-                        IdTicket = item.IdTicket,
-                        Amount = item.Price,
-                    });
-                    var ticket = await context.Tickets.Where(x => x.Id == item.IdTicket).FirstOrDefaultAsync();
-                    if (ticket != null)
-                    {
-                        ticket.IdInvoiceState = 2;
-                        context.Tickets.Update(ticket);
-                    }
-                }
-                await context.SubscriberInvoices.AddAsync(new SubscriberInvoice
-                {
-                    IdInvoiceState = 2,
-                    InvoiceCode = obj.InvoiceCode,
-                    InvoiceEmitDate = obj.InvoiceDate,
-                    IdSubscriber= obj.IdSubscriber,
-                    IdCurrency = obj.IdCurrency,
-                    Quantity = obj.InvoiceSubscriberList.Count(),
-                    IgvAmount = obj.Igv,
-                    TotalAmount = totalAmount,
-                    IgvFlag = obj.Igv > 0 ? true : false,
-                    Type = "FM",
-                    SubscriberInvoiceDetails = invoiceSubscriberDetails
-                });
-                await context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                response.IsSuccess = false;
-                _logger.LogError(ex.Message);
-            }
-            return response;
-        }
-        public async Task<Response<bool>> SaveSubscriberInvoiceCC(AddOrUpdateSubscriberInvoiceCCRequestDto obj)
-        {
-            var response = new Response<bool>();
-            try
-            {
-                using var context = new SqlCoreContext();
-                foreach (var ob in obj.Details)
-                {
-                    var history = await context.CouponBillingSubscriberHistories.Where(x => x.Id == ob.Id).FirstOrDefaultAsync();
-                    if(history != null)
-                    {
-                        history.State = "PC";
-                        context.CouponBillingSubscriberHistories.Update(history);
-                    }
-                }
-                await context.SubscriberInvoices.AddAsync(new SubscriberInvoice
-                {
-                    IdInvoiceState = 2,
-                    InvoiceCode = obj.InvoiceCode,
-                    InvoiceEmitDate = obj.InvoiceDate,
-                    IdSubscriber = obj.IdSubscriber,
-                    IdCurrency = obj.IdCurrency,
-                    Quantity = obj.Quantity,
-                    TotalAmount = obj.TotalPrice,
-                    Type = "CC"
-                });
-                await context.SaveChangesAsync();
-                response.Data = true;
-            }
-            catch (Exception ex)
-            {
-                response.IsSuccess = false;
-                _logger.LogError(ex.Message);
-            }
-            return response;
-        }
-
+       
+      
         public async Task<Response<bool>> UpdateSubscriberTicket(int idTicket, string requestedName, string procedureType, string dispatchDate,decimal price)
         {
             var response = new Response<bool>();
@@ -971,7 +889,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     await context.ProductionClosures.AddAsync(new ProductionClosure
                     {
                         EndDate = lastDayOfCurrentMonth,
-                        Code = code,
+                        Code = cycleCode,
                         Title = "Cierre de Producción " + DateTime.Now.Month.ToString("D2") + " - " + DateTime.Now.Year,
                         Observations = ""
                     });
@@ -982,7 +900,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     {
                         if (DateTime.Now.Month == 12)
                         {
-                            code = "CP_" + (1).ToString("D2") + "_" + (DateTime.Now.Year + 1);
+                            cycleCode = "CP_" + (1).ToString("D2") + "_" + (DateTime.Now.Year + 1);
                             var nextProductionClosureExistent = await context.ProductionClosures.Where(x => x.Code.Contains(code)).FirstOrDefaultAsync();
                             if (nextProductionClosureExistent == null)
                             {
@@ -990,7 +908,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                 await context.ProductionClosures.AddAsync(new ProductionClosure
                                 {
                                     EndDate = lastDayOfCurrentMonth,
-                                    Code = code,
+                                    Code = cycleCode,
                                     Title = "Cierre de Producción " + (1).ToString("D2") + " - " + DateTime.Today.Year + 1,
                                     Observations = ""
                                 });
@@ -998,7 +916,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         }
                         else
                         {
-                            code = "CP_" + (DateTime.Now.Month + 1).ToString("D2") + "_" + DateTime.Now.Year;
+                            cycleCode = "CP_" + (DateTime.Now.Month + 1).ToString("D2") + "_" + DateTime.Now.Year;
                             var nextProductionClosureExistent = await context.ProductionClosures.Where(x => x.Code.Contains(code)).FirstOrDefaultAsync();
                             if (nextProductionClosureExistent == null)
                             {
@@ -1006,7 +924,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                 await context.ProductionClosures.AddAsync(new ProductionClosure
                                 {
                                     EndDate = lastDayOfCurrentMonth,
-                                    Code = code,
+                                    Code = cycleCode,
                                     Title = "Cierre de Producción " + (DateTime.Now.Month + 1).ToString("D2") + " - " + DateTime.Now.Year,
                                     Observations = ""
                                 });
@@ -1017,12 +935,14 @@ namespace DRRCore.Application.Main.CoreApplication
 
                 var internalInvoice = await context.InternalInvoices
                     .Where(x => x.Code == code && x.Cycle == currentCycle && x.Type == type)
-                    .Include(x => x.InternalInvoiceDetails)
+                    //.Include(x => x.InternalInvoiceDetails)
                     .FirstOrDefaultAsync();
                 decimal? totalPrice1 = 0;
-                if (internalInvoice != null)
-                {
-                    foreach (var details in internalInvoice.InternalInvoiceDetails)
+                if (internalInvoice != null) { 
+
+                    var internalInvoiceDetails = await context.InternalInvoiceDetails.Where(x => x.IdInternalInvoice == internalInvoice.Id).ToListAsync();
+
+                    foreach (var details in internalInvoiceDetails)
                     {
                         context.InternalInvoiceDetails.Remove(details);
                     }
@@ -1041,7 +961,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         }
                         var newInternalInvoiceDetails = new InternalInvoiceDetail
                         {
-                            IdTicket = ticket.IdTicket,
+                            IdTicketHistory = ticket.Id,
                             IsComplement = ticket.IsComplement,
                             Quality = quality,
                             Price = ticket.Price,
@@ -1073,7 +993,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         }
                         var newInternalInvoiceDetails = new InternalInvoiceDetail
                         {
-                            IdTicket = ticket.IdTicket,
+                            IdTicketHistory = ticket.Id,
                             IsComplement = ticket.IsComplement,
                             Quality = quality,
                             Price = ticket.Price,
@@ -1164,6 +1084,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         emailDataDto.CC = new List<string>
                         {
                             "diego.rodriguez@del-risco.com",
+                            "crodriguez@del-risco.com"
                              //user.IdEmployeeNavigation.Email,
                             // "crc@del-risco.com"
                         };
@@ -1564,7 +1485,6 @@ namespace DRRCore.Application.Main.CoreApplication
                     }
                     else
                     {
-
                         MONTO_TOTAL_IGV = "0";
                     }
                     INDICADOR_AFECTACION_ITEM = "10";
@@ -1893,7 +1813,7 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             catch (Exception ex)
             {
-
+                
             }
             return response;
         }
@@ -2107,6 +2027,425 @@ namespace DRRCore.Application.Main.CoreApplication
                 case "67": return "PRK";
                 default: return ".";
             }
+        }
+
+
+        public async Task<Response<bool>> SaveSubscriberInvoice(AddOrUpdateSubscriberInvoiceRequestDto obj)
+        {
+            var response = new Response<bool>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var invoiceSubscriberDetails = new List<SubscriberInvoiceDetail>();
+
+                var result = GetTramo(obj).Result.Data;
+                if (result == true)
+                {
+                    decimal? totalAmount = 0;
+                    foreach (var item in obj.InvoiceSubscriberList)
+                    {
+                        totalAmount += item.Price;
+                        invoiceSubscriberDetails.Add(new SubscriberInvoiceDetail
+                        {
+                            Id = 0,
+                            IdTicket = item.IdTicket,
+                            Amount = item.Price,
+                        });
+                        var ticket = await context.Tickets.Where(x => x.Id == item.IdTicket).FirstOrDefaultAsync();
+                        if (ticket != null)
+                        {
+                            ticket.IdInvoiceState = 2;
+                            context.Tickets.Update(ticket);
+                        }
+                    }
+                    await context.SubscriberInvoices.AddAsync(new SubscriberInvoice
+                    {
+                        IdInvoiceState = 2,
+                        InvoiceCode = obj.InvoiceCode,
+                        InvoiceEmitDate = obj.InvoiceDate,
+                        IdSubscriber = obj.IdSubscriber,
+                        IdCurrency = obj.IdCurrency,
+                        Quantity = obj.InvoiceSubscriberList.Count(),
+                        IgvAmount = obj.Igv,
+                        TotalAmount = totalAmount,
+                        IgvFlag = obj.Igv > 0 ? true : false,
+                        Type = "FM",
+                        SubscriberInvoiceDetails = invoiceSubscriberDetails
+                    });
+                    await context.SaveChangesAsync();
+                }
+                else
+                {
+                    response.IsSuccess = false;
+                    response.Message = "Error al guardar el tramo";
+                    _logger.LogError("Error al guardar el tramo");
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                _logger.LogError(ex.Message);
+            }
+            return response;
+        }
+        public async Task<Response<bool>> SaveSubscriberInvoiceCC(AddOrUpdateSubscriberInvoiceCCRequestDto obj)
+        {
+            var response = new Response<bool>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var result = GetTramoCC(obj).Result.Data;
+                if(result == true)
+                {
+                    foreach (var ob in obj.Details)
+                    {
+                        var history = await context.CouponBillingSubscriberHistories.Where(x => x.Id == ob.Id).FirstOrDefaultAsync();
+                        if (history != null)
+                        {
+                            history.State = "PC";
+                            context.CouponBillingSubscriberHistories.Update(history);
+                        }
+                    }
+                    await context.SubscriberInvoices.AddAsync(new SubscriberInvoice
+                    {
+                        IdInvoiceState = 2,
+                        InvoiceCode = obj.InvoiceCode,
+                        InvoiceEmitDate = obj.InvoiceDate,
+                        IdSubscriber = obj.IdSubscriber,
+                        IdCurrency = obj.IdCurrency,
+                        Quantity = obj.Quantity,
+                        TotalAmount = obj.TotalPrice,
+                        Type = "CC"
+                    });
+                    await context.SaveChangesAsync();
+                    response.Data = true;
+                }
+                else
+                {
+                    response.IsSuccess = false;
+                    response.Message = "Error al guardar el tramo";
+                    _logger.LogError("Error al guardar el tramo");
+                }
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                _logger.LogError(ex.Message);
+            }
+            return response;
+        }
+
+        public async Task<Response<bool>> GetTramoCC(AddOrUpdateSubscriberInvoiceCCRequestDto obj)
+        {
+            var response = new Response<bool>();
+            try
+            {
+                using var context = new SqlCoreContext();
+
+                var country = await context.Countries.Where(x => x.Id == (int)obj.IdCountry).FirstOrDefaultAsync();
+                var currency = await context.Currencies.Where(x => x.Id == obj.IdCurrency).FirstOrDefaultAsync();
+                var subscriber = await context.Subscribers.Where(x => x.Code == obj.SubscriberCode).FirstOrDefaultAsync();
+                var cuenta = "";
+
+                string Mone = "", TOTAL_OPERACIONES_GRAV = "0.00", TOTAL_OPERACIONES_EXPORTACION = "0.00", MONTO_TOTAL_IGV = "0.00";
+                string Letras = "", INDICADOR_AFECTACION_ITEM = "";
+
+                string CODIGO_PAIS_EXPORTACION = "", NRO_DOC_ADQUIRIENTE = "", TIPO_OPERACION = "";
+
+
+                string labTipo = "";
+                decimal? lblValorVenta = 0;
+                foreach (var ob in obj.Details)
+                {
+                    lblValorVenta += ob.TotalPrice;
+                }
+
+                if (obj.IdCurrency == 1)
+                {
+                    Mone = "USD";
+                    Letras = LetrasCastellano((lblValorVenta) + "").ToString() + " DOLARES AMERICANOS";
+                }
+                else if (obj.IdCurrency == 2)
+                {
+                    Mone = "EUR";
+                    Letras = LetrasCastellano((lblValorVenta) + "").ToString() + " EUROS";
+                }
+                else if (obj.IdCurrency == 31)
+                {
+                    Mone = "PEN";
+                    Letras = LetrasCastellano((lblValorVenta) + "").ToString() + " SOLES";
+                }
+
+
+                if (subscriber.TaxRegistration.Trim().Length == 11)
+                {
+                    if (subscriber.TaxRegistration.Substring(0, 2) == "10" || subscriber.TaxRegistration.Substring(0, 2) == "20")
+                    {
+                        labTipo = "06";
+                    }
+                    else
+                    {
+                        labTipo = "00";
+                    }
+                }
+                else
+                {
+                    labTipo = "00";
+                }
+
+                if (labTipo == "06")
+                {
+                    TOTAL_OPERACIONES_GRAV = lblValorVenta + "";
+                    TOTAL_OPERACIONES_EXPORTACION = "0";
+                    if (obj.Igv == 0)
+                    {
+                        MONTO_TOTAL_IGV = obj.Igv + "";
+                    }
+                    else
+                    {
+                        MONTO_TOTAL_IGV = "0";
+                    }
+                    INDICADOR_AFECTACION_ITEM = "10";
+                    NRO_DOC_ADQUIRIENTE = obj.TaxTypeCode?.Trim();
+                }
+                else
+                {
+                    TOTAL_OPERACIONES_GRAV = "0.00";
+                    TOTAL_OPERACIONES_EXPORTACION = lblValorVenta + "";
+                    MONTO_TOTAL_IGV = "0.00";
+                    INDICADOR_AFECTACION_ITEM = "40";
+                    NRO_DOC_ADQUIRIENTE = "-";
+                    CODIGO_PAIS_EXPORTACION = Codigo_Pais(country.OldCode);
+                }
+
+                if (obj.SubscriberCode == "1031" || obj.SubscriberCode == "1050" || obj.SubscriberCode == "1105" || obj.SubscriberCode == "2065" || obj.SubscriberCode == "3008" ||
+                    obj.SubscriberCode == "3012" || obj.SubscriberCode == "1077" || obj.SubscriberCode == "3008" || obj.SubscriberCode == "2001" || obj.SubscriberCode == "2002" ||
+                    obj.SubscriberCode == "2024" || obj.SubscriberCode == "3008")
+                {
+                    cuenta = "BANCO INTERNACIONAL DEL PERU SAA - INTERBANK.,Calle Villaran 140 La Victoria -PERU,Cta.Cte.USD. # 2593001863534,Swift: BINPPEPL,Beneficiario: DEL RISCO REPORTS EIRL";
+                }
+                else if (obj.SubscriberCode == "0135" || obj.SubscriberCode == "1026" || obj.SubscriberCode == "2057" || obj.SubscriberCode == "1037" || obj.SubscriberCode == "1104")
+                {
+                    cuenta = "BBVA PERU,Calle Emilio Cavenecia con esquina Tudela y Varela San Isidro - PERU,Cta. Cte.  USD. # 0011-0179-0100063330-93,Swift: BCONPEPL,Beneficiario: DEL RISCO REPORTS EIRL";
+                }
+                else
+                {
+                    if (obj.SubscriberCode == "0112" || obj.SubscriberCode == "0156" || obj.SubscriberCode == "0107")
+                    {
+                        cuenta = "SCOTIABANK,No. Cuenta corriente Soles 000-1480324,CCI 009-213-000001480324-01,Beneficiario DEL RISCO REPORTS";
+                    }
+                    else
+                    {
+                        cuenta = "SCOTIABANK PERU SAA.,Calle Miguel Dasso 250 Lima 27 - PERU,Cta. Cte.  USD. # 000-4592669,Swift: BSUDPEPL,Beneficiario: DEL RISCO REPORTS EIRL";
+                    }
+                }
+
+                decimal? PV = 0;
+                int EXISTE_GRAVADA = 0;
+                int EXISTE_INAFECTA = 0;
+                int EXISTE_EXONERADA = 0;
+                int EXISTE_GRATUITA = 0;
+                int EXISTE_EXPORTACION = 0;
+
+                decimal? lblGeneral = lblValorVenta + decimal.Parse(MONTO_TOTAL_IGV);
+                if (obj.IdCountry == 182)
+                {
+                    PV = lblValorVenta + decimal.Parse(MONTO_TOTAL_IGV);
+                    EXISTE_GRAVADA = 1;
+                    EXISTE_INAFECTA = 0;
+                    EXISTE_EXONERADA = 0;
+                    EXISTE_GRATUITA = 0;
+                    EXISTE_EXPORTACION = 0;
+                    TIPO_OPERACION = "0101";
+                }
+                else
+                {
+                    PV = decimal.Parse(TOTAL_OPERACIONES_EXPORTACION);
+                    EXISTE_GRAVADA = 0;
+                    EXISTE_INAFECTA = 0;
+                    EXISTE_EXONERADA = 0;
+                    EXISTE_GRATUITA = 0;
+                    EXISTE_EXPORTACION = 1;
+                    TIPO_OPERACION = "0201";
+                }
+
+
+                decimal? EVALUAR = 0;
+                decimal? Monto_Detracc = 0;
+                string Trama = "";
+                if (labTipo == "06")
+                {
+                    if (obj.IdCountry == 182 && obj.IdCurrency == 1)
+                    {
+                        EVALUAR = PV * obj.ExchangeRate;
+                    }
+                    else
+                    {
+                        EVALUAR = PV;
+                    }
+
+                    if (PV > 700)
+                    {
+                        if (obj.IdCurrency == 1)
+                        {
+                            Monto_Detracc = PV * 0.12m * obj.ExchangeRate;
+                        }
+                        else
+                        {
+                            Monto_Detracc = PV * 0.12m * 1;
+                        }
+
+                        Trama = "ACTION:Registrar~FEC_ED:" + obj.InvoiceDate.Value.ToString("yyyy-MM-dd") + "|RUC_EMISOR:20504166318|TIP_DOC_EMISOR:06|APAMNO_RAZON_SOCIAL_EMISOR:DEL RISCO REPORTS E.I.R.L." +
+                        "|UBIGEO_EMISOR:150120|DIRECCION_EMISOR:Jr. Tomas Ramsey Nro. 930 Dpto. 603|URBANIZACION_EMISOR:|DEPARTAMENTO_EMISOR:LIMA|PROVINCIA_EMISOR:LIMA" +
+                        "|DISTRITO_EMISOR:MAGDALENA|CODIGO_PAIS_EMISOR:PE|NOMBRE_COMERCIAL_EMISOR:DEL RISCO REPORTS|TIP_DOC:01|NRO_SERIE:F005|NRO_DOC:" + obj.InvoiceCode +
+                        "|NRO_DOC_ADQUIRIENTE:" + NRO_DOC_ADQUIRIENTE + "|TIP_DOC_ADQUIRIENTE:" + labTipo.Trim() + "|APAMNO_RAZON_SOCIAL_ADQUIRIENTE:" + subscriber.Name +
+                        "|MONEDA:" + Mone + "|TOTAL_OPERACIONES_GRAV:" + Decimal.Parse(TOTAL_OPERACIONES_GRAV).ToString("0.00") + "|TOTAL_OPERACIONES_INF:0.00|TOTAL_OPERACIONES_EXONERADAS:0.00|TOTAL_OPERACIONES_EXPORTACION:0.00|MONTO_TOTAL_OPERACIONES_GRAT:0.00" + "|MONTO_DESCUENTOS_GLOBALES:0.00|MONTO_TOTAL_IGV:" + Decimal.Parse(MONTO_TOTAL_IGV).ToString("0.00") + "|MONTO_PAGAR:" +
+                        lblGeneral?.ToString("0.00") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:" + "1001" + "|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
+                        "|VALOR_VENTA:" + lblValorVenta?.ToString("0.00") + "|PRECIO_VENTA:" + PV?.ToString("0.00") +
+                        "|EXISTE_GRAVADA:" + EXISTE_GRAVADA + "|EXISTE_INAFECTA:" + EXISTE_INAFECTA + "|EXISTE_EXONERADA:" + EXISTE_EXONERADA + "|EXISTE_GRATUITA:" + EXISTE_GRATUITA + "|EXISTE_EXPORTACION:" + EXISTE_EXPORTACION +
+                        "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToShortDateString + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + (PV - (PV * 12 / 100))?.ToString("0.00") +
+                        "|IA_40:" + subscriber.Code + " - " + subscriber.Name + "|IA_41:" + obj.Address + "|IA_42:" + obj.AttendedBy + "|IA_43:" + "" + "|IA_44:PAGO POR TRANSFERENCIA BANCARIA" + "|IA_45:" + cuenta + "" + "|IA_46:" + obj.ExchangeRate +
+                        "|PORCENTAJE_DETRACC:" + "12.00" + "|MONTO_DETRACC:" + Monto_Detracc?.ToString("0.00") + "|COD_SUNAT_PAGO_DETRACC:001" + "|TASA_IGV:18.00" + "|BB_SS_CODIGO_SUJETO_A_DETRACC:037|BB_SS_DESCRIPCION_SUJETO_A_DETRACC:DEMAS SERVICIOS GRAVADOS CON EL IGV|NUMERO_CTA_BANCO_NACION_DETRACC:00000812773" + "~";
+                    }
+                    else
+                    {
+                        Trama = "ACTION:Registrar~FEC_ED:" + obj.InvoiceDate.Value.ToString("yyyy-MM-dd") + "|RUC_EMISOR:20504166318|TIP_DOC_EMISOR:06|APAMNO_RAZON_SOCIAL_EMISOR:DEL RISCO REPORTS E.I.R.L." +
+                        "|UBIGEO_EMISOR:150120|DIRECCION_EMISOR:Jr. Tomas Ramsey Nro. 930 Dpto. 603|URBANIZACION_EMISOR:|DEPARTAMENTO_EMISOR:LIMA|PROVINCIA_EMISOR:LIMA" +
+                        "|DISTRITO_EMISOR:MAGDALENA|CODIGO_PAIS_EMISOR:PE|NOMBRE_COMERCIAL_EMISOR:DEL RISCO REPORTS|TIP_DOC:01|NRO_SERIE:F005|NRO_DOC:" + obj.InvoiceCode +
+                        "|NRO_DOC_ADQUIRIENTE:" + NRO_DOC_ADQUIRIENTE + "|TIP_DOC_ADQUIRIENTE:" + labTipo.Trim() + "|APAMNO_RAZON_SOCIAL_ADQUIRIENTE:" + subscriber.Name +
+                        "|MONEDA:" + Mone + "|TOTAL_OPERACIONES_GRAV:" + Decimal.Parse(TOTAL_OPERACIONES_GRAV).ToString("0.00") + "|TOTAL_OPERACIONES_INF:0.00|TOTAL_OPERACIONES_EXONERADAS:0.00|TOTAL_OPERACIONES_EXPORTACION:0.00|MONTO_TOTAL_OPERACIONES_GRAT:0.00" + "|MONTO_DESCUENTOS_GLOBALES:0.00|MONTO_TOTAL_IGV:" + Decimal.Parse(MONTO_TOTAL_IGV).ToString("0.00") + "|MONTO_PAGAR:" +
+                        lblGeneral?.ToString("0.00") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:" + TIPO_OPERACION + "|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
+                        "|VALOR_VENTA:" + lblValorVenta?.ToString("0.00") + "|PRECIO_VENTA:" + PV?.ToString("0.00") +
+                        "|EXISTE_GRAVADA:" + EXISTE_GRAVADA + "|EXISTE_INAFECTA:" + EXISTE_INAFECTA + "|EXISTE_EXONERADA:" + EXISTE_EXONERADA + "|EXISTE_GRATUITA:" + EXISTE_GRATUITA + "|EXISTE_EXPORTACION:" + EXISTE_EXPORTACION +
+                        "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToShortDateString + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + PV + "|TASA_IGV:18.00" +
+                        "|IA_40:" + subscriber.Code + " - " + subscriber.Name + "|IA_41:" + obj.Address + "|IA_42:" + obj.AttendedBy + "|IA_43:" + "" + "|IA_44:PAGO POR TRANSFERENCIA BANCARIA" + "|IA_45:" + cuenta + "~";
+
+                    }
+                }
+                else
+                {
+                    Trama = "ACTION:Registrar~FEC_ED:" + obj.InvoiceDate.Value.ToString("yyyy-MM-dd") + "|RUC_EMISOR:20504166318|TIP_DOC_EMISOR:06|APAMNO_RAZON_SOCIAL_EMISOR:DEL RISCO REPORTS E.I.R.L." +
+                    "|UBIGEO_EMISOR:150120|DIRECCION_EMISOR:Jr. Tomas Ramsey Nro. 930 Dpto. 603|URBANIZACION_EMISOR:|DEPARTAMENTO_EMISOR:LIMA|PROVINCIA_EMISOR:LIMA" +
+                    "|DISTRITO_EMISOR:MAGDALENA|CODIGO_PAIS_EMISOR:PE|NOMBRE_COMERCIAL_EMISOR:DEL RISCO REPORTS|TIP_DOC:01|NRO_SERIE:F005|NRO_DOC:" + obj.InvoiceCode +
+                    "|NRO_DOC_ADQUIRIENTE:" + NRO_DOC_ADQUIRIENTE + "|TIP_DOC_ADQUIRIENTE:" + labTipo.Trim() + "|APAMNO_RAZON_SOCIAL_ADQUIRIENTE:" + subscriber.Name +
+                    "|MONEDA:" + Mone + "|TOTAL_OPERACIONES_GRAV:" + Decimal.Parse(TOTAL_OPERACIONES_GRAV).ToString("0.00") + "|TOTAL_OPERACIONES_INF:0.00|TOTAL_OPERACIONES_EXONERADAS:0.00|TOTAL_OPERACIONES_EXPORTACION:" +
+                    Decimal.Parse(TOTAL_OPERACIONES_EXPORTACION).ToString("0.00") + "|MONTO_TOTAL_OPERACIONES_GRAT:0.00" + "|MONTO_DESCUENTOS_GLOBALES:0.00|MONTO_TOTAL_IGV:" + Decimal.Parse(MONTO_TOTAL_IGV).ToString("0.00") + "|MONTO_PAGAR:" +
+                    lblGeneral?.ToString("0.00") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:" + TIPO_OPERACION + "|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
+                    "|VALOR_VENTA:" + Decimal.Parse(TOTAL_OPERACIONES_EXPORTACION).ToString("0.00") + "|PRECIO_VENTA:" + PV?.ToString("0.00") +
+                    "|EXISTE_GRAVADA:" + EXISTE_GRAVADA + "|EXISTE_INAFECTA:" + EXISTE_INAFECTA + "|EXISTE_EXONERADA:" + EXISTE_EXONERADA + "|EXISTE_GRATUITA:" + EXISTE_GRATUITA + "|EXISTE_EXPORTACION:" + EXISTE_EXPORTACION +
+                    "|CODIGO_PAIS_EXPORTACION:" + CODIGO_PAIS_EXPORTACION +
+                    "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToShortDateString + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + PV + "|TASA_IGV:18.00" +
+                    "|IA_40:" + subscriber.Code + " - " + subscriber.Name + "|IA_41:" + obj.Address + "|IA_42:" + obj.AttendedBy + "|IA_43:" + "" + "|IA_44:PAGO POR TRANSFERENCIA BANCARIA" + "|IA_45:" + cuenta + "~";
+                }
+
+                int Vueltas = 0;
+                string T1 = "", PRECIO_VENTA_UNITARIO_ITEM = "", VALOR_ITEM = "", IGV_TOTAL_ITEM = "";
+                string txtpreciosaldocupones = "";
+                Vueltas = Vueltas + 1;
+                if(labTipo == "06")
+                {
+                    PRECIO_VENTA_UNITARIO_ITEM = (obj.TotalPrice / obj.Quantity * 118 / 100)?.ToString("0.00") + "";
+                    VALOR_ITEM = lblValorVenta?.ToString("0.00");
+                    IGV_TOTAL_ITEM = (lblValorVenta * 118 / 100)?.ToString("0.00");
+                }
+                else if(labTipo == "00")
+                {
+                    PRECIO_VENTA_UNITARIO_ITEM = (obj.TotalPrice / obj.Quantity)?.ToString("0.00") + "";
+                    VALOR_ITEM = (lblValorVenta + obj.Igv)?.ToString("0.00");
+                    IGV_TOTAL_ITEM = "0.00";
+                }
+                T1 = T1 + "ID_ITEM:" + Vueltas + "|COD_PROD_SERV_ITEM:T1|DESRIP_ITEM:Cupones_pagados_por_adelantado_para_solicitar_Informes_Comerciales|COD_UNIDAD_MEDIDA_ITEM:NIU|INDICADOR_PS_ITEM:S|INDICADOR_TRANS_GRAT:0|INDICADOR_AFECTACION_ITEM:" +
+                INDICADOR_AFECTACION_ITEM + "|VALOR_VENTA_UNITARIA:" + (obj.TotalPrice / obj.Quantity)?.ToString("0.00") +
+                "|PRECIO_VENTA_UNITARIO_ITEM:" + PRECIO_VENTA_UNITARIO_ITEM + "|CANTIDAD_ITEM:" + (obj.Quantity)?.ToString("0.00") + "|DESCUENTO_ITEM:0.00|" +
+                "VALOR_ITEM:" + VALOR_ITEM +
+                "|IGV_TOTAL_ITEM:" + labTipo == "06" ? (Decimal.Parse(VALOR_ITEM) * 18 / 100).ToString("0.00") : "0" +
+                "|TOTAL_ITEM:" + labTipo == "06" ? (Decimal.Parse(VALOR_ITEM) + (Decimal.Parse(VALOR_ITEM) * 18 / 100)).ToString("0.00") : VALOR_ITEM + "^";
+
+                string Detalles = Trama + T1;
+
+                var facRuta = await context.Parameters.Where(x => x.Key == "FAC_RUTA").FirstOrDefaultAsync();
+                var facSerie = await context.Parameters.Where(x => x.Key == "FAC_SERIE").FirstOrDefaultAsync();
+
+
+                string fileDirectory = System.IO.Path.Combine(facRuta.Value, facSerie.Value + obj.InvoiceCode + ".txt");
+
+                try
+                {
+                    File.WriteAllText(fileDirectory, Detalles);
+                    Console.WriteLine("Archivo exportado exitosamente a: " + fileDirectory);
+                }
+                catch (Exception ex)
+                {
+
+                    Console.WriteLine("Error al escribir el archivo: " + ex.Message);
+                }
+                response.Data = true;
+
+            }
+            catch (Exception ex)
+            {
+            }
+            return response;
+        }
+
+        public async Task<Response<int?>> GetInvoiceNumber()
+        {
+            var response = new Response<int?>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var invoiceNumber = new Numeration();
+                invoiceNumber = await context.Numerations.Where(x => x.Name == "NUM_INVOICE").FirstOrDefaultAsync();
+                if(invoiceNumber != null)
+                {
+                    response.Data = (invoiceNumber.Number + 1);
+                }
+                else
+                {
+                    invoiceNumber = new Numeration();
+                    invoiceNumber.Name = "NUM_INVOICE";
+                    invoiceNumber.Description = "Número de Facturación";
+                    invoiceNumber.Number = 0;
+                    await context.Numerations.AddAsync(invoiceNumber);
+                    await context.SaveChangesAsync();
+                    response.Data = (invoiceNumber.Number + 1);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
+
+        public async Task<Response<GetSubscriberPricesDto>> GetSubscriberPriceByTicket(int idSubscriber, int idCountry)
+        {
+            var response = new Response<GetSubscriberPricesDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var subscriberPrice = await context.SubscriberPrices.Where(x => x.IdSubscriber == idSubscriber && x.IdCountry == idCountry).FirstOrDefaultAsync();
+                if (subscriberPrice != null)
+                {
+                    response.Data = new GetSubscriberPricesDto
+                    {
+                        PriceT1 = subscriberPrice.PriceT1 ?? 0,
+                        PriceT2 = subscriberPrice.PriceT2 ?? 0,
+                        PriceT3 = subscriberPrice.PriceT3 ?? 0,
+                    };
+                }
+                else
+                {
+                    response.IsSuccess = false;
+                }
+
+            }
+            catch (Exception ex)
+            {
+            }
+            return response;
         }
     }
 }

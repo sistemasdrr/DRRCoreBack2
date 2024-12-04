@@ -122,9 +122,9 @@ namespace DRRCore.Services.ApiCore.Controllers
         }
         [HttpGet]
         [Route("DownloadReport6_2_3")]
-        public async Task<ActionResult> DownloadReport6_2_3(string startDate, string endDate, string code, string format)
+        public async Task<ActionResult> DownloadReport6_2_3(string cycle, string code, string format)
         {
-            var result = await _reportApplication.DownloadReport6_2_3(startDate, endDate, code, format);
+            var result = await _reportApplication.DownloadReport6_2_3(cycle, code, format);
 
             return File(result.Data.File, result.Data.ContentType, result.Data.Name);
         }
@@ -233,9 +233,9 @@ namespace DRRCore.Services.ApiCore.Controllers
         }
         [HttpGet]
         [Route("DownloadReport6_4_3")]
-        public async Task<ActionResult> DownloadReport6_4_3(string startDate, string endDate, string code, string format)
+        public async Task<ActionResult> DownloadReport6_4_3(string cycle, string code, string format)
         {
-            var result = await _reportApplication.DownloadReport6_4_3(startDate, endDate, code, format);
+            var result = await _reportApplication.DownloadReport6_4_3(cycle, code, format);
             return File(result.Data.File, result.Data.ContentType, result.Data.Name);
         }
         [HttpGet]
@@ -262,9 +262,9 @@ namespace DRRCore.Services.ApiCore.Controllers
         }
         [HttpGet]
         [Route("DownloadReport6_5_3")]
-        public async Task<ActionResult> DownloadReport6_5_3(string startDate, string endDate, string code, string format)
+        public async Task<ActionResult> DownloadReport6_5_3(string cycle, string code, string format)
         {
-            var result = await _reportApplication.DownloadReport6_5_3(startDate, endDate, code, format);
+            var result = await _reportApplication.DownloadReport6_5_3(cycle, code, format);
             return File(result.Data.File, result.Data.ContentType, result.Data.Name);
         }
         [HttpGet]
