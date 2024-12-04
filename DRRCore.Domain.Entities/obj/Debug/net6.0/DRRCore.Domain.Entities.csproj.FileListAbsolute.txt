@@ -82,3 +82,8 @@ C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Entities\bin\Debu
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Entities\bin\Debug\net6.0\DRRCore.Application.DTO.pdb
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Entities\bin\Debug\net6.0\DRRCore.Transversal.Common.pdb
 C:\Users\Programador1\source\repos\DRRCoreBack2\DRRCore.Domain.Entities\obj\Debug\net6.0\DRRCore..CEB7AE4D.Up2Date
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Domain.Entities\bin\Debug\net6.0\DRRCore.Application.DTO.dll
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Domain.Entities\bin\Debug\net6.0\DRRCore.Transversal.Common.dll
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Domain.Entities\bin\Debug\net6.0\DRRCore.Application.DTO.pdb
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Domain.Entities\bin\Debug\net6.0\DRRCore.Transversal.Common.pdb
+C:\Users\Usuario\source\repos\DRRCoreBack2024\DRRCore.Domain.Entities\obj\Debug\net6.0\DRRCore.Domain.Entities.csproj.CopyComplete
