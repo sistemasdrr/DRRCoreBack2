@@ -44,6 +44,9 @@ namespace DRRCore.Application.Interfaces.CoreApplication
 
         Task<Response<bool>> GetTramo(AddOrUpdateSubscriberInvoiceRequestDto obj);
         Task<Response<bool>> GetTramoCC(AddOrUpdateSubscriberInvoiceCCRequestDto obj);
+        Task<Response<int?>> GetInvoiceNumber();
+
+        Task<Response<GetSubscriberPricesDto>> GetSubscriberPriceByTicket(int idSubscriber, int idCountry);
 
     }
 }

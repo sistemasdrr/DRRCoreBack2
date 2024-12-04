@@ -57,4 +57,11 @@ namespace DRRCore.Application.DTO.Core.Request
         public decimal? TotalPrice { get; set; }
         public List<InvoiceSubscriberCCHistory> Details { get; set; }
     }
+
+    public class GetSubscriberPricesDto
+    {
+        public decimal PriceT1 { get; set; }
+        public decimal PriceT2 { get; set; }
+        public decimal PriceT3 { get; set; }
+    }
 }

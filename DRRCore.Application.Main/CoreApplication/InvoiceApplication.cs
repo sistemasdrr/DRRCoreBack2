@@ -708,90 +708,8 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<bool>> SaveSubscriberInvoice(AddOrUpdateSubscriberInvoiceRequestDto obj)
-        {
-            var response = new Response<bool>();
-            try
-            {
-                using var context = new SqlCoreContext();
-                var invoiceSubscriberDetails = new List<SubscriberInvoiceDetail>();
-                decimal? totalAmount = 0;
-                foreach (var item in obj.InvoiceSubscriberList)
-                {
-                    totalAmount += item.Price;
-                    invoiceSubscriberDetails.Add(new SubscriberInvoiceDetail
-                    {
-                        Id = 0,
-                        IdTicket = item.IdTicket,
-                        Amount = item.Price,
-                    });
-                    var ticket = await context.Tickets.Where(x => x.Id == item.IdTicket).FirstOrDefaultAsync();
-                    if (ticket != null)
-                    {
-                        ticket.IdInvoiceState = 2;
-                        context.Tickets.Update(ticket);
-                    }
-                }
-                await context.SubscriberInvoices.AddAsync(new SubscriberInvoice
-                {
-                    IdInvoiceState = 2,
-                    InvoiceCode = obj.InvoiceCode,
-                    InvoiceEmitDate = obj.InvoiceDate,
-                    IdSubscriber= obj.IdSubscriber,
-                    IdCurrency = obj.IdCurrency,
-                    Quantity = obj.InvoiceSubscriberList.Count(),
-                    IgvAmount = obj.Igv,
-                    TotalAmount = totalAmount,
-                    IgvFlag = obj.Igv > 0 ? true : false,
-                    Type = "FM",
-                    SubscriberInvoiceDetails = invoiceSubscriberDetails
-                });
-                await context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                response.IsSuccess = false;
-                _logger.LogError(ex.Message);
-            }
-            return response;
-        }
-        public async Task<Response<bool>> SaveSubscriberInvoiceCC(AddOrUpdateSubscriberInvoiceCCRequestDto obj)
-        {
-            var response = new Response<bool>();
-            try
-            {
-                using var context = new SqlCoreContext();
-                foreach (var ob in obj.Details)
-                {
-                    var history = await context.CouponBillingSubscriberHistories.Where(x => x.Id == ob.Id).FirstOrDefaultAsync();
-                    if(history != null)
-                    {
-                        history.State = "PC";
-                        context.CouponBillingSubscriberHistories.Update(history);
-                    }
-                }
-                await context.SubscriberInvoices.AddAsync(new SubscriberInvoice
-                {
-                    IdInvoiceState = 2,
-                    InvoiceCode = obj.InvoiceCode,
-                    InvoiceEmitDate = obj.InvoiceDate,
-                    IdSubscriber = obj.IdSubscriber,
-                    IdCurrency = obj.IdCurrency,
-                    Quantity = obj.Quantity,
-                    TotalAmount = obj.TotalPrice,
-                    Type = "CC"
-                });
-                await context.SaveChangesAsync();
-                response.Data = true;
-            }
-            catch (Exception ex)
-            {
-                response.IsSuccess = false;
-                _logger.LogError(ex.Message);
-            }
-            return response;
-        }
-
+       
+      
         public async Task<Response<bool>> UpdateSubscriberTicket(int idTicket, string requestedName, string procedureType, string dispatchDate,decimal price)
         {
             var response = new Response<bool>();
@@ -1893,7 +1811,7 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             catch (Exception ex)
             {
-
+                
             }
             return response;
         }
@@ -2107,6 +2025,113 @@ namespace DRRCore.Application.Main.CoreApplication
                 case "67": return "PRK";
                 default: return ".";
             }
+        }
+
+
+        public async Task<Response<bool>> SaveSubscriberInvoice(AddOrUpdateSubscriberInvoiceRequestDto obj)
+        {
+            var response = new Response<bool>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var invoiceSubscriberDetails = new List<SubscriberInvoiceDetail>();
+
+                var result = GetTramo(obj).Result.Data;
+                if (result == true)
+                {
+                    decimal? totalAmount = 0;
+                    foreach (var item in obj.InvoiceSubscriberList)
+                    {
+                        totalAmount += item.Price;
+                        invoiceSubscriberDetails.Add(new SubscriberInvoiceDetail
+                        {
+                            Id = 0,
+                            IdTicket = item.IdTicket,
+                            Amount = item.Price,
+                        });
+                        var ticket = await context.Tickets.Where(x => x.Id == item.IdTicket).FirstOrDefaultAsync();
+                        if (ticket != null)
+                        {
+                            ticket.IdInvoiceState = 2;
+                            context.Tickets.Update(ticket);
+                        }
+                    }
+                    await context.SubscriberInvoices.AddAsync(new SubscriberInvoice
+                    {
+                        IdInvoiceState = 2,
+                        InvoiceCode = obj.InvoiceCode,
+                        InvoiceEmitDate = obj.InvoiceDate,
+                        IdSubscriber = obj.IdSubscriber,
+                        IdCurrency = obj.IdCurrency,
+                        Quantity = obj.InvoiceSubscriberList.Count(),
+                        IgvAmount = obj.Igv,
+                        TotalAmount = totalAmount,
+                        IgvFlag = obj.Igv > 0 ? true : false,
+                        Type = "FM",
+                        SubscriberInvoiceDetails = invoiceSubscriberDetails
+                    });
+                    await context.SaveChangesAsync();
+                }
+                else
+                {
+                    response.IsSuccess = false;
+                    response.Message = "Error al guardar el tramo";
+                    _logger.LogError("Error al guardar el tramo");
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                _logger.LogError(ex.Message);
+            }
+            return response;
+        }
+        public async Task<Response<bool>> SaveSubscriberInvoiceCC(AddOrUpdateSubscriberInvoiceCCRequestDto obj)
+        {
+            var response = new Response<bool>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var result = GetTramoCC(obj).Result.Data;
+                if(result == true)
+                {
+                    foreach (var ob in obj.Details)
+                    {
+                        var history = await context.CouponBillingSubscriberHistories.Where(x => x.Id == ob.Id).FirstOrDefaultAsync();
+                        if (history != null)
+                        {
+                            history.State = "PC";
+                            context.CouponBillingSubscriberHistories.Update(history);
+                        }
+                    }
+                    await context.SubscriberInvoices.AddAsync(new SubscriberInvoice
+                    {
+                        IdInvoiceState = 2,
+                        InvoiceCode = obj.InvoiceCode,
+                        InvoiceEmitDate = obj.InvoiceDate,
+                        IdSubscriber = obj.IdSubscriber,
+                        IdCurrency = obj.IdCurrency,
+                        Quantity = obj.Quantity,
+                        TotalAmount = obj.TotalPrice,
+                        Type = "CC"
+                    });
+                    await context.SaveChangesAsync();
+                    response.Data = true;
+                }
+                else
+                {
+                    response.IsSuccess = false;
+                    response.Message = "Error al guardar el tramo";
+                    _logger.LogError("Error al guardar el tramo");
+                }
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                _logger.LogError(ex.Message);
+            }
+            return response;
         }
 
         public async Task<Response<bool>> GetTramoCC(AddOrUpdateSubscriberInvoiceCCRequestDto obj)
@@ -2354,6 +2379,65 @@ namespace DRRCore.Application.Main.CoreApplication
                     Console.WriteLine("Error al escribir el archivo: " + ex.Message);
                 }
                 response.Data = true;
+
+            }
+            catch (Exception ex)
+            {
+            }
+            return response;
+        }
+
+        public async Task<Response<int?>> GetInvoiceNumber()
+        {
+            var response = new Response<int?>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var invoiceNumber = new Numeration();
+                invoiceNumber = await context.Numerations.Where(x => x.Name == "NUM_INVOICE").FirstOrDefaultAsync();
+                if(invoiceNumber != null)
+                {
+                    response.Data = (invoiceNumber.Number + 1);
+                }
+                else
+                {
+                    invoiceNumber = new Numeration();
+                    invoiceNumber.Name = "NUM_INVOICE";
+                    invoiceNumber.Description = "Número de Facturación";
+                    invoiceNumber.Number = 0;
+                    await context.Numerations.AddAsync(invoiceNumber);
+                    await context.SaveChangesAsync();
+                    response.Data = (invoiceNumber.Number + 1);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
+
+        public async Task<Response<GetSubscriberPricesDto>> GetSubscriberPriceByTicket(int idSubscriber, int idCountry)
+        {
+            var response = new Response<GetSubscriberPricesDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var subscriberPrice = await context.SubscriberPrices.Where(x => x.IdSubscriber == idSubscriber && x.IdCountry == idCountry).FirstOrDefaultAsync();
+                if (subscriberPrice != null)
+                {
+                    response.Data = new GetSubscriberPricesDto
+                    {
+                        PriceT1 = subscriberPrice.PriceT1 ?? 0,
+                        PriceT2 = subscriberPrice.PriceT2 ?? 0,
+                        PriceT3 = subscriberPrice.PriceT3 ?? 0,
+                    };
+                }
+                else
+                {
+                    response.IsSuccess = false;
+                }
 
             }
             catch (Exception ex)

@@ -1,4 +1,5 @@
-﻿using DRRCore.Domain.Entities.SqlCoreContext;
+﻿using AutoMapper.Execution;
+using DRRCore.Domain.Entities.SqlCoreContext;
 using DRRCore.Infraestructure.Interfaces.CoreRepository;
 using DRRCore.Transversal.Common.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -91,7 +92,20 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
             try
             {
                 using var context = new SqlCoreContext();
-                return await context.Numerations.Where(x=>x.Name== "NUM_TICKET").FirstOrDefaultAsync() ?? throw new Exception("No existe el objeto solicitado");
+                var numeration = await context.Numerations.Where(x => x.Name == "NUM_TICKET").FirstOrDefaultAsync() ?? throw new Exception("No existe el objeto solicitado");
+                if(numeration != null)
+                {
+                    return numeration;
+                }
+                else
+                {
+                    var newNumeration = new Numeration();
+                    newNumeration.Number = 0;
+                    newNumeration.Name = "NUM_TICKET";
+                    await context.Numerations.AddAsync(newNumeration);
+                    await context.SaveChangesAsync();
+                    return newNumeration;
+                }
             }
             catch (Exception ex)
             {
