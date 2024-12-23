@@ -121,6 +121,8 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                 var companyBranch = await context.CompanyBranches
                     .Include(x => x.IdCompanyNavigation).ThenInclude(x => x.TraductionCompanies)
                     .Include(x => x.IdLandOwnershipNavigation)
+                    .Include(x => x.IdBranchSectorNavigation)
+                    .Include(x => x.IdBusinessBranchNavigation)
                     .Where(x => x.IdCompany == idCompany)
                     .FirstOrDefaultAsync() ?? throw new Exception("No existe la empresa solicitada");
 

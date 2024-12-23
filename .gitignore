@@ -743,3 +743,7 @@
 /DRRCore.Services.Migration/bin/Debug/net6.0/DRRCore.Domain.Entities.pdb
 /DRRCore.Services.Migration/bin/Debug/net6.0/DRRCore.Domain.Main.dll
 /DRRCore.Services.Migration/bin/Debug/net6.0/DRRCore.Transversal.Mapper.dll
+/DRRCore.Domain.Entities/bin/Debug/net6.0/DRRCore.Transversal.Common.dll
+/DRRCore.Domain.Entities/bin/Debug/net6.0/DRRCore.Transversal.Common.pdb
+/DRRCore.Services.ApiCore/obj/Debug/net6.0/staticwebassets/msbuild.build.DRRCore.Services.ApiCore.props
+/DRRCore.Services.ApiCore/obj/Debug/net6.0/staticwebassets.build.json

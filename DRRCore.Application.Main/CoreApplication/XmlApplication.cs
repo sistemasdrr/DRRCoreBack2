@@ -1024,6 +1024,55 @@ namespace DRRCore.Application.Main.CoreApplication
                         XmlElement branchElement = xmlDoc.CreateElement("Business");
                         rootElement.AppendChild(branchElement);
 
+
+                        if (companyBranch.IdBranchSector != null)
+                        {
+                            XmlElement branchSectorElement = xmlDoc.CreateElement("Branch");
+                            branchElement.AppendChild(branchSectorElement);
+
+                            XmlElement sectorElement = xmlDoc.CreateElement("Sector");
+                            branchSectorElement.AppendChild(sectorElement);
+                            AddCDataElement(xmlDoc, sectorElement, "Code", companyBranch.IdBranchSectorNavigation.ApiCode);
+                            AddCDataElement(xmlDoc, sectorElement, "Description", companyBranch.IdBranchSectorNavigation.EnglishName);
+
+                            if (companyBranch.IdBusinessBranch!=null)
+                            {
+                                XmlElement principalBranchElement = xmlDoc.CreateElement("Main_Branch");
+                                branchSectorElement.AppendChild(principalBranchElement);
+                                AddCDataElement(xmlDoc, principalBranchElement, "Code", companyBranch.IdBusinessBranchNavigation.ApiCode);
+                                AddCDataElement(xmlDoc, principalBranchElement, "Description", companyBranch.IdBusinessBranchNavigation.EnglishName);
+                            }
+                            if (!string.IsNullOrEmpty(companyBranch.SpecificActivities))
+                            {                               
+                                var specificActivities = companyBranch.SpecificActivities.Split('-');
+                                if (specificActivities.Length > 0)
+                                {
+                                    XmlElement specificElement = xmlDoc.CreateElement("Specific_Activities");
+                                    branchSectorElement.AppendChild(specificElement);
+
+                                    for (int i = 0; i < specificActivities.Length; i++) {
+
+                                        XmlElement itemElement = xmlDoc.CreateElement("Name_" + (i+1));
+                                        specificElement.AppendChild(itemElement);
+
+                                        if (!string.IsNullOrEmpty(specificActivities[i]))
+                                        {
+                                            var businessActivity = await context.BusineesActivities.Where(x => x.Name == specificActivities[i].Trim()).FirstOrDefaultAsync();
+
+                                            if (businessActivity != null)
+                                            {
+                                                AddCDataElement(xmlDoc, specificElement, "Code", businessActivity.Id.ToString());
+                                                AddCDataElement(xmlDoc, specificElement, "Description", businessActivity.EnglishName);
+                                            }
+                                        }
+                                    }
+                                }
+
+                              
+                            }
+                        }
+
+
                         if (companyBranch.IdCompanyNavigation != null)
                         {
                             if (companyBranch.IdCompanyNavigation.TraductionCompanies != null)
@@ -1051,17 +1100,16 @@ namespace DRRCore.Application.Main.CoreApplication
                                     foreach (var item in imports)
                                     {
                                         n++;
-                                        XmlElement itemElement = xmlDoc.CreateElement("Name");
-                                        itemElement.SetAttribute("Item", n.ToString());
+                                        XmlElement itemElement = xmlDoc.CreateElement("Name_"+n);
+                                        //itemElement.SetAttribute("Item", n.ToString());
                                         importElement.AppendChild(itemElement);
                                         if (item.Year != null)
                                         {
                                             AddCDataElement(xmlDoc, itemElement, "Year", item.Year.ToString());
-                                        }
-                                        if (item.Year != null)
-                                        {
+
                                             AddCDataElement(xmlDoc, itemElement, "Mount", item.Amount.ToString());
                                         }
+                                      
                                     }
                                 }
                             }
