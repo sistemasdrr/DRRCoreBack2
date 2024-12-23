@@ -224,18 +224,19 @@ public partial class SqlCoreContext : DbContext
 
     public virtual DbSet<WorkersHistory> WorkersHistories { get; set; }
 
+  
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
         {
             optionsBuilder.UseSqlServer(
-
-            "Data Source=200.58.123.184,14331;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
-            //"Data Source=SD-4154134-W;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
-
-            //migracion
-            //"Data Source=SD-4154134-W/DRRSQLSERVER;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
-
+           //   "Data Source=200.58.123.184,14331;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
+             "Data Source=SD-4154134-W/DRRSQLSERVER;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
+            , sqlServerOptions => sqlServerOptions.EnableRetryOnFailure(
+                maxRetryCount: 18,
+                maxRetryDelay: TimeSpan.FromSeconds(60),
+                errorNumbersToAdd: null)
+            );
         }
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
