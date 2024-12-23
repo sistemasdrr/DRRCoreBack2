@@ -747,9 +747,9 @@ namespace DRRCore.Application.Main.CoreApplication
                     {
                         AddCDataElement(xmlDoc, legalBackgElement, "Legal_Status", company.IdLegalPersonTypeNavigation.EnglishName);
                     }
-                    if (companyBackground.ConstitutionDate != null)
-                    {                       
-                        AddCDataElement(xmlDoc, legalBackgElement, "Date_Of_Incorporation", companyBackground.ConstitutionDate);
+                    if (!companyBackground.ConstitutionDate.IsNullOrEmpty())
+                    {                      
+                        AddCDataElement(xmlDoc, legalBackgElement, "Date_Of_Incorporation",DateTime.Parse(companyBackground.ConstitutionDate).ToString("ddMMMyyyy", ci).ToUpper());
                     }
                     if (!companyBackground.StartFunctionYear.IsNullOrEmpty())
                     {
@@ -807,8 +807,8 @@ namespace DRRCore.Application.Main.CoreApplication
                         foreach (var item in resultCompanyShareholder)
                         {
                             i++;
-                            XmlElement itemElement = xmlDoc.CreateElement("Name");
-                            itemElement.SetAttribute("Item",i.ToString());
+                            XmlElement itemElement = xmlDoc.CreateElement("Name_"+i);
+                            //itemElement.SetAttribute("Item",i.ToString());
                             shareholdersElement.AppendChild(itemElement);
                             if (!item.Name.IsNullOrEmpty())
                             {
@@ -847,8 +847,8 @@ namespace DRRCore.Application.Main.CoreApplication
                                     j = k; break;
                                 }
                             }
-                            XmlElement itemElement = xmlDoc.CreateElement("Name");
-                            itemElement.SetAttribute("Item", j.ToString());
+                            XmlElement itemElement = xmlDoc.CreateElement("Name_"+j);
+                           // itemElement.SetAttribute("Item", j.ToString());
                             whoiswhoElement.AppendChild(itemElement);
                            
                             AddCDataElement(xmlDoc, itemElement, "ApeNom", item.Fullname);
@@ -977,8 +977,8 @@ namespace DRRCore.Application.Main.CoreApplication
                         foreach (var item in companyRelation)
                         {
                             m++; 
-                            XmlElement itemElement = xmlDoc.CreateElement("Name");
-                            itemElement.SetAttribute("Item", m.ToString());
+                            XmlElement itemElement = xmlDoc.CreateElement("Name_"+m);
+                            //itemElement.SetAttribute("Item", m.ToString());
                             relationElement.AppendChild(itemElement);
                             if (item.IdCompanyRelationNavigation.Name != null)
                             {
@@ -1024,6 +1024,13 @@ namespace DRRCore.Application.Main.CoreApplication
                         XmlElement branchElement = xmlDoc.CreateElement("Business");
                         rootElement.AppendChild(branchElement);
 
+                        if (companyBranch.IdCompanyNavigation != null)
+                        {
+                            if (companyBranch.IdCompanyNavigation.TraductionCompanies != null)
+                            {
+                                AddCDataElement(xmlDoc, branchElement, "Main_Activity", companyBranch.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TRprincAct);
+                            }
+                        }
                         //Import
                         XmlElement importElement = xmlDoc.CreateElement("Import");
                         branchElement.AppendChild(importElement);
@@ -1088,8 +1095,8 @@ namespace DRRCore.Application.Main.CoreApplication
                                     foreach (var item in exports)
                                     {
                                         o++;
-                                        XmlElement itemElement = xmlDoc.CreateElement("Name");
-                                        itemElement.SetAttribute("Item", o.ToString());
+                                        XmlElement itemElement = xmlDoc.CreateElement("Name_"+o);
+                                      //  itemElement.SetAttribute("Item", o.ToString());
                                         exportElement.AppendChild(itemElement);
                                         if (item.Year != null)
                                         {
@@ -1269,171 +1276,12 @@ namespace DRRCore.Application.Main.CoreApplication
                             foreach (var item in balanceS)
                             {
                                 q++;
-                                XmlElement itemElement = xmlDoc.CreateElement("Balance");
-                                itemElement.SetAttribute("Item", q.ToString());
+                                string balanceTag = "Balance_" + q;
+                                XmlElement itemElement = xmlDoc.CreateElement(balanceTag);
+                                //itemElement.SetAttribute("Item", q.ToString());
                                 balanceSitElement.AppendChild(itemElement);
                                 DateTime date = (DateTime)item.Date;
-                                AddCDataElement(xmlDoc, itemElement, "Date", date.ToString("ddMMMyyyy"));
-                                if(!item.BalanceTypeEng.IsNullOrEmpty())
-                                {
-                                    AddCDataElement(xmlDoc, itemElement, "Type_Of_Balance_Sheet", item.BalanceTypeEng);
-                                }
-                                if (!item.DurationEng.IsNullOrEmpty())
-                                {
-                                    AddCDataElement(xmlDoc, itemElement, "Period", item.DurationEng);
-                                }
-                                if (item.IdCurrency != null)
-                                {
-                                    AddCDataElement(xmlDoc, itemElement, "Currency", item.IdCurrencyNavigation.Abreviation);
-                                }
-                                if (item.ExchangeRate != null)
-                                {
-                                    AddCDataElement(xmlDoc, itemElement, "Exchange_Rate", item.ExchangeRate.ToString());
-                                }
-                                if (item.Sales != null)
-                                {
-                                    AddCDataElement(xmlDoc, itemElement, "Sales", item.Sales.ToString());
-                                }
-                                if (item.Utilities != null)
-                                {
-                                    AddCDataElement(xmlDoc, itemElement, "Net_Profits", item.Utilities.ToString());
-                                }
-                                //Assets
-                                XmlElement assetsElement = xmlDoc.CreateElement("Assets");
-                                itemElement.AppendChild(assetsElement); 
-                                if (item.ACashBoxBank != null)
-                                {
-                                    AddCDataElement(xmlDoc, assetsElement, "Cash_Banks", item.ACashBoxBank.ToString());
-                                }
-                                if (item.AToCollect != null)
-                                {
-                                    AddCDataElement(xmlDoc, assetsElement, "Receivables", item.AToCollect.ToString());
-                                }
-                                if (item.AInventory != null)
-                                {
-                                    AddCDataElement(xmlDoc, assetsElement, "Inventory", item.AInventory.ToString());
-                                }
-                                if (item.AOtherCurrentAssets != null)
-                                {
-                                    AddCDataElement(xmlDoc, assetsElement, "Other_Current_Assets", item.AOtherCurrentAssets.ToString());
-                                }
-                                if (item.TotalCurrentAssets != null)
-                                {
-                                    AddCDataElement(xmlDoc, assetsElement, "Total_Current_Assets", item.TotalCurrentAssets.ToString());
-                                }
-                                if (item.AFixed != null)
-                                {
-                                    AddCDataElement(xmlDoc, assetsElement, "Fixed", item.AFixed.ToString());
-                                }
-                                if (item.AOtherNonCurrentAssets != null)
-                                {
-                                    AddCDataElement(xmlDoc, assetsElement, "Other_Non_Current_Assets", item.AOtherNonCurrentAssets.ToString());
-                                }
-                                if (item.TotalNonCurrentAssets != null)
-                                {
-                                    AddCDataElement(xmlDoc, assetsElement, "Total_Non_Current_Assets", item.TotalNonCurrentAssets.ToString());
-                                }
-                                if (item.TotalAssets != null)
-                                {
-                                    AddCDataElement(xmlDoc, assetsElement, "Total_Assets", item.TotalAssets.ToString());
-                                }
-
-                                //Liabilities
-                                XmlElement LiabilitiesElement = xmlDoc.CreateElement("Liabilities");
-                                itemElement.AppendChild(LiabilitiesElement);
-                                if (item.LCashBoxBank != null)
-                                {
-                                    AddCDataElement(xmlDoc, LiabilitiesElement, "Bank_Suppliers", item.LCashBoxBank.ToString());
-                                }
-                                if (item.LOtherCurrentLiabilities != null)
-                                {
-                                    AddCDataElement(xmlDoc, LiabilitiesElement, "Others_Current_Liabilities", item.LOtherCurrentLiabilities.ToString());
-                                }
-                                if (item.TotalCurrentLiabilities != null)
-                                {
-                                    AddCDataElement(xmlDoc, LiabilitiesElement, "Total_Current_Liabilities", item.TotalCurrentLiabilities.ToString());
-                                }
-                                if (item.LLongTerm != null)
-                                {
-                                    AddCDataElement(xmlDoc, LiabilitiesElement, "Long_Term", item.LLongTerm.ToString());
-                                }
-                                if (item.LOtherNonCurrentLiabilities != null)
-                                {
-                                    AddCDataElement(xmlDoc, LiabilitiesElement, "Others_Non_Current_Liabilities", item.LOtherNonCurrentLiabilities.ToString());
-                                }
-                                if (item.TotalNonCurrentLiabilities != null)
-                                {
-                                    AddCDataElement(xmlDoc, LiabilitiesElement, "Total_Current_Liabilities", item.TotalNonCurrentLiabilities.ToString());
-                                }
-                                if (item.TotalLliabilities != null)
-                                {
-                                    AddCDataElement(xmlDoc, LiabilitiesElement, "Total_Liabilities", item.TotalLliabilities.ToString());
-                                }
-                                //Shareholders_Equity
-                                XmlElement patrimonyElement = xmlDoc.CreateElement("Shareholders_Equity");
-                                itemElement.AppendChild(patrimonyElement);
-                                if (item.PCapital != null)
-                                {
-                                    AddCDataElement(xmlDoc, patrimonyElement, "Capital", item.PCapital.ToString());
-                                }
-                                if (item.PStockPile != null)
-                                {
-                                    AddCDataElement(xmlDoc, patrimonyElement, "Reserves", item.PStockPile.ToString());
-                                }
-                                if (item.PUtilities != null)
-                                {
-                                    AddCDataElement(xmlDoc, patrimonyElement, "Utilities", item.PUtilities.ToString());
-                                }
-                                if (item.POther != null)
-                                {
-                                    AddCDataElement(xmlDoc, patrimonyElement, "Others", item.POther.ToString());
-                                }
-                                if (item.TotalPatrimony != null)
-                                {
-                                    AddCDataElement(xmlDoc, patrimonyElement, "Total_Shareholders_Equity", item.TotalPatrimony.ToString());
-                                }
-                                if (item.TotalLiabilitiesPatrimony != null)
-                                {
-                                    AddCDataElement(xmlDoc, patrimonyElement, "Total_Liabilities_Shareholders_Equity", item.TotalLiabilitiesPatrimony.ToString());
-                                }
-                                //Shareholders_Equity
-                                XmlElement ratiosElement = xmlDoc.CreateElement("Ratios");
-                                itemElement.AppendChild(ratiosElement);
-                                if (item.LiquidityRatio != null)
-                                {
-                                    AddCDataElement(xmlDoc, ratiosElement, "Liquidity_Ratio", item.LiquidityRatio.ToString());
-                                }
-                                if (item.DebtRatio != null)
-                                {
-                                    AddCDataElement(xmlDoc, ratiosElement, "Debt_Ratio", item.DebtRatio.ToString() + "%");
-                                }
-                                if (item.ProfitabilityRatio != null)
-                                {
-                                    AddCDataElement(xmlDoc, ratiosElement, "Profitability_Ratio", item.ProfitabilityRatio.ToString() + "%");
-                                }
-                                if (item.WorkingCapital != null)
-                                {
-                                    AddCDataElement(xmlDoc, ratiosElement, "Working_Capital", item.WorkingCapital.ToString());
-                                }
-                            }
-                        }
-                        if (balanceG.Count > 0)
-                        {
-                            XmlElement balanceGenElement = xmlDoc.CreateElement("Balance_Sheet");
-                            financialElement.AppendChild(balanceGenElement);
-                            int r = 0;
-                            foreach (var item in balanceG)
-                            {
-                                r++;
-                                XmlElement itemElement = xmlDoc.CreateElement("Balance");
-                                itemElement.SetAttribute("Item", r.ToString());
-                                if (!companyFinancial.Auditors.IsNullOrEmpty())
-                                {
-                                    AddCDataElement(xmlDoc, itemElement, "Auditors", companyFinancial.Auditors);
-                                }
-                                balanceGenElement.AppendChild(itemElement);
-                                DateTime date = (DateTime)item.Date;
-                                AddCDataElement(xmlDoc, itemElement, "Date", date.ToString("ddMMMyyyy"));
+                                AddCDataElement(xmlDoc, itemElement, "Date", date.ToString("ddMMMyyyy",ci).Replace(".", "").ToUpper());
                                 if (!item.BalanceTypeEng.IsNullOrEmpty())
                                 {
                                     AddCDataElement(xmlDoc, itemElement, "Type_Of_Balance_Sheet", item.BalanceTypeEng);
@@ -1450,52 +1298,45 @@ namespace DRRCore.Application.Main.CoreApplication
                                 {
                                     AddCDataElement(xmlDoc, itemElement, "Exchange_Rate", item.ExchangeRate.ToString());
                                 }
-                                if (item.Sales != null)
-                                {
-                                    AddCDataElement(xmlDoc, itemElement, "Sales", item.Sales.ToString());
-                                }
-                                if (item.Utilities != null)
-                                {
-                                    AddCDataElement(xmlDoc, itemElement, "Net_Profits", item.Utilities.ToString());
-                                }
+
                                 //Assets
                                 XmlElement assetsElement = xmlDoc.CreateElement("Assets");
                                 itemElement.AppendChild(assetsElement);
                                 if (item.ACashBoxBank != null)
                                 {
-                                    AddCDataElement(xmlDoc, assetsElement, "Cash_Banks", item.ACashBoxBank.ToString());
+                                    AddCDataElement(xmlDoc, assetsElement, "Cash_Banks", item.ACashBoxBank.Value.ToString("#,0.00"));
                                 }
                                 if (item.AToCollect != null)
                                 {
-                                    AddCDataElement(xmlDoc, assetsElement, "Receivables", item.AToCollect.ToString());
+                                    AddCDataElement(xmlDoc, assetsElement, "Receivables", item.AToCollect.Value.ToString("#,0.00"));
                                 }
                                 if (item.AInventory != null)
                                 {
-                                    AddCDataElement(xmlDoc, assetsElement, "Inventory", item.AInventory.ToString());
+                                    AddCDataElement(xmlDoc, assetsElement, "Inventory", item.AInventory.Value.ToString("#,0.00"));
                                 }
                                 if (item.AOtherCurrentAssets != null)
                                 {
-                                    AddCDataElement(xmlDoc, assetsElement, "Other_Current_Assets", item.AOtherCurrentAssets.ToString());
+                                    AddCDataElement(xmlDoc, assetsElement, "Others_Activo", item.AOtherCurrentAssets.Value.ToString("#,0.00"));
                                 }
                                 if (item.TotalCurrentAssets != null)
                                 {
-                                    AddCDataElement(xmlDoc, assetsElement, "Total_Current_Assets", item.TotalCurrentAssets.ToString());
+                                    AddCDataElement(xmlDoc, assetsElement, "Current_Assets", item.TotalCurrentAssets.Value.ToString("#,0.00"));
                                 }
                                 if (item.AFixed != null)
                                 {
-                                    AddCDataElement(xmlDoc, assetsElement, "Fixed", item.AFixed.ToString());
+                                    AddCDataElement(xmlDoc, assetsElement, "Fixed", item.AFixed.Value.ToString("#,0.00"));
                                 }
                                 if (item.AOtherNonCurrentAssets != null)
                                 {
-                                    AddCDataElement(xmlDoc, assetsElement, "Other_Non_Current_Assets", item.AOtherNonCurrentAssets.ToString());
+                                    AddCDataElement(xmlDoc, assetsElement, "Others_ActivoCorriente", item.AOtherNonCurrentAssets.Value.ToString("#,0.00"));
                                 }
-                                if (item.TotalNonCurrentAssets != null)
-                                {
-                                    AddCDataElement(xmlDoc, assetsElement, "Total_Non_Current_Assets", item.TotalNonCurrentAssets.ToString());
-                                }
+                                //if (item.TotalNonCurrentAssets != null)
+                                //{
+                                //    AddCDataElement(xmlDoc, assetsElement, "Total_Non_Current_Assets", item.TotalNonCurrentAssets.ToString());
+                                //}
                                 if (item.TotalAssets != null)
                                 {
-                                    AddCDataElement(xmlDoc, assetsElement, "Total_Assets", item.TotalAssets.ToString());
+                                    AddCDataElement(xmlDoc, assetsElement, "Total_Assets", item.TotalAssets.Value.ToString("#,0.00"));
                                 }
 
                                 //Liabilities
@@ -1503,78 +1344,252 @@ namespace DRRCore.Application.Main.CoreApplication
                                 itemElement.AppendChild(LiabilitiesElement);
                                 if (item.LCashBoxBank != null)
                                 {
-                                    AddCDataElement(xmlDoc, LiabilitiesElement, "Bank_Suppliers", item.LCashBoxBank.ToString());
+                                    AddCDataElement(xmlDoc, LiabilitiesElement, "Bank_Suppliers", item.LCashBoxBank.Value.ToString("#,0.00"));
                                 }
                                 if (item.LOtherCurrentLiabilities != null)
                                 {
-                                    AddCDataElement(xmlDoc, LiabilitiesElement, "Others_Current_Liabilities", item.LOtherCurrentLiabilities.ToString());
+                                    AddCDataElement(xmlDoc, LiabilitiesElement, "Others_Pasivo", item.LOtherCurrentLiabilities.Value.ToString("#,0.00"));
                                 }
                                 if (item.TotalCurrentLiabilities != null)
                                 {
-                                    AddCDataElement(xmlDoc, LiabilitiesElement, "Total_Current_Liabilities", item.TotalCurrentLiabilities.ToString());
+                                    AddCDataElement(xmlDoc, LiabilitiesElement, "Current_Liabilities", item.TotalCurrentLiabilities.Value.ToString("#,0.00"));
                                 }
                                 if (item.LLongTerm != null)
                                 {
-                                    AddCDataElement(xmlDoc, LiabilitiesElement, "Long_Term", item.LLongTerm.ToString());
+                                    AddCDataElement(xmlDoc, LiabilitiesElement, "Long_Term", item.LLongTerm.Value.ToString("#,0.00"));
                                 }
-                                if (item.LOtherNonCurrentLiabilities != null)
-                                {
-                                    AddCDataElement(xmlDoc, LiabilitiesElement, "Others_Non_Current_Liabilities", item.LOtherNonCurrentLiabilities.ToString());
-                                }
-                                if (item.TotalNonCurrentLiabilities != null)
-                                {
-                                    AddCDataElement(xmlDoc, LiabilitiesElement, "Total_Current_Liabilities", item.TotalNonCurrentLiabilities.ToString());
-                                }
+                                //if (item.LOtherNonCurrentLiabilities != null)
+                                //{
+                                //    AddCDataElement(xmlDoc, LiabilitiesElement, "Others_Non_Current_Liabilities", item.LOtherNonCurrentLiabilities.ToString());
+                                //}
+                                //if (item.TotalNonCurrentLiabilities != null)
+                                //{
+                                //    AddCDataElement(xmlDoc, LiabilitiesElement, "Total_Current_Liabilities", item.TotalNonCurrentLiabilities.ToString());
+                                //}
                                 if (item.TotalLliabilities != null)
                                 {
-                                    AddCDataElement(xmlDoc, LiabilitiesElement, "Total_Liabilities", item.TotalLliabilities.ToString());
+                                    AddCDataElement(xmlDoc, LiabilitiesElement, "Total_Liabilities", item.TotalLliabilities.Value.ToString("#,0.00"));
                                 }
                                 //Shareholders_Equity
                                 XmlElement patrimonyElement = xmlDoc.CreateElement("Shareholders_Equity");
                                 itemElement.AppendChild(patrimonyElement);
                                 if (item.PCapital != null)
                                 {
-                                    AddCDataElement(xmlDoc, patrimonyElement, "Capital", item.PCapital.ToString());
+                                    AddCDataElement(xmlDoc, patrimonyElement, "Capital", item.PCapital.Value.ToString("#,0.00"));
                                 }
                                 if (item.PStockPile != null)
                                 {
-                                    AddCDataElement(xmlDoc, patrimonyElement, "Reserves", item.PStockPile.ToString());
+                                    AddCDataElement(xmlDoc, patrimonyElement, "Reserves", item.PStockPile.Value.ToString("#,0.00"));
                                 }
                                 if (item.PUtilities != null)
                                 {
-                                    AddCDataElement(xmlDoc, patrimonyElement, "Utilities", item.PUtilities.ToString());
+                                    AddCDataElement(xmlDoc, patrimonyElement, "Profits_Loss", item.PUtilities.Value.ToString("#,0.00"));
                                 }
                                 if (item.POther != null)
                                 {
-                                    AddCDataElement(xmlDoc, patrimonyElement, "Others", item.POther.ToString());
+                                    AddCDataElement(xmlDoc, patrimonyElement, "Others_Patrimonio", item.POther.Value.ToString("#,0.00"));
                                 }
                                 if (item.TotalPatrimony != null)
                                 {
-                                    AddCDataElement(xmlDoc, patrimonyElement, "Total_Shareholders_Equity", item.TotalPatrimony.ToString());
+                                    AddCDataElement(xmlDoc, patrimonyElement, "Total_Shareh_Equity", item.TotalPatrimony.Value.ToString("#,0.00"));
                                 }
                                 if (item.TotalLiabilitiesPatrimony != null)
                                 {
-                                    AddCDataElement(xmlDoc, patrimonyElement, "Total_Liabilities_Shareholders_Equity", item.TotalLiabilitiesPatrimony.ToString());
+                                    AddCDataElement(xmlDoc, patrimonyElement, "Total_Liab_Sh_Equity", item.TotalLiabilitiesPatrimony.Value.ToString("#,0.00"));
+                                }
+
+                                if (item.Sales != null)
+                                {
+                                    AddCDataElement(xmlDoc, itemElement, "Sales", item.Sales.Value.ToString("#,0.00"));
+                                }
+                                if (item.Utilities != null)
+                                {
+                                    AddCDataElement(xmlDoc, itemElement, "Profit_Loss", item.Utilities.Value.ToString("#,0.00"));
+                                }
+
+                                //Shareholders_Equity
+                                //XmlElement ratiosElement = xmlDoc.CreateElement("Ratios");
+                                //itemElement.AppendChild(ratiosElement);
+                                //if (item.LiquidityRatio != null)
+                                //{
+                                //    AddCDataElement(xmlDoc, ratiosElement, "Liquidity_Ratio", item.LiquidityRatio.ToString());
+                                //}
+                                //if (item.DebtRatio != null)
+                                //{
+                                //    AddCDataElement(xmlDoc, ratiosElement, "Debt_Ratio", item.DebtRatio.ToString() + "%");
+                                //}
+                                //if (item.ProfitabilityRatio != null)
+                                //{
+                                //    AddCDataElement(xmlDoc, ratiosElement, "Profitability_Ratio", item.ProfitabilityRatio.ToString() + "%");
+                                //}
+                                //if (item.WorkingCapital != null)
+                                //{
+                                //    AddCDataElement(xmlDoc, ratiosElement, "Working_Capital", item.WorkingCapital.ToString());
+                                //}
+                            }
+                        }
+                        if (balanceG.Count > 0)
+                        {
+                            XmlElement balanceGenElement = xmlDoc.CreateElement("Balance_Sheet");
+                            financialElement.AppendChild(balanceGenElement);
+                            int r = 0;
+                            foreach (var item in balanceG)
+                            {
+                                r++;
+                                string balanceTag = "Balance_" + r;
+                                XmlElement itemElement = xmlDoc.CreateElement(balanceTag);
+                              //  itemElement.SetAttribute("Item", r.ToString());
+                                if (!companyFinancial.Auditors.IsNullOrEmpty())
+                                {
+                                    AddCDataElement(xmlDoc, itemElement, "Ba_Quien", companyFinancial.Auditors);
+                                }
+                                balanceGenElement.AppendChild(itemElement);
+                                DateTime date = (DateTime)item.Date;
+                                AddCDataElement(xmlDoc, itemElement, "Date", date.ToString("ddMMMyyyy",ci).Replace(".","").ToUpper());
+                                if (!item.BalanceTypeEng.IsNullOrEmpty())
+                                {
+                                    AddCDataElement(xmlDoc, itemElement, "Type_Of_Balance_Sheet", item.BalanceTypeEng);
+                                }
+                                if (!item.DurationEng.IsNullOrEmpty())
+                                {
+                                    AddCDataElement(xmlDoc, itemElement, "Period", item.DurationEng);
+                                }
+                                if (item.IdCurrency != null)
+                                {
+                                    AddCDataElement(xmlDoc, itemElement, "Currency", item.IdCurrencyNavigation.Abreviation);
+                                }
+                                if (item.ExchangeRate != null)
+                                {
+                                    AddCDataElement(xmlDoc, itemElement, "Exchange_Rate", item.ExchangeRate.ToString());
+                                }
+                               
+                                //Assets
+                                XmlElement assetsElement = xmlDoc.CreateElement("Assets");
+                                itemElement.AppendChild(assetsElement);
+                                if (item.ACashBoxBank != null)
+                                {
+                                    AddCDataElement(xmlDoc, assetsElement, "Cash_Banks", item.ACashBoxBank.Value.ToString("#,0.00"));
+                                }
+                                if (item.AToCollect != null)
+                                {
+                                    AddCDataElement(xmlDoc, assetsElement, "Receivables", item.AToCollect.Value.ToString("#,0.00"));
+                                }
+                                if (item.AInventory != null)
+                                {
+                                    AddCDataElement(xmlDoc, assetsElement, "Inventory", item.AInventory.Value.ToString("#,0.00"));
+                                }
+                                if (item.AOtherCurrentAssets != null)
+                                {
+                                    AddCDataElement(xmlDoc, assetsElement, "Others_Activo", item.AOtherCurrentAssets.Value.ToString("#,0.00"));
+                                }
+                                if (item.TotalCurrentAssets != null)
+                                {
+                                    AddCDataElement(xmlDoc, assetsElement, "Current_Assets", item.TotalCurrentAssets.Value.ToString("#,0.00"));
+                                }
+                                if (item.AFixed != null)
+                                {
+                                    AddCDataElement(xmlDoc, assetsElement, "Fixed", item.AFixed.Value.ToString("#,0.00"));
+                                }
+                                if (item.AOtherNonCurrentAssets != null)
+                                {
+                                    AddCDataElement(xmlDoc, assetsElement, "Others_ActivoCorriente", item.AOtherNonCurrentAssets.Value.ToString("#,0.00"));
+                                }
+                                //if (item.TotalNonCurrentAssets != null)
+                                //{
+                                //    AddCDataElement(xmlDoc, assetsElement, "Total_Non_Current_Assets", item.TotalNonCurrentAssets.ToString());
+                                //}
+                                if (item.TotalAssets != null)
+                                {
+                                    AddCDataElement(xmlDoc, assetsElement, "Total_Assets", item.TotalAssets.Value.ToString("#,0.00"));
+                                }
+
+                                //Liabilities
+                                XmlElement LiabilitiesElement = xmlDoc.CreateElement("Liabilities");
+                                itemElement.AppendChild(LiabilitiesElement);
+                                if (item.LCashBoxBank != null)
+                                {
+                                    AddCDataElement(xmlDoc, LiabilitiesElement, "Bank_Suppliers", item.LCashBoxBank.Value.ToString("#,0.00"));
+                                }
+                                if (item.LOtherCurrentLiabilities != null)
+                                {
+                                    AddCDataElement(xmlDoc, LiabilitiesElement, "Others_Pasivo", item.LOtherCurrentLiabilities.Value.ToString("#,0.00"));
+                                }
+                                if (item.TotalCurrentLiabilities != null)
+                                {
+                                    AddCDataElement(xmlDoc, LiabilitiesElement, "Current_Liabilities", item.TotalCurrentLiabilities.Value.ToString("#,0.00"));
+                                }
+                                if (item.LLongTerm != null)
+                                {
+                                    AddCDataElement(xmlDoc, LiabilitiesElement, "Long_Term", item.LLongTerm.Value.ToString("#,0.00"));
+                                }
+                                //if (item.LOtherNonCurrentLiabilities != null)
+                                //{
+                                //    AddCDataElement(xmlDoc, LiabilitiesElement, "Others_Non_Current_Liabilities", item.LOtherNonCurrentLiabilities.ToString());
+                                //}
+                                //if (item.TotalNonCurrentLiabilities != null)
+                                //{
+                                //    AddCDataElement(xmlDoc, LiabilitiesElement, "Total_Current_Liabilities", item.TotalNonCurrentLiabilities.ToString());
+                                //}
+                                if (item.TotalLliabilities != null)
+                                {
+                                    AddCDataElement(xmlDoc, LiabilitiesElement, "Total_Liabilities", item.TotalLliabilities.Value.ToString("#,0.00"));
                                 }
                                 //Shareholders_Equity
-                                XmlElement ratiosElement = xmlDoc.CreateElement("Ratios");
-                                itemElement.AppendChild(ratiosElement);
-                                if (item.LiquidityRatio != null)
+                                XmlElement patrimonyElement = xmlDoc.CreateElement("Shareholders_Equity");
+                                itemElement.AppendChild(patrimonyElement);
+                                if (item.PCapital != null)
                                 {
-                                    AddCDataElement(xmlDoc, ratiosElement, "Liquidity_Ratio", item.LiquidityRatio.ToString());
+                                    AddCDataElement(xmlDoc, patrimonyElement, "Capital", item.PCapital.Value.ToString("#,0.00"));
                                 }
-                                if (item.DebtRatio != null)
+                                if (item.PStockPile != null)
                                 {
-                                    AddCDataElement(xmlDoc, ratiosElement, "Debt_Ratio", item.DebtRatio.ToString() + "%");
+                                    AddCDataElement(xmlDoc, patrimonyElement, "Reserves", item.PStockPile.Value.ToString("#,0.00"));
                                 }
-                                if (item.ProfitabilityRatio != null)
+                                if (item.PUtilities != null)
                                 {
-                                    AddCDataElement(xmlDoc, ratiosElement, "Profitability_Ratio", item.ProfitabilityRatio.ToString() + "%");
+                                    AddCDataElement(xmlDoc, patrimonyElement, "Profits_Loss", item.PUtilities.Value.ToString("#,0.00"));
                                 }
-                                if (item.WorkingCapital != null)
+                                if (item.POther != null)
                                 {
-                                    AddCDataElement(xmlDoc, ratiosElement, "Working_Capital", item.WorkingCapital.ToString());
+                                    AddCDataElement(xmlDoc, patrimonyElement, "Others_Patrimonio", item.POther.Value.ToString("#,0.00"));
                                 }
+                                if (item.TotalPatrimony != null)
+                                {
+                                    AddCDataElement(xmlDoc, patrimonyElement, "Total_Shareh_Equity", item.TotalPatrimony.Value.ToString("#,0.00"));
+                                }
+                                if (item.TotalLiabilitiesPatrimony != null)
+                                {
+                                    AddCDataElement(xmlDoc, patrimonyElement, "Total_Liab_Sh_Equity", item.TotalLiabilitiesPatrimony.Value.ToString("#,0.00"));
+                                }
+
+                                if (item.Sales != null)
+                                {
+                                    AddCDataElement(xmlDoc, itemElement, "Sales", item.Sales.Value.ToString("#,0.00"));
+                                }
+                                if (item.Utilities != null)
+                                {
+                                    AddCDataElement(xmlDoc, itemElement, "Profit_Loss", item.Utilities.Value.ToString("#,0.00"));
+                                }
+
+                                //Shareholders_Equity
+                                //XmlElement ratiosElement = xmlDoc.CreateElement("Ratios");
+                                //itemElement.AppendChild(ratiosElement);
+                                //if (item.LiquidityRatio != null)
+                                //{
+                                //    AddCDataElement(xmlDoc, ratiosElement, "Liquidity_Ratio", item.LiquidityRatio.ToString());
+                                //}
+                                //if (item.DebtRatio != null)
+                                //{
+                                //    AddCDataElement(xmlDoc, ratiosElement, "Debt_Ratio", item.DebtRatio.ToString() + "%");
+                                //}
+                                //if (item.ProfitabilityRatio != null)
+                                //{
+                                //    AddCDataElement(xmlDoc, ratiosElement, "Profitability_Ratio", item.ProfitabilityRatio.ToString() + "%");
+                                //}
+                                //if (item.WorkingCapital != null)
+                                //{
+                                //    AddCDataElement(xmlDoc, ratiosElement, "Working_Capital", item.WorkingCapital.ToString());
+                                //}
                             }
                         }
                         if (companyFinancial != null)
@@ -1591,8 +1606,8 @@ namespace DRRCore.Application.Main.CoreApplication
                                 foreach (var item in salesHistory)
                                 {
                                     s++;
-                                    XmlElement itemElement = xmlDoc.CreateElement("Name");
-                                    itemElement.SetAttribute("Item", s.ToString());
+                                    XmlElement itemElement = xmlDoc.CreateElement("Name_"+s);
+                                    //itemElement.SetAttribute("Item", s.ToString());
                                     salesElement.AppendChild(itemElement);
                                     if(item.Date != null)
                                     {
@@ -1646,8 +1661,8 @@ namespace DRRCore.Application.Main.CoreApplication
                             foreach (var item in providers)
                             {
                                 s++;
-                                XmlElement itemElement = xmlDoc.CreateElement("Name");
-                                itemElement.SetAttribute("Item", s.ToString());
+                                XmlElement itemElement = xmlDoc.CreateElement("Name_"+s);
+                               // itemElement.SetAttribute("Item", s.ToString());
                                 provPrimElement.AppendChild(itemElement);
                                 if (!item.Name.IsNullOrEmpty())
                                 {
@@ -1701,8 +1716,8 @@ namespace DRRCore.Application.Main.CoreApplication
                         foreach (var item in morComercial)
                         {
                             s++;
-                            XmlElement itemElement = xmlDoc.CreateElement("Name");
-                            itemElement.SetAttribute("Item", s.ToString());
+                            XmlElement itemElement = xmlDoc.CreateElement("Name_"+s);
+                           // itemElement.SetAttribute("Item", s.ToString());
                             protElement.AppendChild(itemElement);
                             if (!item.CreditorOrSupplier.IsNullOrEmpty())
                             {
@@ -1761,8 +1776,8 @@ namespace DRRCore.Application.Main.CoreApplication
                         foreach (var item in bankDebt)
                         {
                             r++;
-                            XmlElement itemElement = xmlDoc.CreateElement("Name");
-                            itemElement.SetAttribute("Item", r.ToString());
+                            XmlElement itemElement = xmlDoc.CreateElement("Name_"+r);
+                           // itemElement.SetAttribute("Item", r.ToString());
                             bankDebtElement.AppendChild(itemElement);
                             if (!item.BankName.IsNullOrEmpty())
                             {
