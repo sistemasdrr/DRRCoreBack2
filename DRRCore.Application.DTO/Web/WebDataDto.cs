@@ -15,6 +15,7 @@
         public string UltimobalanceEmpresa { get; set; } = string.Empty;
         public string CalidadDisponibleEsp { get; set; } = string.Empty;
         public string CalidadDisponibleEng { get; set; } = string.Empty;
+        public int CodigoIdioma { get; set; } = 0;
         public object CodigoEmpresaWeb { get; set; } = string.Empty;
     }
     public class WebDTO

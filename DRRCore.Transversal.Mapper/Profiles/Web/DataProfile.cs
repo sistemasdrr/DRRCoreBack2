@@ -34,8 +34,8 @@ namespace DRRCore.Transversal.Mapper.Profiles.Web
                 .ForMember(dest => dest.SectorEmpresa, opt => opt?.MapFrom(src => src.RamoActividad ?? string.Empty))
                 .ForMember(dest => dest.SectorEmpresaIngles, opt => opt?.MapFrom(src => src.RamoActividadIngles ?? string.Empty))
                 .ForMember(dest => dest.CeoEmpresa, opt => opt?.MapFrom(src => GetCeoName(src.Persona??string.Empty)))
-                .ForMember(dest => dest.CalidadDisponibleEsp, opt => opt?.MapFrom(src => GetQualityDescription(src.CalidadCodigo)))
-                .ForMember(dest => dest.CalidadDisponibleEng, opt => opt?.MapFrom(src => GetQualityDescription(src.CalidadCodigo)))
+                .ForMember(dest => dest.CalidadDisponibleEsp, opt => opt?.MapFrom(src => GetQualityDescriptionEsp(src.CalidadCodigo,src.CodigoIdioma)))
+                .ForMember(dest => dest.CalidadDisponibleEng, opt => opt?.MapFrom(src => GetQualityDescriptionIng(src.CalidadCodigo,src.CodigoIdioma)))
                 .ForMember(dest => dest.UltimobalanceEmpresa, opt => opt?.MapFrom(src => GetLastBalance(src.FechaBalance1, src.FechaBalance2, src.FechaBalance3))).ReverseMap();
                 
 
@@ -54,14 +54,36 @@ namespace DRRCore.Transversal.Mapper.Profiles.Web
             var length=name.Length;           
             return name.Substring(0, length/3).ToString() + "***";
         }
-        private static string GetQualityDescription(int? calidadCodigo)
+        private static string GetQualityDescriptionEsp(int? calidadCodigo, int? idiomaCodigo)
         {
-            return calidadCodigo switch
+            if (idiomaCodigo == 1 || idiomaCodigo==3) {
+                return calidadCodigo switch
+                {
+                    1 or 2 => "A",
+                    3 or 4 => "B",
+                    _ => "C",
+                };
+            }
+            else
             {
-                1 or 2 => "A",
-                3 or 4 => "B",
-                _ => "C",
-            };
+                return string.Empty;
+            }
+        }
+        private static string GetQualityDescriptionIng(int? calidadCodigo, int? idiomaCodigo)
+        {
+            if (idiomaCodigo == 2 || idiomaCodigo == 3)
+            {
+                return calidadCodigo switch
+                {
+                    1 or 2 => "A",
+                    3 or 4 => "B",
+                    _ => "C",
+                };
+            }
+            else
+            {
+                return string.Empty;
+            }
         }
         private static string GetLastBalance(string? bal1,string? bal2,string? bal3)
         {

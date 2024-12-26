@@ -942,11 +942,9 @@ namespace DRRCore.Application.Main.CoreApplication
 
                     var internalInvoiceDetails = await context.InternalInvoiceDetails.Where(x => x.IdInternalInvoice == internalInvoice.Id).ToListAsync();
 
-                    foreach (var details in internalInvoiceDetails)
-                    {
-                        context.InternalInvoiceDetails.Remove(details);
-                    }
-                    internalInvoice.InternalInvoiceDetails = new List<InternalInvoiceDetail>();
+                    context.InternalInvoiceDetails.RemoveRange(internalInvoiceDetails);
+                    
+                   var listDetails = new List<InternalInvoiceDetail>();
                     foreach (var ticket in tickets)
                     {
                         totalPrice1 += ticket.Price;
@@ -958,25 +956,25 @@ namespace DRRCore.Application.Main.CoreApplication
                             case "DI": quality = t.QualityTypist; break;
                             case "TR": quality = t.QualityTranslator; break;
                             case "RF": quality = t.Quality; break;
-                        }
-                        var newInternalInvoiceDetails = new InternalInvoiceDetail
+                        }                       
+                        listDetails.Add(new InternalInvoiceDetail
                         {
                             IdTicketHistory = ticket.Id,
                             IsComplement = ticket.IsComplement,
                             Quality = quality,
                             Price = ticket.Price,
-                        };
-                        internalInvoice.InternalInvoiceDetails.Add(newInternalInvoiceDetails);
+                        });
                     }
                     internalInvoice.TotalPrice = totalPrice1;
+                    internalInvoice.InternalInvoiceDetails = listDetails;
                     context.InternalInvoices.Update(internalInvoice);
                 }
                 else
                 {
                     var newInternalInvoice = new InternalInvoice();
-                    newInternalInvoice.InternalInvoiceDetails = new List<InternalInvoiceDetail>();
+                    var listDetails = new List<InternalInvoiceDetail>();
                     newInternalInvoice.Code = code.Trim();
-                    newInternalInvoice.Cycle = cycleCode;
+                    newInternalInvoice.Cycle = currentCycle;
                     newInternalInvoice.Type = type;
                     newInternalInvoice.Sended = false;
                     foreach (var ticket in tickets)
@@ -991,17 +989,18 @@ namespace DRRCore.Application.Main.CoreApplication
                             case "TR": quality = t.QualityTranslator; break;
                             case "RF": quality = t.Quality; break;
                         }
-                        var newInternalInvoiceDetails = new InternalInvoiceDetail
+                       
+                        listDetails.Add(new InternalInvoiceDetail
                         {
                             IdTicketHistory = ticket.Id,
                             IsComplement = ticket.IsComplement,
                             Quality = quality,
                             Price = ticket.Price,
-                        };
-                        newInternalInvoice.InternalInvoiceDetails.Add(newInternalInvoiceDetails);
+                        });
                     }
 
                     newInternalInvoice.TotalPrice = totalPrice1;
+                    newInternalInvoice.InternalInvoiceDetails = listDetails;
                     await context.InternalInvoices.AddAsync(newInternalInvoice);
                 }
                 await context.SaveChangesAsync();
@@ -1586,7 +1585,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         lblGeneral?.ToString("0.00") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:" + "1001" + "|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
                         "|VALOR_VENTA:" + lblValorVenta?.ToString("0.00") + "|PRECIO_VENTA:" + PV?.ToString("0.00") +
                         "|EXISTE_GRAVADA:" + EXISTE_GRAVADA + "|EXISTE_INAFECTA:" + EXISTE_INAFECTA + "|EXISTE_EXONERADA:" + EXISTE_EXONERADA + "|EXISTE_GRATUITA:" + EXISTE_GRATUITA + "|EXISTE_EXPORTACION:" + EXISTE_EXPORTACION +
-                        "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToShortDateString + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + (PV - (PV * 12 / 100))?.ToString("0.00") +
+                        "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToShortDateString() + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + (PV - (PV * 12 / 100))?.ToString("0.00") +
                         "|IA_40:" + subscriber.Code + " - " + subscriber.Name + "|IA_41:" + obj.Address + "|IA_42:" + obj.AttendedBy + "|IA_43:" + "" + "|IA_44:PAGO POR TRANSFERENCIA BANCARIA" + "|IA_45:" + cuenta + "" + "|IA_46:" + obj.ExchangeRate +
                         "|PORCENTAJE_DETRACC:" + "12.00" + "|MONTO_DETRACC:" + Monto_Detracc?.ToString("0.00") + "|COD_SUNAT_PAGO_DETRACC:001" + "|TASA_IGV:18.00" + "|BB_SS_CODIGO_SUJETO_A_DETRACC:037|BB_SS_DESCRIPCION_SUJETO_A_DETRACC:DEMAS SERVICIOS GRAVADOS CON EL IGV|NUMERO_CTA_BANCO_NACION_DETRACC:00000812773" + "~";
                     }
@@ -1600,7 +1599,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         lblGeneral?.ToString("0.00") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:" + TIPO_OPERACION + "|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
                         "|VALOR_VENTA:" + lblValorVenta?.ToString("0.00") + "|PRECIO_VENTA:" + PV?.ToString("0.00") +
                         "|EXISTE_GRAVADA:" + EXISTE_GRAVADA + "|EXISTE_INAFECTA:" + EXISTE_INAFECTA + "|EXISTE_EXONERADA:" + EXISTE_EXONERADA + "|EXISTE_GRATUITA:" + EXISTE_GRATUITA + "|EXISTE_EXPORTACION:" + EXISTE_EXPORTACION +
-                        "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToShortDateString + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + PV + "|TASA_IGV:18.00" +
+                        "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToShortDateString() + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + PV + "|TASA_IGV:18.00" +
                         "|IA_40:" + subscriber.Code + " - " + subscriber.Name + "|IA_41:" + obj.Address + "|IA_42:" + obj.AttendedBy + "|IA_43:" + "" + "|IA_44:PAGO POR TRANSFERENCIA BANCARIA" + "|IA_45:" + cuenta + "~";
 
                     }
@@ -1617,7 +1616,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     "|VALOR_VENTA:" + Decimal.Parse(TOTAL_OPERACIONES_EXPORTACION).ToString("0.00") + "|PRECIO_VENTA:" + PV?.ToString("0.00") +
                     "|EXISTE_GRAVADA:" + EXISTE_GRAVADA + "|EXISTE_INAFECTA:" + EXISTE_INAFECTA + "|EXISTE_EXONERADA:" + EXISTE_EXONERADA + "|EXISTE_GRATUITA:" + EXISTE_GRATUITA + "|EXISTE_EXPORTACION:" + EXISTE_EXPORTACION +
                     "|CODIGO_PAIS_EXPORTACION:" + CODIGO_PAIS_EXPORTACION +
-                    "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToShortDateString + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + PV + "|TASA_IGV:18.00" +
+                    "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToShortDateString() + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + PV + "|TASA_IGV:18.00" +
                     "|IA_40:" + subscriber.Code + " - " + subscriber.Name + "|IA_41:" + obj.Address + "|IA_42:" + obj.AttendedBy + "|IA_43:" + "" + "|IA_44:PAGO POR TRANSFERENCIA BANCARIA" + "|IA_45:" + cuenta + "~";
                 }
 
@@ -2304,7 +2303,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         lblGeneral?.ToString("0.00") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:" + "1001" + "|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
                         "|VALOR_VENTA:" + lblValorVenta?.ToString("0.00") + "|PRECIO_VENTA:" + PV?.ToString("0.00") +
                         "|EXISTE_GRAVADA:" + EXISTE_GRAVADA + "|EXISTE_INAFECTA:" + EXISTE_INAFECTA + "|EXISTE_EXONERADA:" + EXISTE_EXONERADA + "|EXISTE_GRATUITA:" + EXISTE_GRATUITA + "|EXISTE_EXPORTACION:" + EXISTE_EXPORTACION +
-                        "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToShortDateString + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + (PV - (PV * 12 / 100))?.ToString("0.00") +
+                        "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToShortDateString() + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + (PV - (PV * 12 / 100))?.ToString("0.00") +
                         "|IA_40:" + subscriber.Code + " - " + subscriber.Name + "|IA_41:" + obj.Address + "|IA_42:" + obj.AttendedBy + "|IA_43:" + "" + "|IA_44:PAGO POR TRANSFERENCIA BANCARIA" + "|IA_45:" + cuenta + "" + "|IA_46:" + obj.ExchangeRate +
                         "|PORCENTAJE_DETRACC:" + "12.00" + "|MONTO_DETRACC:" + Monto_Detracc?.ToString("0.00") + "|COD_SUNAT_PAGO_DETRACC:001" + "|TASA_IGV:18.00" + "|BB_SS_CODIGO_SUJETO_A_DETRACC:037|BB_SS_DESCRIPCION_SUJETO_A_DETRACC:DEMAS SERVICIOS GRAVADOS CON EL IGV|NUMERO_CTA_BANCO_NACION_DETRACC:00000812773" + "~";
                     }
@@ -2318,7 +2317,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         lblGeneral?.ToString("0.00") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:" + TIPO_OPERACION + "|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
                         "|VALOR_VENTA:" + lblValorVenta?.ToString("0.00") + "|PRECIO_VENTA:" + PV?.ToString("0.00") +
                         "|EXISTE_GRAVADA:" + EXISTE_GRAVADA + "|EXISTE_INAFECTA:" + EXISTE_INAFECTA + "|EXISTE_EXONERADA:" + EXISTE_EXONERADA + "|EXISTE_GRATUITA:" + EXISTE_GRATUITA + "|EXISTE_EXPORTACION:" + EXISTE_EXPORTACION +
-                        "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToShortDateString + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + PV + "|TASA_IGV:18.00" +
+                        "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToShortDateString() + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + PV + "|TASA_IGV:18.00" +
                         "|IA_40:" + subscriber.Code + " - " + subscriber.Name + "|IA_41:" + obj.Address + "|IA_42:" + obj.AttendedBy + "|IA_43:" + "" + "|IA_44:PAGO POR TRANSFERENCIA BANCARIA" + "|IA_45:" + cuenta + "~";
 
                     }
@@ -2335,7 +2334,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     "|VALOR_VENTA:" + Decimal.Parse(TOTAL_OPERACIONES_EXPORTACION).ToString("0.00") + "|PRECIO_VENTA:" + PV?.ToString("0.00") +
                     "|EXISTE_GRAVADA:" + EXISTE_GRAVADA + "|EXISTE_INAFECTA:" + EXISTE_INAFECTA + "|EXISTE_EXONERADA:" + EXISTE_EXONERADA + "|EXISTE_GRATUITA:" + EXISTE_GRATUITA + "|EXISTE_EXPORTACION:" + EXISTE_EXPORTACION +
                     "|CODIGO_PAIS_EXPORTACION:" + CODIGO_PAIS_EXPORTACION +
-                    "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToShortDateString + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + PV + "|TASA_IGV:18.00" +
+                    "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToShortDateString() + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + PV + "|TASA_IGV:18.00" +
                     "|IA_40:" + subscriber.Code + " - " + subscriber.Name + "|IA_41:" + obj.Address + "|IA_42:" + obj.AttendedBy + "|IA_43:" + "" + "|IA_44:PAGO POR TRANSFERENCIA BANCARIA" + "|IA_45:" + cuenta + "~";
                 }
 
