@@ -884,3 +884,6 @@
 /DRRCore.Services.ApiWeb/obj/Release/net6.0/DRRCore.Services.ApiWeb.dll
 /DRRCore.Services.ApiWeb/obj/Release/net6.0/DRRCore.Services.ApiWeb.genruntimeconfig.cache
 /DRRCore.Services.ApiWeb/obj/Release/net6.0/staticwebassets.build.json
+*.dll
+*.config
+/DRRCore.Services.ApiEmail/obj/Debug/net6.0/DRRCore.Services.ApiEmail.csproj.FileListAbsolute.txt
