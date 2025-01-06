@@ -580,6 +580,7 @@ namespace DRRCore.Services.ApiCore.Controllers
 
             return File(result.Data.File, result.Data.ContentType, result.Data.Name);
         }
+       
     }
     
 }

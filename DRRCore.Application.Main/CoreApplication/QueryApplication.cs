@@ -2190,19 +2190,19 @@ namespace DRRCore.Application.Main.CoreApplication
                         var subscriberTickets = new List<GetQueryTicket5_1_2ResponseDto>();
                         foreach (var item1 in referenceHistory.Where(x => x.IdTicketNavigation.IdSubscriber == item.IdTicketNavigation.IdSubscriber).DistinctBy(x => x.IdTicket))
                         {
-                            decimal amount = 0;
-                            if (code.Contains("RC"))
-                            {
-                                var providers = await context.Providers.Where(x => x.IdTicket == item1.IdTicket && x.Qualification == "Dió referencia" && x.Flag == true).ToListAsync();
-                                amount = providers.Count();
-                            }
+                            //decimal amount = 0;
+                            //if (code.Contains("RC"))
+                            //{
+                            //    var providers = await context.Providers.Where(x => x.IdTicket == item1.IdTicket && x.Qualification == "Dió referencia" && x.Flag == true).ToListAsync();
+                            //    amount = providers.Count();
+                            //}
 
                             subscriberTickets.Add(new GetQueryTicket5_1_2ResponseDto
                             {
                                 AsignedTo = item1.Code,
                                 AsignationType = "RF",
                                 Cycle = item1.Cycle,
-                                Price = amount,
+                                Price = item1.ValidReferences,
                                 Id = item1.Id,
                                 IdTicket = item1.IdTicket,
                                 IdCompany = item1.IdTicketNavigation.IdCompany,

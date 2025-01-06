@@ -887,3 +887,9 @@
 *.dll
 *.config
 /DRRCore.Services.ApiEmail/obj/Debug/net6.0/DRRCore.Services.ApiEmail.csproj.FileListAbsolute.txt
+/DRRCore.Application.Interfaces/bin/Release/net6.0/DRRCore.Infraestructure.Configuration.dll
+/DRRCore.Domain.Interfaces/bin/Release/net6.0/DRRCore.Infraestructure.Configuration.dll
+/DRRCore.Infraestructure.Interfaces/bin/Release/net6.0/DRRCore.Infraestructure.Configuration.dll
+/DRRCore.Transversal.Mapper/bin/Release/net6.0/DRRCore.Infraestructure.Configuration.dll
+/DRRCore.Domain.Entities/bin/Release/net6.0/DRRCore.Infraestructure.Configuration.dll
+/DRRCore.Infraestructure.Configuration/SqlContext.cs

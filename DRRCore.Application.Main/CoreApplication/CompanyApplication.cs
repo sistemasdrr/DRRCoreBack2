@@ -50,6 +50,7 @@ namespace DRRCore.Application.Main.CoreApplication
         private readonly IReportingDownload _reportingDownload;
         private readonly ICompanyImageDomain _companyImagesDomain;
         private readonly ITicketDomain _ticketDomain;
+     
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
@@ -62,6 +63,7 @@ namespace DRRCore.Application.Main.CoreApplication
             IReportingDownload reportingDownload,
             ITicketDomain ticketDomain,
             ITCuponDomain tCuponDomain,
+           
             IImportsAndExportsDomain importsAndExportsDomain, ICompanyPartnersDomain companyPartnersDomain, IHttpContextAccessor httpContextAccessor)
         {
             _companyDomain = companyDomain;
@@ -88,6 +90,7 @@ namespace DRRCore.Application.Main.CoreApplication
             _logger = logger;
             _reportingDownload=reportingDownload;
             _httpContextAccessor = httpContextAccessor;
+           
             claims = (ClaimsIdentity)_httpContextAccessor.HttpContext.User.Identity;
         }
         public async Task<Response<int>> AddOrUpdateAsync(AddOrUpdateCompanyRequestDto obj)
@@ -2810,5 +2813,7 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             return response;
         }
+
+      
     }
 }

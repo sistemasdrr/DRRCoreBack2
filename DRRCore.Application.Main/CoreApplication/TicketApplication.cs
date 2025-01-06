@@ -2330,7 +2330,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                         };
                                                         emailDataDto.CC = new List<string>
                                                         {
-                                                            "diego.rodriguez@del-risco.com",
+                                                            "prueba.sistemas@del-risco.com",
                                                             userFrom.IdEmployeeNavigation.Email
                                                            
                                                         };
@@ -2347,9 +2347,9 @@ namespace DRRCore.Application.Main.CoreApplication
                                                         };
                                                         emailDataDto.CC = new List<string>
                                                         {
-                                                            "diego.rodriguez@del-risco.com",
+                                                            "prueba.sistemas@del-risco.com",
                                                             userFrom.IdEmployeeNavigation.Email,
-                                                            "crc@del-risco.com"
+                                                           
                                                         };
                                                         emailDataDto.Subject = ticket.ReportType + ": " + (numeration != null ? numeration.Number : 1) + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureType + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
                                                     }
@@ -2382,7 +2382,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                     {
                                                         IdTicket = ticket.Id,
                                                         Path = path,
-                                                        Name = emailDataDto.Subject,
+                                                        Name = file.Name+".pdf",
                                                         Extension = ".pdf"
                                                     });
 
@@ -2445,9 +2445,9 @@ namespace DRRCore.Application.Main.CoreApplication
                                                         };
                                                         emailDataDto.CC = new List<string>
                                                         {
-                                                            "diego.rodriguez@del-risco.com",
+                                                            "prueba.sistemas@del-risco.com",
                                                             userFrom.IdEmployeeNavigation.Email,
-                                                            // "crc@del-risco.com"
+                                                           
                                                         };
                                                         emailDataDto.Subject = "PRUEBA_" + ticket.ReportType + ": " + (numeration != null ? numeration.Number : 1) + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureType + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
                                                     }
@@ -2462,7 +2462,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                         };
                                                         emailDataDto.CC = new List<string>
                                                         {
-                                                            "diego.rodriguez@del-risco.com",
+                                                            "prueba.sistemas@del-risco.com",
                                                             userFrom.IdEmployeeNavigation.Email,
                                                            
                                                         };
@@ -2573,8 +2573,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                         }
                                         else
                                         {
-                                            number = numeration.Number++;
-                                            numeration.Number++;
+                                            number = numeration.Number++;                                           
                                             numeration.UpdateDate = DateTime.Now;
                                             context.Numerations.Update(numeration);
                                         }
@@ -2670,12 +2669,11 @@ namespace DRRCore.Application.Main.CoreApplication
                                                     emailDataDto.Password =userFrom.EmailPassword;
                                                     emailDataDto.To = new List<string>
                                                     {
-                                                        user.IdEmployeeNavigation.Email,
-                                                        "jeanpierrefernandez2001@gmail.com"
+                                                        user.IdEmployeeNavigation.Email                                                      
                                                     };
                                                     emailDataDto.CC = new List<string>
                                                     {
-                                                        "diego.rodriguez@del-risco.com",
+                                                        "prueba.sistemas@del-risco.com",
                                                         userFrom.IdEmployeeNavigation.Email,
                                                       
                                                     };
@@ -2692,9 +2690,8 @@ namespace DRRCore.Application.Main.CoreApplication
                                                         };
                                                     emailDataDto.CC = new List<string>
                                                         {
-                                                            "diego.rodriguez@del-risco.com",
-                                                            userFrom.IdEmployeeNavigation.Email,
-                                                            "crc@del-risco.com"
+                                                            "prueba.sistemas@del-risco.com",
+                                                            userFrom.IdEmployeeNavigation.Email                                                           
                                                         };
                                                     emailDataDto.Subject = ticket.ReportType + ": " + (numeration != null ? numeration.Number : 1) + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureType + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
                                                 }
@@ -2766,8 +2763,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                    
                                                     emailDataDto.CC = new List<string>
                                                     {
-                                                        "diego.rodriguez@del-risco.com",
-                                                        "jeanpierrefernandez2001@gmail.com"
+                                                        "prueba.sistemas@del-risco.com",                                                       
                                                     };
                                                     emailDataDto.Subject = "PRUEBA_" + ticket.ReportType + ": " + (numeration != null ? numeration.Number : 1) + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureType + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
                                                     emailDataDto.Parameters.Add(userFrom.IdEmployeeNavigation.FirstName + " " + userFrom.IdEmployeeNavigation.LastName);
@@ -2785,7 +2781,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                     }
                                                     emailDataDto.CC = new List<string>
                                                     {
-                                                        "diego.rodriguez@del-risco.com",
+                                                        "prueba.sistemas@del-risco.com",
                                                         userFrom.IdEmployeeNavigation.Email
                                                     };
                                                     emailDataDto.Subject = ticket.ReportType + ": " + (numeration != null ? numeration.Number : 1) + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureType + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
