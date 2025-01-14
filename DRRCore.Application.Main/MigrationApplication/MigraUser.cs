@@ -3513,7 +3513,7 @@ namespace DRRCore.Application.Main.MigrationApplication
             return true;
         }
 
-        public async Task<bool> AddOrUpdateCompany(int migra)
+        public async Task<bool> AddOrUpdateCompany(int migra,string oldCode)
         {
             using var context = new SqlCoreContext();
             using var mysqlContext = new MySqlContext();
@@ -3521,7 +3521,7 @@ namespace DRRCore.Application.Main.MigrationApplication
             {
                 try
                 {
-                    var empresas = await mysqlContext.MEmpresas.Where(x => x.Migra == migra && x.EmNombre != null).Take(100).ToListAsync();
+                    var empresas = await mysqlContext.MEmpresas.Where(x => x.Migra == migra && x.EmNombre != null && x.EmCodigo==oldCode).Take(100).ToListAsync();
                     foreach (var empresa in empresas)
                     {
                         finanzas = new REmpVsInfFin();

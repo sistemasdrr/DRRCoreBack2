@@ -109,6 +109,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
             CreateMap<Ticket, GetListTicketResponseDto>()
                  .ForMember(dest => dest.Id, opt => opt?.MapFrom(src => src.Id))
                  .ForMember(dest => dest.IdTicket, opt => opt?.MapFrom(src => src.Id))
+                  
                  .ForMember(dest => dest.IdSubscriber, opt => opt?.MapFrom(src => src.IdSubscriber == null ? 0 : src.IdSubscriber))
                  .ForMember(dest => dest.ProcedureType, opt => opt?.MapFrom(src => src.ProcedureType == null ? string.Empty : src.ProcedureType.Trim()))
                  .ForMember(dest => dest.IdContinent, opt => opt?.MapFrom(src => src.IdContinent == null ? 0 : src.IdContinent))

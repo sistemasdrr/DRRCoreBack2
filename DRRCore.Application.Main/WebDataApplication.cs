@@ -12,7 +12,7 @@ using DRRCore.Application.DTO.Web;
 using DRRCore.Application.Interfaces;
 using DRRCore.Domain.Entities.SQLContext;
 using DRRCore.Domain.Entities.SqlCoreContext;
-using DRRCore.Domain.Entities.SqlCoreContext2;
+
 using DRRCore.Domain.Interfaces;
 using DRRCore.Domain.Interfaces.EmailDomain;
 using DRRCore.Transversal.Common;

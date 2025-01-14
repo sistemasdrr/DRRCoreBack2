@@ -893,3 +893,5 @@
 /DRRCore.Transversal.Mapper/bin/Release/net6.0/DRRCore.Infraestructure.Configuration.dll
 /DRRCore.Domain.Entities/bin/Release/net6.0/DRRCore.Infraestructure.Configuration.dll
 /DRRCore.Infraestructure.Configuration/SqlContext.cs
+/DRRCore.Services.ApiCore/bin/Release/net6.0/DRRCore.Services.ApiCore.deps.json
+/DRRCore.Services.ApiCore/obj/Release/net6.0/PubTmp/Out/DRRCore.Services.ApiCore.deps.json

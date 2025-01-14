@@ -7,6 +7,7 @@ using DRRCore.Application.DTO.Core.Response;
 using DRRCore.Application.DTO.Enum;
 using DRRCore.Application.Interfaces.CoreApplication;
 using DRRCore.Domain.Entities.SqlCoreContext;
+
 using DRRCore.Domain.Interfaces.CoreDomain;
 using DRRCore.Domain.Interfaces.EmailDomain;
 using DRRCore.Domain.Interfaces.MysqlDomain;
@@ -1038,6 +1039,7 @@ namespace DRRCore.Application.Main.CoreApplication
 
         public async Task<Response<bool>> DeleteComercialLatePayment(int id)
         {
+            using var context = new SqlCoreContext();
             var response = new Response<bool>();
             try
             {
@@ -1051,7 +1053,9 @@ namespace DRRCore.Application.Main.CoreApplication
                 }
                 else
                 {
-                    response.Data = await _comercialLatePaymentDomain.DeleteAsync(id);
+                    context.ComercialLatePayments.Remove(comercialLatePayment);
+                    await context.SaveChangesAsync();
+                    response.Data = true;
                 }
             }
             catch (Exception ex)
@@ -1146,6 +1150,7 @@ namespace DRRCore.Application.Main.CoreApplication
 
         public async Task<Response<bool>> DeleteBankDebt(int id)
         {
+            using var context = new SqlCoreContext();
             var response = new Response<bool>();
             try
             {
@@ -1159,7 +1164,9 @@ namespace DRRCore.Application.Main.CoreApplication
                 }
                 else
                 {
-                    response.Data = await _bankDebtDomain.DeleteAsync(id);
+                    context.BankDebts.Remove(bankDebt);
+                    await context.SaveChangesAsync();
+                    response.Data = true;
                 }
             }
             catch (Exception ex)
@@ -2147,6 +2154,7 @@ namespace DRRCore.Application.Main.CoreApplication
             try
             {
                 var list = await _workerHistoryDomain.GetByIdCompanyAsync(idCompany);
+                list = list.OrderBy(x => x.NumberYear).ToList();
                 if (list != null)
                 {
                     response.Data = _mapper.Map<List<GetListWorkersHistoryResponseDto>>(list);

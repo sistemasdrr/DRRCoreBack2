@@ -25,7 +25,7 @@
         Task<bool> MigrateCompanyBankDebt(int migra);
         Task<bool> UpdatePersonJob();
 
-        Task<bool> AddOrUpdateCompany(int migra);
+        Task<bool> AddOrUpdateCompany(int migra, string oldCode);
         Task<bool> AddOrUpdatePerson(int migra);
 
         Task<bool> UpdateSubscriber();

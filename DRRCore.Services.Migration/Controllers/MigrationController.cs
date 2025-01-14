@@ -20,9 +20,9 @@ namespace DRRCore.Services.Migration.Controllers
         }
         [HttpPost()]
         [Route("AddOrUpdateCompany")]
-        public async Task<ActionResult> AddOrUpdateCompany(int migra)
+        public async Task<ActionResult> AddOrUpdateCompany(int migra, string oldCode)
         {
-            return Ok(await _migraUser.AddOrUpdateCompany(migra));
+            return Ok(await _migraUser.AddOrUpdateCompany(migra,oldCode));
         }
         
         [HttpPost()]

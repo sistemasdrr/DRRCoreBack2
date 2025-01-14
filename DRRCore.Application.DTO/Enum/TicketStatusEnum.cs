@@ -26,5 +26,9 @@
        Despachado_con_Observacion = 23,
        Por_Supervisar_Falta_Referencia = 24,
        Por_Despachar_Con_Observaciones = 26,
+       Anulado_Por_Abonado=27,
+        Anulado_Por_DRR=28,
+        Anulado_Por_Supervisor=30,
+        Anulado_Por_FaltaDatos=29
     }
 }

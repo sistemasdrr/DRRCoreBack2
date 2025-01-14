@@ -594,7 +594,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     AddCDataElement(xmlDoc, clientDataElement, "FecInf", ticket.OrderDate.ToString("dddd, MMMM dd, yyyy",ci));
                     AddCDataElement(xmlDoc, clientDataElement, "Status", ticket.IdSubscriberNavigation.Enable == true ? "Active" : "Inactive");
                     AddCDataElement(xmlDoc, clientDataElement, "Status_Desde", ticket.IdSubscriberNavigation.Code);
-                    AddCDataElement(xmlDoc, clientDataElement, "Ordered_On", ticket.OrderDate.ToString("dddd, MMMM dd, yyyy"));
+                    AddCDataElement(xmlDoc, clientDataElement, "Ordered_On", ticket.OrderDate.ToString("dddd, MMMM dd, yyyy",ci));
                     if (!ticket.ReferenceNumber.IsNullOrEmpty())
                     {
                         AddCDataElement(xmlDoc, clientDataElement, "ClientReference", ticket.ReferenceNumber);
@@ -672,15 +672,16 @@ namespace DRRCore.Application.Main.CoreApplication
                     }
                     if (companyBackground.CurrentPaidCapital > 0)
                     {
+                        
                        AddCDataElement(xmlDoc, summaryElement, "Capital_Stock", companyBackground.CurrentPaidCapitalCurrencyNavigation.Abreviation + companyBackground.CurrentPaidCapital.ToString() +
                                companyBackground.IdCompanyNavigation.TraductionCompanies.FirstOrDefault().TBpaidCapital);
                     }
                     if (balanceG.Count > 0)
                     {
                         DateTime date = (DateTime)balanceG[0].Date;
-                        AddCDataElement(xmlDoc, summaryElement, "Shareholders_Equity", balanceG[0].TotalPatrimony.ToString() + " " + balanceG[0].IdCurrencyNavigation.Abreviation + " (" + date.ToString("ddMMMyyyy") + ")");
-                        AddCDataElement(xmlDoc, summaryElement, "Annual_Revenues", balanceG[0].Sales.ToString() + " " + balanceG[0].IdCurrencyNavigation.Abreviation + " (" + date.ToString("ddMMMyyyy") + ")");
-                        AddCDataElement(xmlDoc, summaryElement, "Profits", balanceG[0].Utilities.ToString() + " " + balanceG[0].IdCurrencyNavigation.Abreviation + " (" + date.ToString("ddMMMyyyy") + ")");
+                        AddCDataElement(xmlDoc, summaryElement, "Shareholders_Equity", balanceG[0].TotalPatrimony.ToString() + " " + balanceG[0].IdCurrencyNavigation.Abreviation + " (" + date.ToString("ddMMMyyyy",ci) + ")");
+                        AddCDataElement(xmlDoc, summaryElement, "Annual_Revenues", balanceG[0].Sales.ToString() + " " + balanceG[0].IdCurrencyNavigation.Abreviation + " (" + date.ToString("ddMMMyyyy",ci) + ")");
+                        AddCDataElement(xmlDoc, summaryElement, "Profits", balanceG[0].Utilities.ToString() + " " + balanceG[0].IdCurrencyNavigation.Abreviation + " (" + date.ToString("ddMMMyyyy",ci) + ")");
                     }
                     if (companyBranch.WorkerNumber != null)
                     {
@@ -748,8 +749,15 @@ namespace DRRCore.Application.Main.CoreApplication
                         AddCDataElement(xmlDoc, legalBackgElement, "Legal_Status", company.IdLegalPersonTypeNavigation.EnglishName);
                     }
                     if (!companyBackground.ConstitutionDate.IsNullOrEmpty())
-                    {                      
-                        AddCDataElement(xmlDoc, legalBackgElement, "Date_Of_Incorporation",DateTime.Parse(companyBackground.ConstitutionDate).ToString("ddMMMyyyy", ci).ToUpper());
+                    {
+                        if (companyBackground.ConstitutionDate.Length > 4)
+                        {
+
+                            AddCDataElement(xmlDoc, legalBackgElement, "Date_Of_Incorporation", DateTime.ParseExact(companyBackground.ConstitutionDate, "dd/MM/yyyy", ci).ToString("ddMMMyyyy", ci).ToUpper());
+                        }
+                        else {
+                            AddCDataElement(xmlDoc, legalBackgElement, "Date_Of_Incorporation",companyBackground.ConstitutionDate);
+                        }
                     }
                     if (!companyBackground.StartFunctionYear.IsNullOrEmpty())
                     {
@@ -783,7 +791,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     if (balanceG.Count > 0)
                     {
                         DateTime date = (DateTime)balanceG[0].Date;
-                        AddCDataElement(xmlDoc, legalBackgElement, "Shareholders_Equity", balanceG[0].TotalPatrimony.ToString() + " " + balanceG[0].IdCurrencyNavigation.Abreviation + " (" + date.ToString("ddMMMyyyy") + ")");
+                        AddCDataElement(xmlDoc, legalBackgElement, "Shareholders_Equity", balanceG[0].TotalPatrimony.ToString() + " " + balanceG[0].IdCurrencyNavigation.Abreviation + " (" + date.ToString("ddMMMyyyy",ci) + ")");
                     }
                     if (!companyBackground.Traded.IsNullOrEmpty())
                     {

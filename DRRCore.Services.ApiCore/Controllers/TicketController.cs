@@ -462,6 +462,29 @@ namespace DRRCore.Services.ApiCore.Controllers
         {
             return Ok(await _ticketApplication.TicketToDispatchById(idTicket, hasObs));
         }
-        
+        [HttpGet()]
+        [Route("GetTicketToDelete")]
+        public async Task<IActionResult> GetTicketToDelete(int? cupon,string? name)
+        {
+            return Ok(await _ticketApplication.GetTicketToDelete(cupon??0,name??string.Empty));
+        }
+        [HttpGet()]
+        [Route("GetTicketHistoryToDelete")]
+        public async Task<IActionResult> GetTicketHistoryToDelete(int idTicket)
+        {
+            return Ok(await _ticketApplication.GetTicketHistoryToDelete(idTicket));
+        }
+        [HttpPost()]
+        [Route("AnluarTicketHistory")]
+        public async Task<IActionResult> DeleteTicketHistory(int idTicketHistory)
+        {
+            return Ok(await _ticketApplication.DeleteTicketHistory(idTicketHistory));
+        }
+        [HttpPost()]
+        [Route("AnularTicket")]
+        public async Task<IActionResult> DeleteTicketHistory(int idTicket,int reason)
+        {
+            return Ok(await _ticketApplication.DeleteTicketHistory(idTicket,reason));
+        }
     }
 }

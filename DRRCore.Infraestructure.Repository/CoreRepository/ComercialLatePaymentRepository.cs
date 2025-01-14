@@ -37,9 +37,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                 var comercialLatePayment = await context.ComercialLatePayments.FindAsync(id);
                 if (comercialLatePayment != null)
                 {
-                    comercialLatePayment.Enable = false;
-                    comercialLatePayment.DeleteDate = DateTime.Now;
-                    context.ComercialLatePayments.Update(comercialLatePayment);
+                    context.ComercialLatePayments.Remove(comercialLatePayment);
                     await context.SaveChangesAsync();
                     return true;
                 }

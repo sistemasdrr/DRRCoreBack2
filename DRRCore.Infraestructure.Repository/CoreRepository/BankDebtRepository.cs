@@ -34,11 +34,9 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
             {
                 using var context = new SqlCoreContext();
                 var bankDebt = await context.BankDebts.FindAsync(id);
-                if(bankDebt == null)
+                if(bankDebt != null)
                 {
-                    bankDebt.Enable = false;
-                    bankDebt.DeleteDate = DateTime.Now;
-                    context.BankDebts.Update(bankDebt);
+                    context.BankDebts.Remove(bankDebt);                   
                     await context.SaveChangesAsync();
                     return true;
                 }

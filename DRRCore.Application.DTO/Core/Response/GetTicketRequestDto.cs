@@ -74,6 +74,7 @@
         public string Code { get; set; }
         public string Type { get; set; }
         public bool? Flag { get; set; }
+        public string ProcedureType { get; set; }
     }
     public class GetTicketPendingObservationsResponseDto
     {

@@ -40,6 +40,7 @@ public partial class Ticket
     public string ReportType { get; set; } = null!;
 
     public string ProcedureType { get; set; } = null!;
+    public string? ProcedureTypeAgent { get; set; } 
 
     public int? IdCompany { get; set; }
 

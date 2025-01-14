@@ -85,7 +85,9 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         //GetListTicketResponseDto2
         Task<Response<List<GetListTicketResponseDto>>> GetTicketObservedByIdEmployee(int idEmployee);
         Task<Response<bool>> TicketToDispatchById(int idTicket, bool hasObs);
-
-
+        Task<Response<List<GetTicketToDeleteRequestDto>>> GetTicketToDelete(int cupon, string name);
+        Task<Response<List<GetTicketHistoryToDeleteResponseDto>>> GetTicketHistoryToDelete(int idTicketHistory);
+        Task<Response<bool>> DeleteTicketHistory(int idTicketHistory);
+        Task<Response<bool>> DeleteTicketHistory(int idTicket, int reason);
     }
 }

@@ -34,6 +34,7 @@ namespace DRRCore.Application.DTO.Core.Request
         public int? NumberAssign { get; set; }
         public bool? SendZip { get; set; }
         public bool? AttachmentRefCom { get; set; }
+        public string? ProcedureTypeAgent { get; set; }
     }
     public class NewAsignationDto
     {

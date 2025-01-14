@@ -1,9 +1,6 @@
 ﻿using AspNetCore.Reporting;
 using AutoMapper;
 using CoreFtp;
-using DocumentFormat.OpenXml.Drawing;
-using DocumentFormat.OpenXml.Math;
-using DocumentFormat.OpenXml.Office2013.Excel;
 using DocumentFormat.OpenXml.Wordprocessing;
 using DRRCore.Application.DTO.Core.Request;
 using DRRCore.Application.DTO.Core.Response;
@@ -11,7 +8,6 @@ using DRRCore.Application.DTO.Email;
 using DRRCore.Application.DTO.Enum;
 using DRRCore.Application.Interfaces.CoreApplication;
 using DRRCore.Application.Interfaces.EmailApplication;
-using DRRCore.Domain.Entities.MYSQLContext;
 using DRRCore.Domain.Entities.SQLContext;
 using DRRCore.Domain.Entities.SqlCoreContext;
 using DRRCore.Domain.Interfaces.CoreDomain;
@@ -30,7 +26,6 @@ using SharpCompress.Archives.Zip;
 using SharpCompress.Common;
 using SharpCompress.Writers;
 using SpreadsheetLight;
-using System.IO;
 
 namespace DRRCore.Application.Main.CoreApplication
 {
@@ -363,11 +358,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                 Identifier = "L_E_NEW",
                                 LargeValue = ""
                             });
-                            var financial = new List<CompanyFinancialInformation>();
-                            financial.Add(new CompanyFinancialInformation
-                            {
-                                IdFinancialSituacion = null
-                            });
+                           
                             var company = await _companyDomain.AddCompanyAsync(new Domain.Entities.SqlCoreContext.Company
                             {
                                 Name = request.RequestedName ?? string.Empty,
@@ -380,8 +371,8 @@ namespace DRRCore.Application.Main.CoreApplication
                                 Email = request.Email,
                                 Telephone = request.Telephone,
                                 Address = request.Address,
-                                Traductions = traduction,
-                                CompanyFinancialInformations = financial
+                                Traductions = traduction
+                              
                             });
                             var ticket = await _ticketDomain.GetByIdAsync(newTicket.Id);
                             ticket.IdCompany = company;
@@ -2585,7 +2576,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                         history.Cycle = code;
                                         history.ShippingDate = DateTime.Now;
                                         history.UpdateDate = DateTime.Now;
-
+                                        ticket.ProcedureTypeAgent = obj.Asignacion[0].ProcedureTypeAgent;
 
                                         if (item.Internal)
                                         {
@@ -2693,7 +2684,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                             "prueba.sistemas@del-risco.com",
                                                             userFrom.IdEmployeeNavigation.Email                                                           
                                                         };
-                                                    emailDataDto.Subject = ticket.ReportType + ": " + (numeration != null ? numeration.Number : 1) + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureType + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
+                                                    emailDataDto.Subject = ticket.ReportType + ": " + (numeration != null ? numeration.Number : 1) + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureTypeAgent + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
                                                 }
 
 
@@ -2703,7 +2694,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 emailDataDto.BodyHTML = emailDataDto.IsBodyHTML ? await GetBodyHtml(emailDataDto) : emailDataDto.BodyHTML;
                                                 _logger.LogInformation(JsonConvert.SerializeObject(emailDataDto));
 
-                                                var file = DownloadAssignAgent((int)ticket.Id, item.AssignedToCode,item.StartDate,item.EndDate, numeration.Number ?? 1, item.Observations).Result.Data;
+                                                var file = DownloadAssignAgent((int)ticket.Id, item.AssignedToCode,item.StartDate,item.EndDate, numeration.Number ?? 1, item.Observations, obj.Asignacion[0].ProcedureTypeAgent).Result.Data;
                                                 var attachment = new AttachmentDto();
                                                 attachment.FileName = file.Name + ".pdf";
                                                 attachment.Content = Convert.ToBase64String(file.File);
@@ -2793,7 +2784,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 emailDataDto.BodyHTML = emailDataDto.IsBodyHTML ? await GetBodyHtml(emailDataDto) : emailDataDto.BodyHTML;
                                                 //_logger.LogInformation(JsonConvert.SerializeObject(emailDataDto));
 
-                                                var file = DownloadAssignAgent((int)ticket.Id, item.AssignedToCode, item.StartDate, item.EndDate, numeration.Number ?? 1, item.Observations).Result.Data;
+                                                var file = DownloadAssignAgent((int)ticket.Id, item.AssignedToCode, item.StartDate, item.EndDate, numeration.Number ?? 1, item.Observations, obj.Asignacion[0].ProcedureTypeAgent).Result.Data;
                                                 var attachment = new AttachmentDto();
                                                 attachment.FileName = file.Name + ".pdf";
                                                 attachment.Content = Convert.ToBase64String(file.File);
@@ -3365,15 +3356,27 @@ namespace DRRCore.Application.Main.CoreApplication
                             emailDataDto.From = userLogin.IdEmployeeNavigation.Email;
                             emailDataDto.UserName = emailDataDto.From;
                             emailDataDto.Password =userLogin.EmailPassword;
-                            emailDataDto.To = new List<string>
-                            {                              
-                                ticket.IdSubscriberNavigation.SendReportToEmail,
-                            };
-                            emailDataDto.CC = new List<string>
+                            var emailss = ticket.IdSubscriberNavigation.SendReportToEmail.Split(';');
+                            if (emailss.Length > 0)
                             {
-                                "despacho@del-risco.com",
-                                "myepez@del-risco.com"
-                            };
+                                emailDataDto.To.Add(emailss[0]);
+                                if (emailss.Length > 1)
+                                {
+                                    for (int i = 1; i < emailss.Length; i++)
+                                    {
+                                        emailDataDto.CC.Add(emailss[i].Trim());
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                emailDataDto.To.Add(ticket.IdSubscriberNavigation.SendReportToEmail);
+                            }
+
+
+                            emailDataDto.CC.Add("despacho@del-risco.com");
+                            emailDataDto.CC.Add("prueba.sistemas@del-risco.com");
+                         
                         }
                     }
                     emailDataDto.EmailKey = ticket.IdSubscriberNavigation.Language == "E" ? "DRR_WORKFLOW_ESP_0027" : "DRR_WORKFLOW_ENG_0027";
@@ -3402,7 +3405,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         {
                             IdTicket = idTicket,
                             Path = path,
-                            Name = emailDataDto.Subject,
+                            Name = emailDataDto.Subject + ".pdf",
                             Extension = ".pdf"
                         });
                     }
@@ -3649,7 +3652,7 @@ namespace DRRCore.Application.Main.CoreApplication
 
 
 
-        public async Task<Response<GetFileResponseDto>> DownloadAssignAgent(int idTicket, string assignedTo, string startDate, string endDate, int number, string observations)
+        public async Task<Response<GetFileResponseDto>> DownloadAssignAgent(int idTicket, string assignedTo, string startDate, string endDate, int number, string observations,string procedureTypeAgent)
         {
             var response = new Response<GetFileResponseDto>();
             try
@@ -3672,6 +3675,7 @@ namespace DRRCore.Application.Main.CoreApplication
                             { "endDate", endDate },
                             { "number", number.ToString() },
                             { "observations", observations },
+                             { "procedureTypeAgent", procedureTypeAgent },
                          };
                     response.Data = new GetFileResponseDto
                     {
@@ -3984,7 +3988,8 @@ namespace DRRCore.Application.Main.CoreApplication
                         }
                         foreach (var cs in companyShareholder)
                         {
-                            data = data + i + ". " + cs.IdCompanyShareHolderNavigation.Name + " (" + cs.IdCompanyShareHolderNavigation.IdCountryNavigation.Name + " / " + cs.IdCompanyShareHolderNavigation.TaxTypeCode + " / " + cs.RelationEng + " )   ";
+                           string country = cs.IdCompanyShareHolderNavigation.IdCountryNavigation == null ? string.Empty : cs.IdCompanyShareHolderNavigation.IdCountryNavigation.Name;
+                            data = data + i + ". " + cs.IdCompanyShareHolderNavigation.Name + " (" +country + " / " + cs.IdCompanyShareHolderNavigation.TaxTypeCode + " / " + cs.RelationEng + " )   ";
                             i++;
                         }
 
@@ -5171,8 +5176,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 var ticketFiles = new List<TicketFile>();
                 foreach(var ticketFile in ticket.TicketFiles)
                 {
-                    ticketFile.IdTicket = null;
-                    ticketFiles.Add(ticketFile);
+                   ticketFiles.Add(ticketFile);
                 }
                 var newTicket = new Ticket{ 
                     Number = ticket.Number,
@@ -5214,7 +5218,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     IdTicketComplement = ticket.Id,
                     NumberTicketComplement = ticket.Number.ToString("D6") + "*"
                 };
-                
+
                 var ticketHistory1 = new TicketHistory { 
                     IdTicket = newTicket.Id,
                     UserFrom = user.Id.ToString(),
@@ -5227,7 +5231,6 @@ namespace DRRCore.Application.Main.CoreApplication
                 };
                 var ticketHistory2 = new TicketHistory
                 {
-                    IdTicket = newTicket.Id,
                     UserFrom = user.Id.ToString(),
                     UserTo = ticketHistory.UserTo,
                     AsignedTo = ticketHistory.AsignedTo,
@@ -5239,6 +5242,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     Cycle = "",
                     StartDate = DateTime.Now,
                 };
+               
                 newTicket.TicketHistories.Add(ticketHistory1);
                 newTicket.TicketHistories.Add(ticketHistory2);
                 await context.Tickets.AddAsync(newTicket);
@@ -5630,7 +5634,7 @@ namespace DRRCore.Application.Main.CoreApplication
             try
             {
                 using var context = new SqlCoreContext();
-                var ticketHistories = await context.TicketHistories.Where(x => x.IdTicket == idTicket && 
+                var ticketHistories = await context.TicketHistories.Include(x=>x.IdTicketNavigation).Where(x => x.IdTicket == idTicket && 
                 ((x.AsignedTo.Contains("R")) || (x.AsignedTo.Contains("A")) || (x.AsignedTo.Contains("RC")) || (x.AsignedTo.Contains("D")) || (x.AsignedTo.Contains("T")))  && (!x.AsignedTo.Contains("CR") && !x.AsignedTo.Contains("PA") && !x.AsignedTo.Contains("S")) && x.AsignationType != null && x.AsignationType != "" ).ToListAsync();
                 if(ticketHistories == null)
                 {
@@ -5642,6 +5646,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     asignation.Code = ticketHistory.AsignedTo;
                     asignation.Type = ticketHistory.AsignationType;
                     asignation.Flag = ticketHistory.Flag;
+                    asignation.ProcedureType = ticketHistory.IdTicketNavigation.ProcedureType;
                     response.Data.Add(asignation);
                 }
 
@@ -5693,20 +5698,27 @@ namespace DRRCore.Application.Main.CoreApplication
                 }
                 //0 no mostrara mensaje
                 //1 mostrara mensaje
-                switch(ticket.About)
+                if (ticket.IdCompanyNavigation.Quality != null)
                 {
-                    case "E":
-                        if (ticket.IdCompanyNavigation.Quality.Trim().IsNullOrEmpty())
-                        {
-                            response.Data = 1; 
-                        }
-                        break;
-                    case "P":
-                        if (ticket.IdPersonNavigation.Quality.Trim().IsNullOrEmpty())
-                        {
-                            response.Data = 1; 
-                        }
-                        break;
+                    switch (ticket.About)
+                    {
+                        case "E":
+                            if (ticket.IdCompanyNavigation.Quality.Trim().IsNullOrEmpty())
+                            {
+                                response.Data = 1;
+                            }
+                            break;
+                        case "P":
+                            if (ticket.IdPersonNavigation.Quality.Trim().IsNullOrEmpty())
+                            {
+                                response.Data = 1;
+                            }
+                            break;
+                    }
+                }
+                else
+                {
+                    response.Data = 1;
                 }
 
             }catch(Exception ex)
@@ -5755,6 +5767,161 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 _logger.LogError(ex.Message);
                 response.IsSuccess = true;
+            }
+            return response;
+        }
+
+        public async Task<Response<List<GetTicketToDeleteRequestDto>>> GetTicketToDelete(int cupon, string name)
+        {
+            var response = new Response<List<GetTicketToDeleteRequestDto>>();
+            response.Data = new List<GetTicketToDeleteRequestDto>();
+            var listTicket =new List<Ticket>();
+            try
+            {
+                using var context = new SqlCoreContext();
+
+
+                if (cupon == 0)
+                {
+                     listTicket = await context.Tickets
+                      .Include(x => x.IdCompanyNavigation)
+                      .Include(x => x.IdPersonNavigation)
+                      .Include(x => x.IdCountryNavigation)
+                      .Include(x => x.IdSubscriberNavigation)
+                      .Where(x => x.RequestedName.Contains(name) && (x.IdStatusTicket != (int)TicketStatusEnum.Pendiente || x.IdStatusTicket != (int)TicketStatusEnum.Despachado ||
+                                  x.IdStatusTicket != (int)TicketStatusEnum.Despachado_con_Observacion || x.IdStatusTicket != (int)TicketStatusEnum.Rechazado ||
+                                   x.IdStatusTicket != (int)TicketStatusEnum.Anulado_Por_Abonado || x.IdStatusTicket != (int)TicketStatusEnum.Anulado_Por_DRR ||
+                                    x.IdStatusTicket != (int)TicketStatusEnum.Anulado_Por_Supervisor || x.IdStatusTicket != (int)TicketStatusEnum.Anulado_Por_FaltaDatos)).ToListAsync();
+
+
+                }
+                else
+                {
+                     listTicket = await context.Tickets
+                    .Include(x => x.IdCompanyNavigation)
+                    .Include(x => x.IdPersonNavigation)
+                    .Include(x => x.IdCountryNavigation)
+                    .Include(x => x.IdSubscriberNavigation)
+                    .Where(x => x.RequestedName.Contains(name) && x.Number==cupon && (x.IdStatusTicket != (int)TicketStatusEnum.Pendiente || x.IdStatusTicket != (int)TicketStatusEnum.Despachado ||
+                                x.IdStatusTicket != (int)TicketStatusEnum.Despachado_con_Observacion || x.IdStatusTicket != (int)TicketStatusEnum.Rechazado ||
+                                 x.IdStatusTicket != (int)TicketStatusEnum.Anulado_Por_Abonado || x.IdStatusTicket != (int)TicketStatusEnum.Anulado_Por_DRR ||
+                                  x.IdStatusTicket != (int)TicketStatusEnum.Anulado_Por_Supervisor || x.IdStatusTicket != (int)TicketStatusEnum.Anulado_Por_FaltaDatos)).ToListAsync();
+
+
+                }
+
+                foreach (var item in listTicket)
+                {
+                    response.Data.Add(new GetTicketToDeleteRequestDto
+                    {
+                        Id = item.Id,
+                        Number=item.Number.ToString("D6"),
+                        Country = item.IdCountryNavigation != null ? item.IdCountryNavigation.Iso : string.Empty,
+                        Name=item.About=="E"?item.IdCompanyNavigation.Name:item.IdPersonNavigation.Fullname,
+                        ProcedureType=item.ProcedureType,
+                        ReportType=item.ReportType,
+                        SubscriberCode=item.IdSubscriberNavigation.Code,
+                        IsoFlagCountry= item.IdCountryNavigation != null ? item.IdCountryNavigation.FlagIso : string.Empty,
+                        RequestName=item.RequestedName,
+                        ExpireDate=item.ExpireDate.ToString("dd/MM/yyyy"),
+                        OrderDate = item.OrderDate.ToString("dd/MM/yyyy")
+                    }) ;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                response.IsSuccess = true;
+            }
+            return response;
+        
+    }
+
+        public async Task<Response<List<GetTicketHistoryToDeleteResponseDto>>> GetTicketHistoryToDelete(int idTicketHistory)
+        {
+            var response = new Response<List<GetTicketHistoryToDeleteResponseDto>>();
+            response.Data = new List<GetTicketHistoryToDeleteResponseDto>();
+            var listTicket = new List<TicketAssignation>();
+            try
+            {
+                using var context = new SqlCoreContext();
+
+                var ticket = await context.TicketHistories.Where(x => x.IdTicket == idTicketHistory && x.Flag == false).ToListAsync();
+                foreach (var item in ticket)
+                {
+                    response.Data.Add(new GetTicketHistoryToDeleteResponseDto
+                    {
+                        Id=item.Id,
+                        AsignedDate=item.StartDate.Value.ToString("dd/MM/yyyy"),
+                        AsignedEnd= item.EndDate.Value.ToString("dd/MM/yyyy"),
+                        AsignedName= item.AsignedTo,
+                        AsignedType=item.AsignationType
+                    });
+                }             
+             }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                response.IsSuccess = true;
+            }
+            return response;
+
+        }
+
+        public async Task<Response<bool>> DeleteTicketHistory(int idTicketHistory)
+        {
+            var response = new Response<bool>();
+          
+            try
+            {
+                using var context = new SqlCoreContext();
+
+                var ticket = await context.TicketHistories.Where(x => x.IdTicket == idTicketHistory).FirstOrDefaultAsync();
+                var idTicketDeleted = ticket.Id;
+
+                context.TicketHistories.Remove(ticket);
+                
+                var lastHistory= await context.TicketHistories.Where(x => x.IdTicket == idTicketHistory && x.Id<idTicketDeleted).OrderByDescending(x=>x.Id).FirstOrDefaultAsync();
+
+                lastHistory.Flag = false;
+                lastHistory.UpdateDate = DateTime.Now;
+                context.TicketHistories.Update(lastHistory);
+
+                await context.SaveChangesAsync();
+                response.Data = true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                response.IsSuccess = true;
+                response.Data = false;
+            }
+            return response;
+        }
+
+        public async Task<Response<bool>> DeleteTicketHistory(int idTicket, int reason)
+        {
+            var response = new Response<bool>();
+
+            try
+            {
+                using var context = new SqlCoreContext();
+
+                var ticket = await context.Tickets.Where(x => x.Id == idTicket).FirstOrDefaultAsync();
+
+                ticket.IdStatusTicket = reason;
+                ticket.UpdateDate = DateTime.Now;
+
+                context.Tickets.Update(ticket);
+
+                await context.SaveChangesAsync();
+                response.Data = true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                response.IsSuccess = true;
+                response.Data = false;
             }
             return response;
         }
