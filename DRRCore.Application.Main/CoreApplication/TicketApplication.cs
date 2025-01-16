@@ -537,15 +537,15 @@ namespace DRRCore.Application.Main.CoreApplication
             if (reportType == "DF")
             {
                 getReceptor = await _ticketReceptorDomain.GetReceptorDoubleDate(idCountry);
-                return getReceptor.IdEmployee ?? 38;
+                return getReceptor.IdEmployee ?? 51;
             }
             if (reportType == "EF")
             {
                 getReceptor = await _ticketReceptorDomain.GetReceptorInDate(idCountry);
-                return getReceptor.IdEmployee ?? 38;
+                return getReceptor.IdEmployee ?? 51;
             }
             getReceptor = await _ticketReceptorDomain.GetReceptorOtherCase(idCountry);
-            return getReceptor.IdEmployee ?? 38;
+            return getReceptor.IdEmployee ?? 51;
         }
 
         public async Task<Response<bool>> DeleteTicket(int id)
@@ -5876,12 +5876,13 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 using var context = new SqlCoreContext();
 
-                var ticket = await context.TicketHistories.Where(x => x.IdTicket == idTicketHistory).FirstOrDefaultAsync();
-                var idTicketDeleted = ticket.Id;
+                var ticket = await context.TicketHistories.Where(x => x.Id == idTicketHistory).FirstOrDefaultAsync();
+                var idTicketHistoryDeleted = ticket.Id;
+                var idTicketDeleted = ticket.IdTicket;
 
                 context.TicketHistories.Remove(ticket);
                 
-                var lastHistory= await context.TicketHistories.Where(x => x.IdTicket == idTicketHistory && x.Id<idTicketDeleted).OrderByDescending(x=>x.Id).FirstOrDefaultAsync();
+                var lastHistory= await context.TicketHistories.Where(x => x.IdTicket == idTicketDeleted && x.Id< idTicketHistoryDeleted && x.AsignedTo!="CR1" && !x.AsignedTo.StartsWith("RC")).OrderByDescending(x=>x.Id).FirstOrDefaultAsync();
 
                 lastHistory.Flag = false;
                 lastHistory.UpdateDate = DateTime.Now;

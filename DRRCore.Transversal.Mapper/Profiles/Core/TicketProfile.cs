@@ -281,6 +281,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                 .ForMember(dest => dest.ReportType, opt => opt.MapFrom(src => src.IdTicketNavigation.ReportType ?? string.Empty))
                 .ForMember(dest => dest.HasBalance, opt => opt.MapFrom(src => src.IdTicketNavigation.HasBalance ?? null))
                 .ForMember(dest => dest.DispatchDate, opt => opt.MapFrom(src => StaticFunctions.DateTimeToString(src.IdTicketNavigation.DispatchtDate) ?? string.Empty))
+                 .ForMember(dest => dest.LastSearched, opt => opt.MapFrom(src =>src.IdTicketNavigation.About=="E"?StaticFunctions.DateTimeToString(src.IdTicketNavigation.IdCompanyNavigation.LastSearched): StaticFunctions.DateTimeToString(src.IdTicketNavigation.IdPersonNavigation.LastSearched)))
 
                 .ForMember(dest => dest.SubscriberCode, opt => opt.MapFrom(src => src.IdTicketNavigation.IdSubscriberNavigation.Code ?? string.Empty))
                 .ForMember(dest => dest.SubscriberName, opt => opt.MapFrom(src => src.IdTicketNavigation.IdSubscriberNavigation.Name ?? string.Empty))

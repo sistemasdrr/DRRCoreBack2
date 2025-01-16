@@ -591,10 +591,10 @@ namespace DRRCore.Application.Main.CoreApplication
                     XmlElement clientDataElement = xmlDoc.CreateElement("Client_Data");
                     rootElement.AppendChild(clientDataElement);
                     AddCDataElement(xmlDoc, clientDataElement, "Client", ticket.IdSubscriberNavigation.Code);
-                    AddCDataElement(xmlDoc, clientDataElement, "FecInf", ticket.OrderDate.ToString("dddd, MMMM dd, yyyy",ci));
+                    AddCDataElement(xmlDoc, clientDataElement, "FecInf", ticket.OrderDate.ToString("dddd, MMMM d, yyyy",ci));
                     AddCDataElement(xmlDoc, clientDataElement, "Status", ticket.IdSubscriberNavigation.Enable == true ? "Active" : "Inactive");
                     AddCDataElement(xmlDoc, clientDataElement, "Status_Desde", ticket.IdSubscriberNavigation.Code);
-                    AddCDataElement(xmlDoc, clientDataElement, "Ordered_On", ticket.OrderDate.ToString("dddd, MMMM dd, yyyy",ci));
+                    AddCDataElement(xmlDoc, clientDataElement, "Ordered_On", ticket.OrderDate.ToString("dddd, MMMM d, yyyy",ci));
                     if (!ticket.ReferenceNumber.IsNullOrEmpty())
                     {
                         AddCDataElement(xmlDoc, clientDataElement, "ClientReference", ticket.ReferenceNumber);

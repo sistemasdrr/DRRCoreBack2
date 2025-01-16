@@ -106,6 +106,7 @@
         public string? Status { get; set; }
         public string? StatusColor { get; set; }
         public string? StatusFinalOwner { get; set; }
+        public string? LastSearched { get; set; }
 
         //ABONADO
         public string? SubscriberCode { get; set; }

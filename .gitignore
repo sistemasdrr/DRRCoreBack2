@@ -895,3 +895,10 @@
 /DRRCore.Infraestructure.Configuration/SqlContext.cs
 /DRRCore.Services.ApiCore/bin/Release/net6.0/DRRCore.Services.ApiCore.deps.json
 /DRRCore.Services.ApiCore/obj/Release/net6.0/PubTmp/Out/DRRCore.Services.ApiCore.deps.json
+/DRRCore.Services.ApiCore/bin/Release/net6.0/publish/DRRCore.Domain.Entities.dll
+/DRRCore.Services.ApiCore/bin/Release/net6.0/publish/DRRCore.Domain.Entities.pdb
+/DRRCore.Services.ApiCore/bin/Release/net6.0/publish/DRRCore.Transversal.Common.pdb
+/DRRCore.Services.ApiCore/Properties/PublishProfiles/FolderProfile1.pubxml.user
+/DRRCore.Services.ApiCore/bin/Release/net6.0/publish/DRRCore.Infraestructure.Repository.dll
+/DRRCore.Services.ApiCore/bin/Release/net6.0/publish/DRRCore.Services.ApiCore.deps.json
+/DRRCore.Services.ApiCore/bin/Release/net6.0/publish/DRRCore.Transversal.Common.dll
