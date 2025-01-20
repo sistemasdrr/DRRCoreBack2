@@ -248,7 +248,21 @@ namespace DRRCore.Application.Main.CoreApplication
                             }
                         }
                     }
-
+                    CultureInfo ci = new CultureInfo("en-US");
+                    var registrationDate = string.Empty;
+                    if (resultCompany != null)
+                    {
+                        if (resultCompany.RegistrationDate!=null && resultCompany.RegistrationDate.Length > 4)
+                        {
+                            registrationDate = DateTime.ParseExact(resultCompany.RegistrationDate, "dd/MM/yyyy", ci).ToString("yyyy-MM-dd", ci).ToUpper();
+                            
+                        }
+                        else
+                        {
+                            registrationDate = resultCompany.RegistrationDate;
+                           
+                        }
+                    }
                     XNamespace xsiNs = "http://www.w3.org/2001/XMLSchema-instance";
                     XDocument xDoc = new XDocument(
                         new XDeclaration("1.0", "UTF-8", ""),
@@ -329,7 +343,12 @@ namespace DRRCore.Application.Main.CoreApplication
                                 //),
 
 
-                                resultCompany.NumberOfEmployeesWithinTheCompanyRangeFrom == 0 ? null :
+                 
+
+
+
+
+                                  resultCompany.NumberOfEmployeesWithinTheCompanyRangeFrom == 0 ? null :
                                 new XElement("numberOfEmployees",
                                     new XElement("numberOfEmployeesType", (resultCompany == null ? "" : resultCompany.NumberOfEmployeesType)),
                                     new XElement("numberOfEmployeesWithinTheCompanyRangeFrom", (resultCompany == null ? "" : resultCompany.NumberOfEmployeesWithinTheCompanyRangeFrom))
@@ -346,7 +365,11 @@ namespace DRRCore.Application.Main.CoreApplication
                                      new XElement("contactWebsiteAddress", (resultCompany == null ? "" : resultCompany.ContactWebsiteAddress))
                                 ),
                                 new XElement("incorporationDate", (resultCompany == null ? "" : resultCompany.IncorporationDate)),
-                                new XElement("registrationDate", (resultCompany == null ? "" : resultCompany.RegistrationDate)),
+
+
+
+
+                    new XElement("registrationDate", (resultCompany == null ? "" : registrationDate)),
                                 new XElement("companyMainSector",
                                     new XElement("companyMainSectorCode", (resultCompany == null ? "" : GetBusinessBranchCode(resultCompany.CompanyMainSectorCode))),
                                     new XElement("companyMainSectorCodeType", (resultCompany == null ? "" : resultCompany.CompanyMainSectorCodeType)),

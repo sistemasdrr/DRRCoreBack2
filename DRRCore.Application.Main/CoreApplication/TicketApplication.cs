@@ -3837,7 +3837,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         sLDocument.SetCellValue("B1", "DATA");
 
                         sLDocument.SetCellValue("A2", "KSURE_REFERENCE");
-                        sLDocument.SetCellValue("B2", ticket.ReferenceNumber.PadLeft(10));
+                        sLDocument.SetCellValue("B2", ticket.ReferenceNumber.Substring(0,10));
 
                         sLDocument.SetCellValue("A3", "TRGTPSN_NM");
                         sLDocument.SetCellValue("B3", ticket.IdCompanyNavigation.Name);
@@ -3979,6 +3979,7 @@ namespace DRRCore.Application.Main.CoreApplication
                             .Include(x => x.IdCompanyShareHolderNavigation).ThenInclude(x => x.IdCountryNavigation)
                             .Where(x => x.IdCompany == ticket.IdCompany)
                             .OrderBy(x => x.IdCompanyShareHolderNavigation.Name)
+                            .Take(3)                            
                             .ToListAsync();
                         foreach (var cr in companyRelations)
                         {
@@ -4007,6 +4008,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         var partners = await context.CompanyPartners
                             .Where(x => x.IdCompany == ticket.IdCompany && x.Enable == true)
                             .Include(x => x.IdPersonNavigation).ThenInclude(x => x.TraductionPeople)
+                            .Take(3)
                             .ToListAsync();
                         foreach (var partner in partners)
                         {
