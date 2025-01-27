@@ -11,9 +11,11 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
         {
             CreateMap<BillinPersonal, GetBillingPersonalResponseDto>()
                .ForMember(dest => dest.IdEmployee, opt => opt?.MapFrom(src => src.IdEmployee == 0 ?  null : src.IdEmployee))
+               .ForMember(dest => dest.DirectTranslate, opt => opt?.MapFrom(src => src.DirectTranslate))
                .ReverseMap();
             CreateMap<AddOrUpdateBillingPersonal, BillinPersonal > ()
                .ForMember(dest => dest.IdEmployee, opt => opt?.MapFrom(src => src.IdEmployee == 0 ? null : src.IdEmployee))
+               .ForMember(dest => dest.DirectTranslate, opt => opt?.MapFrom(src => src.DirectTranslate))
                .ReverseMap();
         }
     }

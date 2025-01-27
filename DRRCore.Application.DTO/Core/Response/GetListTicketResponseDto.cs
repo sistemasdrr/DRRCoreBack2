@@ -82,6 +82,7 @@
         public string? ComplementQuality { get; set; }
         public string? ComplementQualityTypist { get; set; }
         public string? ComplementQualityTranslator { get; set; }
+        public string? FinalComentary { get; set; }
     }
     public class GetListTicketResponseDto2
     {

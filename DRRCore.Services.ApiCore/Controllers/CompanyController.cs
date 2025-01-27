@@ -333,6 +333,12 @@ namespace DRRCore.Services.ApiCore.Controllers
         {
             return Ok(await _companyImagesApplication.GetCompanyImagesByIdCompany(idCompany));
         }
+        [HttpGet()]
+        [Route("getPersonImgByIdPerson")]
+        public async Task<ActionResult> getPersonImgByIdPerson(int idPerson)
+        {
+            return Ok(await _companyImagesApplication.GetPersonImgByIdPerson(idPerson));
+        }
         [HttpPost()]
         [Route("uploadImage")]
         public async Task<ActionResult> uploadImage(IFormFile request)
@@ -347,6 +353,15 @@ namespace DRRCore.Services.ApiCore.Controllers
             descriptionEng ??= "";
             print ??= false;
             return Ok(await _companyImagesApplication.UpdateImageCompany(idCompany, number, description, descriptionEng, print, file));
+        }
+        [HttpPost()]
+        [Route("UpdateImagePerson")]
+        public async Task<ActionResult> updateImagePerson(int idPerson, int number, string? description, string? descriptionEng, bool? print, IFormFile file)
+        {
+            description ??= "";
+            descriptionEng ??= "";
+            print ??= false;
+            return Ok(await _companyImagesApplication.UpdateImagePerson(idPerson, number, description, descriptionEng, print, file));
         }
         [HttpGet()]
         [Route("getImageByPath")]

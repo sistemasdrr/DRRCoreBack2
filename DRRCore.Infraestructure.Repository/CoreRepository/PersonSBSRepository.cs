@@ -200,30 +200,10 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                         obj.IdPersonNavigation.TraductionPeople.FirstOrDefault().TSbscommentBank= traductions.Where(x => x.Identifier == "L_SBS_COMMENTBANK").FirstOrDefault().LargeValue;
                         obj.IdPersonNavigation.TraductionPeople.FirstOrDefault().TSbslitig= traductions.Where(x => x.Identifier == "L_SBS_LITIG").FirstOrDefault().LargeValue;
                     }
+                    obj.IdPersonNavigation.Traductions = null;
                     context.PersonSbs.Update(obj);
 
-                    //foreach (var item in traductions)
-                    //{
-                    //    var modifierTraduction = await context.Traductions.Where(x => x.IdPerson == obj.IdPerson && x.Identifier == item.Identifier).FirstOrDefaultAsync();
-                    //    if (modifierTraduction != null)
-                    //    {
-                    //        modifierTraduction.ShortValue = item.ShortValue;
-                    //        modifierTraduction.LargeValue = item.LargeValue;
-                    //        modifierTraduction.LastUpdaterUser = item.LastUpdaterUser;
-                    //        context.Traductions.Update(modifierTraduction);
-                    //    }
-                    //    else
-                    //    {
-                    //        var newTraduction = new Traduction();
-                    //        newTraduction.Id = 0;
-                    //        newTraduction.IdPerson = obj.IdPerson;
-                    //        newTraduction.Identifier = item.Identifier;
-                    //        newTraduction.ShortValue = item.ShortValue;
-                    //        newTraduction.LargeValue = item.LargeValue;
-                    //        newTraduction.LastUpdaterUser = item.LastUpdaterUser;
-                    //        await context.Traductions.AddAsync(newTraduction);
-                    //    }
-                    //}
+                     
                     await context.SaveChangesAsync();
                     return obj.Id;
                 }

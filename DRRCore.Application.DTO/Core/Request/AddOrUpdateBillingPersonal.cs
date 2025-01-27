@@ -9,6 +9,7 @@
         public string? Code { get; set; }
 
         public bool? Commission { get; set; }
+        public bool? DirectTranslate { get; set; }
 
         public string? ReportType { get; set; }
 

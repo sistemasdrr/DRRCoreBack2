@@ -129,7 +129,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     using var context = new SqlCoreContext();
                     var existingCompany = await context.Companies
                     .Where(x => x.Id == obj.Id)
-                    .Include(x => x.CompanyFinancialInformations)
+                 
                     .Include(x => x.TraductionCompanies)
                    .FirstOrDefaultAsync();
 

@@ -1,5 +1,6 @@
 ﻿
 using AutoMapper;
+using CoreFtp;
 using DRRCore.Application.DTO.Core.Request;
 using DRRCore.Application.DTO.Core.Response;
 using DRRCore.Application.DTO.Email;
@@ -15,6 +16,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using Org.BouncyCastle.Crypto.Parameters;
+using SharpCompress.Common;
+using System.IO;
 
 namespace DRRCore.Application.Main.CoreApplication
 {
@@ -455,7 +459,8 @@ namespace DRRCore.Application.Main.CoreApplication
                         .Include(x => x.IdSubscriberNavigation)
                         .Include(x => x.IdCountryNavigation)
                         .Where(x => x.DispatchtDate >= startDateTime && x.DispatchtDate <= endDateTime && x.IdInvoiceState == 1 && x.IdSubscriberNavigation.FacturationType == "FM" &&
-                                    (x.IdStatusTicket == (int)TicketStatusEnum.Despachado || x.IdStatusTicket == (int)TicketStatusEnum.Despachado_con_Observacion))
+                                    (x.IdStatusTicket == (int)TicketStatusEnum.Despachado || x.IdStatusTicket == (int)TicketStatusEnum.Despachado_con_Observacion) && x.IsComplement==false && x.Enable==true)
+                        .OrderBy(x=>x.DispatchtDate)
                         .ToListAsync();
                 if (tickets != null && tickets.Any())
                 {
@@ -1496,7 +1501,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     MONTO_TOTAL_IGV = "0.00";
                     INDICADOR_AFECTACION_ITEM = "40";
                     NRO_DOC_ADQUIRIENTE = "-";
-                    CODIGO_PAIS_EXPORTACION = Codigo_Pais(country.OldCode);
+                    CODIGO_PAIS_EXPORTACION =await Codigo_Pais(context,country.OldCode);
                 }
 
 
@@ -1621,186 +1626,120 @@ namespace DRRCore.Application.Main.CoreApplication
                 }
 
                 int Vueltas = 0;
-                string T1 = "", T2 = "", T3 = "", PRECIO_VENTA_UNITARIO_ITEM = "", VALOR_ITEM = "", IGV_TOTAL_ITEM = "";
+                string TramoDetail = "", T2 = "", T3 = "", PRECIO_VENTA_UNITARIO_ITEM = "", VALOR_ITEM = "", IGV_TOTAL_ITEM = "";
 
+                string specialCaracter = "^";
 
-                decimal? T1a = 0;
-                foreach (var item in obj.InvoiceSubscriberList.Where(x => x.ProcedureType == "T1"))
+                var LstGrupoSumado = obj.InvoiceSubscriberList.GroupBy(l => l.ProcedureType)
+                          .Select(la =>
+                                new {
+                                    IdGrupo = la.Key,
+                                    NoArticulos = la.Count(),
+                                    SumaPrecio = la.Sum(s => s.Price)??0,
+                                }).OrderBy(x=>x.IdGrupo).ToList();
+         
+                foreach (var procedure in LstGrupoSumado)
                 {
-                    T1a += item.Price;
-                }
-                if (obj.InvoiceSubscriberList.Where(x => x.ProcedureType == "T1").Count() > 0)
-                {
-                    T1a = T1a / obj.InvoiceSubscriberList.Where(x => x.ProcedureType == "T1").Count();
-                }
-
-
-                decimal? T1b = 0;
-                foreach (var item in obj.InvoiceSubscriberList.Where(x => x.ProcedureType == "T1"))
-                {
-                    T1b++;
-                }
-
-                decimal? T1c = 0;
-                foreach (var item in obj.InvoiceSubscriberList.Where(x => x.ProcedureType == "T1"))
-                {
-                    T1c += item.Price;
-                }
-
-                if (obj.InvoiceSubscriberList.Where(x => x.ProcedureType == "T1").ToList().Count == 0)
-                {
-                    T1 = "";
-                }
-                else
-                {
-                    Vueltas = Vueltas + 1;
+                    Vueltas++;
+                    string DescripcionItem = string.Empty;
+                    switch (procedure.IdGrupo)
+                    {
+                        case "T1":
+                            DescripcionItem = "T1(Informes - Normales)";
+                            break;
+                        case "T2":
+                            DescripcionItem = "T2(Informes - Urgentes)";
+                            break;
+                        case "T3":
+                            DescripcionItem = "T3(Informes - Super Urgentes)";
+                            break;
+                        case "T4":
+                            DescripcionItem = "T4(Informes Online)";
+                            break;
+                        default:
+                            DescripcionItem = procedure.IdGrupo+ "(Informes Varios)";
+                            break;
+                    }
+                    decimal precioUnitario = decimal.Zero;
+                    decimal igvItem = 0;
+                    decimal totalItem = 0;
 
                     if (labTipo == "06")
                     {
-                        PRECIO_VENTA_UNITARIO_ITEM = (T1c / T1b * 118 / 100) + "";
-                        VALOR_ITEM = T1c?.ToString("0.00");
-                        IGV_TOTAL_ITEM = (T1c * 118 / 100)?.ToString("0.00");
+                        precioUnitario = procedure.SumaPrecio/procedure.NoArticulos;
+                        igvItem = procedure.SumaPrecio * 18 / 100;
+                        totalItem = procedure.SumaPrecio * 118 / 100;
+                       
                     }
                     else if (labTipo == "00")
                     {
-                        PRECIO_VENTA_UNITARIO_ITEM = T1a?.ToString("0.00");
-                        VALOR_ITEM = T1c?.ToString("0.00");
-                        IGV_TOTAL_ITEM = "0.00";
+                        precioUnitario = procedure.SumaPrecio / procedure.NoArticulos;
+                        igvItem = 0;
+                        totalItem = procedure.SumaPrecio;
+                       
                     }
-                    T1 = "ID_ITEM:" + Vueltas + "|COD_PROD_SERV_ITEM:T1|DESRIP_ITEM:T1(Informes-Normales)|COD_UNIDAD_MEDIDA_ITEM:NIU|INDICADOR_PS_ITEM:S|INDICADOR_TRANS_GRAT:0|INDICADOR_AFECTACION_ITEM:" +
-                    INDICADOR_AFECTACION_ITEM + "|VALOR_VENTA_UNITARIA:" + T1a?.ToString("0.00") +
-                    "|PRECIO_VENTA_UNITARIO_ITEM:" + PRECIO_VENTA_UNITARIO_ITEM + "|CANTIDAD_ITEM:" + T1b?.ToString("0.00") + "|DESCUENTO_ITEM:0.00|" +
-                    "VALOR_ITEM:" + VALOR_ITEM +
-                    "|IGV_TOTAL_ITEM:" + (labTipo == "06" ? (decimal.Parse(VALOR_ITEM) * 18 / 100).ToString("0.00") : "0") +
-                    "|TOTAL_ITEM:" + (labTipo == "06" ? (decimal.Parse(VALOR_ITEM) + (decimal.Parse(VALOR_ITEM) * 18 / 100)).ToString("0.00") : (decimal.Parse(VALOR_ITEM)).ToString("0.00")) + "^";
-                }
+
+                    TramoDetail = TramoDetail + (Vueltas != 1 ? specialCaracter : string.Empty) +  "ID_ITEM:" + Vueltas + "|COD_PROD_SERV_ITEM:"+procedure.IdGrupo+"|DESRIP_ITEM:"+DescripcionItem+"|COD_UNIDAD_MEDIDA_ITEM:NIU|INDICADOR_PS_ITEM:S|INDICADOR_TRANS_GRAT:0|INDICADOR_AFECTACION_ITEM:" +
+                    INDICADOR_AFECTACION_ITEM + "|VALOR_VENTA_UNITARIA:" + precioUnitario.ToString("0.00") +
+                    "|PRECIO_VENTA_UNITARIO_ITEM:" + precioUnitario.ToString("0.00") + "|CANTIDAD_ITEM:" + procedure.NoArticulos.ToString("0.00") + "|DESCUENTO_ITEM:0.00|" +
+                    "VALOR_ITEM:" + procedure.SumaPrecio.ToString("0.00") +
+                    "|IGV_TOTAL_ITEM:" + igvItem.ToString("0.00") +
+                    "|TOTAL_ITEM:" + totalItem.ToString("0.00");
 
 
-                decimal? T2a = 0;
-                foreach (var item in obj.InvoiceSubscriberList.Where(x => x.ProcedureType == "T2"))
-                {
-                    T2a += item.Price;
-                }
-                if (obj.InvoiceSubscriberList.Where(x => x.ProcedureType == "T2").Count() > 0)
-                {
-                    T2a = T2a / obj.InvoiceSubscriberList.Where(x => x.ProcedureType == "T2").Count();
-                }
+                   
+                }        
 
-
-                decimal? T2b = 0;
-                foreach (var item in obj.InvoiceSubscriberList.Where(x => x.ProcedureType == "T2"))
-                {
-                    T2b++;
-                }
-
-                decimal? T2c = 0;
-                foreach (var item in obj.InvoiceSubscriberList.Where(x => x.ProcedureType == "T2"))
-                {
-                    T2c += item.Price;
-                }
-                if (obj.InvoiceSubscriberList.Where(x => x.ProcedureType == "T2").ToList().Count == 0)
-                {
-                    T2 = "";
-                }
-                else
-                {
-                    Vueltas = Vueltas + 1;
-
-                    if (labTipo == "06")
-                    {
-                        PRECIO_VENTA_UNITARIO_ITEM = (T2c / T2b * 118 / 100) + "";
-                        VALOR_ITEM = T2c?.ToString("0.00");
-                        IGV_TOTAL_ITEM = (T2c * 118 / 100)?.ToString("0.00");
-                    }
-                    else if (labTipo == "00")
-                    {
-                        PRECIO_VENTA_UNITARIO_ITEM = T2a?.ToString("0.00");
-                        VALOR_ITEM = T2c?.ToString("0.00");
-                        IGV_TOTAL_ITEM = "0.00";
-                    }
-                       T2 = T2 + "ID_ITEM:" + Vueltas + 
-                         "|COD_PROD_SERV_ITEM:T2|DESRIP_ITEM:T2(Informes-Normales)|COD_UNIDAD_MEDIDA_ITEM:NIU|INDICADOR_PS_ITEM:S|INDICADOR_TRANS_GRAT:0|INDICADOR_AFECTACION_ITEM:" +
-                         INDICADOR_AFECTACION_ITEM + 
-                         "|VALOR_VENTA_UNITARIA:" + T2a?.ToString("0.00") +
-                         "|PRECIO_VENTA_UNITARIO_ITEM:" + PRECIO_VENTA_UNITARIO_ITEM + 
-                         "|CANTIDAD_ITEM:" + T2b?.ToString("0.00") + 
-                         "|DESCUENTO_ITEM:0.00|" +
-                         "VALOR_ITEM:" + VALOR_ITEM +
-                         "|IGV_TOTAL_ITEM:" + (labTipo == "06" ? (decimal.Parse(VALOR_ITEM) * 18 / 100).ToString("0.00") : "0") +
-                         "|TOTAL_ITEM:" + (labTipo == "06" ? 
-                        (decimal.Parse(VALOR_ITEM) + (decimal.Parse(VALOR_ITEM) * 18 / 100)).ToString("0.00") : 
-                        (decimal.Parse(VALOR_ITEM)).ToString("0.00")) + "^";
-
-                }
-
-                decimal? T3a = 0;
-                foreach (var item in obj.InvoiceSubscriberList.Where(x => x.ProcedureType == "T3"))
-                {
-                    T3a += item.Price;
-                }
-                if(obj.InvoiceSubscriberList.Where(x => x.ProcedureType == "T3").Count() > 0)
-                {
-                    T3a = T3a / obj.InvoiceSubscriberList.Where(x => x.ProcedureType == "T3").Count();
-                }
-
-
-                decimal? T3b = 0;
-                foreach (var item in obj.InvoiceSubscriberList.Where(x => x.ProcedureType == "T3"))
-                {
-                    T3b++;
-                }
-
-                decimal? T3c = 0;
-                foreach (var item in obj.InvoiceSubscriberList.Where(x => x.ProcedureType == "T3"))
-                {
-                    T3c += item.Price;
-                }
-                if (obj.InvoiceSubscriberList.Where(x => x.ProcedureType == "T3").ToList().Count == 0)
-                {
-                    T3 = "";
-                }
-                else
-                {
-                    Vueltas = Vueltas + 1;
-
-                    if (labTipo == "06")
-                    {
-                        PRECIO_VENTA_UNITARIO_ITEM = (T3c / T3b * 118 / 100) + "";
-                        VALOR_ITEM = T3c?.ToString("0.00");
-                        IGV_TOTAL_ITEM = (T3c * 118 / 100)?.ToString("0.00");
-                    }
-                    else if (labTipo == "00")
-                    {
-                        PRECIO_VENTA_UNITARIO_ITEM = T3a?.ToString("0.00");
-                        VALOR_ITEM = T3c?.ToString("0.00");
-                        IGV_TOTAL_ITEM = "0.00";
-                    }
-                       T3 = T3 + "ID_ITEM:" + Vueltas + 
-                         "|COD_PROD_SERV_ITEM:T3|DESRIP_ITEM:T3(Informes-Normales)|COD_UNIDAD_MEDIDA_ITEM:NIU|INDICADOR_PS_ITEM:S|INDICADOR_TRANS_GRAT:0|INDICADOR_AFECTACION_ITEM:" +
-                         INDICADOR_AFECTACION_ITEM + 
-                         "|VALOR_VENTA_UNITARIA:" + T3a?.ToString("0.00") +
-                         "|PRECIO_VENTA_UNITARIO_ITEM:" + PRECIO_VENTA_UNITARIO_ITEM + 
-                         "|CANTIDAD_ITEM:" + T3b?.ToString("0.00") + 
-                         "|DESCUENTO_ITEM:0.00|" +
-                         "VALOR_ITEM:" + VALOR_ITEM +
-                         "|IGV_TOTAL_ITEM:" + (labTipo == "06" ? (decimal.Parse(VALOR_ITEM) * 18 / 100).ToString("0.00") : "0") +
-                         "|TOTAL_ITEM:" + (labTipo == "06" ? 
-                        (decimal.Parse(VALOR_ITEM) + (decimal.Parse(VALOR_ITEM) * 18 / 100)).ToString("0.00") : 
-                        (decimal.Parse(VALOR_ITEM)).ToString("0.00")) + "^";
-
-                }
-
-                string Detalles = Trama + T1 + T2 + T3;
+                string Detalles = Trama + TramoDetail;
 
                 var facRuta = await context.Parameters.Where(x => x.Key == "FAC_RUTA").FirstOrDefaultAsync();
                 var facSerie = await context.Parameters.Where(x => x.Key == "FAC_SERIE").FirstOrDefaultAsync();
 
+                var host = await context.Parameters.Where(x => x.Key == "HOST_FTP_CONTANET").FirstOrDefaultAsync();
+                var port = await context.Parameters.Where(x => x.Key == "PORT_FTP_CONTANET").FirstOrDefaultAsync();
+                var user = await context.Parameters.Where(x => x.Key == "USER_FTP_CONTANET").FirstOrDefaultAsync();
+                var password = await context.Parameters.Where(x => x.Key == "PASSWORD_FTP_CONTANET").FirstOrDefaultAsync();
+                var ftpConfigutarion = new FtpClientConfiguration
+                {
+                    Host = host.Value,
+                   // Port = int.Parse(port.Value),
+                    Username = user.Value,
+                    Password = password.Value
+                };
+                if (!string.IsNullOrEmpty(port.Value))
+                {
+                    ftpConfigutarion.Port = int.Parse(port.Value);
+                }
 
-                string fileDirectory = System.IO.Path.Combine(facRuta.Value, facSerie.Value+obj.InvoiceCode+".txt");
+
+                string fileDirectory = facSerie.Value+obj.InvoiceCode+".txt";
 
                 try
                 {
-                    File.WriteAllText(fileDirectory, Detalles);
+                    byte[] bytes = null;
+                    using (var ms = new MemoryStream())
+                    {
+                        using (TextWriter tw = new StreamWriter(ms))
+                        {
+                            tw.Write(Detalles);
+                            tw.Flush();
+                            ms.Position = 0;
+                            bytes = ms.ToArray();
+
+                            using (var ftpClient = new FtpClient(ftpConfigutarion))
+                            {
+                                await ftpClient.LoginAsync();
+                                using (var writeStream = await ftpClient.OpenFileWriteStreamAsync("/prueba/" + fileDirectory))
+                                {
+                                    await ms.CopyToAsync(writeStream);
+                                }
+                            }                         
+                           
+                        }
+
+                    }
+                    
+                    //File.WriteAllText(fileDirectory, Detalles);
                     Console.WriteLine("Archivo exportado exitosamente a: " + fileDirectory);
                 }
                 catch (Exception ex)
@@ -1816,218 +1755,21 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             return response;
         }
-        private string Codigo_Pais(string codigo)
+       
+        private async Task<FtpClientConfiguration> GetFtpClientConfiguration(SqlCoreContext context)
         {
-            switch (codigo)
+            var host = await context.Parameters.Where(x => x.Key == "HOST_FTP_CONTANET").FirstOrDefaultAsync();
+            var port = await context.Parameters.Where(x => x.Key == "PORT_FTP_CONTANET").FirstOrDefaultAsync();
+            var user = await context.Parameters.Where(x => x.Key == "USER_FTP_CONTANET").FirstOrDefaultAsync();
+            var password = await context.Parameters.Where(x => x.Key == "PASSWORD_FTP_CONTANET").FirstOrDefaultAsync();
+            return new FtpClientConfiguration
             {
-                case "152": return "AF";
-                case "185": return "AL";
-                case "36": return "DE";
-                case "186": return "AD";
-                case "105": return "AO";
-                case "59": return "AI";
-                case "63": return "AG";
-                case "81": return "AN";
-                case "174": return "SA";
-                case "97": return "DZ";
-                case "1": return "AR";
-                case "153": return "AM";
-                case "43": return "AW";
-                case "37": return "AU";
-                case "44": return "AT";
-                case "154": return "AZ";
-                case "155": return "BH";
-                case "156": return "BD";
-                case "38": return "BB";
-                case "45": return "BE";
-                case "32": return "BZ";
-                case "106": return "BJ";
-                case "46": return "BM";
-                case "2": return "BO";
-                case "187": return "BA";
-                case "107": return "BW";
-                case "3": return "BR";
-                case "158": return "BN";
-                case "188": return "BG";
-                case "108": return "BF";
-                case "109": return "BI";
-                case "157": return "BT";
-                case "160": return "KH";
-                case "110": return "CM";
-                case "31": return "CA";
-                case "113": return "TD";
-                case "6": return "CL";
-                case "61": return "CN";
-                case "161": return "CY";
-                case "4": return "CO";
-                case "114": return "KM";
-                case "221": return "KP";
-                case "54": return "KR";
-                case "5": return "CR";
-                case "190": return "HR";
-                case "40": return "CU";
-                case "65": return "DK";
-                case "115": return "DJ";
-                case "47": return "DM";
-                case "7": return "EC";
-                case "116": return "EG";
-                case "8": return "SV";
-                case "95": return "AE";
-                case "118": return "ER";
-                case "205": return "SK";
-                case "206": return "SI";
-                case "41": return "ES";
-                case "191": return "EE";
-                case "119": return "ET";
-                case "210": return "FJ";
-                case "35": return "PH";
-                case "68": return "FI";
-                case "48": return "FR";
-                case "120": return "GA";
-                case "121": return "GM";
-                case "99": return "GE";
-                case "122": return "GH";
-                case "91": return "GI";
-                case "49": return "GD";
-                case "100": return "GR";
-                case "24": return "GP";
-                case "213": return "GU";
-                case "9": return "GT";
-                case "219": return "GF";
-                case "117": return "GN";
-                case "123": return "GW";
-                case "25": return "GY";
-                case "22": return "HT";
-                case "50": return "NL";
-                case "10": return "HN";
-                case "51": return "HK";
-                case "193": return "HU";
-                case "86": return "IN";
-                case "162": return "ID";
-                case "163": return "IR";
-                case "164": return "IQ";
-                case "195": return "IE";
-                case "194": return "IS";
-                case "26": return "KY";
-                case "192": return "FO";
-                case "212": return "MH";
-                case "208": return "SB";
-                case "80": return "TC";
-                case "30": return "VG";
-                case "29": return "VI";
-                case "87": return "IL";
-                case "52": return "IT";
-                case "34": return "JM";
-                case "53": return "JP";
-                case "64": return "JO";
-                case "96": return "KZ";
-                case "124": return "KE";
-                case "166": return "KG";
-                case "167": return "KW";
-                case "85": return "LV";
-                case "101": return "LB";
-                case "125": return "LR";
-                case "126": return "LY";
-                case "103": return "LI";
-                case "89": return "LT";
-                case "197": return "LU";
-                case "225": return "MO";
-                case "127": return "MG";
-                case "92": return "MY";
-                case "128": return "MW";
-                case "129": return "ML";
-                case "199": return "MT";
-                case "132": return "MA";
-                case "23": return "MQ";
-                case "60": return "MU";
-                case "130": return "MR";
-                case "39": return "MX";
-                case "200": return "MD";
-                case "201": return "MC";
-                case "169": return "MN";
-                case "76": return "MS";
-                case "133": return "MZ";
-                case "134": return "NA";
-                case "211": return "NR";
-                case "170": return "NP";
-                case "12": return "NI";
-                case "135": return "NG";
-                case "11": return "NU";
-                case "69": return "NO";
-                case "28": return "NC";
-                case "90": return "NZ";
-                case "171": return "OM";
-                case "104": return "PK";
-                case "215": return "PW";
-                case "172": return "PS";
-                case "13": return "PA";
-                case "14": return "PY";
-                case "15": return "PE";
-                case "217": return "PF";
-                case "88": return "PL";
-                case "42": return "PT";
-                case "16": return "PR";
-                case "173": return "QA";
-                case "73": return "GB";
-                case "111": return "CF";
-                case "17": return "DO";
-                case "70": return "CZ";
-                case "136": return "RW";
-                case "202": return "RO";
-                case "71": return "RU";
-                case "137": return "EH";
-                case "214": return "WS";
-                case "55": return "KN";
-                case "203": return "SM";
-                case "56": return "LC";
-                case "139": return "SN";
-                case "204": return "CS";
-                case "140": return "SL";
-                case "102": return "SG";
-                case "176": return "SY";
-                case "141": return "SO";
-                case "175": return "LK";
-                case "143": return "SZ";
-                case "98": return "ZA";
-                case "142": return "SD";
-                case "84": return "SE";
-                case "83": return "CH";
-                case "58": return "SR";
-                case "178": return "TH";
-                case "62": return "TW";
-                case "177": return "TJ";
-                case "33": return "BS";
-                case "145": return "TG";
-                case "216": return "TO";
-                case "18": return "TT";
-                case "66": return "TN";
-                case "179": return "TM";
-                case "93": return "TR";
-                case "20": return "US";
-                case "72": return "UA";
-                case "147": return "UG";
-                case "19": return "UY";
-                case "181": return "UZ";
-                case "209": return "VU";
-                case "21": return "VE";
-                case "182": return "VN";
-                case "183": return "YE";
-                case "148": return "CD";
-                case "149": return "ZM";
-                case "150": return "ZW";
-                case "226": return "CI";
-                case "227": return "PG";
-                case "229": return "MV";
-                case "230": return "SC";
-                case "231": return "CG";
-                case "235": return "GS";
-                case "236": return "TZ";
-                case "239": return "BS";
-                case "67": return "PRK";
-                default: return ".";
-            }
+                Host = host.Value,
+                Port = int.Parse(port.Value),
+                Username = user.Value,
+                Password = password.Value
+            };
         }
-
 
         public async Task<Response<bool>> SaveSubscriberInvoice(AddOrUpdateSubscriberInvoiceRequestDto obj)
         {
@@ -2071,6 +1813,9 @@ namespace DRRCore.Application.Main.CoreApplication
                         Type = "FM",
                         SubscriberInvoiceDetails = invoiceSubscriberDetails
                     });
+                    var number=await context.Numerations.Where(x => x.Name == "NUM_INVOICE").FirstOrDefaultAsync();
+                    number.Number = int.Parse(obj.InvoiceCode);
+                    context.Numerations.Update(number);
                     await context.SaveChangesAsync();
                 }
                 else
@@ -2215,7 +1960,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     MONTO_TOTAL_IGV = "0.00";
                     INDICADOR_AFECTACION_ITEM = "40";
                     NRO_DOC_ADQUIRIENTE = "-";
-                    CODIGO_PAIS_EXPORTACION = Codigo_Pais(country.OldCode);
+                    CODIGO_PAIS_EXPORTACION =await Codigo_Pais(context,country.OldCode);
                 }
 
                 if (obj.SubscriberCode == "1031" || obj.SubscriberCode == "1050" || obj.SubscriberCode == "1105" || obj.SubscriberCode == "2065" || obj.SubscriberCode == "3008" ||
@@ -2295,7 +2040,7 @@ namespace DRRCore.Application.Main.CoreApplication
                             Monto_Detracc = PV * 0.12m * 1;
                         }
 
-                        Trama = "ACTION:Registrar~FEC_ED:" + obj.InvoiceDate.Value.ToString("yyyy-MM-dd") + "|RUC_EMISOR:20504166318|TIP_DOC_EMISOR:06|APAMNO_RAZON_SOCIAL_EMISOR:DEL RISCO REPORTS E.I.R.L." +
+                        Trama = "ACTION:Registrar~FEC_ED:" + obj.InvoiceDate.Value.ToString("dd/MM/yyyy") + "|RUC_EMISOR:20504166318|TIP_DOC_EMISOR:06|APAMNO_RAZON_SOCIAL_EMISOR:DEL RISCO REPORTS E.I.R.L." +
                         "|UBIGEO_EMISOR:150120|DIRECCION_EMISOR:Jr. Tomas Ramsey Nro. 930 Dpto. 603|URBANIZACION_EMISOR:|DEPARTAMENTO_EMISOR:LIMA|PROVINCIA_EMISOR:LIMA" +
                         "|DISTRITO_EMISOR:MAGDALENA|CODIGO_PAIS_EMISOR:PE|NOMBRE_COMERCIAL_EMISOR:DEL RISCO REPORTS|TIP_DOC:01|NRO_SERIE:F005|NRO_DOC:" + obj.InvoiceCode +
                         "|NRO_DOC_ADQUIRIENTE:" + NRO_DOC_ADQUIRIENTE + "|TIP_DOC_ADQUIRIENTE:" + labTipo.Trim() + "|APAMNO_RAZON_SOCIAL_ADQUIRIENTE:" + subscriber.Name +
@@ -2303,13 +2048,13 @@ namespace DRRCore.Application.Main.CoreApplication
                         lblGeneral?.ToString("0.00") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:" + "1001" + "|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
                         "|VALOR_VENTA:" + lblValorVenta?.ToString("0.00") + "|PRECIO_VENTA:" + PV?.ToString("0.00") +
                         "|EXISTE_GRAVADA:" + EXISTE_GRAVADA + "|EXISTE_INAFECTA:" + EXISTE_INAFECTA + "|EXISTE_EXONERADA:" + EXISTE_EXONERADA + "|EXISTE_GRATUITA:" + EXISTE_GRATUITA + "|EXISTE_EXPORTACION:" + EXISTE_EXPORTACION +
-                        "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToShortDateString() + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + (PV - (PV * 12 / 100))?.ToString("0.00") +
+                        "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToString("dd/MM/yyyy") + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + (PV - (PV * 12 / 100))?.ToString("0.00") +
                         "|IA_40:" + subscriber.Code + " - " + subscriber.Name + "|IA_41:" + obj.Address + "|IA_42:" + obj.AttendedBy + "|IA_43:" + "" + "|IA_44:PAGO POR TRANSFERENCIA BANCARIA" + "|IA_45:" + cuenta + "" + "|IA_46:" + obj.ExchangeRate +
                         "|PORCENTAJE_DETRACC:" + "12.00" + "|MONTO_DETRACC:" + Monto_Detracc?.ToString("0.00") + "|COD_SUNAT_PAGO_DETRACC:001" + "|TASA_IGV:18.00" + "|BB_SS_CODIGO_SUJETO_A_DETRACC:037|BB_SS_DESCRIPCION_SUJETO_A_DETRACC:DEMAS SERVICIOS GRAVADOS CON EL IGV|NUMERO_CTA_BANCO_NACION_DETRACC:00000812773" + "~";
                     }
                     else
                     {
-                        Trama = "ACTION:Registrar~FEC_ED:" + obj.InvoiceDate.Value.ToString("yyyy-MM-dd") + "|RUC_EMISOR:20504166318|TIP_DOC_EMISOR:06|APAMNO_RAZON_SOCIAL_EMISOR:DEL RISCO REPORTS E.I.R.L." +
+                        Trama = "ACTION:Registrar~FEC_ED:" + obj.InvoiceDate.Value.ToString("dd/MM/yyyy") + "|RUC_EMISOR:20504166318|TIP_DOC_EMISOR:06|APAMNO_RAZON_SOCIAL_EMISOR:DEL RISCO REPORTS E.I.R.L." +
                         "|UBIGEO_EMISOR:150120|DIRECCION_EMISOR:Jr. Tomas Ramsey Nro. 930 Dpto. 603|URBANIZACION_EMISOR:|DEPARTAMENTO_EMISOR:LIMA|PROVINCIA_EMISOR:LIMA" +
                         "|DISTRITO_EMISOR:MAGDALENA|CODIGO_PAIS_EMISOR:PE|NOMBRE_COMERCIAL_EMISOR:DEL RISCO REPORTS|TIP_DOC:01|NRO_SERIE:F005|NRO_DOC:" + obj.InvoiceCode +
                         "|NRO_DOC_ADQUIRIENTE:" + NRO_DOC_ADQUIRIENTE + "|TIP_DOC_ADQUIRIENTE:" + labTipo.Trim() + "|APAMNO_RAZON_SOCIAL_ADQUIRIENTE:" + subscriber.Name +
@@ -2317,14 +2062,14 @@ namespace DRRCore.Application.Main.CoreApplication
                         lblGeneral?.ToString("0.00") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:" + TIPO_OPERACION + "|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
                         "|VALOR_VENTA:" + lblValorVenta?.ToString("0.00") + "|PRECIO_VENTA:" + PV?.ToString("0.00") +
                         "|EXISTE_GRAVADA:" + EXISTE_GRAVADA + "|EXISTE_INAFECTA:" + EXISTE_INAFECTA + "|EXISTE_EXONERADA:" + EXISTE_EXONERADA + "|EXISTE_GRATUITA:" + EXISTE_GRATUITA + "|EXISTE_EXPORTACION:" + EXISTE_EXPORTACION +
-                        "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToShortDateString() + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + PV + "|TASA_IGV:18.00" +
+                        "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToString("dd/MM/yyyy") + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + PV?.ToString("0.00") + "|TASA_IGV:18.00" +
                         "|IA_40:" + subscriber.Code + " - " + subscriber.Name + "|IA_41:" + obj.Address + "|IA_42:" + obj.AttendedBy + "|IA_43:" + "" + "|IA_44:PAGO POR TRANSFERENCIA BANCARIA" + "|IA_45:" + cuenta + "~";
 
                     }
                 }
                 else
                 {
-                    Trama = "ACTION:Registrar~FEC_ED:" + obj.InvoiceDate.Value.ToString("yyyy-MM-dd") + "|RUC_EMISOR:20504166318|TIP_DOC_EMISOR:06|APAMNO_RAZON_SOCIAL_EMISOR:DEL RISCO REPORTS E.I.R.L." +
+                    Trama = "ACTION:Registrar~FEC_ED:" + obj.InvoiceDate.Value.ToString("dd/MM/yyyy") + "|RUC_EMISOR:20504166318|TIP_DOC_EMISOR:06|APAMNO_RAZON_SOCIAL_EMISOR:DEL RISCO REPORTS E.I.R.L." +
                     "|UBIGEO_EMISOR:150120|DIRECCION_EMISOR:Jr. Tomas Ramsey Nro. 930 Dpto. 603|URBANIZACION_EMISOR:|DEPARTAMENTO_EMISOR:LIMA|PROVINCIA_EMISOR:LIMA" +
                     "|DISTRITO_EMISOR:MAGDALENA|CODIGO_PAIS_EMISOR:PE|NOMBRE_COMERCIAL_EMISOR:DEL RISCO REPORTS|TIP_DOC:01|NRO_SERIE:F005|NRO_DOC:" + obj.InvoiceCode +
                     "|NRO_DOC_ADQUIRIENTE:" + NRO_DOC_ADQUIRIENTE + "|TIP_DOC_ADQUIRIENTE:" + labTipo.Trim() + "|APAMNO_RAZON_SOCIAL_ADQUIRIENTE:" + subscriber.Name +
@@ -2334,7 +2079,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     "|VALOR_VENTA:" + Decimal.Parse(TOTAL_OPERACIONES_EXPORTACION).ToString("0.00") + "|PRECIO_VENTA:" + PV?.ToString("0.00") +
                     "|EXISTE_GRAVADA:" + EXISTE_GRAVADA + "|EXISTE_INAFECTA:" + EXISTE_INAFECTA + "|EXISTE_EXONERADA:" + EXISTE_EXONERADA + "|EXISTE_GRATUITA:" + EXISTE_GRATUITA + "|EXISTE_EXPORTACION:" + EXISTE_EXPORTACION +
                     "|CODIGO_PAIS_EXPORTACION:" + CODIGO_PAIS_EXPORTACION +
-                    "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToShortDateString() + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + PV + "|TASA_IGV:18.00" +
+                    "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToString("dd/MM/yyyy") + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + PV?.ToString("0.00") + "|TASA_IGV:18.00" +
                     "|IA_40:" + subscriber.Code + " - " + subscriber.Name + "|IA_41:" + obj.Address + "|IA_42:" + obj.AttendedBy + "|IA_43:" + "" + "|IA_44:PAGO POR TRANSFERENCIA BANCARIA" + "|IA_45:" + cuenta + "~";
                 }
 
@@ -2359,7 +2104,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 "|PRECIO_VENTA_UNITARIO_ITEM:" + PRECIO_VENTA_UNITARIO_ITEM + "|CANTIDAD_ITEM:" + (obj.Quantity)?.ToString("0.00") + "|DESCUENTO_ITEM:0.00|" +
                 "VALOR_ITEM:" + VALOR_ITEM +
                 "|IGV_TOTAL_ITEM:" + labTipo == "06" ? (Decimal.Parse(VALOR_ITEM) * 18 / 100).ToString("0.00") : "0" +
-                "|TOTAL_ITEM:" + labTipo == "06" ? (Decimal.Parse(VALOR_ITEM) + (Decimal.Parse(VALOR_ITEM) * 18 / 100)).ToString("0.00") : VALOR_ITEM + "^";
+                "|TOTAL_ITEM:" + labTipo == "06" ? (Decimal.Parse(VALOR_ITEM) + (Decimal.Parse(VALOR_ITEM) * 18 / 100)).ToString("0.00") : VALOR_ITEM ;
 
                 string Detalles = Trama + T1;
 
@@ -2386,6 +2131,16 @@ namespace DRRCore.Application.Main.CoreApplication
             {
             }
             return response;
+        }
+
+        private async Task<string> Codigo_Pais(SqlCoreContext context, string? oldCode)
+        {
+            var country =await context.Countries.Where(x => x.Id == int.Parse(oldCode)).FirstOrDefaultAsync();
+            if (country== null)
+            {
+                return ".";
+            }
+            return country.FlagIso.ToUpper();
         }
 
         public async Task<Response<int?>> GetInvoiceNumber()

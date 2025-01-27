@@ -18,6 +18,7 @@ public partial class BillinPersonal
     public string? Quality { get; set; }
 
     public bool? IsComplement { get; set; }
+    public bool? DirectTranslate { get; set; }
 
     public decimal? Amount { get; set; }
 

@@ -145,9 +145,17 @@ namespace DRRCore.Application.Main.CoreApplication
                                     .FromSqlRaw("EXECUTE SP_TicketsInCurrentMonth")
                                     .AsEnumerable()
                                     .ToList();
-                var selectRt = resultRelated.Select(x => x.ReportType).Distinct().ToArray();
+                List<string> elementos = new List<string>
+                {
+                    "OR",
+                    "RV",
+                    "EF"
+                };
+                var selectRt = elementos.ToArray();
                 var selectPt = resultRelated.Select(x => x.ProcedureType).Distinct().ToArray();
-
+                int TotalOR = 0;
+                int TotalRV = 0;
+                int TotalEF = 0;
                 for (int i = 0; i < selectPt.Length; i++)
                 {
                     int[] arrayData = new int[selectRt.Length];
@@ -157,7 +165,9 @@ namespace DRRCore.Application.Main.CoreApplication
                         for (int j = 0; j < selectRt.Length; j++)
                         {
                             var selectPtByRt = resultRelated.Where(x => x.ReportType == selectRt[j] && x.ProcedureType == selectPt[i]).FirstOrDefault();
-
+                            if (selectRt[j] == "OR") TotalOR = TotalOR + (selectPtByRt != null ? selectPtByRt.Quantity.Value : 0);
+                            if (selectRt[j] == "RV") TotalRV = TotalRV + (selectPtByRt != null ? selectPtByRt.Quantity.Value : 0);
+                            if (selectRt[j] == "EF") TotalEF = TotalEF + (selectPtByRt != null ? selectPtByRt.Quantity.Value : 0);
                             arrayData[j] = selectPtByRt != null ? selectPtByRt.Quantity.Value : 0;
                         }
 
@@ -174,7 +184,11 @@ namespace DRRCore.Application.Main.CoreApplication
                 response.Data = new SeriesDashboardResponse
                 {
                     Series = listSerie,
-                    Categories = selectRt
+                    Categories = selectRt,
+                    TotalOR=TotalOR,
+                    TotalRV=TotalRV,
+                    TotalEF=TotalEF,
+                    TotalGeneral=TotalOR+TotalRV+TotalEF
                 };
 
 
@@ -666,5 +680,10 @@ namespace DRRCore.Application.Main.CoreApplication
         public object Series { get; set; }=new object();
         public object Colors { get; set; } = new object();
         public object Categories { get; set; } = new object();
+        public int TotalOR { get; set; }
+        public int TotalRV { get; set; }
+        public int TotalEF { get; set; }
+        public int TotalGeneral { get; set; }
+
     }
 }

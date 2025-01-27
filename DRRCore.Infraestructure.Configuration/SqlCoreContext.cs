@@ -243,8 +243,8 @@ public partial class SqlCoreContext : DbContext
         if (!optionsBuilder.IsConfigured)
         {
             optionsBuilder.UseSqlServer(
-           "Data Source=200.58.123.184,14331;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
-          //  "Data Source=SD-4154134-W\\DRRSQLSERVER;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
+          "Data Source=200.58.123.184,14331;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
+           // "Data Source=SD-4154134-W\\DRRSQLSERVER;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
            //  "Data Source=SD-4154134-W;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
             , sqlServerOptions => sqlServerOptions.EnableRetryOnFailure(
                 maxRetryCount: 18,
@@ -673,6 +673,7 @@ public partial class SqlCoreContext : DbContext
                 .HasColumnName("enable");
             entity.Property(e => e.IdEmployee).HasColumnName("idEmployee");
             entity.Property(e => e.IsComplement).HasColumnName("isComplement");
+            entity.Property(e => e.DirectTranslate).HasColumnName("directTranslate");
             entity.Property(e => e.Quality)
                 .HasMaxLength(1)
                 .IsUnicode(false)

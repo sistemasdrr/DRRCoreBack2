@@ -234,6 +234,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
             CreateMap<AddOrUpdateBankDebtRequestDto, BankDebt>()
                  .ForMember(dest => dest.IdCompany, opt => opt?.MapFrom(src => src.IdCompany == 0 ? null : src.IdCompany))
                  .ForMember(dest => dest.IdPerson, opt => opt?.MapFrom(src => src.IdPerson == 0 ? null : src.IdPerson))
+                  .ForMember(dest => dest.QualificationEng, opt => opt?.MapFrom(src => GetQualificationEng(src.Qualification)))
                .ForMember(dest => dest.DebtDate, opt => opt?.MapFrom(src => StaticFunctions.VerifyDate(src.DebtDate)))
            .ReverseMap();
             CreateMap<BankDebt, GetBankDebtResponseDto>()
@@ -389,6 +390,25 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
           .ReverseMap();
             CreateMap<CompanyXmlData, GetCompanyXmlData>()
           .ReverseMap();
+        }
+
+        private string GetQualificationEng(string? qualification)
+        {
+            switch (qualification)
+            {
+                case "NORMAL / 1C":
+                    return "NORMAL / 1C";
+                case "PROBLEMA POTENCIAL / 2A":
+                    return "POTENTIAL PROBLEM / 2A";
+                case "DEFICIENTE / 2B":
+                    return "DEFICIENT / 2B";
+                case "DUDOSO / 3-4":
+                    return "DOUBTFUL / 3-4";
+                case "PERDIDA / 5":
+                    return "LOSS / 5";
+                default:
+                    return string.Empty;                    
+            }
         }
 
         private int GetTraductionCompanyPercentage(TraductionCompany traductions)

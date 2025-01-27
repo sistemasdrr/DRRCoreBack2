@@ -15,5 +15,7 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<List<GetImagentDto>>> GetImageByIdCompany(int idCompany);
         Task<Response<GetImagentDto>> GetImageByPath(string path);
         Task<Response<string>> GetBase64eByPath(string path);
+        Task<Response<GetPersonImageResponseDto>> GetPersonImgByIdPerson(int idPerson);
+        Task<Response<bool>> UpdateImagePerson(int idPerson, int number, string description, string descriptionEng, bool? print, IFormFile file);
     }
 }

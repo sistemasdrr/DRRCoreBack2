@@ -696,6 +696,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                     .Include(x => x.IdStatusTicketNavigation)
                     .Include(x => x.TicketQuery)
                     .Include(x => x.TicketFiles)
+                     .Include(x => x.TicketAssignation)
                     .Include(x => x.TicketHistories.OrderByDescending(x => x.Id)).Where(x => x.Enable == true)
                     .Where(x => x.IdStatusTicket == (int?)TicketStatusEnum.Por_Despachar).ToListAsync();
                 return tickets != null ? tickets : null;

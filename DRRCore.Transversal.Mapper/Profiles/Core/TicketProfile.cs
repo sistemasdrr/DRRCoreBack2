@@ -120,6 +120,8 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                  .ForMember(dest => dest.Number, opt => opt?.MapFrom(src => src.About + " - " + src.Number.ToString("D6") + (src.IsComplement == true ? " (C)" : "")))
                  .ForMember(dest => dest.Status, opt => opt?.MapFrom(src => src.IdStatusTicketNavigation.Abrev))
                  .ForMember(dest => dest.StatusColor, opt => opt?.MapFrom(src => src.IdStatusTicketNavigation.Color))
+                  .ForMember(dest => dest.FinalComentary, opt => opt?.MapFrom(src => src.TicketAssignation.Commentary))
+
                  .ForMember(dest => dest.StatusFinalOwner, opt => opt?.MapFrom(src => GetStatusFinalOwner(src.TicketHistories)))
 
                  .ForMember(dest => dest.SubscriberCode, opt => opt?.MapFrom(src => src.IdSubscriberNavigation.Code))

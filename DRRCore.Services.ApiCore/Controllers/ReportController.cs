@@ -137,6 +137,14 @@ namespace DRRCore.Services.ApiCore.Controllers
             return File(result.Data.File, result.Data.ContentType, result.Data.Name);
         }
         [HttpGet]
+        [Route("DownloadReport_Realizado_Pendiente")]
+        public async Task<ActionResult> DownloadReport_Realizado_Pendiente(int month, int year, string type, string format)
+        {
+            var result = await _reportApplication.DownloadReport_Realizado_Pendiente(month, year, type, format);
+
+            return File(result.Data.File, result.Data.ContentType, result.Data.Name);
+        }
+        [HttpGet]
         [Route("DownloadReport6_3_1")]
         public async Task<ActionResult> DownloadReport6_3_1(string startDate, string endDate, string code, string format)
         {

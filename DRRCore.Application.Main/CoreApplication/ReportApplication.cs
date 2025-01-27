@@ -9,6 +9,7 @@ using DRRCore.Transversal.Common;
 using DRRCore.Transversal.Common.Interface;
 using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Asn1.X509;
+using System.Globalization;
 
 namespace DRRCore.Application.Main.CoreApplication
 {
@@ -1784,6 +1785,42 @@ namespace DRRCore.Application.Main.CoreApplication
                     File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
                     ContentType = contentType,
                     Name = string.Format(fileFormat, "REPORTE_7.15", "", extension)
+                };
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
+      
+        public async Task<Response<GetFileResponseDto>> DownloadReport_Realizado_Pendiente(int month, int year, string type, string format)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+                string fileFormat = "{0}_{1}{2}";
+                string report = "REPORTES/REPORTS_REF";
+                var reportRenderType = StaticFunctions.GetReportRenderType(format);
+                var extension = StaticFunctions.FileExtension(reportRenderType);
+                var contentType = StaticFunctions.GetContentType(reportRenderType);
+                string fullMonthName = new DateTime(2025, month, 1).ToString("MMMM", CultureInfo.CreateSpecificCulture("es")).ToUpper();
+                var dictionary = new Dictionary<string, string>
+                {
+                    { "month", month.ToString() },
+                    { "year", year.ToString() },
+                     { "monthName", fullMonthName },
+                    { "type", type },
+                };
+
+                response.Data = new GetFileResponseDto
+                {
+                    File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                    ContentType = contentType,
+                    Name = string.Format(fileFormat, "REPORTE_REALIZADOS_PENDIENTES_"+fullMonthName, "", extension)
                 };
             }
             catch (Exception ex)

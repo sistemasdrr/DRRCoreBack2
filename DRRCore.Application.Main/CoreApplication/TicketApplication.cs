@@ -26,6 +26,7 @@ using SharpCompress.Archives.Zip;
 using SharpCompress.Common;
 using SharpCompress.Writers;
 using SpreadsheetLight;
+using System.Globalization;
 
 namespace DRRCore.Application.Main.CoreApplication
 {
@@ -1208,7 +1209,8 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<List<GetListTicketResponseDto2>>> GetTicketsToUser(string userTo)
+        public async Task<Response<List<GetListTicketResponseDto2>>> 
+            GetTicketsToUser(string userTo)
         {
             var response = new Response<List<GetListTicketResponseDto2>>();
             response.Data = new List<GetListTicketResponseDto2>();
@@ -1235,7 +1237,13 @@ namespace DRRCore.Application.Main.CoreApplication
                        .Include(x => x.IdTicketNavigation).ThenInclude(x => x.TicketFiles)
                        .Include(x => x.IdTicketNavigation.TicketHistories.OrderByDescending(x => x.Id)).Where(x => x.Enable == true)
                        .OrderByDescending(x => x.IdTicketNavigation.OrderDate)
-                       .Where(x => x.UserTo == userTo && x.Flag == false && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Despachado && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Observado && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Rechazado)
+                       .Where(x => x.UserTo == userTo && x.Flag == false && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Despachado && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Observado 
+                       && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Rechazado
+                       && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Anulado_Por_Abonado
+                       && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Anulado_Por_DRR
+                       && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Anulado_Por_FaltaDatos
+                       && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Anulado_Por_Supervisor
+                       )
                            .ToListAsync();
                 
                 if (list != null)
@@ -2147,7 +2155,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                     newTicketHistory.StartDate = ticketHistory.StartDate;
                                     newTicketHistory.EndDate = ticketHistory.EndDate;
                                     newTicketHistory.AsignationType = ticketHistory.AsignationType;
-                                    newTicketHistory.Cycle = "";
+                                    newTicketHistory.Cycle = code;
 
                                     await context.TicketHistories.AddAsync(newTicketHistory);
                                 }
@@ -2229,7 +2237,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                             Observations=item.Observations,
                                             Balance=item.Balance,
                                             AsignationType = item.Type,
-                                            Cycle = ""
+                                            Cycle = code
                                         };
                                         await context.TicketHistories.AddAsync(newTicketHistory);
 
@@ -2289,7 +2297,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = item.Type,
-                                                Cycle = "",
+                                                Cycle = code,
                                                 References = item.References
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
@@ -2404,7 +2412,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = item.Type,
-                                                Cycle = "",
+                                                Cycle = code,
                                                 References = item.References
 
                                             };
@@ -2537,7 +2545,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = item.Type,
-                                                Cycle = "",
+                                                Cycle = code,
                                                 References = item.References
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
@@ -2599,7 +2607,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 References = item.References,
-                                                Cycle = ""
+                                                Cycle = code
 
                                             };
                                             ticket.HasBalance = item.HasBalance == null ? ticket.HasBalance : item.HasBalance;
@@ -2629,7 +2637,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Balance = item.Balance,
                                                 References = item.References,
                                                 AsignationType = item.Type,
-                                                Cycle = ""
+                                                Cycle = code
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
                                         }
@@ -2668,6 +2676,10 @@ namespace DRRCore.Application.Main.CoreApplication
                                                         userFrom.IdEmployeeNavigation.Email,
                                                       
                                                     };
+                                                    if (item.UserTo == "55")
+                                                    {
+                                                        emailDataDto.CC.Add("ccanevaro@del-risco.com");
+                                                    }
                                                     emailDataDto.Subject = "PRUEBA_" + ticket.ReportType + ": " + (numeration != null ? numeration.Number : 1) + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureType + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
                                                 }
                                                 else
@@ -2679,11 +2691,20 @@ namespace DRRCore.Application.Main.CoreApplication
                                                         {
                                                             user.IdEmployeeNavigation.Email
                                                         };
+
                                                     emailDataDto.CC = new List<string>
                                                         {
                                                             "prueba.sistemas@del-risco.com",
                                                             userFrom.IdEmployeeNavigation.Email                                                           
                                                         };
+
+                                                    if (item.UserTo == "55")
+                                                    {
+                                                      
+                                                        emailDataDto.CC.Add("ccanevaro@del-risco.com");
+                                                    }
+
+
                                                     emailDataDto.Subject = ticket.ReportType + ": " + (numeration != null ? numeration.Number : 1) + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureTypeAgent + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
                                                 }
 
@@ -2736,7 +2757,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                         else
                                         {
                                             var agent = await context.Agents.Where(x => x.Code.Contains(item.AssignedToCode)).FirstOrDefaultAsync();
-                                            var emailAgents = agent.Email.Split(";");
+                                           
                                             if (userFrom != null && agent != null)
                                             {
                                                 emailDataDto = new EmailDataDTO();
@@ -2765,16 +2786,28 @@ namespace DRRCore.Application.Main.CoreApplication
                                                     emailDataDto.From = userFrom.IdEmployeeNavigation.Email;
                                                     emailDataDto.UserName = userFrom.IdEmployeeNavigation.Email;
                                                     emailDataDto.Password = userFrom.EmailPassword;
-                                                    emailDataDto.To = new List<string>();
-                                                    foreach(var email in emailAgents)
+                                                    var emailAgents = agent.Email.Split(";");
+                                                   
+                                                    if (emailAgents.Length > 0)
                                                     {
-                                                        emailDataDto.To.Add(email);
+                                                        emailDataDto.To.Add(emailAgents[0]);
+                                                        if (emailAgents.Length > 1)
+                                                        {
+                                                            for (int i = 1; i < emailAgents.Length; i++)
+                                                            {
+                                                                emailDataDto.CC.Add(emailAgents[i].Trim());
+                                                            }
+                                                        }
                                                     }
-                                                    emailDataDto.CC = new List<string>
+                                                    else
                                                     {
-                                                        "prueba.sistemas@del-risco.com",
-                                                        userFrom.IdEmployeeNavigation.Email
-                                                    };
+                                                        emailDataDto.To.Add(agent.Email);
+                                                    }
+
+
+                                                    emailDataDto.CC.Add("prueba.sistemas@del-risco.com");
+                                                    emailDataDto.CC.Add(userFrom.IdEmployeeNavigation.Email);
+                                                 
                                                     emailDataDto.Subject = ticket.ReportType + ": " + (numeration != null ? numeration.Number : 1) + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureType + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
                                                     emailDataDto.Parameters.Add(userFrom.IdEmployeeNavigation.FirstName + " " + userFrom.IdEmployeeNavigation.LastName); 
                                                     emailDataDto.Parameters.Add(userFrom.IdEmployeeNavigation.Email);
@@ -2862,7 +2895,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Balance = item.Balance,
                                                 References = item.References,
                                                 AsignationType = item.Type,
-                                                Cycle = ""
+                                                Cycle = code
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
                                         }
@@ -2925,7 +2958,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = "RF",
-                                                Cycle = "",
+                                                Cycle = code,
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
                                         
@@ -2975,7 +3008,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = "DI",
-                                                Cycle = ""
+                                                Cycle = code
                                             };
                                             ticket.HasBalance = item.HasBalance == null ? ticket.HasBalance : item.HasBalance;
                                             ticket.UpdateDate = DateTime.Now;
@@ -3034,7 +3067,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = item.Type,
-                                                Cycle = ""
+                                                Cycle = code
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
                                         }
@@ -3083,7 +3116,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = "TR",
-                                                Cycle = ""
+                                                Cycle = code
                                             };
                                             ticket.HasBalance = item.HasBalance == null ? ticket.HasBalance : item.HasBalance;
                                             ticket.UpdateDate = DateTime.Now;
@@ -3132,7 +3165,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = "TR",
-                                                Cycle = ""
+                                                Cycle = code
 
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
@@ -3192,7 +3225,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = "SU",
-                                                Cycle = ""
+                                                Cycle = code
                                             };
                                             ticket.HasBalance = item.HasBalance == null ? ticket.HasBalance : item.HasBalance;
                                             ticket.UpdateDate = DateTime.Now;
@@ -3249,7 +3282,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 AsignationType = "SU",
-                                                Cycle = ""
+                                                Cycle = code
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
 
@@ -3876,7 +3909,15 @@ namespace DRRCore.Application.Main.CoreApplication
                         sLDocument.SetCellValue("B14", ticket.IdCompanyNavigation.Address ?? "");
 
                         sLDocument.SetCellValue("A15", "TRGTPSN_2_ADDR");
+                    if (ticket.IdCompanyNavigation.TraductionCompanies.FirstOrDefault()?.TRotherLocals.Length <= 200)
+                    {
                         sLDocument.SetCellValue("B15", ticket.IdCompanyNavigation.TraductionCompanies.FirstOrDefault()?.TRotherLocals ?? "");
+                    }
+                    else
+                    {
+                        sLDocument.SetCellValue("B15", ticket.IdCompanyNavigation.TraductionCompanies.FirstOrDefault()?.TRotherLocals.Substring(0, 200) ?? "");
+                    }
+                       
 
                         sLDocument.SetCellValue("A16", "RPRSNT_1_DSCRM_NO");
                         sLDocument.SetCellValue("B16", "");
@@ -3927,8 +3968,26 @@ namespace DRRCore.Application.Main.CoreApplication
                         sLDocument.SetCellValue("B31", "");
 
                         sLDocument.SetCellValue("A32", "FUND_DD");
-                        sLDocument.SetCellValue("B32", ticket.IdCompanyNavigation.CompanyBackgrounds.FirstOrDefault()?.ConstitutionDate ?? "");
+                    string constitutionDate = string.Empty;
+                    CultureInfo ci = new CultureInfo("en-US");
+                    if (ticket.IdCompanyNavigation.CompanyBackgrounds.FirstOrDefault() != null)
+                    {
+                        constitutionDate = ticket.IdCompanyNavigation.CompanyBackgrounds.FirstOrDefault()?.ConstitutionDate;
+                        if (constitutionDate.Length > 4)
+                        {
 
+                            sLDocument.SetCellValue("B32", DateTime.ParseExact(constitutionDate, "dd/MM/yyyy", ci).ToString("yyyyMMdd", ci).ToUpper());
+
+                        }
+                        else
+                        {
+                            sLDocument.SetCellValue("B32", constitutionDate);
+                        }
+                    }
+                  
+
+
+                  
                         sLDocument.SetCellValue("A33", "PROD_1_NM");
                         sLDocument.SetCellValue("B33", "");
 
@@ -5700,28 +5759,25 @@ namespace DRRCore.Application.Main.CoreApplication
                 }
                 //0 no mostrara mensaje
                 //1 mostrara mensaje
-                if (ticket.IdCompanyNavigation.Quality != null)
-                {
+
+                
                     switch (ticket.About)
                     {
                         case "E":
-                            if (ticket.IdCompanyNavigation.Quality.Trim().IsNullOrEmpty())
+                            if (ticket.IdCompanyNavigation.Quality != null && ticket.IdCompanyNavigation.Quality.Trim().IsNullOrEmpty())
                             {
                                 response.Data = 1;
-                            }
+                          }
+                      
                             break;
                         case "P":
-                            if (ticket.IdPersonNavigation.Quality.Trim().IsNullOrEmpty())
+                            if (ticket.IdPersonNavigation.Quality != null && ticket.IdPersonNavigation.Quality.Trim().IsNullOrEmpty())
                             {
                                 response.Data = 1;
                             }
                             break;
                     }
-                }
-                else
-                {
-                    response.Data = 1;
-                }
+               
 
             }catch(Exception ex)
             {

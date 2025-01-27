@@ -10,6 +10,8 @@ using DRRCore.Domain.Interfaces.EmailDomain;
 using DRRCore.Transversal.Common;
 using DRRCore.Transversal.Common.Interface;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using System.Drawing;
 
 namespace DRRCore.Application.Main.CoreApplication
 {
@@ -230,5 +232,121 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             return response;
         }
+
+        public async Task<Response<GetPersonImageResponseDto>> GetPersonImgByIdPerson(int idPerson)
+        {
+            var response = new Response<GetPersonImageResponseDto>();
+            var data = new GetPersonImageResponseDto();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var images = await context.PhotoPeople.Where(x => x.IdPerson == idPerson && x.Enable==true).ToListAsync();
+
+                if (images != null)
+                {
+                    data.IdPerson = idPerson;
+                    foreach (var item in images)
+                    {
+                        if (item.NumImg == 1)
+                        {
+                            data.Id1 = item.Id;
+                            data.Img1 = item.Base64;
+                            data.ImgDesc1 = item.Description;
+                            data.ImgDescEng1= item.DescriptionEng;
+                            data.ImgPrint1 = item.PrintImg;
+                        }
+                        if (item.NumImg == 2)
+                        {
+                            data.Id2 = item.Id;
+                            data.Img2 = item.Base64;
+                            data.ImgDesc2 = item.Description;
+                            data.ImgDescEng2 = item.DescriptionEng;
+                            data.ImgPrint2 = item.PrintImg;
+                        }
+                        if (item.NumImg == 3)
+                        {
+                            data.Id3 = item.Id;
+                            data.Img3 = item.Base64;
+                            data.ImgDesc3 = item.Description;
+                            data.ImgDescEng3 = item.DescriptionEng;
+                            data.ImgPrint3 = item.PrintImg;
+                        }
+                        if (item.NumImg == 4)
+                        {
+                            data.Id4 = item.Id;
+                            data.Img4 = item.Base64;
+                            data.ImgDesc4 = item.Description;
+                            data.ImgDescEng4 = item.DescriptionEng;
+                            data.ImgPrint4 = item.PrintImg;
+                        }
+                       
+                    }
+                    data.ImgPrint1 = data.Id1 == 0 ? true : data.ImgPrint1;
+                    data.ImgPrint2 = data.Id2 == 0 ? true : data.ImgPrint2;
+                    data.ImgPrint3 = data.Id3 == 0 ? true : data.ImgPrint3;
+                    data.ImgPrint4 = data.Id4 == 0 ? true : data.ImgPrint4;
+                    response.Data=data;
+                   
+                }
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return null;
+            }
+        }
+
+        public async Task<Response<bool>> UpdateImagePerson(int idPerson, int number, string description, string descriptionEng, bool? print, IFormFile file)
+        {
+            var response = new Response<bool>();
+            try{
+                string base64Data = "";
+                using var context = new SqlCoreContext();
+                // Verificar si el archivo no es nulo y tiene contenido
+                if (file != null && file.Length > 0)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await file.CopyToAsync(memoryStream);
+                        byte[] bytes = memoryStream.ToArray();
+                        base64Data = Convert.ToBase64String(bytes);
+                    }
+                }
+                var image = await context.PhotoPeople.Where(x => x.IdPerson == idPerson && x.NumImg == number).FirstOrDefaultAsync();
+                if(image != null)
+                {
+                    image.Description = description;
+                    image.DescriptionEng=descriptionEng;
+                    image.Base64= base64Data;
+                    image.PrintImg = print;
+
+                    context.PhotoPeople.Update(image);
+                }
+                else
+                {
+                    context.PhotoPeople.Add(new PhotoPerson
+                    {
+                        Description = description,
+                        DescriptionEng = descriptionEng,
+                        Base64 = base64Data,
+                        PrintImg = print,
+                        IdPerson = idPerson,
+                        NumImg = number
+                    });
+                }
+                await context.SaveChangesAsync();
+               response.Data = true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                response.Data = false;
+                response.IsSuccess = false;
+            }
+            return response;
+
+        }
+       
     }
 }
