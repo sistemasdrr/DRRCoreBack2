@@ -244,8 +244,8 @@ public partial class SqlCoreContext : DbContext
         {
             optionsBuilder.UseSqlServer(
           "Data Source=200.58.123.184,14331;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
-           // "Data Source=SD-4154134-W\\DRRSQLSERVER;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
-           //  "Data Source=SD-4154134-W;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
+         //  "Data Source=SD-4154134-W\\DRRSQLSERVER;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
+          //   "Data Source=SD-4154134-W;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
             , sqlServerOptions => sqlServerOptions.EnableRetryOnFailure(
                 maxRetryCount: 18,
                 maxRetryDelay: TimeSpan.FromSeconds(60),
@@ -270,6 +270,7 @@ public partial class SqlCoreContext : DbContext
         modelBuilder.Entity<Report7_10_1>().ToSqlQuery("EXEC SP_REPORTES_7_10_1").HasNoKey();
         modelBuilder.Entity<Report7_10_2_Main>().ToSqlQuery("EXEC SP_REPORTES_7_10_2").HasNoKey();
         modelBuilder.Entity<Report7_10_2_Details>().ToSqlQuery("EXEC SP_REPORTES_7_10_2_Details").HasNoKey();
+        modelBuilder.Entity<GetInternalInvoice>().ToSqlQuery("EXEC GetInternalInvoice").HasNoKey();
 
         modelBuilder.Entity<Agent>(entity =>
         {

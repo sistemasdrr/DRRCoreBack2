@@ -1,4 +1,6 @@
-﻿namespace DRRCore.Application.DTO.Core.Response
+﻿using Org.BouncyCastle.Bcpg.OpenPgp;
+
+namespace DRRCore.Application.DTO.Core.Response
 {
     public class GetQueryResponseDto
     {
@@ -25,6 +27,10 @@
     public class GetQuery1_1ByMonthResponseDto
     {
         public int Id { get; set; }
+        public int? IdCompany { get; set; }
+        public int? IdPerson { get; set; }
+        public string? AsignedTo { get; set; }
+        public string? AsignationType { get; set; }
         public string? RequestedName { get; set; }
         public int? IdCountry { get; set; }
         public string? Country { get; set; }
@@ -188,6 +194,9 @@
         public string? SubscriberCountry { get; set; }
         public string? SubscriberFlagCountry { get; set; }
         public decimal? Price { get; set; }
+        public string? Status { get; set; }
+        public string? StatusColor { get; set; }
+        public string? Number { get; set; }
     }
 
     public class GetQuery1_7SubscriberResponseDto
@@ -244,6 +253,9 @@
         public string? ProcedureType { get; set; }
         public string? ReportType { get; set; }
         public decimal? Price { get; set; }
+        public string? Status { get; set; }
+        public string? StatusColor { get; set; }
+        public string? Number { get; set; }
     }
     public class GetQuery1_11SubscribersResponseDto
     {
@@ -573,12 +585,14 @@
     }
     public class GetQueryTicket5_1_2ResponseDto
     {
-
+        public string? StartDate { get; set; }
+        public string? EndDate { get; set; }
         public string? AsignedTo { get; set; }
         public string? AsignationType { get; set; }
         public string? Cycle { get; set; }
         public decimal? Price { get; set; }
-        public int Id { get; set; }
+        public int? Id { get; set; }
+        public int? IdTicketHistory { get; set; }
         public int? IdTicket { get; set; }
         public int? IdCompany { get; set; }
         public int? IdPerson { get; set; }
@@ -596,7 +610,7 @@
         public List<TicketFileResponseDto>? Files { get; set; } = new List<TicketFileResponseDto>();
         public string Number { get; set; }
         public string? Language { get; set; }
-        public string About { get; set; } = null!;
+        public string? About { get; set; } = null!;
         public string? Status { get; set; }
         public string? StatusColor { get; set; }
         public string? Country { get; set; }
@@ -630,8 +644,8 @@
         public string? WebPage { get; set; }
 
         //INFORME
-        public string ReportType { get; set; } = null!;
-        public string ProcedureType { get; set; } = null!;
+        public string? ReportType { get; set; } = null!;
+        public string? ProcedureType { get; set; } = null!;
         public string? OrderDate { get; set; }
         public string? ExpireDate { get; set; }
         public string? RealExpireDate { get; set; }

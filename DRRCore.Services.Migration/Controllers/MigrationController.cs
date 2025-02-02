@@ -92,6 +92,12 @@ namespace DRRCore.Services.Migration.Controllers
             return Ok(await _migraUser.MigrateAgent());
         }
         [HttpPost()]
+        [Route("precioAgente")]
+        public async Task<ActionResult> MigrarPrecioAgentes()
+        {
+            return Ok(await _migraUser.MigrateAgentPrice());
+        }
+        [HttpPost()]
         [Route("oldTicket")]
         public async Task<ActionResult> MigrarOldTicket()
         {

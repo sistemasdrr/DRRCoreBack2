@@ -19,6 +19,7 @@
         Task<bool> MigrateSubscriberCategory();
         Task<bool> MigratePersonal();
         Task<bool> MigrateAgent();
+        Task<bool> MigrateAgentPrice();
         Task<bool> MigrateCompanyRelationated(int migra);
         Task<bool> MigrateCompanyPerson(int migra);
         Task<bool> MigrateCompanyShareholder();

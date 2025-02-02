@@ -12,5 +12,6 @@ namespace DRRCore.Domain.Interfaces.CoreDomain
         Task<bool> DeleteSubscriberAsync(int id);
         Task<bool> ActiveSubscriberAsync(int id);
         Task<Subscriber> LoginSubscriber(string usr, string psw);
+        Task<List<Subscriber>> GetSolicitados();
     }
 }

@@ -121,7 +121,28 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             return response;
         }
-
+        public async Task<Response<List<GetListSubscriberResponseDto>>> GetSolicitados()
+        {
+            var response = new Response<List<GetListSubscriberResponseDto>>();
+            try
+            {
+                var subscriber = await _subscriberDomain.GetSolicitados();
+                if (subscriber == null)
+                {
+                    response.IsSuccess = false;
+                    response.Message = Messages.MessageNoDataFound;
+                    _logger.LogError(response.Message);
+                }
+                response.Data = _mapper.Map<List<GetListSubscriberResponseDto>>(subscriber);
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
         public async Task<Response<List<GetListSubscriberResponseDto>>> GetSubscriber(string code, string name, string enable)
         {
             var response = new Response<List<GetListSubscriberResponseDto>>();

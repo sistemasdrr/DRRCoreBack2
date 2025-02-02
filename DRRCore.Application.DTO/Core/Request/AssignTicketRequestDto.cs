@@ -26,6 +26,7 @@ namespace DRRCore.Application.DTO.Core.Request
         public bool Internal { get; set; }
         public bool Balance { get; set; }
         public bool? HasBalance { get; set; }
+        public int? SpecialPriceBalance { get; set; }
         public string? StartDate { get; set; }
         public DateTime? StartDateD { get; set; }
         public string? EndDate { get; set; }
@@ -35,6 +36,7 @@ namespace DRRCore.Application.DTO.Core.Request
         public bool? SendZip { get; set; }
         public bool? AttachmentRefCom { get; set; }
         public string? ProcedureTypeAgent { get; set; }
+        public bool? Traduccion { get; set; }
     }
     public class NewAsignationDto
     {

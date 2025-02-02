@@ -2156,6 +2156,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                     newTicketHistory.EndDate = ticketHistory.EndDate;
                                     newTicketHistory.AsignationType = ticketHistory.AsignationType;
                                     newTicketHistory.Cycle = code;
+                                    newTicketHistory.DirectTranslation = false;
 
                                     await context.TicketHistories.AddAsync(newTicketHistory);
                                 }
@@ -2215,11 +2216,12 @@ namespace DRRCore.Application.Main.CoreApplication
                                         ticket.HasBalance = item.HasBalance == null ? ticket.HasBalance : item.HasBalance;
                                         ticket.UpdateDate = DateTime.Now;
                                         ticket.IdStatusTicket = (int)TicketStatusEnum.Pre_Asignacion;
+                                        ticket.IdSpecialAgentBalancePrice =(item.SpecialPriceBalance==0 || item.SpecialPriceBalance == null)? item.SpecialPriceBalance: ticket.IdSpecialAgentBalancePrice;
                                         history.Flag = true;
                                         history.Cycle = code;
                                         history.ShippingDate = DateTime.Now;
                                         history.UpdateDate = DateTime.Now;
-
+                                       
                                         context.Tickets.Update(ticket);
                                         context.TicketHistories.Update(history);
 
@@ -2234,6 +2236,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                             Flag = false,
                                             StartDate = StaticFunctions.VerifyDate(item.StartDate),
                                             EndDate = StaticFunctions.VerifyDate(item.EndDate),
+                                            DirectTranslation=item.Traduccion,
                                             Observations=item.Observations,
                                             Balance=item.Balance,
                                             AsignationType = item.Type,
@@ -2273,6 +2276,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                         ticket.HasBalance = item.HasBalance == null ? ticket.HasBalance : item.HasBalance;
                                         ticket.UpdateDate = DateTime.Now;
                                         ticket.IdStatusTicket = (int)TicketStatusEnum.Asig_Reportero;
+                                        ticket.IdSpecialAgentBalancePrice = (item.SpecialPriceBalance == 0 || item.SpecialPriceBalance == null) ? item.SpecialPriceBalance : ticket.IdSpecialAgentBalancePrice;
                                         history.Flag = true;
                                         history.Cycle = code;
                                         history.ShippingDate = DateTime.Now;
@@ -2298,6 +2302,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Balance = item.Balance,
                                                 AsignationType = item.Type,
                                                 Cycle = code,
+                                                DirectTranslation = item.Traduccion,
                                                 References = item.References
                                             };
                                             await context.TicketHistories.AddAsync(newTicketHistory);
@@ -2407,6 +2412,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 IdStatusTicket = (int)TicketStatusEnum.Asig_Reportero_Espera,
                                                 NumberAssign = number,
                                                 Flag = false,
+                                                DirectTranslation = item.Traduccion,
                                                 StartDate = StaticFunctions.VerifyDate(item.StartDate),
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
                                                 Observations = item.Observations,
@@ -2540,6 +2546,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 IdStatusTicket = (int)TicketStatusEnum.Por_Referencia,
                                                 NumberAssign = numberRef,
                                                 Flag = false,
+                                                DirectTranslation = item.Traduccion,
                                                 StartDate = StaticFunctions.VerifyDate(item.StartDate),
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
                                                 Observations = item.Observations,
@@ -2580,6 +2587,7 @@ namespace DRRCore.Application.Main.CoreApplication
 
                                         ticket.HasBalance = item.HasBalance == null ? ticket.HasBalance : item.HasBalance;
                                         ticket.UpdateDate = DateTime.Now;
+                                        ticket.IdSpecialAgentBalancePrice = (item.SpecialPriceBalance == 0 || item.SpecialPriceBalance == null) ? item.SpecialPriceBalance : ticket.IdSpecialAgentBalancePrice;
                                         history.Flag = true;
                                         history.Cycle = code;
                                         history.ShippingDate = DateTime.Now;
@@ -2601,6 +2609,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 IdStatusTicket = (int)TicketStatusEnum.Asig_Agente,
                                                 NumberAssign = number,
                                                 Flag = false,
+                                                DirectTranslation = item.Traduccion,
                                                 StartDate = StaticFunctions.VerifyDate(item.StartDate),
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
                                                 AsignationType = item.Type,
@@ -2630,6 +2639,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 AsignedTo = item.AssignedToCode,
                                                 IdStatusTicket = (int)TicketStatusEnum.Asig_Agente_Espera,
                                                 NumberAssign = number,
+                                                DirectTranslation = item.Traduccion,
                                                 Flag = false,
                                                 StartDate = StaticFunctions.VerifyDate(item.StartDate),
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
@@ -2889,6 +2899,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 IdStatusTicket = (int)TicketStatusEnum.Por_Referencia,
                                                 NumberAssign = numberRef,
                                                 Flag = false,
+                                                DirectTranslation = item.Traduccion,
                                                 StartDate = StaticFunctions.VerifyDate(item.StartDate),
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
                                                 Observations = item.Observations,
@@ -2901,6 +2912,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                         }
                                         ticket.HasBalance = item.HasBalance == null ? ticket.HasBalance : item.HasBalance;
                                         ticket.UpdateDate = DateTime.Now;
+                                        ticket.IdSpecialAgentBalancePrice = (item.SpecialPriceBalance == 0 || item.SpecialPriceBalance == null) ? item.SpecialPriceBalance : ticket.IdSpecialAgentBalancePrice;
                                         history.Flag = true;
                                         history.Cycle = code;
                                         history.ShippingDate = DateTime.Now;
@@ -2937,6 +2949,7 @@ namespace DRRCore.Application.Main.CoreApplication
 
                                         ticket.HasBalance = item.HasBalance == null ? ticket.HasBalance : item.HasBalance;
                                         ticket.UpdateDate = DateTime.Now;
+                                        ticket.IdSpecialAgentBalancePrice = (item.SpecialPriceBalance == 0 || item.SpecialPriceBalance == null) ? item.SpecialPriceBalance : ticket.IdSpecialAgentBalancePrice;
                                         history.Flag = true;
                                         history.Cycle = code;
                                         history.ShippingDate = DateTime.Now;
@@ -2950,6 +2963,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 UserFrom = item.UserFrom,
                                                 UserTo = item.UserTo,
                                                 AsignedTo = item.AssignedToCode,
+                                                DirectTranslation = item.Traduccion,
                                                 IdStatusTicket = (int)TicketStatusEnum.Asig_Referencista,
                                                 NumberAssign = number,
                                                 Flag = false,
@@ -3003,6 +3017,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 IdStatusTicket = (int)TicketStatusEnum.Por_Digitar,
                                                 NumberAssign = numberRef,
                                                 Flag = false,
+                                                DirectTranslation = item.Traduccion,
                                                 StartDate = StaticFunctions.VerifyDate(item.StartDate),
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
                                                 Observations = item.Observations,
@@ -3012,6 +3027,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                             };
                                             ticket.HasBalance = item.HasBalance == null ? ticket.HasBalance : item.HasBalance;
                                             ticket.UpdateDate = DateTime.Now;
+                                            ticket.IdSpecialAgentBalancePrice = (item.SpecialPriceBalance == 0 || item.SpecialPriceBalance == null) ? item.SpecialPriceBalance : ticket.IdSpecialAgentBalancePrice;
                                             history.Flag = true;
                                             history.Cycle = code;
                                             history.ShippingDate = DateTime.Now;
@@ -3046,6 +3062,7 @@ namespace DRRCore.Application.Main.CoreApplication
 
                                             ticket.HasBalance = item.HasBalance == null ? ticket.HasBalance : item.HasBalance;
                                             ticket.UpdateDate = DateTime.Now;
+                                            ticket.IdSpecialAgentBalancePrice = (item.SpecialPriceBalance == 0 || item.SpecialPriceBalance == null) ? item.SpecialPriceBalance : ticket.IdSpecialAgentBalancePrice;
                                             history.Flag = true;
                                             history.Cycle = code;
                                             history.ShippingDate = DateTime.Now;
@@ -3061,6 +3078,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 AsignedTo = item.AssignedToCode,
                                                 IdStatusTicket = (int)TicketStatusEnum.Asig_Digitidor,
                                                 NumberAssign = number,
+                                                DirectTranslation = item.Traduccion,
                                                 Flag = false,
                                                 StartDate = StaticFunctions.VerifyDate(item.StartDate),
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
@@ -3108,6 +3126,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 UserFrom = item.UserFrom,
                                                 UserTo = "42",
                                                 AsignedTo = "CR5",
+                                                DirectTranslation = item.Traduccion,
                                                 IdStatusTicket = (int)TicketStatusEnum.Por_Traducir,
                                                 NumberAssign = numberRef,
                                                 Flag = false,
@@ -3120,6 +3139,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                             };
                                             ticket.HasBalance = item.HasBalance == null ? ticket.HasBalance : item.HasBalance;
                                             ticket.UpdateDate = DateTime.Now;
+                                            ticket.IdSpecialAgentBalancePrice = (ticket.IdSpecialAgentBalancePrice == 0 || ticket.IdSpecialAgentBalancePrice == null) ? item.SpecialPriceBalance : ticket.IdSpecialAgentBalancePrice;
                                             history.Flag = true;
                                             history.Cycle = code;
                                             history.ShippingDate = DateTime.Now;
@@ -3160,6 +3180,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 IdStatusTicket = (int)TicketStatusEnum.Asig_Traductor,
                                                 NumberAssign = number,
                                                 Flag = false,
+                                                DirectTranslation = item.Traduccion,
                                                 StartDate = StaticFunctions.VerifyDate(item.StartDate),
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
                                                 Observations = item.Observations,
@@ -3173,6 +3194,7 @@ namespace DRRCore.Application.Main.CoreApplication
 
                                         ticket.HasBalance = item.HasBalance == null ? ticket.HasBalance : item.HasBalance;
                                         ticket.UpdateDate = DateTime.Now;
+                                        ticket.IdSpecialAgentBalancePrice = (item.SpecialPriceBalance == 0 || item.SpecialPriceBalance == null) ? item.SpecialPriceBalance : ticket.IdSpecialAgentBalancePrice;
                                         history.Flag = true;
                                         history.Cycle = code;
                                         history.ShippingDate = DateTime.Now;
@@ -3220,6 +3242,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 IdStatusTicket = (int)TicketStatusEnum.Por_Supervisar,
                                                 NumberAssign = numberRef,
                                                 Flag = false,
+                                                DirectTranslation = item.Traduccion,
                                                 StartDate = StaticFunctions.VerifyDate(item.StartDate),
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
                                                 Observations = item.Observations,
@@ -3229,6 +3252,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                             };
                                             ticket.HasBalance = item.HasBalance == null ? ticket.HasBalance : item.HasBalance;
                                             ticket.UpdateDate = DateTime.Now;
+                                            ticket.IdSpecialAgentBalancePrice = (item.SpecialPriceBalance == 0 || item.SpecialPriceBalance == null) ? item.SpecialPriceBalance : ticket.IdSpecialAgentBalancePrice;
                                             history.Flag = true;
                                             history.Cycle = code;
                                             history.ShippingDate = DateTime.Now;
@@ -3262,6 +3286,7 @@ namespace DRRCore.Application.Main.CoreApplication
 
                                             ticket.HasBalance = item.HasBalance == null ? ticket.HasBalance : item.HasBalance;
                                             ticket.UpdateDate = DateTime.Now;
+                                            ticket.IdSpecialAgentBalancePrice = (item.SpecialPriceBalance == 0 || item.SpecialPriceBalance == null) ? item.SpecialPriceBalance : ticket.IdSpecialAgentBalancePrice;
                                             history.Flag = true;
                                             history.Cycle = code;
                                             history.ShippingDate = DateTime.Now;
@@ -3276,6 +3301,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 AsignedTo = item.AssignedToCode,
                                                 IdStatusTicket = (int)TicketStatusEnum.Asig_Supervisor,
                                                 NumberAssign = number,
+                                                DirectTranslation = item.Traduccion,
                                                 Flag = false,
                                                 StartDate = StaticFunctions.VerifyDate(item.StartDate),
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
@@ -4970,21 +4996,25 @@ namespace DRRCore.Application.Main.CoreApplication
 
                     foreach (var item in otherUsers.Where(x => x.Active == true).ToList())
                     {
-                        var personal = await context.Personals.Where(x => x.Code == item.Code).Include(x => x.IdEmployeeNavigation).ThenInclude(x => x.UserLogins).FirstOrDefaultAsync();
-                        ticket.TicketHistories.Add(new TicketHistory{
-                            IdTicket =idTicket,
-                            UserFrom = personal.IdEmployeeNavigation.UserLogins.FirstOrDefault().Id + "",
-                            UserTo = personal.IdEmployeeNavigation.UserLogins.FirstOrDefault().Id + "",
-                            AsignationType = item.Type,
-                            AsignedTo = item.Code,
-                            StartDate = DateTime.Now,
-                            EndDate = DateTime.Now,
-                            ShippingDate = DateTime.Now,
-                            FlagInvoice = false,
-                            Flag = true,
-                            Cycle = code,
-                            IdStatusTicket = GetIdStatusTicket(item.Type)
-                        });
+                        if (ticket.TicketHistories.Any(x => x.AsignedTo != item.Code))
+                        {
+                            var personal = await context.Personals.Where(x => x.Code == item.Code).Include(x => x.IdEmployeeNavigation).ThenInclude(x => x.UserLogins).FirstOrDefaultAsync();
+                            ticket.TicketHistories.Add(new TicketHistory
+                            {
+                                IdTicket = idTicket,
+                                UserFrom = personal.IdEmployeeNavigation.UserLogins.FirstOrDefault().Id + "",
+                                UserTo = personal.IdEmployeeNavigation.UserLogins.FirstOrDefault().Id + "",
+                                AsignationType = item.Type,
+                                AsignedTo = item.Code,
+                                StartDate = DateTime.Now,
+                                EndDate = DateTime.Now,
+                                ShippingDate = DateTime.Now,
+                                FlagInvoice = false,
+                                Flag = true,
+                                Cycle = code,
+                                IdStatusTicket = GetIdStatusTicket(item.Type)
+                            });
+                        }
                     }
 
                 }

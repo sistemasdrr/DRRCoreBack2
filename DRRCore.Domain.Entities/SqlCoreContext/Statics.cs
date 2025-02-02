@@ -67,6 +67,29 @@ namespace DRRCore.Domain.Entities.SqlCoreContext
         public bool? IsComplement { get; set; }
         public int? IdTicketComplement { get; set; }
     }
+    public class GetInternalInvoice
+    {
+        public int? Id { get; set; }
+        public int? IdCompany { get; set; }
+        public int? IdPerson { get; set; }
+        public bool? IsComplement { get; set; }
+        public int? IdTicketHistory { get; set; }
+        public int? Number { get; set; }
+        public string? AsignedTo { get; set; }
+        public string? AsignationType { get; set; }
+        public string? RequestedName { get; set; }
+        public string? Quality { get; set; }
+        public string? Country { get; set; }
+        public string? Flag { get; set; }
+        public string? ProcedureType { get; set; }
+        public string? ReportType { get; set; }
+        public string? About { get; set; }
+        public decimal Price { get; set; }
+
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }      
+    }
+
 
     public class PriceResult
     {

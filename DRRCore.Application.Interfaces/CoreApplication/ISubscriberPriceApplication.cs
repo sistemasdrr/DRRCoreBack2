@@ -13,5 +13,6 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<List<GetComboValueResponseDto>>> GetContinentsById(int idSubscriber);
         Task<Response<List<GetComboValueFlagResponseDto>>> GetCountriesById(int idSubscriber, int idContitent);
         Task<Response<List<GetPricesResponseDto>>> GetSelectSubscriberPrice(int idSubscriber, int idContinent, int idCountry);
+     
     }
 }

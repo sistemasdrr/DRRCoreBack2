@@ -85,6 +85,12 @@ namespace DRRCore.Services.ApiCore.Controllers
         {
             return Ok(await _subscriberPriceApplication.GetSubscriberPriceById(id));
         }
+        [HttpGet()]
+        [Route("getSolicitados")]
+        public async Task<ActionResult> GetSolicitados()
+        {
+            return Ok(await _subscriberApplication.GetSolicitados());
+        }
         [HttpPost()]
         [Route("deletePrice")]
         public async Task<ActionResult> DeleteSubscriberPrice(int id)

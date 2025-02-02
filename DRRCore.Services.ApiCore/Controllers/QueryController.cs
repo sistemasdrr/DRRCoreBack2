@@ -287,6 +287,13 @@ namespace DRRCore.Services.ApiCore.Controllers
             return Ok(await _queryApplication.GetQuery5_1_2MonthlyByCycle(idUser, cycle, code));
         }
         [HttpGet]
+        [Route("GetInternalInvoice")]
+        public async Task<ActionResult> GetInternalInvoice(string idUser, string cycle, string? code)
+        {
+            code = code ?? string.Empty;
+            return Ok(await _queryApplication.GetInternalInvoice(idUser, cycle, code));
+        }
+        [HttpGet]
         [Route("GetCycles")]
         public async Task<ActionResult> GetCycles()
         {

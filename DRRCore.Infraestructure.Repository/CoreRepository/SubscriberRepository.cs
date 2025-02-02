@@ -1,4 +1,5 @@
-﻿using DRRCore.Domain.Entities.SqlCoreContext;
+﻿using DRRCore.Application.DTO.Enum;
+using DRRCore.Domain.Entities.SqlCoreContext;
 using DRRCore.Infraestructure.Interfaces.CoreRepository;
 using DRRCore.Transversal.Common.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -108,6 +109,29 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                 {
                     return await context.Subscribers.Include(x => x.IdCountryNavigation).Where(x => x.Code.Contains(code) && x.Name.Contains(name)).OrderBy(x => x.Code).ToListAsync();
                 }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return new List<Subscriber>();
+            }
+        }
+        public async Task<List<Subscriber>> GetSolicitados()
+        {
+            try
+            {
+                using var context = new SqlCoreContext();
+                var subscribers = await context.Tickets.Include(x => x.IdSubscriberNavigation)
+                     .Where(x => x.IdStatusTicket != (int?)TicketStatusEnum.Despachado_con_Observacion && x.Enable == true
+                    && x.IdStatusTicket != (int?)TicketStatusEnum.Rechazado
+                    && x.IdStatusTicket != (int?)TicketStatusEnum.Anulado_Por_Abonado
+                    && x.IdStatusTicket != (int?)TicketStatusEnum.Por_Despachar_Con_Observaciones
+                    && x.IdStatusTicket != (int?)TicketStatusEnum.Anulado_Por_DRR
+                    && x.IdStatusTicket != (int?)TicketStatusEnum.Anulado_Por_FaltaDatos
+                    && x.IdStatusTicket != (int?)TicketStatusEnum.Anulado_Por_Supervisor
+                    && x.IsComplement == false)
+                    .Select(x => x.IdSubscriberNavigation).Distinct().OrderBy(x=>x.Code).ToListAsync();
+                return subscribers;
             }
             catch (Exception ex)
             {

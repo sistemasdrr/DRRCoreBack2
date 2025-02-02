@@ -194,12 +194,18 @@ namespace DRRCore.Application.Main.CoreApplication
                     {
                         ticketHistory.IdTicketNavigation.IdSpecialAgentBalancePrice = idSpecialPrice != 0 ? idSpecialPrice : null;
                     }
-                    if(ticketHistory.IdTicketNavigation.Quality.Trim() != quality.Trim())
+                    if (ticketHistory.IdTicketNavigation.Quality != null)
                     {
-                        ticketHistory.IdTicketNavigation.Quality = quality.Trim();
+                        if (ticketHistory.IdTicketNavigation.Quality.Trim() != quality.Trim())
+                        {
+                            ticketHistory.IdTicketNavigation.Quality = quality.Trim();
+                            ticketHistory.IdTicketNavigation.QualityTranslator = quality.Trim();
+                            ticketHistory.IdTicketNavigation.QualityTypist = quality.Trim();
+
+                        }
                     }
                     ticketHistory.IdTicketNavigation.RequestedName = requestedName;
-                    ticketHistory.IdTicketNavigation.ProcedureType = procedureType;
+                    ticketHistory.IdTicketNavigation.ProcedureTypeAgent = procedureType;
                     ticketHistory.IdTicketNavigation.UpdateDate = DateTime.Now;
                     ticketHistory.ShippingDate = StaticFunctions.VerifyDate(shippingDate);
                     ticketHistory.UpdateDate = DateTime.Now;
@@ -953,7 +959,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     foreach (var ticket in tickets)
                     {
                         totalPrice1 += ticket.Price;
-                        var t = await context.Tickets.Where(x => x.Id == ticket.IdTicket).FirstOrDefaultAsync();
+                        var t = await context.Tickets.Where(x => x.Id == ticket.Id).FirstOrDefaultAsync();
                         var quality = "";
                         switch (type.Trim())
                         {
@@ -964,7 +970,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         }                       
                         listDetails.Add(new InternalInvoiceDetail
                         {
-                            IdTicketHistory = ticket.Id,
+                            IdTicketHistory = ticket.IdTicketHistory,
                             IsComplement = ticket.IsComplement,
                             Quality = quality,
                             Price = ticket.Price,
@@ -985,7 +991,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     foreach (var ticket in tickets)
                     {
                         totalPrice1 += ticket.Price;
-                        var t = await context.Tickets.Where(x => x.Id == ticket.IdTicket).FirstOrDefaultAsync();
+                        var t = await context.Tickets.Where(x => x.Id == ticket.Id).FirstOrDefaultAsync();
                         var quality = "";
                         switch (type.Trim())
                         {
@@ -997,7 +1003,7 @@ namespace DRRCore.Application.Main.CoreApplication
                        
                         listDetails.Add(new InternalInvoiceDetail
                         {
-                            IdTicketHistory = ticket.Id,
+                            IdTicketHistory = ticket.IdTicketHistory,
                             IsComplement = ticket.IsComplement,
                             Quality = quality,
                             Price = ticket.Price,
@@ -1590,7 +1596,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         lblGeneral?.ToString("0.00") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:" + "1001" + "|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
                         "|VALOR_VENTA:" + lblValorVenta?.ToString("0.00") + "|PRECIO_VENTA:" + PV?.ToString("0.00") +
                         "|EXISTE_GRAVADA:" + EXISTE_GRAVADA + "|EXISTE_INAFECTA:" + EXISTE_INAFECTA + "|EXISTE_EXONERADA:" + EXISTE_EXONERADA + "|EXISTE_GRATUITA:" + EXISTE_GRATUITA + "|EXISTE_EXPORTACION:" + EXISTE_EXPORTACION +
-                        "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToShortDateString() + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + (PV - (PV * 12 / 100))?.ToString("0.00") +
+                        "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToString("yyyy-MM-dd") + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + (PV - (PV * 12 / 100))?.ToString("0.00") +
                         "|IA_40:" + subscriber.Code + " - " + subscriber.Name + "|IA_41:" + obj.Address + "|IA_42:" + obj.AttendedBy + "|IA_43:" + "" + "|IA_44:PAGO POR TRANSFERENCIA BANCARIA" + "|IA_45:" + cuenta + "" + "|IA_46:" + obj.ExchangeRate +
                         "|PORCENTAJE_DETRACC:" + "12.00" + "|MONTO_DETRACC:" + Monto_Detracc?.ToString("0.00") + "|COD_SUNAT_PAGO_DETRACC:001" + "|TASA_IGV:18.00" + "|BB_SS_CODIGO_SUJETO_A_DETRACC:037|BB_SS_DESCRIPCION_SUJETO_A_DETRACC:DEMAS SERVICIOS GRAVADOS CON EL IGV|NUMERO_CTA_BANCO_NACION_DETRACC:00000812773" + "~";
                     }
@@ -1604,7 +1610,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         lblGeneral?.ToString("0.00") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:" + TIPO_OPERACION + "|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
                         "|VALOR_VENTA:" + lblValorVenta?.ToString("0.00") + "|PRECIO_VENTA:" + PV?.ToString("0.00") +
                         "|EXISTE_GRAVADA:" + EXISTE_GRAVADA + "|EXISTE_INAFECTA:" + EXISTE_INAFECTA + "|EXISTE_EXONERADA:" + EXISTE_EXONERADA + "|EXISTE_GRATUITA:" + EXISTE_GRATUITA + "|EXISTE_EXPORTACION:" + EXISTE_EXPORTACION +
-                        "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToShortDateString() + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + PV + "|TASA_IGV:18.00" +
+                        "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToString("yyyy-MM-dd") + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + PV + "|TASA_IGV:18.00" +
                         "|IA_40:" + subscriber.Code + " - " + subscriber.Name + "|IA_41:" + obj.Address + "|IA_42:" + obj.AttendedBy + "|IA_43:" + "" + "|IA_44:PAGO POR TRANSFERENCIA BANCARIA" + "|IA_45:" + cuenta + "~";
 
                     }
@@ -1621,7 +1627,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     "|VALOR_VENTA:" + Decimal.Parse(TOTAL_OPERACIONES_EXPORTACION).ToString("0.00") + "|PRECIO_VENTA:" + PV?.ToString("0.00") +
                     "|EXISTE_GRAVADA:" + EXISTE_GRAVADA + "|EXISTE_INAFECTA:" + EXISTE_INAFECTA + "|EXISTE_EXONERADA:" + EXISTE_EXONERADA + "|EXISTE_GRATUITA:" + EXISTE_GRATUITA + "|EXISTE_EXPORTACION:" + EXISTE_EXPORTACION +
                     "|CODIGO_PAIS_EXPORTACION:" + CODIGO_PAIS_EXPORTACION +
-                    "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToShortDateString() + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + PV + "|TASA_IGV:18.00" +
+                    "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToString("yyyy-MM-dd") + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + PV + "|TASA_IGV:18.00" +
                     "|IA_40:" + subscriber.Code + " - " + subscriber.Name + "|IA_41:" + obj.Address + "|IA_42:" + obj.AttendedBy + "|IA_43:" + "" + "|IA_44:PAGO POR TRANSFERENCIA BANCARIA" + "|IA_45:" + cuenta + "~";
                 }
 
@@ -1695,59 +1701,74 @@ namespace DRRCore.Application.Main.CoreApplication
                 var facRuta = await context.Parameters.Where(x => x.Key == "FAC_RUTA").FirstOrDefaultAsync();
                 var facSerie = await context.Parameters.Where(x => x.Key == "FAC_SERIE").FirstOrDefaultAsync();
 
-                var host = await context.Parameters.Where(x => x.Key == "HOST_FTP_CONTANET").FirstOrDefaultAsync();
-                var port = await context.Parameters.Where(x => x.Key == "PORT_FTP_CONTANET").FirstOrDefaultAsync();
-                var user = await context.Parameters.Where(x => x.Key == "USER_FTP_CONTANET").FirstOrDefaultAsync();
-                var password = await context.Parameters.Where(x => x.Key == "PASSWORD_FTP_CONTANET").FirstOrDefaultAsync();
-                var ftpConfigutarion = new FtpClientConfiguration
-                {
-                    Host = host.Value,
-                   // Port = int.Parse(port.Value),
-                    Username = user.Value,
-                    Password = password.Value
-                };
-                if (!string.IsNullOrEmpty(port.Value))
-                {
-                    ftpConfigutarion.Port = int.Parse(port.Value);
-                }
+                //var host = await context.Parameters.Where(x => x.Key == "HOST_FTP_CONTANET").FirstOrDefaultAsync();
+                //var port = await context.Parameters.Where(x => x.Key == "PORT_FTP_CONTANET").FirstOrDefaultAsync();
+                //var user = await context.Parameters.Where(x => x.Key == "USER_FTP_CONTANET").FirstOrDefaultAsync();
+                //var password = await context.Parameters.Where(x => x.Key == "PASSWORD_FTP_CONTANET").FirstOrDefaultAsync();
+                //var ftpConfigutarion = new FtpClientConfiguration
+                //{
+                //    Host = host.Value,
+                //   // Port = int.Parse(port.Value),
+                //    Username = user.Value,
+                //    Password = password.Value,
+                //    SslProtocols=System.Security.Authentication.SslProtocols.None
+                   
+                //};
+                //if (!string.IsNullOrEmpty(port.Value))
+                //{
+                //    ftpConfigutarion.Port = int.Parse(port.Value);
+                //}
 
 
-                string fileDirectory = facSerie.Value+obj.InvoiceCode+".txt";
+              //  string fileDirectory = facSerie.Value+obj.InvoiceCode+".txt";
+               
+                string fileDirectory = System.IO.Path.Combine(facRuta.Value, facSerie.Value + obj.InvoiceCode + ".txt");
 
                 try
                 {
-                    byte[] bytes = null;
-                    using (var ms = new MemoryStream())
-                    {
-                        using (TextWriter tw = new StreamWriter(ms))
-                        {
-                            tw.Write(Detalles);
-                            tw.Flush();
-                            ms.Position = 0;
-                            bytes = ms.ToArray();
-
-                            using (var ftpClient = new FtpClient(ftpConfigutarion))
-                            {
-                                await ftpClient.LoginAsync();
-                                using (var writeStream = await ftpClient.OpenFileWriteStreamAsync("/prueba/" + fileDirectory))
-                                {
-                                    await ms.CopyToAsync(writeStream);
-                                }
-                            }                         
-                           
-                        }
-
-                    }
-                    
-                    //File.WriteAllText(fileDirectory, Detalles);
+                    File.WriteAllText(fileDirectory, Detalles);
                     Console.WriteLine("Archivo exportado exitosamente a: " + fileDirectory);
                 }
                 catch (Exception ex)
                 {
-                    
+
                     Console.WriteLine("Error al escribir el archivo: " + ex.Message);
                 }
                 response.Data = true;
+                //try
+                //{
+                //    byte[] bytes = null;
+                //    using (var ms = new MemoryStream())
+                //    {
+                //        using (TextWriter tw = new StreamWriter(ms))
+                //        {
+                //            tw.Write(Detalles);
+                //            tw.Flush();
+                //            ms.Position = 0;
+                //            bytes = ms.ToArray();
+
+                //            using (var ftpClient = new FtpClient(ftpConfigutarion))
+                //            {
+                //                await ftpClient.LoginAsync();
+                //                using (var writeStream = await ftpClient.OpenFileWriteStreamAsync( fileDirectory))
+                //                {
+                //                    await ms.CopyToAsync(writeStream);
+                //                }
+                //            }                         
+                           
+                //        }
+
+                //    }
+                    
+                //    //File.WriteAllText(fileDirectory, Detalles);
+                //    Console.WriteLine("Archivo exportado exitosamente a: " + fileDirectory);
+                //}
+                //catch (Exception ex)
+                //{
+                    
+                //    Console.WriteLine("Error al escribir el archivo: " + ex.Message);
+                //}
+               // response.Data = true;
             }
             catch (Exception ex)
             {

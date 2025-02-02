@@ -2897,6 +2897,70 @@ namespace DRRCore.Application.Main.MigrationApplication
             return true;
         }
 
+
+        public async Task<bool> MigrateAgentPrice()
+        {
+            using var mysqlcontext = new MySqlContext();
+            using var context = new SqlCoreContext();
+            try
+            {
+                var agentes = await context.Agents.ToListAsync();
+                var newAgent = new Agent();
+                var newAgentPrice = new List<AgentPrice>();
+                foreach (var agente in agentes)
+                {
+                    try
+                    {
+                        var agentePrecios = await mysqlcontext.TPrecioAgentes.Where(x => x.AgeCodigo == agente.Code).ToListAsync();
+                        foreach (var item in agentePrecios)
+                        {
+                            int? idCountry = await GetIdCountry(item.PaiCodigo);
+                            int? idContinent = null;
+                            if (idCountry != null)
+                            {
+                                var country = await context.Countries.Where(x => x.Id == idCountry).FirstOrDefaultAsync();
+                                idContinent = country != null ? country.IdContinent : null;
+                            }
+                            var t1 = item.PaPrenor.Trim().Replace(" ", "").Replace("-", "").Split("/");
+                            var t2 = item.PaPreurg.Trim().Replace(" ", "").Replace("-", "").Split("/");
+                            var t3 = item.PaPresup.Trim().Replace(" ", "").Replace("-", "").Split("/");
+
+                            int ExtractFirstNumber(string input)
+                            {
+                                var match = Regex.Match(input, @"\d+");
+                                return match.Success ? int.Parse(match.Value) : 0;
+                            }
+                            var agentPrice = new AgentPrice();
+                            agentPrice.IdAgent = agente.Id;
+                            agentPrice.IdCountry = idCountry;
+                            agentPrice.IdContinent = idContinent;
+                            agentPrice.IdCurrency = item.MonCodigo == "002" ? 1 : item.MonCodigo == "003" ? 2 : null;
+                            agentPrice.Date = item.PaFecha;
+                            agentPrice.PriceT1 = ExtractFirstNumber(t1[0]);
+                            agentPrice.DayT1 = ExtractFirstNumber(t1[1]);
+                            agentPrice.PriceT2 = ExtractFirstNumber(t2[0]);
+                            agentPrice.DayT2 = ExtractFirstNumber(t2[1]);
+                            agentPrice.PriceT3 = ExtractFirstNumber(t3[0]);
+                            agentPrice.DayT3 = ExtractFirstNumber(t3[1]);
+                            context.AgentPrices.Add(agentPrice);
+                        }    
+                        await context.SaveChangesAsync();
+                    }
+                    catch (Exception exx)
+                    {
+
+                        continue;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                throw new Exception("Error: " + ex.Message);
+
+            }
+            return true;
+        }
         public async Task<bool> CorrecPersona(int migra)
         {
             using var mysqlcontext = new MySqlContext();

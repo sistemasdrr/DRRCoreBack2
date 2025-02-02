@@ -1,6 +1,7 @@
 ﻿using AspNetCore.ReportingServices.ReportProcessing.ReportObjectModel;
 using AutoMapper;
 using DocumentFormat.OpenXml.Bibliography;
+using DocumentFormat.OpenXml.Wordprocessing;
 using DRRCore.Application.DTO.Core.Response;
 using DRRCore.Application.DTO.Email;
 using DRRCore.Application.DTO.Enum;
@@ -17,6 +18,7 @@ using Microsoft.IdentityModel.Tokens;
 using Mysqlx.Crud;
 using Newtonsoft.Json;
 using static iTextSharp.text.pdf.AcroFields;
+using Personal = DRRCore.Domain.Entities.SqlCoreContext.Personal;
 
 namespace DRRCore.Application.Main.CoreApplication
 {
@@ -69,6 +71,7 @@ namespace DRRCore.Application.Main.CoreApplication
                             ProcedureType = item1.IdTicketNavigation.ProcedureType,
                             ReportType = item1.IdTicketNavigation.ReportType,
                             Price = item1.IdTicketNavigation.Price,
+                            
                         });
                     }
                 }
@@ -449,9 +452,17 @@ namespace DRRCore.Application.Main.CoreApplication
 
                 var tickets = await context.Tickets
                     .Where(x => x.IdStatusTicket != (int?)TicketStatusEnum.Despachado_con_Observacion && x.Enable == true
-                    && x.IdStatusTicket != (int?)TicketStatusEnum.Despachado && x.IdStatusTicket != (int?)TicketStatusEnum.Rechazado)
+                    && x.IdStatusTicket != (int?)TicketStatusEnum.Despachado && x.IdStatusTicket != (int?)TicketStatusEnum.Rechazado
+                    && x.IdStatusTicket != (int?)TicketStatusEnum.Anulado_Por_Abonado
+                    && x.IdStatusTicket != (int?)TicketStatusEnum.Por_Despachar_Con_Observaciones
+                    && x.IdStatusTicket != (int?)TicketStatusEnum.Anulado_Por_DRR
+                    && x.IdStatusTicket != (int?)TicketStatusEnum.Anulado_Por_FaltaDatos
+                    && x.IdStatusTicket != (int?)TicketStatusEnum.Anulado_Por_Supervisor
+                    && x.IsComplement ==false)
+                     .Include(x => x.IdStatusTicketNavigation)
                     .Include(x => x.IdSubscriberNavigation).ThenInclude(x => x.IdCountryNavigation)
                     .Include(x => x.IdCountryNavigation)
+                    .OrderBy(x => x.IdSubscriberNavigation.Code)
                     .OrderBy(x => x.OrderDate)
                     .ToListAsync();
                 foreach (var item in tickets)
@@ -473,7 +484,10 @@ namespace DRRCore.Application.Main.CoreApplication
                         SubscriberCode = item.IdSubscriberNavigation.Code ?? "",
                         SubscriberCountry = item.IdSubscriberNavigation.IdCountryNavigation.Iso ?? "",
                         SubscriberFlagCountry = item.IdSubscriberNavigation.IdCountryNavigation.FlagIso ?? "",
-                        Price = item.Price
+                        Price = item.Price,
+                        Status=item.IdStatusTicketNavigation.Abrev,
+                        StatusColor=item.IdStatusTicketNavigation.Color,
+                        Number=item.Number.ToString("D6")
                     });
                 }
             }
@@ -647,8 +661,17 @@ namespace DRRCore.Application.Main.CoreApplication
                 var endDateTime = StaticFunctions.VerifyDate(endDate)?.Date.AddDays(1).AddTicks(-1);
 
                 var tickets = await context.Tickets
-                    .Where(x => x.IdSubscriber == idSubscriber && x.OrderDate > startDateTime && x.OrderDate < endDateTime && x.Enable == true)
+                    .Where(x => x.IdSubscriber == idSubscriber && x.OrderDate > startDateTime && x.OrderDate < endDateTime && x.Enable == true
+                    &&  x.Enable == true
+                    &&  x.IdStatusTicket != (int?)TicketStatusEnum.Rechazado
+                    && x.IdStatusTicket != (int?)TicketStatusEnum.Anulado_Por_Abonado
+                    && x.IdStatusTicket != (int?)TicketStatusEnum.Por_Despachar_Con_Observaciones
+                    && x.IdStatusTicket != (int?)TicketStatusEnum.Anulado_Por_DRR
+                    && x.IdStatusTicket != (int?)TicketStatusEnum.Anulado_Por_FaltaDatos
+                    && x.IdStatusTicket != (int?)TicketStatusEnum.Anulado_Por_Supervisor
+                    && x.IsComplement == false)
                     .Include(x => x.IdCountryNavigation)
+                    .Include(x => x.IdStatusTicketNavigation)
                     .ToListAsync();
                 foreach (var item in tickets)
                 {
@@ -665,6 +688,9 @@ namespace DRRCore.Application.Main.CoreApplication
                         ProcedureType = item.ProcedureType,
                         ReportType = item.ReportType,
                         Price = item.Price,
+                        Status = item.IdStatusTicketNavigation.Abrev,
+                        StatusColor = item.IdStatusTicketNavigation.Color,
+                        Number = item.Number.ToString("D6")
                     });
                 }
             }
@@ -2163,8 +2189,54 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             return response;
         }
+        public async Task<Response<List<GetQueryTicket5_1_2ResponseDto>>> GetInternalInvoice(string idUser, string cycle, string? code)
+        {
+            var response = new Response<List<GetQueryTicket5_1_2ResponseDto>>();
+            response.Data = new List<GetQueryTicket5_1_2ResponseDto>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                var agentInvoiceList = context.Set<GetInternalInvoice>()
+                                    .FromSqlRaw("EXECUTE GetInternalInvoice @code = '" + code + "', @cycle = '" + cycle + "'")
+                                    .ToList();
 
-        public async Task<Response<List<GetQuery5_1_2ByCycleResponseDto>>> GetQuery5_1_2MonthlyByCycle(string idUser, string cycle, string? code)
+                foreach (var item in agentInvoiceList)
+                {
+                    if (!response.Data.Any(x => x.Id == item.Id && x.AsignedTo == item.AsignedTo))
+                    {
+                        response.Data.Add(new GetQueryTicket5_1_2ResponseDto
+                        {
+                            Id = item.Id,
+                            IsComplement = item.IsComplement,
+                            IdTicketHistory = item.IdTicketHistory,
+                            Number = item.Number.Value.ToString("D6") + (item.IsComplement == true ? "(C)" : ""),
+                            RequestedName = item.RequestedName,
+                            Quality = item.Quality,
+                            Country = item.Country,
+                            FlagCountry = item.Flag,
+                            ProcedureType = item.ProcedureType,
+                            ReportType = item.ReportType,
+                            StartDate = item.StartDate == null ? string.Empty : item.StartDate.Value.ToString("dd/MM/yyyy"),
+                            EndDate = item.EndDate == null ? string.Empty : item.EndDate.Value.ToString("dd/MM/yyyy"),
+                            IdCompany = item.IdCompany,
+                            IdPerson = item.IdPerson,
+                            AsignationType = item.AsignationType,
+                            AsignedTo = item.AsignedTo,
+                            About = item.About,
+                            Price = item.Price
+                        });
+                    }
+                }
+         
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
+            public async Task<Response<List<GetQuery5_1_2ByCycleResponseDto>>> GetQuery5_1_2MonthlyByCycle(string idUser, string cycle, string? code)
         {
             var response = new Response<List<GetQuery5_1_2ByCycleResponseDto>>();
             response.Data = new List<GetQuery5_1_2ByCycleResponseDto>();

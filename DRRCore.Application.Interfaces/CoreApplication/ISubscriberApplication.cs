@@ -15,5 +15,6 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<int>> AddOrUpdateAsync(AddOrUpdateSubscriberRequestDto subscriberDto);
         Task<Response<List<GetListSubscriberResponseDto>>> GetSubscriber(string code, string name, string enable);
         Task<Response<GetSubscriberDataResponseDto>> LoginSubscriber(string? user, string? psw);
+        Task<Response<List<GetListSubscriberResponseDto>>> GetSolicitados();
     }
 }

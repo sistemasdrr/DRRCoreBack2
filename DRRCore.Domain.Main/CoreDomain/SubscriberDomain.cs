@@ -28,6 +28,11 @@ namespace DRRCore.Domain.Main.CoreDomain
             return await _subscriberRepository.DeleteSubscriberAsync(id);
         }
 
+        public async Task<List<Subscriber>> GetSolicitados()
+        {
+            return await _subscriberRepository.GetSolicitados();
+        }
+
         public async Task<List<Subscriber>> GetSubscriber(string code, string name, string enable)
         {
             return await _subscriberRepository.GetSubscriber(code, name, enable);
