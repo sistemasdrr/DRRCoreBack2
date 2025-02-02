@@ -1667,12 +1667,14 @@ namespace DRRCore.Application.Main.CoreApplication
                             break;
                     }
                     decimal precioUnitario = decimal.Zero;
+                    decimal precioUnitarioIgv = decimal.Zero;
                     decimal igvItem = 0;
                     decimal totalItem = 0;
 
                     if (labTipo == "06")
                     {
                         precioUnitario = procedure.SumaPrecio/procedure.NoArticulos;
+                        precioUnitarioIgv=precioUnitario * 18 / 100;
                         igvItem = procedure.SumaPrecio * 18 / 100;
                         totalItem = procedure.SumaPrecio * 118 / 100;
                        
@@ -1682,12 +1684,14 @@ namespace DRRCore.Application.Main.CoreApplication
                         precioUnitario = procedure.SumaPrecio / procedure.NoArticulos;
                         igvItem = 0;
                         totalItem = procedure.SumaPrecio;
-                       
+                        precioUnitarioIgv = precioUnitario;
+
+
                     }
 
                     TramoDetail = TramoDetail + (Vueltas != 1 ? specialCaracter : string.Empty) +  "ID_ITEM:" + Vueltas + "|COD_PROD_SERV_ITEM:"+procedure.IdGrupo+"|DESRIP_ITEM:"+DescripcionItem+"|COD_UNIDAD_MEDIDA_ITEM:NIU|INDICADOR_PS_ITEM:S|INDICADOR_TRANS_GRAT:0|INDICADOR_AFECTACION_ITEM:" +
                     INDICADOR_AFECTACION_ITEM + "|VALOR_VENTA_UNITARIA:" + precioUnitario.ToString("0.00") +
-                    "|PRECIO_VENTA_UNITARIO_ITEM:" + precioUnitario.ToString("0.00") + "|CANTIDAD_ITEM:" + procedure.NoArticulos.ToString("0.00") + "|DESCUENTO_ITEM:0.00|" +
+                    "|PRECIO_VENTA_UNITARIO_ITEM:" + precioUnitarioIgv.ToString("0.00") + "|CANTIDAD_ITEM:" + procedure.NoArticulos.ToString("0.00") + "|DESCUENTO_ITEM:0.00|" +
                     "VALOR_ITEM:" + procedure.SumaPrecio.ToString("0.00") +
                     "|IGV_TOTAL_ITEM:" + igvItem.ToString("0.00") +
                     "|TOTAL_ITEM:" + totalItem.ToString("0.00");
