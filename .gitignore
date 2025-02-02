@@ -902,3 +902,5 @@
 /DRRCore.Services.ApiCore/bin/Release/net6.0/publish/DRRCore.Infraestructure.Repository.dll
 /DRRCore.Services.ApiCore/bin/Release/net6.0/publish/DRRCore.Services.ApiCore.deps.json
 /DRRCore.Services.ApiCore/bin/Release/net6.0/publish/DRRCore.Transversal.Common.dll
+/DRRCore.Services.Migration/bin/Debug/net6.0/DRRCore.Transversal.Common.dll
+/DRRCore.Services.Migration/bin/Debug/net6.0/DRRCore.Transversal.Common.pdb
