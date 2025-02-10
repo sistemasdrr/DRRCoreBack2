@@ -51,5 +51,11 @@ namespace DRRCore.Services.ApiCore.Controllers
         {
             return Ok(await _userApplication.UpdateProcess(obj));
         }
+        [HttpPost()]
+        [Route("PruebaFTP")]
+        public async Task<ActionResult> PruebaFtp()
+        {
+            return Ok(await _userApplication.PruebaFtp());
+        }
     }
 }

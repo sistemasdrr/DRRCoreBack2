@@ -407,7 +407,9 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                 .ForMember(dest => dest.Status, opt => opt?.MapFrom(src => src.IdStatusTicketNavigation.Description))
                 .ReverseMap();
             CreateMap<TicketFileResponseDto, TicketFile>().ReverseMap();
-            CreateMap<GetTicketFileResponseDto, TicketFile>().ReverseMap();
+            CreateMap<TicketFile,GetTicketFileResponseDto>()
+                   .ForMember(dest => dest.UploadDate, opt => opt?.MapFrom(src => StaticFunctions.DateTimeToString(src.CreationDate)))
+                   .ReverseMap();
             CreateMap<TicketQuery, GetTicketQueryResponseDto>()
              .ForMember(dest => dest.QueryDate, opt => opt?.MapFrom(src => StaticFunctions.DateTimeToString(src.QueryDate)))
              .ForMember(dest => dest.SubscriberName, opt => opt?.MapFrom(src =>src.IdSubscriberNavigation==null?string.Empty: src.IdSubscriberNavigation.Code +"||"+src.IdSubscriberNavigation.Name))

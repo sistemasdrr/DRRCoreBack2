@@ -19,6 +19,7 @@ using Newtonsoft.Json;
 using Org.BouncyCastle.Crypto.Parameters;
 using SharpCompress.Common;
 using System.IO;
+using System.Net;
 
 namespace DRRCore.Application.Main.CoreApplication
 {
@@ -1443,30 +1444,14 @@ namespace DRRCore.Application.Main.CoreApplication
                 var cuenta = "";
 
                 string CODIGO_PAIS_EXPORTACION = "", NRO_DOC_ADQUIRIENTE = "", TIPO_OPERACION = "";
-                string Mone = "", TOTAL_OPERACIONES_GRAV = "0.00", TOTAL_OPERACIONES_EXPORTACION = "0.00", MONTO_TOTAL_IGV = "0.00", Letras = "", INDICADOR_AFECTACION_ITEM = "";
+                string Mone = "", TOTAL_OPERACIONES_EXPORTACION = "0.00", MONTO_TOTAL_IGV = "0.00", Letras = "", INDICADOR_AFECTACION_ITEM = "";
 
                 string labTipo = "";
                 decimal? lblValorVenta = 0;
+                decimal? totalVentaConIgv = 0, montoIgv = 0, totalSinIgv = 0, montoDetraccion = 0, montoPendientePago = 0;
                 foreach (var ob in obj.InvoiceSubscriberList)
                 {
-                    lblValorVenta += ob.Price;
-                }
-
-
-                if (obj.IdCurrency == 1)
-                {
-                    Mone = "USD";
-                    Letras = LetrasCastellano((lblValorVenta + obj.Igv) + "").ToString() + " DOLARES AMERICANOS";
-                }
-                else if (obj.IdCurrency == 2)
-                {
-                    Mone = "EUR";
-                    Letras = LetrasCastellano((lblValorVenta + obj.Igv) + "").ToString() + " EUROS";
-                }
-                else if (obj.IdCurrency == 31)
-                {
-                    Mone = "PEN";
-                    Letras = LetrasCastellano((lblValorVenta + obj.Igv) + "").ToString() + " SOLES";
+                    totalSinIgv += ob.Price;
                 }
 
                 if (subscriber.TaxRegistration.Trim().Length == 11)
@@ -1487,28 +1472,43 @@ namespace DRRCore.Application.Main.CoreApplication
 
                 if (labTipo == "06")
                 {
-                    TOTAL_OPERACIONES_GRAV = (lblValorVenta + obj.Igv) + "";
-                    TOTAL_OPERACIONES_EXPORTACION = "0";
-                    if (obj.Igv == 0)
-                    {
-                        MONTO_TOTAL_IGV = obj.Igv + "";
-                    }
-                    else
-                    {
-                        MONTO_TOTAL_IGV = "0";
-                    }
+                    totalVentaConIgv = totalSinIgv * 118 / 100;
+                    montoIgv = totalVentaConIgv - totalSinIgv;
+                    montoDetraccion = totalVentaConIgv * 12 * obj.ExchangeRate / 100;
+                    montoPendientePago = totalVentaConIgv * (100 - 12) / 100;
+                              
                     INDICADOR_AFECTACION_ITEM = "10";
                     NRO_DOC_ADQUIRIENTE = obj.TaxTypeCode?.Trim();
                 }
                 else
                 {
-                    TOTAL_OPERACIONES_GRAV = "0.00";
-                    TOTAL_OPERACIONES_EXPORTACION = lblValorVenta + "";
-                    MONTO_TOTAL_IGV = "0.00";
+                    totalVentaConIgv = totalSinIgv;
+                    montoIgv = 0;
+                    montoDetraccion = 0;
+                    montoPendientePago = totalVentaConIgv;
                     INDICADOR_AFECTACION_ITEM = "40";
                     NRO_DOC_ADQUIRIENTE = "-";
-                    CODIGO_PAIS_EXPORTACION =await Codigo_Pais(context,country.OldCode);
+                    CODIGO_PAIS_EXPORTACION = await Codigo_Pais(context, country.OldCode);
                 }
+
+
+                if (obj.IdCurrency == 1)
+                {
+                    Mone = "USD";
+                    Letras = LetrasCastellano(totalVentaConIgv.ToString()) + " DOLARES AMERICANOS";
+                }
+                else if (obj.IdCurrency == 2)
+                {
+                    Mone = "EUR";
+                    Letras = LetrasCastellano(totalVentaConIgv.ToString()) + " EUROS";
+                }
+                else if (obj.IdCurrency == 31)
+                {
+                    Mone = "PEN";
+                    Letras = LetrasCastellano(totalVentaConIgv.ToString()) + " SOLES";
+                }
+
+             
 
 
                 if (obj.SubscriberCode == "1031" || obj.SubscriberCode == "1050" || obj.SubscriberCode == "1105" || obj.SubscriberCode == "2065" || obj.SubscriberCode == "3008" ||
@@ -1588,29 +1588,33 @@ namespace DRRCore.Application.Main.CoreApplication
                             Monto_Detracc = PV * 0.12m * 1;
                         }
 
-                        Trama = "ACTION:Registrar~FEC_ED:" + obj.InvoiceDate.Value.ToString("yyyy-MM-dd") + "|RUC_EMISOR:20504166318|TIP_DOC_EMISOR:06|APAMNO_RAZON_SOCIAL_EMISOR:DEL RISCO REPORTS E.I.R.L." +
+                        Trama = "ACTION:Registrar~"+
+                            "FEC_ED:" + obj.InvoiceDate.Value.ToString("yyyy-MM-dd") +
+                            "|RUC_EMISOR:20504166318|TIP_DOC_EMISOR:06|APAMNO_RAZON_SOCIAL_EMISOR:DEL RISCO REPORTS E.I.R.L." +
                         "|UBIGEO_EMISOR:150120|DIRECCION_EMISOR:Jr. Tomas Ramsey Nro. 930 Dpto. 603|URBANIZACION_EMISOR:|DEPARTAMENTO_EMISOR:LIMA|PROVINCIA_EMISOR:LIMA" +
                         "|DISTRITO_EMISOR:MAGDALENA|CODIGO_PAIS_EMISOR:PE|NOMBRE_COMERCIAL_EMISOR:DEL RISCO REPORTS|TIP_DOC:01|NRO_SERIE:F005|NRO_DOC:" + obj.InvoiceCode +
                         "|NRO_DOC_ADQUIRIENTE:" + NRO_DOC_ADQUIRIENTE + "|TIP_DOC_ADQUIRIENTE:" + labTipo.Trim() + "|APAMNO_RAZON_SOCIAL_ADQUIRIENTE:" + subscriber.Name +
-                        "|MONEDA:" + Mone + "|TOTAL_OPERACIONES_GRAV:" + Decimal.Parse(TOTAL_OPERACIONES_GRAV).ToString("0.00") + "|TOTAL_OPERACIONES_INF:0.00|TOTAL_OPERACIONES_EXONERADAS:0.00|TOTAL_OPERACIONES_EXPORTACION:0.00|MONTO_TOTAL_OPERACIONES_GRAT:0.00" + "|MONTO_DESCUENTOS_GLOBALES:0.00|MONTO_TOTAL_IGV:" + Decimal.Parse(MONTO_TOTAL_IGV).ToString("0.00") + "|MONTO_PAGAR:" +
-                        lblGeneral?.ToString("0.00") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:" + "1001" + "|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
-                        "|VALOR_VENTA:" + lblValorVenta?.ToString("0.00") + "|PRECIO_VENTA:" + PV?.ToString("0.00") +
+                        "|MONEDA:" + Mone + "|TOTAL_OPERACIONES_GRAV:" + totalSinIgv.Value.ToString("0.00000000") + "|TOTAL_OPERACIONES_INF:0.00|TOTAL_OPERACIONES_EXONERADAS:0.00|TOTAL_OPERACIONES_EXPORTACION:0.00|MONTO_TOTAL_OPERACIONES_GRAT:0.00" + "|MONTO_DESCUENTOS_GLOBALES:0.00|MONTO_TOTAL_IGV:" + montoIgv.Value.ToString("0.00000000") + "|MONTO_PAGAR:" +
+                        totalVentaConIgv?.ToString("0.00000000") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:" + "1001" + "|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
+                        "|VALOR_VENTA:" + totalSinIgv?.ToString("0.00000000") + "|PRECIO_VENTA:" + totalVentaConIgv?.ToString("0.00000000") +
                         "|EXISTE_GRAVADA:" + EXISTE_GRAVADA + "|EXISTE_INAFECTA:" + EXISTE_INAFECTA + "|EXISTE_EXONERADA:" + EXISTE_EXONERADA + "|EXISTE_GRATUITA:" + EXISTE_GRATUITA + "|EXISTE_EXPORTACION:" + EXISTE_EXPORTACION +
-                        "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToString("yyyy-MM-dd") + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + (PV - (PV * 12 / 100))?.ToString("0.00") +
+                        "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToString("yyyy-MM-dd") + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + montoPendientePago?.ToString("0.00000000") +
                         "|IA_40:" + subscriber.Code + " - " + subscriber.Name + "|IA_41:" + obj.Address + "|IA_42:" + obj.AttendedBy + "|IA_43:" + "" + "|IA_44:PAGO POR TRANSFERENCIA BANCARIA" + "|IA_45:" + cuenta + "" + "|IA_46:" + obj.ExchangeRate +
-                        "|PORCENTAJE_DETRACC:" + "12.00" + "|MONTO_DETRACC:" + Monto_Detracc?.ToString("0.00") + "|COD_SUNAT_PAGO_DETRACC:001" + "|TASA_IGV:18.00" + "|BB_SS_CODIGO_SUJETO_A_DETRACC:037|BB_SS_DESCRIPCION_SUJETO_A_DETRACC:DEMAS SERVICIOS GRAVADOS CON EL IGV|NUMERO_CTA_BANCO_NACION_DETRACC:00000812773" + "~";
+                        "|PORCENTAJE_DETRACC:" + "12.00" + "|MONTO_DETRACC:" + montoDetraccion?.ToString("0.00000000") + "|COD_SUNAT_PAGO_DETRACC:001" + "|TASA_IGV:18.00" + "|BB_SS_CODIGO_SUJETO_A_DETRACC:037|BB_SS_DESCRIPCION_SUJETO_A_DETRACC:DEMAS SERVICIOS GRAVADOS CON EL IGV|NUMERO_CTA_BANCO_NACION_DETRACC:00000812773" + "~";
                     }
                     else
                     {
-                        Trama = "ACTION:Registrar~FEC_ED:" + obj.InvoiceDate.Value.ToString("yyyy-MM-dd") + "|RUC_EMISOR:20504166318|TIP_DOC_EMISOR:06|APAMNO_RAZON_SOCIAL_EMISOR:DEL RISCO REPORTS E.I.R.L." +
-                        "|UBIGEO_EMISOR:150120|DIRECCION_EMISOR:Jr. Tomas Ramsey Nro. 930 Dpto. 603|URBANIZACION_EMISOR:|DEPARTAMENTO_EMISOR:LIMA|PROVINCIA_EMISOR:LIMA" +
-                        "|DISTRITO_EMISOR:MAGDALENA|CODIGO_PAIS_EMISOR:PE|NOMBRE_COMERCIAL_EMISOR:DEL RISCO REPORTS|TIP_DOC:01|NRO_SERIE:F005|NRO_DOC:" + obj.InvoiceCode +
-                        "|NRO_DOC_ADQUIRIENTE:" + NRO_DOC_ADQUIRIENTE + "|TIP_DOC_ADQUIRIENTE:" + labTipo.Trim() + "|APAMNO_RAZON_SOCIAL_ADQUIRIENTE:" + subscriber.Name +
-                        "|MONEDA:" + Mone + "|TOTAL_OPERACIONES_GRAV:" + Decimal.Parse(TOTAL_OPERACIONES_GRAV).ToString("0.00") + "|TOTAL_OPERACIONES_INF:0.00|TOTAL_OPERACIONES_EXONERADAS:0.00|TOTAL_OPERACIONES_EXPORTACION:0.00|MONTO_TOTAL_OPERACIONES_GRAT:0.00" + "|MONTO_DESCUENTOS_GLOBALES:0.00|MONTO_TOTAL_IGV:" + Decimal.Parse(MONTO_TOTAL_IGV).ToString("0.00") + "|MONTO_PAGAR:" +
-                        lblGeneral?.ToString("0.00") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:" + TIPO_OPERACION + "|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
-                        "|VALOR_VENTA:" + lblValorVenta?.ToString("0.00") + "|PRECIO_VENTA:" + PV?.ToString("0.00") +
-                        "|EXISTE_GRAVADA:" + EXISTE_GRAVADA + "|EXISTE_INAFECTA:" + EXISTE_INAFECTA + "|EXISTE_EXONERADA:" + EXISTE_EXONERADA + "|EXISTE_GRATUITA:" + EXISTE_GRATUITA + "|EXISTE_EXPORTACION:" + EXISTE_EXPORTACION +
-                        "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToString("yyyy-MM-dd") + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + PV + "|TASA_IGV:18.00" +
+                        Trama = "ACTION:Registrar~" +
+                             "FEC_ED:" + obj.InvoiceDate.Value.ToString("yyyy-MM-dd") +
+                             "|RUC_EMISOR:20504166318|TIP_DOC_EMISOR:06|APAMNO_RAZON_SOCIAL_EMISOR:DEL RISCO REPORTS E.I.R.L." +
+                         "|UBIGEO_EMISOR:150120|DIRECCION_EMISOR:Jr. Tomas Ramsey Nro. 930 Dpto. 603|URBANIZACION_EMISOR:|DEPARTAMENTO_EMISOR:LIMA|PROVINCIA_EMISOR:LIMA" +
+                         "|DISTRITO_EMISOR:MAGDALENA|CODIGO_PAIS_EMISOR:PE|NOMBRE_COMERCIAL_EMISOR:DEL RISCO REPORTS|TIP_DOC:01|NRO_SERIE:F005|NRO_DOC:" + obj.InvoiceCode +
+                         "|NRO_DOC_ADQUIRIENTE:" + NRO_DOC_ADQUIRIENTE + "|TIP_DOC_ADQUIRIENTE:" + labTipo.Trim() + "|APAMNO_RAZON_SOCIAL_ADQUIRIENTE:" + subscriber.Name +
+                         "|MONEDA:" + Mone + "|TOTAL_OPERACIONES_GRAV:" + totalSinIgv.Value.ToString("0.00000000") + "|TOTAL_OPERACIONES_INF:0.00|TOTAL_OPERACIONES_EXONERADAS:0.00|TOTAL_OPERACIONES_EXPORTACION:0.00|MONTO_TOTAL_OPERACIONES_GRAT:0.00" + "|MONTO_DESCUENTOS_GLOBALES:0.00|MONTO_TOTAL_IGV:" + montoIgv.Value.ToString("0.00000000") + "|MONTO_PAGAR:" +
+                         totalVentaConIgv?.ToString("0.00000000") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:" + "1001" + "|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
+                         "|VALOR_VENTA:" + totalSinIgv?.ToString("0.00000000") + "|PRECIO_VENTA:" + totalVentaConIgv?.ToString("0.00000000") +
+                         "|EXISTE_GRAVADA:" + EXISTE_GRAVADA + "|EXISTE_INAFECTA:" + EXISTE_INAFECTA + "|EXISTE_EXONERADA:" + EXISTE_EXONERADA + "|EXISTE_GRATUITA:" + EXISTE_GRATUITA + "|EXISTE_EXPORTACION:" + EXISTE_EXPORTACION +
+                         "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToString("yyyy-MM-dd") + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + montoPendientePago?.ToString("0.00000000") + "|TASA_IGV:18.00" +
                         "|IA_40:" + subscriber.Code + " - " + subscriber.Name + "|IA_41:" + obj.Address + "|IA_42:" + obj.AttendedBy + "|IA_43:" + "" + "|IA_44:PAGO POR TRANSFERENCIA BANCARIA" + "|IA_45:" + cuenta + "~";
 
                     }
@@ -1621,18 +1625,18 @@ namespace DRRCore.Application.Main.CoreApplication
                     "|UBIGEO_EMISOR:150120|DIRECCION_EMISOR:Jr. Tomas Ramsey Nro. 930 Dpto. 603|URBANIZACION_EMISOR:|DEPARTAMENTO_EMISOR:LIMA|PROVINCIA_EMISOR:LIMA" +
                     "|DISTRITO_EMISOR:MAGDALENA|CODIGO_PAIS_EMISOR:PE|NOMBRE_COMERCIAL_EMISOR:DEL RISCO REPORTS|TIP_DOC:01|NRO_SERIE:F005|NRO_DOC:" + obj.InvoiceCode +
                     "|NRO_DOC_ADQUIRIENTE:" + NRO_DOC_ADQUIRIENTE + "|TIP_DOC_ADQUIRIENTE:" + labTipo.Trim() + "|APAMNO_RAZON_SOCIAL_ADQUIRIENTE:" + subscriber.Name +
-                    "|MONEDA:" + Mone + "|TOTAL_OPERACIONES_GRAV:" + Decimal.Parse(TOTAL_OPERACIONES_GRAV).ToString("0.00") + "|TOTAL_OPERACIONES_INF:0.00|TOTAL_OPERACIONES_EXONERADAS:0.00|TOTAL_OPERACIONES_EXPORTACION:" +
-                    Decimal.Parse(TOTAL_OPERACIONES_EXPORTACION).ToString("0.00") + "|MONTO_TOTAL_OPERACIONES_GRAT:0.00" + "|MONTO_DESCUENTOS_GLOBALES:0.00|MONTO_TOTAL_IGV:" + Decimal.Parse(MONTO_TOTAL_IGV).ToString("0.00") + "|MONTO_PAGAR:" +
-                    lblGeneral?.ToString("0.00") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:" + TIPO_OPERACION + "|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
-                    "|VALOR_VENTA:" + Decimal.Parse(TOTAL_OPERACIONES_EXPORTACION).ToString("0.00") + "|PRECIO_VENTA:" + PV?.ToString("0.00") +
+                    "|MONEDA:" + Mone + "|TOTAL_OPERACIONES_GRAV: 0.00|TOTAL_OPERACIONES_INF:0.00|TOTAL_OPERACIONES_EXONERADAS:0.00|TOTAL_OPERACIONES_EXPORTACION:" +
+                    totalSinIgv?.ToString("0.00000000") + "|MONTO_TOTAL_OPERACIONES_GRAT:0.00" + "|MONTO_DESCUENTOS_GLOBALES:0.00|MONTO_TOTAL_IGV:0.00|MONTO_PAGAR:" +
+                    totalSinIgv?.ToString("0.00000000") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:" + TIPO_OPERACION + "|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
+                    "|VALOR_VENTA:" + totalSinIgv?.ToString("0.00") + "|PRECIO_VENTA:" + totalSinIgv?.ToString("0.00") +
                     "|EXISTE_GRAVADA:" + EXISTE_GRAVADA + "|EXISTE_INAFECTA:" + EXISTE_INAFECTA + "|EXISTE_EXONERADA:" + EXISTE_EXONERADA + "|EXISTE_GRATUITA:" + EXISTE_GRATUITA + "|EXISTE_EXPORTACION:" + EXISTE_EXPORTACION +
                     "|CODIGO_PAIS_EXPORTACION:" + CODIGO_PAIS_EXPORTACION +
-                    "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToString("yyyy-MM-dd") + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + PV + "|TASA_IGV:18.00" +
+                    "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToString("yyyy-MM-dd") + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + totalSinIgv?.ToString("0.00000000") + "|TASA_IGV:18.00" +
                     "|IA_40:" + subscriber.Code + " - " + subscriber.Name + "|IA_41:" + obj.Address + "|IA_42:" + obj.AttendedBy + "|IA_43:" + "" + "|IA_44:PAGO POR TRANSFERENCIA BANCARIA" + "|IA_45:" + cuenta + "~";
                 }
 
                 int Vueltas = 0;
-                string TramoDetail = "", T2 = "", T3 = "", PRECIO_VENTA_UNITARIO_ITEM = "", VALOR_ITEM = "", IGV_TOTAL_ITEM = "";
+                string TramoDetail = "";
 
                 string specialCaracter = "^";
 
@@ -1705,78 +1709,55 @@ namespace DRRCore.Application.Main.CoreApplication
                 var facRuta = await context.Parameters.Where(x => x.Key == "FAC_RUTA").FirstOrDefaultAsync();
                 var facSerie = await context.Parameters.Where(x => x.Key == "FAC_SERIE").FirstOrDefaultAsync();
 
-                //var host = await context.Parameters.Where(x => x.Key == "HOST_FTP_CONTANET").FirstOrDefaultAsync();
-                //var port = await context.Parameters.Where(x => x.Key == "PORT_FTP_CONTANET").FirstOrDefaultAsync();
-                //var user = await context.Parameters.Where(x => x.Key == "USER_FTP_CONTANET").FirstOrDefaultAsync();
-                //var password = await context.Parameters.Where(x => x.Key == "PASSWORD_FTP_CONTANET").FirstOrDefaultAsync();
-                //var ftpConfigutarion = new FtpClientConfiguration
-                //{
-                //    Host = host.Value,
-                //   // Port = int.Parse(port.Value),
-                //    Username = user.Value,
-                //    Password = password.Value,
-                //    SslProtocols=System.Security.Authentication.SslProtocols.None
-                   
-                //};
-                //if (!string.IsNullOrEmpty(port.Value))
-                //{
-                //    ftpConfigutarion.Port = int.Parse(port.Value);
-                //}
-
-
-              //  string fileDirectory = facSerie.Value+obj.InvoiceCode+".txt";
+                var host = await context.Parameters.Where(x => x.Key == "HOST_FTP_CONTANET").FirstOrDefaultAsync();
+                var port = await context.Parameters.Where(x => x.Key == "PORT_FTP_CONTANET").FirstOrDefaultAsync();
+                var user = await context.Parameters.Where(x => x.Key == "USER_FTP_CONTANET").FirstOrDefaultAsync();
+                var password = await context.Parameters.Where(x => x.Key == "PASSWORD_FTP_CONTANET").FirstOrDefaultAsync();
                
-                string fileDirectory = System.IO.Path.Combine(facRuta.Value, facSerie.Value + obj.InvoiceCode + ".txt");
+
+                string fileDirectory = facSerie.Value+obj.InvoiceCode+".txt";
+
+                var ftpServerUrl = @"ftp://" + host.Value + ":" + port.Value + "/";
+                var username = user.Value;
+                var passwordv = password.Value;
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(new Uri(ftpServerUrl + fileDirectory));
+                request.Method = WebRequestMethods.Ftp.UploadFile;
+                request.Credentials = new NetworkCredential(username, passwordv);
+                request.UsePassive = false;
 
                 try
                 {
-                    File.WriteAllText(fileDirectory, Detalles);
-                    Console.WriteLine("Archivo exportado exitosamente a: " + fileDirectory);
+                    byte[] bytes = null;
+                    using (var ms = new MemoryStream())
+                    {
+                        using (TextWriter tw = new StreamWriter(ms))
+                        {
+                            tw.Write(Detalles);
+                            tw.Flush();
+                            ms.Position = 0;
+                            bytes = ms.ToArray();
+
+                            using (var writeStream = await request.GetRequestStreamAsync())
+                            {
+                                ms.Position = 0;
+                                await ms.CopyToAsync(writeStream);
+                            }
+
+                        }
+
+                    }
                 }
                 catch (Exception ex)
                 {
-
-                    Console.WriteLine("Error al escribir el archivo: " + ex.Message);
+                    response.Data = false;
+                    _logger.LogError(ex.Message);
                 }
                 response.Data = true;
-                //try
-                //{
-                //    byte[] bytes = null;
-                //    using (var ms = new MemoryStream())
-                //    {
-                //        using (TextWriter tw = new StreamWriter(ms))
-                //        {
-                //            tw.Write(Detalles);
-                //            tw.Flush();
-                //            ms.Position = 0;
-                //            bytes = ms.ToArray();
-
-                //            using (var ftpClient = new FtpClient(ftpConfigutarion))
-                //            {
-                //                await ftpClient.LoginAsync();
-                //                using (var writeStream = await ftpClient.OpenFileWriteStreamAsync( fileDirectory))
-                //                {
-                //                    await ms.CopyToAsync(writeStream);
-                //                }
-                //            }                         
-                           
-                //        }
-
-                //    }
-                    
-                //    //File.WriteAllText(fileDirectory, Detalles);
-                //    Console.WriteLine("Archivo exportado exitosamente a: " + fileDirectory);
-                //}
-                //catch (Exception ex)
-                //{
-                    
-                //    Console.WriteLine("Error al escribir el archivo: " + ex.Message);
-                //}
-               // response.Data = true;
             }
             catch (Exception ex)
             {
-                
+                response.Data = false;
+                _logger.LogError(ex.Message);
             }
             return response;
         }
@@ -1911,42 +1892,20 @@ namespace DRRCore.Application.Main.CoreApplication
             try
             {
                 using var context = new SqlCoreContext();
-
                 var country = await context.Countries.Where(x => x.Id == (int)obj.IdCountry).FirstOrDefaultAsync();
                 var currency = await context.Currencies.Where(x => x.Id == obj.IdCurrency).FirstOrDefaultAsync();
                 var subscriber = await context.Subscribers.Where(x => x.Code == obj.SubscriberCode).FirstOrDefaultAsync();
                 var cuenta = "";
 
-                string Mone = "", TOTAL_OPERACIONES_GRAV = "0.00", TOTAL_OPERACIONES_EXPORTACION = "0.00", MONTO_TOTAL_IGV = "0.00";
-                string Letras = "", INDICADOR_AFECTACION_ITEM = "";
-
                 string CODIGO_PAIS_EXPORTACION = "", NRO_DOC_ADQUIRIENTE = "", TIPO_OPERACION = "";
-
+                string Mone = "", TOTAL_OPERACIONES_EXPORTACION = "0.00", MONTO_TOTAL_IGV = "0.00", Letras = "", INDICADOR_AFECTACION_ITEM = "";
 
                 string labTipo = "";
                 decimal? lblValorVenta = 0;
-                foreach (var ob in obj.Details)
-                {
-                    lblValorVenta += ob.TotalPrice;
-                }
+                decimal? totalVentaConIgv = 0, montoIgv = 0, totalSinIgv = 0, montoDetraccion = 0, montoPendientePago = 0;
 
-                if (obj.IdCurrency == 1)
-                {
-                    Mone = "USD";
-                    Letras = LetrasCastellano((lblValorVenta) + "").ToString() + " DOLARES AMERICANOS";
-                }
-                else if (obj.IdCurrency == 2)
-                {
-                    Mone = "EUR";
-                    Letras = LetrasCastellano((lblValorVenta) + "").ToString() + " EUROS";
-                }
-                else if (obj.IdCurrency == 31)
-                {
-                    Mone = "PEN";
-                    Letras = LetrasCastellano((lblValorVenta) + "").ToString() + " SOLES";
-                }
-
-
+                totalSinIgv = obj.TotalPrice;
+              
                 if (subscriber.TaxRegistration.Trim().Length == 11)
                 {
                     if (subscriber.TaxRegistration.Substring(0, 2) == "10" || subscriber.TaxRegistration.Substring(0, 2) == "20")
@@ -1965,28 +1924,44 @@ namespace DRRCore.Application.Main.CoreApplication
 
                 if (labTipo == "06")
                 {
-                    TOTAL_OPERACIONES_GRAV = lblValorVenta + "";
-                    TOTAL_OPERACIONES_EXPORTACION = "0";
-                    if (obj.Igv == 0)
-                    {
-                        MONTO_TOTAL_IGV = obj.Igv + "";
-                    }
-                    else
-                    {
-                        MONTO_TOTAL_IGV = "0";
-                    }
+                    totalVentaConIgv = totalSinIgv * 118 / 100;
+                    montoIgv = totalVentaConIgv - totalSinIgv;
+                    montoDetraccion = totalVentaConIgv * 12 * obj.ExchangeRate / 100;
+                    montoPendientePago = totalVentaConIgv * (100 - 12) / 100;
+
                     INDICADOR_AFECTACION_ITEM = "10";
                     NRO_DOC_ADQUIRIENTE = obj.TaxTypeCode?.Trim();
                 }
                 else
                 {
-                    TOTAL_OPERACIONES_GRAV = "0.00";
-                    TOTAL_OPERACIONES_EXPORTACION = lblValorVenta + "";
-                    MONTO_TOTAL_IGV = "0.00";
+                    totalVentaConIgv = totalSinIgv;
+                    montoIgv = 0;
+                    montoDetraccion = 0;
+                    montoPendientePago = totalVentaConIgv;
                     INDICADOR_AFECTACION_ITEM = "40";
                     NRO_DOC_ADQUIRIENTE = "-";
-                    CODIGO_PAIS_EXPORTACION =await Codigo_Pais(context,country.OldCode);
+                    CODIGO_PAIS_EXPORTACION = await Codigo_Pais(context, country.OldCode);
                 }
+
+
+                if (obj.IdCurrency == 1)
+                {
+                    Mone = "USD";
+                    Letras = LetrasCastellano(totalVentaConIgv.ToString()) + " DOLARES AMERICANOS";
+                }
+                else if (obj.IdCurrency == 2)
+                {
+                    Mone = "EUR";
+                    Letras = LetrasCastellano(totalVentaConIgv.ToString()) + " EUROS";
+                }
+                else if (obj.IdCurrency == 31)
+                {
+                    Mone = "PEN";
+                    Letras = LetrasCastellano(totalVentaConIgv.ToString()) + " SOLES";
+                }
+
+
+
 
                 if (obj.SubscriberCode == "1031" || obj.SubscriberCode == "1050" || obj.SubscriberCode == "1105" || obj.SubscriberCode == "2065" || obj.SubscriberCode == "3008" ||
                     obj.SubscriberCode == "3012" || obj.SubscriberCode == "1077" || obj.SubscriberCode == "3008" || obj.SubscriberCode == "2001" || obj.SubscriberCode == "2002" ||
@@ -2065,97 +2040,142 @@ namespace DRRCore.Application.Main.CoreApplication
                             Monto_Detracc = PV * 0.12m * 1;
                         }
 
-                        Trama = "ACTION:Registrar~FEC_ED:" + obj.InvoiceDate.Value.ToString("dd/MM/yyyy") + "|RUC_EMISOR:20504166318|TIP_DOC_EMISOR:06|APAMNO_RAZON_SOCIAL_EMISOR:DEL RISCO REPORTS E.I.R.L." +
+                        Trama = "ACTION:Registrar~" +
+                            "FEC_ED:" + obj.InvoiceDate.Value.ToString("yyyy-MM-dd") +
+                            "|RUC_EMISOR:20504166318|TIP_DOC_EMISOR:06|APAMNO_RAZON_SOCIAL_EMISOR:DEL RISCO REPORTS E.I.R.L." +
                         "|UBIGEO_EMISOR:150120|DIRECCION_EMISOR:Jr. Tomas Ramsey Nro. 930 Dpto. 603|URBANIZACION_EMISOR:|DEPARTAMENTO_EMISOR:LIMA|PROVINCIA_EMISOR:LIMA" +
                         "|DISTRITO_EMISOR:MAGDALENA|CODIGO_PAIS_EMISOR:PE|NOMBRE_COMERCIAL_EMISOR:DEL RISCO REPORTS|TIP_DOC:01|NRO_SERIE:F005|NRO_DOC:" + obj.InvoiceCode +
                         "|NRO_DOC_ADQUIRIENTE:" + NRO_DOC_ADQUIRIENTE + "|TIP_DOC_ADQUIRIENTE:" + labTipo.Trim() + "|APAMNO_RAZON_SOCIAL_ADQUIRIENTE:" + subscriber.Name +
-                        "|MONEDA:" + Mone + "|TOTAL_OPERACIONES_GRAV:" + Decimal.Parse(TOTAL_OPERACIONES_GRAV).ToString("0.00") + "|TOTAL_OPERACIONES_INF:0.00|TOTAL_OPERACIONES_EXONERADAS:0.00|TOTAL_OPERACIONES_EXPORTACION:0.00|MONTO_TOTAL_OPERACIONES_GRAT:0.00" + "|MONTO_DESCUENTOS_GLOBALES:0.00|MONTO_TOTAL_IGV:" + Decimal.Parse(MONTO_TOTAL_IGV).ToString("0.00") + "|MONTO_PAGAR:" +
-                        lblGeneral?.ToString("0.00") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:" + "1001" + "|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
-                        "|VALOR_VENTA:" + lblValorVenta?.ToString("0.00") + "|PRECIO_VENTA:" + PV?.ToString("0.00") +
+                        "|MONEDA:" + Mone + "|TOTAL_OPERACIONES_GRAV:" + totalSinIgv.Value.ToString("0.00000000") + "|TOTAL_OPERACIONES_INF:0.00|TOTAL_OPERACIONES_EXONERADAS:0.00|TOTAL_OPERACIONES_EXPORTACION:0.00|MONTO_TOTAL_OPERACIONES_GRAT:0.00" + "|MONTO_DESCUENTOS_GLOBALES:0.00|MONTO_TOTAL_IGV:" + montoIgv.Value.ToString("0.00000000") + "|MONTO_PAGAR:" +
+                        totalVentaConIgv?.ToString("0.00000000") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:" + "1001" + "|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
+                        "|VALOR_VENTA:" + totalSinIgv?.ToString("0.00000000") + "|PRECIO_VENTA:" + totalVentaConIgv?.ToString("0.00000000") +
                         "|EXISTE_GRAVADA:" + EXISTE_GRAVADA + "|EXISTE_INAFECTA:" + EXISTE_INAFECTA + "|EXISTE_EXONERADA:" + EXISTE_EXONERADA + "|EXISTE_GRATUITA:" + EXISTE_GRATUITA + "|EXISTE_EXPORTACION:" + EXISTE_EXPORTACION +
-                        "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToString("dd/MM/yyyy") + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + (PV - (PV * 12 / 100))?.ToString("0.00") +
+                        "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToString("yyyy-MM-dd") + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + montoPendientePago?.ToString("0.00000000") +
                         "|IA_40:" + subscriber.Code + " - " + subscriber.Name + "|IA_41:" + obj.Address + "|IA_42:" + obj.AttendedBy + "|IA_43:" + "" + "|IA_44:PAGO POR TRANSFERENCIA BANCARIA" + "|IA_45:" + cuenta + "" + "|IA_46:" + obj.ExchangeRate +
-                        "|PORCENTAJE_DETRACC:" + "12.00" + "|MONTO_DETRACC:" + Monto_Detracc?.ToString("0.00") + "|COD_SUNAT_PAGO_DETRACC:001" + "|TASA_IGV:18.00" + "|BB_SS_CODIGO_SUJETO_A_DETRACC:037|BB_SS_DESCRIPCION_SUJETO_A_DETRACC:DEMAS SERVICIOS GRAVADOS CON EL IGV|NUMERO_CTA_BANCO_NACION_DETRACC:00000812773" + "~";
+                        "|PORCENTAJE_DETRACC:" + "12.00" + "|MONTO_DETRACC:" + montoDetraccion?.ToString("0.00000000") + "|COD_SUNAT_PAGO_DETRACC:001" + "|TASA_IGV:18.00" + "|BB_SS_CODIGO_SUJETO_A_DETRACC:037|BB_SS_DESCRIPCION_SUJETO_A_DETRACC:DEMAS SERVICIOS GRAVADOS CON EL IGV|NUMERO_CTA_BANCO_NACION_DETRACC:00000812773" + "~";
                     }
                     else
                     {
-                        Trama = "ACTION:Registrar~FEC_ED:" + obj.InvoiceDate.Value.ToString("dd/MM/yyyy") + "|RUC_EMISOR:20504166318|TIP_DOC_EMISOR:06|APAMNO_RAZON_SOCIAL_EMISOR:DEL RISCO REPORTS E.I.R.L." +
-                        "|UBIGEO_EMISOR:150120|DIRECCION_EMISOR:Jr. Tomas Ramsey Nro. 930 Dpto. 603|URBANIZACION_EMISOR:|DEPARTAMENTO_EMISOR:LIMA|PROVINCIA_EMISOR:LIMA" +
-                        "|DISTRITO_EMISOR:MAGDALENA|CODIGO_PAIS_EMISOR:PE|NOMBRE_COMERCIAL_EMISOR:DEL RISCO REPORTS|TIP_DOC:01|NRO_SERIE:F005|NRO_DOC:" + obj.InvoiceCode +
-                        "|NRO_DOC_ADQUIRIENTE:" + NRO_DOC_ADQUIRIENTE + "|TIP_DOC_ADQUIRIENTE:" + labTipo.Trim() + "|APAMNO_RAZON_SOCIAL_ADQUIRIENTE:" + subscriber.Name +
-                        "|MONEDA:" + Mone + "|TOTAL_OPERACIONES_GRAV:" + Decimal.Parse(TOTAL_OPERACIONES_GRAV).ToString("0.00") + "|TOTAL_OPERACIONES_INF:0.00|TOTAL_OPERACIONES_EXONERADAS:0.00|TOTAL_OPERACIONES_EXPORTACION:0.00|MONTO_TOTAL_OPERACIONES_GRAT:0.00" + "|MONTO_DESCUENTOS_GLOBALES:0.00|MONTO_TOTAL_IGV:" + Decimal.Parse(MONTO_TOTAL_IGV).ToString("0.00") + "|MONTO_PAGAR:" +
-                        lblGeneral?.ToString("0.00") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:" + TIPO_OPERACION + "|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
-                        "|VALOR_VENTA:" + lblValorVenta?.ToString("0.00") + "|PRECIO_VENTA:" + PV?.ToString("0.00") +
-                        "|EXISTE_GRAVADA:" + EXISTE_GRAVADA + "|EXISTE_INAFECTA:" + EXISTE_INAFECTA + "|EXISTE_EXONERADA:" + EXISTE_EXONERADA + "|EXISTE_GRATUITA:" + EXISTE_GRATUITA + "|EXISTE_EXPORTACION:" + EXISTE_EXPORTACION +
-                        "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToString("dd/MM/yyyy") + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + PV?.ToString("0.00") + "|TASA_IGV:18.00" +
+                        Trama = "ACTION:Registrar~" +
+                             "FEC_ED:" + obj.InvoiceDate.Value.ToString("yyyy-MM-dd") +
+                             "|RUC_EMISOR:20504166318|TIP_DOC_EMISOR:06|APAMNO_RAZON_SOCIAL_EMISOR:DEL RISCO REPORTS E.I.R.L." +
+                         "|UBIGEO_EMISOR:150120|DIRECCION_EMISOR:Jr. Tomas Ramsey Nro. 930 Dpto. 603|URBANIZACION_EMISOR:|DEPARTAMENTO_EMISOR:LIMA|PROVINCIA_EMISOR:LIMA" +
+                         "|DISTRITO_EMISOR:MAGDALENA|CODIGO_PAIS_EMISOR:PE|NOMBRE_COMERCIAL_EMISOR:DEL RISCO REPORTS|TIP_DOC:01|NRO_SERIE:F005|NRO_DOC:" + obj.InvoiceCode +
+                         "|NRO_DOC_ADQUIRIENTE:" + NRO_DOC_ADQUIRIENTE + "|TIP_DOC_ADQUIRIENTE:" + labTipo.Trim() + "|APAMNO_RAZON_SOCIAL_ADQUIRIENTE:" + subscriber.Name +
+                         "|MONEDA:" + Mone + "|TOTAL_OPERACIONES_GRAV:" + totalSinIgv.Value.ToString("0.00000000") + "|TOTAL_OPERACIONES_INF:0.00|TOTAL_OPERACIONES_EXONERADAS:0.00|TOTAL_OPERACIONES_EXPORTACION:0.00|MONTO_TOTAL_OPERACIONES_GRAT:0.00" + "|MONTO_DESCUENTOS_GLOBALES:0.00|MONTO_TOTAL_IGV:" + montoIgv.Value.ToString("0.00000000") + "|MONTO_PAGAR:" +
+                         totalVentaConIgv?.ToString("0.00000000") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:" + "1001" + "|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
+                         "|VALOR_VENTA:" + totalSinIgv?.ToString("0.00000000") + "|PRECIO_VENTA:" + totalVentaConIgv?.ToString("0.00000000") +
+                         "|EXISTE_GRAVADA:" + EXISTE_GRAVADA + "|EXISTE_INAFECTA:" + EXISTE_INAFECTA + "|EXISTE_EXONERADA:" + EXISTE_EXONERADA + "|EXISTE_GRATUITA:" + EXISTE_GRATUITA + "|EXISTE_EXPORTACION:" + EXISTE_EXPORTACION +
+                         "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToString("yyyy-MM-dd") + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + montoPendientePago?.ToString("0.00000000") + "|TASA_IGV:18.00" +
                         "|IA_40:" + subscriber.Code + " - " + subscriber.Name + "|IA_41:" + obj.Address + "|IA_42:" + obj.AttendedBy + "|IA_43:" + "" + "|IA_44:PAGO POR TRANSFERENCIA BANCARIA" + "|IA_45:" + cuenta + "~";
 
                     }
                 }
                 else
                 {
-                    Trama = "ACTION:Registrar~FEC_ED:" + obj.InvoiceDate.Value.ToString("dd/MM/yyyy") + "|RUC_EMISOR:20504166318|TIP_DOC_EMISOR:06|APAMNO_RAZON_SOCIAL_EMISOR:DEL RISCO REPORTS E.I.R.L." +
+                    Trama = "ACTION:Registrar~FEC_ED:" + obj.InvoiceDate.Value.ToString("yyyy-MM-dd") + "|RUC_EMISOR:20504166318|TIP_DOC_EMISOR:06|APAMNO_RAZON_SOCIAL_EMISOR:DEL RISCO REPORTS E.I.R.L." +
                     "|UBIGEO_EMISOR:150120|DIRECCION_EMISOR:Jr. Tomas Ramsey Nro. 930 Dpto. 603|URBANIZACION_EMISOR:|DEPARTAMENTO_EMISOR:LIMA|PROVINCIA_EMISOR:LIMA" +
                     "|DISTRITO_EMISOR:MAGDALENA|CODIGO_PAIS_EMISOR:PE|NOMBRE_COMERCIAL_EMISOR:DEL RISCO REPORTS|TIP_DOC:01|NRO_SERIE:F005|NRO_DOC:" + obj.InvoiceCode +
                     "|NRO_DOC_ADQUIRIENTE:" + NRO_DOC_ADQUIRIENTE + "|TIP_DOC_ADQUIRIENTE:" + labTipo.Trim() + "|APAMNO_RAZON_SOCIAL_ADQUIRIENTE:" + subscriber.Name +
-                    "|MONEDA:" + Mone + "|TOTAL_OPERACIONES_GRAV:" + Decimal.Parse(TOTAL_OPERACIONES_GRAV).ToString("0.00") + "|TOTAL_OPERACIONES_INF:0.00|TOTAL_OPERACIONES_EXONERADAS:0.00|TOTAL_OPERACIONES_EXPORTACION:" +
-                    Decimal.Parse(TOTAL_OPERACIONES_EXPORTACION).ToString("0.00") + "|MONTO_TOTAL_OPERACIONES_GRAT:0.00" + "|MONTO_DESCUENTOS_GLOBALES:0.00|MONTO_TOTAL_IGV:" + Decimal.Parse(MONTO_TOTAL_IGV).ToString("0.00") + "|MONTO_PAGAR:" +
-                    lblGeneral?.ToString("0.00") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:" + TIPO_OPERACION + "|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
-                    "|VALOR_VENTA:" + Decimal.Parse(TOTAL_OPERACIONES_EXPORTACION).ToString("0.00") + "|PRECIO_VENTA:" + PV?.ToString("0.00") +
+                    "|MONEDA:" + Mone + "|TOTAL_OPERACIONES_GRAV: 0.00|TOTAL_OPERACIONES_INF:0.00|TOTAL_OPERACIONES_EXONERADAS:0.00|TOTAL_OPERACIONES_EXPORTACION:" +
+                    totalSinIgv?.ToString("0.00000000") + "|MONTO_TOTAL_OPERACIONES_GRAT:0.00" + "|MONTO_DESCUENTOS_GLOBALES:0.00|MONTO_TOTAL_IGV:0.00|MONTO_PAGAR:" +
+                    totalSinIgv?.ToString("0.00000000") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:" + TIPO_OPERACION + "|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
+                    "|VALOR_VENTA:" + totalSinIgv?.ToString("0.00") + "|PRECIO_VENTA:" + totalSinIgv?.ToString("0.00") +
                     "|EXISTE_GRAVADA:" + EXISTE_GRAVADA + "|EXISTE_INAFECTA:" + EXISTE_INAFECTA + "|EXISTE_EXONERADA:" + EXISTE_EXONERADA + "|EXISTE_GRATUITA:" + EXISTE_GRATUITA + "|EXISTE_EXPORTACION:" + EXISTE_EXPORTACION +
                     "|CODIGO_PAIS_EXPORTACION:" + CODIGO_PAIS_EXPORTACION +
-                    "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToString("dd/MM/yyyy") + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + PV?.ToString("0.00") + "|TASA_IGV:18.00" +
+                    "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToString("yyyy-MM-dd") + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + totalSinIgv?.ToString("0.00000000") + "|TASA_IGV:18.00" +
                     "|IA_40:" + subscriber.Code + " - " + subscriber.Name + "|IA_41:" + obj.Address + "|IA_42:" + obj.AttendedBy + "|IA_43:" + "" + "|IA_44:PAGO POR TRANSFERENCIA BANCARIA" + "|IA_45:" + cuenta + "~";
                 }
 
-                int Vueltas = 0;
-                string T1 = "", PRECIO_VENTA_UNITARIO_ITEM = "", VALOR_ITEM = "", IGV_TOTAL_ITEM = "";
-                string txtpreciosaldocupones = "";
-                Vueltas = Vueltas + 1;
-                if(labTipo == "06")
-                {
-                    PRECIO_VENTA_UNITARIO_ITEM = (obj.TotalPrice / obj.Quantity * 118 / 100)?.ToString("0.00") + "";
-                    VALOR_ITEM = lblValorVenta?.ToString("0.00");
-                    IGV_TOTAL_ITEM = (lblValorVenta * 118 / 100)?.ToString("0.00");
-                }
-                else if(labTipo == "00")
-                {
-                    PRECIO_VENTA_UNITARIO_ITEM = (obj.TotalPrice / obj.Quantity)?.ToString("0.00") + "";
-                    VALOR_ITEM = (lblValorVenta + obj.Igv)?.ToString("0.00");
-                    IGV_TOTAL_ITEM = "0.00";
-                }
-                T1 = T1 + "ID_ITEM:" + Vueltas + "|COD_PROD_SERV_ITEM:T1|DESRIP_ITEM:Cupones_pagados_por_adelantado_para_solicitar_Informes_Comerciales|COD_UNIDAD_MEDIDA_ITEM:NIU|INDICADOR_PS_ITEM:S|INDICADOR_TRANS_GRAT:0|INDICADOR_AFECTACION_ITEM:" +
-                INDICADOR_AFECTACION_ITEM + "|VALOR_VENTA_UNITARIA:" + (obj.TotalPrice / obj.Quantity)?.ToString("0.00") +
-                "|PRECIO_VENTA_UNITARIO_ITEM:" + PRECIO_VENTA_UNITARIO_ITEM + "|CANTIDAD_ITEM:" + (obj.Quantity)?.ToString("0.00") + "|DESCUENTO_ITEM:0.00|" +
-                "VALOR_ITEM:" + VALOR_ITEM +
-                "|IGV_TOTAL_ITEM:" + labTipo == "06" ? (Decimal.Parse(VALOR_ITEM) * 18 / 100).ToString("0.00") : "0" +
-                "|TOTAL_ITEM:" + labTipo == "06" ? (Decimal.Parse(VALOR_ITEM) + (Decimal.Parse(VALOR_ITEM) * 18 / 100)).ToString("0.00") : VALOR_ITEM ;
+              
+                string TramoDetail = "";                  
+                    decimal? precioUnitario = decimal.Zero;
+                    decimal? precioUnitarioIgv = decimal.Zero;
+                    decimal? igvItem = 0;
+                    decimal? totalItem = 0;
 
-                string Detalles = Trama + T1;
+                    if (labTipo == "06")
+                    {
+                        precioUnitario = obj.TotalPrice / obj.Quantity;
+                        precioUnitarioIgv = precioUnitario * 18 / 100;
+                        igvItem = obj.TotalPrice * 18 / 100;
+                        totalItem = obj.TotalPrice * 118 / 100;
+
+                    }
+                    else if (labTipo == "00")
+                    {
+                        precioUnitario = obj.TotalPrice / obj.Quantity;
+                        igvItem = 0;
+                        totalItem = obj.TotalPrice;
+                        precioUnitarioIgv = precioUnitario;
+
+
+                    }
+
+                    TramoDetail = "ID_ITEM:1|COD_PROD_SERV_ITEM:T1|DESRIP_ITEM:Cupones_pagados_por_adelantado_para_solicitar_Informes_Comerciales| COD_UNIDAD_MEDIDA_ITEM:NIU|INDICADOR_PS_ITEM:S|INDICADOR_TRANS_GRAT:0|INDICADOR_AFECTACION_ITEM:" +
+                    INDICADOR_AFECTACION_ITEM + "|VALOR_VENTA_UNITARIA:" + precioUnitario?.ToString("0.00") +
+                    "|PRECIO_VENTA_UNITARIO_ITEM:" + precioUnitarioIgv?.ToString("0.00") + "|CANTIDAD_ITEM:" + obj.Quantity?.ToString("0.00") + "|DESCUENTO_ITEM:0.00|" +
+                    "VALOR_ITEM:" + obj.TotalPrice?.ToString("0.00") +
+                    "|IGV_TOTAL_ITEM:" + igvItem?.ToString("0.00") +
+                    "|TOTAL_ITEM:" + totalItem?.ToString("0.00");
+
+                string Detalles = Trama + TramoDetail;
 
                 var facRuta = await context.Parameters.Where(x => x.Key == "FAC_RUTA").FirstOrDefaultAsync();
                 var facSerie = await context.Parameters.Where(x => x.Key == "FAC_SERIE").FirstOrDefaultAsync();
 
+                var host = await context.Parameters.Where(x => x.Key == "HOST_FTP_CONTANET").FirstOrDefaultAsync();
+                var port = await context.Parameters.Where(x => x.Key == "PORT_FTP_CONTANET").FirstOrDefaultAsync();
+                var user = await context.Parameters.Where(x => x.Key == "USER_FTP_CONTANET").FirstOrDefaultAsync();
+                var password = await context.Parameters.Where(x => x.Key == "PASSWORD_FTP_CONTANET").FirstOrDefaultAsync();
 
-                string fileDirectory = System.IO.Path.Combine(facRuta.Value, facSerie.Value + obj.InvoiceCode + ".txt");
+            
+                string fileDirectory = facSerie.Value + obj.InvoiceCode + ".txt";
 
+
+                var ftpServerUrl = @"ftp://" + host.Value + ":" + port.Value + "/";
+                var username = user.Value;
+                var passwordv = password.Value;
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(new Uri(ftpServerUrl + fileDirectory));
+                request.Method = WebRequestMethods.Ftp.UploadFile;
+                request.Credentials = new NetworkCredential(username, passwordv);
+                request.UsePassive = false;
                 try
                 {
-                    File.WriteAllText(fileDirectory, Detalles);
-                    Console.WriteLine("Archivo exportado exitosamente a: " + fileDirectory);
+                    byte[] bytes = null;
+                    using (var ms = new MemoryStream())
+                    {
+                        using (TextWriter tw = new StreamWriter(ms))
+                        {
+                            tw.Write(Detalles);
+                            tw.Flush();
+                            ms.Position = 0;
+                            bytes = ms.ToArray();                          
+                             
+                                using (var writeStream = await request.GetRequestStreamAsync())
+                                {
+                                    ms.Position = 0;
+                                    await ms.CopyToAsync(writeStream);
+                                }
+                           
+                        }
+
+                    }
                 }
                 catch (Exception ex)
                 {
-
-                    Console.WriteLine("Error al escribir el archivo: " + ex.Message);
+                    response.Data = false;
+                    _logger.LogError(ex.Message);
                 }
                 response.Data = true;
-
             }
             catch (Exception ex)
             {
+                response.Data = false;
+                _logger.LogError(ex.Message);
             }
             return response;
+
         }
 
         private async Task<string> Codigo_Pais(SqlCoreContext context, string? oldCode)

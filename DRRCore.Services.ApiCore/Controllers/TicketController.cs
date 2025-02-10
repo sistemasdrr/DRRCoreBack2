@@ -434,9 +434,9 @@ namespace DRRCore.Services.ApiCore.Controllers
         }
         [HttpPost()]
         [Route("ConfirmAgentHistory")]
-        public async Task<IActionResult> ConfirmAgentHistory( int idTicketHistory)
+        public async Task<IActionResult> ConfirmAgentHistory( int idTicketHistory,int idSpecialPrice)
         {
-            return Ok(await _ticketApplication.ConfirmAgentHistory(idTicketHistory));
+            return Ok(await _ticketApplication.ConfirmAgentHistory(idTicketHistory, idSpecialPrice));
         }
         [HttpGet()]
         [Route("GetTicketAssignedValidation")]

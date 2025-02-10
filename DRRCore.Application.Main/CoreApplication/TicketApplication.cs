@@ -428,7 +428,45 @@ namespace DRRCore.Application.Main.CoreApplication
                             ticket.IdPerson = person;
                             await _ticketDomain.UpdateAsync(ticket);
                         }
-                       
+                        var ticketToCoupon = await _ticketDomain.GetByIdAsync(newTicket.Id);
+                        if (ticketToCoupon.IdSubscriberNavigation.FacturationType == "CC" && ticketToCoupon.IsComplement == false)
+                        {
+                            var couponBilling = await context.CouponBillingSubscribers.Where(x => x.IdSubscriber == ticketToCoupon.IdSubscriber).FirstOrDefaultAsync();
+                            var couponBillingHistory = new CouponBillingSubscriberHistory();
+                            couponBillingHistory.PurchaseDate = DateTime.Now;
+                            couponBillingHistory.Type = "E";
+                            var lastHistory = await context.CouponBillingSubscriberHistories.Where(x => x.IdCouponBilling == couponBilling.Id).FirstOrDefaultAsync();
+                            if (lastHistory == null)
+                            {
+                                throw new Exception("El abonado no tiene historial de cupon. Por favor contactar con Sistemas.");
+                            }
+                            decimal? decimalDiscount = couponBilling.PriceT1;
+
+                            switch (ticketToCoupon.ProcedureType)
+                            {
+                                case "T2":
+                                    decimalDiscount = couponBilling.PriceT2;
+                                    break;
+                                case "T3":
+                                    decimalDiscount = couponBilling.PriceT3;
+                                    break;
+                                default:
+                                    decimalDiscount = couponBilling.PriceT1;
+                                    break;
+                            }
+                            couponBilling.NumCoupon = couponBilling.NumCoupon - decimalDiscount;
+                            //Ese cuponAmount hay q convertir en decimal 
+                            //continua
+                            couponBillingHistory.CouponAmount = decimalDiscount;
+                            couponBillingHistory.CouponUnitPrice = lastHistory.CouponUnitPrice;
+                            couponBillingHistory.TotalPrice = couponBillingHistory.CouponAmount * couponBillingHistory.CouponUnitPrice;
+                            couponBillingHistory.IdTicket = ticketToCoupon.Id;
+                            couponBilling.CouponBillingSubscriberHistories.Add(couponBillingHistory);
+
+                            context.CouponBillingSubscribers.Update(couponBilling);
+                        }
+
+
                         response.Data = newTicket.Id;
                     }
                 }
@@ -3374,11 +3412,11 @@ namespace DRRCore.Application.Main.CoreApplication
                 if (ticket != null && userLogin != null)
                 {
                     var ticketHistory = await context.TicketHistories.Where(x => x.IdTicket == idTicket).ToListAsync();
-                    foreach (var item in ticketHistory)
-                    {
-                        item.Flag = true;
-                        context.TicketHistories.Update(item);
-                    }
+                    //foreach (var item in ticketHistory)
+                    //{
+                    //    item.Flag = true;
+                    //    context.TicketHistories.Update(item);
+                    //}
                     var history = new TicketHistory();
                     history.IdTicket = idTicket;
                     history.UserFrom = idUser + "";
@@ -3410,7 +3448,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         }
                         else
                         {
-                            emailDataDto.Subject = ticket.IsComplement == true ? "UPDATED - " : "" + ticket.ReferenceNumber+"_"+ticket.RequestedName + "_" + ticket.ReportType + "_" + DateTime.Now.ToString("dd-MM-yyyy");
+                            emailDataDto.Subject = (ticket.IsComplement == true ? "UPDATED - " : "") + ticket.ReferenceNumber+"_"+ticket.RequestedName + "_" + ticket.ReportType + "_" + DateTime.Now.ToString("dd-MM-yyyy");
 
                             emailDataDto.From = userLogin.IdEmployeeNavigation.Email;
                             emailDataDto.UserName = emailDataDto.From;
@@ -3609,43 +3647,6 @@ namespace DRRCore.Application.Main.CoreApplication
                     ticket.DispatchtDate = DateTime.Now;
                     ticket.DispatchedName = ticket.About=="E"?ticket.IdCompanyNavigation.Name:ticket.IdPersonNavigation.Fullname;
                     context.Tickets.Update(ticket);
-
-                    if (ticket.IdSubscriberNavigation.FacturationType == "CC")
-                    {
-                        var couponBilling = await context.CouponBillingSubscribers.Where(x => x.IdSubscriber == ticket.IdSubscriber).FirstOrDefaultAsync();
-                        var couponBillingHistory = new CouponBillingSubscriberHistory();
-                        couponBillingHistory.PurchaseDate = DateTime.Now;
-                        couponBillingHistory.Type = "E";
-                        var lastHistory = await context.CouponBillingSubscriberHistories.Where(x => x.IdCouponBilling == couponBilling.Id).FirstOrDefaultAsync();
-                        if (lastHistory == null)
-                        {
-                            throw new Exception("El abonado no tiene historial de cupon. Por favor contactar con Sistemas.");
-                        }
-                        decimal? decimalDiscount = couponBilling.PriceT1;
-
-                        switch (ticket.ProcedureType)
-                        {
-                            case "T2":
-                                decimalDiscount = couponBilling.PriceT2;
-                                break;
-                            case "T3":
-                                decimalDiscount = couponBilling.PriceT3;
-                                break;
-                            default:
-                                decimalDiscount = couponBilling.PriceT1;
-                                break;
-                        }
-                        couponBilling.NumCoupon = couponBilling.NumCoupon - decimalDiscount;
-                        //Ese cuponAmount hay q convertir en decimal 
-                        //continua
-                        couponBillingHistory.CouponAmount = decimalDiscount;
-                        couponBillingHistory.CouponUnitPrice = lastHistory.CouponUnitPrice;
-                        couponBillingHistory.TotalPrice = couponBillingHistory.CouponAmount * couponBillingHistory.CouponUnitPrice;
-                        couponBillingHistory.IdTicket = ticket.Id;
-                        couponBilling.CouponBillingSubscriberHistories.Add(couponBillingHistory);
-
-                        context.CouponBillingSubscribers.Update(couponBilling);
-                    }
 
                   
                     var result = await _mailSender.SendMailAsync(_mapper.Map<EmailValues>(emailDataDto));
@@ -5660,20 +5661,28 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<bool>?> ConfirmAgentHistory(int idTicketHistory)
+        public async Task<Response<bool>?> ConfirmAgentHistory(int idTicketHistory,int idSpecialPrice)
         {
             var response = new Response<bool>();
             using var context = new SqlCoreContext();
             try
             {
                 var ticketHistory = await context.TicketHistories.FindAsync(idTicketHistory);
+                var ticket = await context.Tickets.Where(x => x.Id == ticketHistory.IdTicket).FirstOrDefaultAsync();
 
                 if (ticketHistory != null)
                 {
+                    if (idSpecialPrice > 0)
+                    {
+                        ticket.HasBalance = true;
+                        ticket.IdSpecialAgentBalancePrice = idSpecialPrice;
+                    }
+                  
                     ticketHistory.Flag = true;
                     ticketHistory.UpdateDate = DateTime.Now;
                     ticketHistory.ShippingDate = DateTime.Now;
 
+                    context.Tickets.Update(ticket);
                     context.TicketHistories.Update(ticketHistory);
                     await context.SaveChangesAsync();
                     response.Data = true;

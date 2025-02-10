@@ -9,6 +9,7 @@
         public string Path { get; set; } = null!;
 
         public string Extension { get; set; } = null!;
+        public string? UploadDate { get; set; }
 
     }
 }

@@ -10,10 +10,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace DRRCore.Application.Main.CoreApplication
@@ -481,6 +480,55 @@ namespace DRRCore.Application.Main.CoreApplication
                 response.IsSuccess = false;
                 response.Data = ex.Message;
             }
+            return response;
+        }
+
+        public async Task<Transversal.Common.Response<bool>> PruebaFtp()
+        {
+            var response = new Transversal.Common.Response<bool>();
+            using var context = new SqlCoreContext();
+            var host = await context.Parameters.Where(x => x.Key == "HOST_FTP_CONTANET").FirstOrDefaultAsync();
+            var port = await context.Parameters.Where(x => x.Key == "PORT_FTP_CONTANET").FirstOrDefaultAsync();
+            var user = await context.Parameters.Where(x => x.Key == "USER_FTP_CONTANET").FirstOrDefaultAsync();
+            var password = await context.Parameters.Where(x => x.Key == "PASSWORD_FTP_CONTANET").FirstOrDefaultAsync();
+
+
+
+            var ftpServerUrl = @"ftp://" + host.Value+":"+port.Value + "/prueba/";
+            var username = user.Value;
+            var passwordv = password.Value;
+            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(new Uri(ftpServerUrl + "prueba.txt"));
+            request.Method = WebRequestMethods.Ftp.UploadFile;
+            request.Credentials = new NetworkCredential(username, passwordv);
+            request.UsePassive = false;
+            
+            try
+            {
+                byte[] bytes = null;
+                using (var ms = new MemoryStream())
+                {
+                    using (TextWriter tw = new StreamWriter(ms))
+                    {
+                        tw.Write("Hola estoy probando");
+                        tw.Flush();
+                        ms.Position = 0;
+                        bytes = ms.ToArray();
+
+                        using (var writeStream = await request.GetRequestStreamAsync())
+                        {
+                           
+                            await ms.CopyToAsync(writeStream);
+                        }
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Data = false;
+                _logger.LogError(ex.Message);
+            }
+            response.Data = true;
             return response;
         }
 
