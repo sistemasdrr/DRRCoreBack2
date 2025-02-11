@@ -1259,178 +1259,100 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             return response;
         }
-        public string LetrasCastellano(string numero)
+      
+        public string LetrasCastellano(string num)
         {
-            string palabras = "", entero = "", dec = "", flag = "N";
-            int num = 0;
+            string res, dec = "";
+            Int64 entero;
+            int decimales;
+            double nro;
 
-            // Si el número comienza con un signo negativo, lo manejamos
-            if (numero.StartsWith("-"))
+            try
+
             {
-                numero = numero.Substring(1);
-                palabras = "MENOS ";
+                nro = Convert.ToDouble(num);
+            }
+            catch
+            {
+                return "";
             }
 
-            // Separar el número en parte entera y decimal
-            numero = numero.TrimStart('0');
-            string[] partes = numero.Split('.');
-
-            entero = partes[0];  // Parte entera
-            dec = partes.Length > 1 ? partes[1] : "";  // Parte decimal, si existe
-
-            // Si la parte decimal tiene solo un dígito, agregar un "0" al final
-            if (dec.Length == 1)
+            entero = Convert.ToInt64(Math.Truncate(nro));
+            decimales = Convert.ToInt32(Math.Round((nro - entero) * 100, 2));
+            if (decimales > 0)
             {
-                dec += "0";
+                dec = " CON " + decimales.ToString() + "/100";
             }
 
-            // Convertir a entero y verificar que no exceda el límite
-            if (int.TryParse(entero, out num) && num <= 999999999)
-            {
-                // Convertir la parte entera en palabras
-                for (int y = entero.Length; y > 0; y--)
-                {
-                    int pos = entero.Length - y;
-                    switch (y)
-                    {
-                        case 3:
-                        case 6:
-                        case 9:
-                            switch (entero[pos].ToString())
-                            {
-                                case "1":
-                                    if (entero.Length > pos + 1 && entero[pos + 1] == '0' && entero[pos + 2] == '0')
-                                        palabras += "CIEN ";
-                                    else
-                                        palabras += "CIENTO ";
-                                    break;
-                                case "2":
-                                    palabras += "DOSCIENTOS ";
-                                    break;
-                                case "3":
-                                    palabras += "TRESCIENTOS ";
-                                    break;
-                                case "4":
-                                    palabras += "CUATROCIENTOS ";
-                                    break;
-                                case "5":
-                                    palabras += "QUINIENTOS ";
-                                    break;
-                                case "6":
-                                    palabras += "SEISCIENTOS ";
-                                    break;
-                                case "7":
-                                    palabras += "SETECIENTOS ";
-                                    break;
-                                case "8":
-                                    palabras += "OCHOCIENTOS ";
-                                    break;
-                                case "9":
-                                    palabras += "NOVECIENTOS ";
-                                    break;
-                            }
-                            break;
-
-                        case 2:
-                        case 5:
-                        case 8:
-                            switch (entero[pos].ToString())
-                            {
-                                case "1":
-                                    if (entero.Length > pos + 1 && "012345".Contains(entero[pos + 1].ToString()))
-                                    {
-                                        flag = "S";
-                                        switch (entero[pos + 1])
-                                        {
-                                            case '0': palabras += "DIEZ "; break;
-                                            case '1': palabras += "ONCE "; break;
-                                            case '2': palabras += "DOCE "; break;
-                                            case '3': palabras += "TRECE "; break;
-                                            case '4': palabras += "CATORCE "; break;
-                                            case '5': palabras += "QUINCE "; break;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        flag = "N";
-                                        palabras += "DIECI";
-                                    }
-                                    break;
-
-                                case "2":
-                                    if (entero.Length > pos + 1 && entero[pos + 1] == '0')
-                                    {
-                                        palabras += "VEINTE ";
-                                        flag = "S";
-                                    }
-                                    else
-                                    {
-                                        palabras += "VEINTI";
-                                        flag = "N";
-                                    }
-                                    break;
-
-                                case "3": palabras += entero.Length > pos + 1 && entero[pos + 1] == '0' ? "TREINTA " : "TREINTA Y "; break;
-                                case "4": palabras += entero.Length > pos + 1 && entero[pos + 1] == '0' ? "CUARENTA " : "CUARENTA Y "; break;
-                                case "5": palabras += entero.Length > pos + 1 && entero[pos + 1] == '0' ? "CINCUENTA " : "CINCUENTA Y "; break;
-                                case "6": palabras += entero.Length > pos + 1 && entero[pos + 1] == '0' ? "SESENTA " : "SESENTA Y "; break;
-                                case "7": palabras += entero.Length > pos + 1 && entero[pos + 1] == '0' ? "SETENTA " : "SETENTA Y "; break;
-                                case "8": palabras += entero.Length > pos + 1 && entero[pos + 1] == '0' ? "OCHENTA " : "OCHENTA Y "; break;
-                                case "9": palabras += entero.Length > pos + 1 && entero[pos + 1] == '0' ? "NOVENTA " : "NOVENTA Y "; break;
-                            }
-                            break;
-
-                        case 1:
-                        case 4:
-                        case 7:
-                            switch (entero[pos].ToString())
-                            {
-                                case "1":
-                                    if (flag == "N")
-                                        palabras += y == 1 ? "UNO " : "UN ";
-                                    break;
-                                case "2": palabras += flag == "N" ? "DOS " : ""; break;
-                                case "3": palabras += flag == "N" ? "TRES " : ""; break;
-                                case "4": palabras += flag == "N" ? "CUATRO " : ""; break;
-                                case "5": palabras += flag == "N" ? "CINCO " : ""; break;
-                                case "6": palabras += flag == "N" ? "SEIS " : ""; break;
-                                case "7": palabras += flag == "N" ? "SIETE " : ""; break;
-                                case "8": palabras += flag == "N" ? "OCHO " : ""; break;
-                                case "9": palabras += flag == "N" ? "NUEVE " : ""; break;
-                            }
-                            break;
-                    }
-
-                    if (y == 4)
-                    {
-                        if (entero.Length <= 6 && entero.Substring(0, 3) == "000")
-                            palabras += "MIL ";
-                    }
-                    if (y == 7)
-                    {
-                        if (entero.Length == 7 && entero[0] == '1')
-                            palabras += "MILLON ";
-                        else
-                            palabras += "MILLONES ";
-                    }
-                }
-
-                // Manejar la parte decimal, si existe
-                if (!string.IsNullOrEmpty(dec))
-                {
-                    return palabras + "Y " + dec + "/100";
-                }
-                else
-                {
-                    return palabras + "Y 00/100";
-                }
-            }
-            else
-            {
-                return string.Empty;
-            }
+            res = toText(Convert.ToDouble(entero)) + dec;
+            return res;
         }
 
+        private string toText(double value)
+        {
+            string Num2Text = "";
+            value = Math.Truncate(value);
+            if (value == 0) Num2Text = "CERO";
+            else if (value == 1) Num2Text = "UNO";
+            else if (value == 2) Num2Text = "DOS";
+            else if (value == 3) Num2Text = "TRES";
+            else if (value == 4) Num2Text = "CUATRO";
+            else if (value == 5) Num2Text = "CINCO";
+            else if (value == 6) Num2Text = "SEIS";
+            else if (value == 7) Num2Text = "SIETE";
+            else if (value == 8) Num2Text = "OCHO";
+            else if (value == 9) Num2Text = "NUEVE";
+            else if (value == 10) Num2Text = "DIEZ";
+            else if (value == 11) Num2Text = "ONCE";
+            else if (value == 12) Num2Text = "DOCE";
+            else if (value == 13) Num2Text = "TRECE";
+            else if (value == 14) Num2Text = "CATORCE";
+            else if (value == 15) Num2Text = "QUINCE";
+            else if (value < 20) Num2Text = "DIECI" + toText(value - 10);
+            else if (value == 20) Num2Text = "VEINTE";
+            else if (value < 30) Num2Text = "VEINTI" + toText(value - 20);
+            else if (value == 30) Num2Text = "TREINTA";
+            else if (value == 40) Num2Text = "CUARENTA";
+            else if (value == 50) Num2Text = "CINCUENTA";
+            else if (value == 60) Num2Text = "SESENTA";
+            else if (value == 70) Num2Text = "SETENTA";
+            else if (value == 80) Num2Text = "OCHENTA";
+            else if (value == 90) Num2Text = "NOVENTA";
+            else if (value < 100) Num2Text = toText(Math.Truncate(value / 10) * 10) + " Y " + toText(value % 10);
+            else if (value == 100) Num2Text = "CIEN";
+            else if (value < 200) Num2Text = "CIENTO " + toText(value - 100);
+            else if ((value == 200) || (value == 300) || (value == 400) || (value == 600) || (value == 800)) Num2Text = toText(Math.Truncate(value / 100)) + "CIENTOS";
+            else if (value == 500) Num2Text = "QUINIENTOS";
+            else if (value == 700) Num2Text = "SETECIENTOS";
+            else if (value == 900) Num2Text = "NOVECIENTOS";
+            else if (value < 1000) Num2Text = toText(Math.Truncate(value / 100) * 100) + " " + toText(value % 100);
+            else if (value == 1000) Num2Text = "MIL";
+            else if (value < 2000) Num2Text = "MIL " + toText(value % 1000);
+            else if (value < 1000000)
+            {
+                Num2Text = toText(Math.Truncate(value / 1000)) + " MIL";
+                if ((value % 1000) > 0) Num2Text = Num2Text + " " + toText(value % 1000);
+            }
+
+            else if (value == 1000000) Num2Text = "UN MILLON";
+            else if (value < 2000000) Num2Text = "UN MILLON " + toText(value % 1000000);
+            else if (value < 1000000000000)
+            {
+                Num2Text = toText(Math.Truncate(value / 1000000)) + " MILLONES ";
+                if ((value - Math.Truncate(value / 1000000) * 1000000) > 0) Num2Text = Num2Text + " " + toText(value - Math.Truncate(value / 1000000) * 1000000);
+            }
+
+            else if (value == 1000000000000) Num2Text = "UN BILLON";
+            else if (value < 2000000000000) Num2Text = "UN BILLON " + toText(value - Math.Truncate(value / 1000000000000) * 1000000000000);
+
+            else
+            {
+                Num2Text = toText(Math.Truncate(value / 1000000000000)) + " BILLONES";
+                if ((value - Math.Truncate(value / 1000000000000) * 1000000000000) > 0) Num2Text = Num2Text + " " + toText(value - Math.Truncate(value / 1000000000000) * 1000000000000);
+            }
+            return Num2Text;
+
+        }
 
         public async Task<Response<bool>> GetTramo(AddOrUpdateSubscriberInvoiceRequestDto obj)
         {
@@ -1469,13 +1391,26 @@ namespace DRRCore.Application.Main.CoreApplication
                 {
                     labTipo = "00";
                 }
-
+                bool existeDetraccion = false;
                 if (labTipo == "06")
                 {
                     totalVentaConIgv = totalSinIgv * 118 / 100;
                     montoIgv = totalVentaConIgv - totalSinIgv;
-                    montoDetraccion = totalVentaConIgv * 12 * obj.ExchangeRate / 100;
-                    montoPendientePago = totalVentaConIgv * (100 - 12) / 100;
+                    if (obj.IdCountry == 182)
+                    {
+                        if (obj.IdCurrency == 31)
+                        {
+                            montoDetraccion = totalVentaConIgv * 12 / 100;
+                            existeDetraccion = totalVentaConIgv > 700;
+
+                        }
+                        else
+                        {
+                            montoDetraccion = totalVentaConIgv * 12 * obj.ExchangeRate / 100;
+                            existeDetraccion = (totalVentaConIgv * obj.ExchangeRate) > 700;
+                        }
+                    }
+                    montoPendientePago = existeDetraccion? (totalVentaConIgv * (100 - 12) / 100): totalVentaConIgv;
                               
                     INDICADOR_AFECTACION_ITEM = "10";
                     NRO_DOC_ADQUIRIENTE = obj.TaxTypeCode?.Trim();
@@ -1563,44 +1498,27 @@ namespace DRRCore.Application.Main.CoreApplication
                 }
 
 
-                decimal? EVALUAR = 0;
-                decimal? Monto_Detracc = 0;
+               
                 string Trama = "";
                 if (labTipo == "06")
                 {
-                    if (obj.IdCountry == 182 && obj.IdCurrency == 1)
+                  
+                    if (existeDetraccion)
                     {
-                        EVALUAR = PV * obj.ExchangeRate;
-                    }
-                    else
-                    {
-                        EVALUAR = PV;
-                    }
-
-                    if (PV > 700)
-                    {
-                        if (obj.IdCurrency == 1)
-                        {
-                            Monto_Detracc = PV * 0.12m * obj.ExchangeRate;
-                        }
-                        else
-                        {
-                            Monto_Detracc = PV * 0.12m * 1;
-                        }
-
+                      
                         Trama = "ACTION:Registrar~"+
                             "FEC_ED:" + obj.InvoiceDate.Value.ToString("yyyy-MM-dd") +
                             "|RUC_EMISOR:20504166318|TIP_DOC_EMISOR:06|APAMNO_RAZON_SOCIAL_EMISOR:DEL RISCO REPORTS E.I.R.L." +
                         "|UBIGEO_EMISOR:150120|DIRECCION_EMISOR:Jr. Tomas Ramsey Nro. 930 Dpto. 603|URBANIZACION_EMISOR:|DEPARTAMENTO_EMISOR:LIMA|PROVINCIA_EMISOR:LIMA" +
                         "|DISTRITO_EMISOR:MAGDALENA|CODIGO_PAIS_EMISOR:PE|NOMBRE_COMERCIAL_EMISOR:DEL RISCO REPORTS|TIP_DOC:01|NRO_SERIE:F005|NRO_DOC:" + obj.InvoiceCode +
                         "|NRO_DOC_ADQUIRIENTE:" + NRO_DOC_ADQUIRIENTE + "|TIP_DOC_ADQUIRIENTE:" + labTipo.Trim() + "|APAMNO_RAZON_SOCIAL_ADQUIRIENTE:" + subscriber.Name +
-                        "|MONEDA:" + Mone + "|TOTAL_OPERACIONES_GRAV:" + totalSinIgv.Value.ToString("0.00000000") + "|TOTAL_OPERACIONES_INF:0.00|TOTAL_OPERACIONES_EXONERADAS:0.00|TOTAL_OPERACIONES_EXPORTACION:0.00|MONTO_TOTAL_OPERACIONES_GRAT:0.00" + "|MONTO_DESCUENTOS_GLOBALES:0.00|MONTO_TOTAL_IGV:" + montoIgv.Value.ToString("0.00000000") + "|MONTO_PAGAR:" +
-                        totalVentaConIgv?.ToString("0.00000000") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:" + "1001" + "|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
-                        "|VALOR_VENTA:" + totalSinIgv?.ToString("0.00000000") + "|PRECIO_VENTA:" + totalVentaConIgv?.ToString("0.00000000") +
+                        "|MONEDA:" + Mone + "|TOTAL_OPERACIONES_GRAV:" + totalSinIgv.Value.ToString("0.00") + "|TOTAL_OPERACIONES_INF:0.00|TOTAL_OPERACIONES_EXONERADAS:0.00|TOTAL_OPERACIONES_EXPORTACION:0.00|MONTO_TOTAL_OPERACIONES_GRAT:0.00" + "|MONTO_DESCUENTOS_GLOBALES:0.00|MONTO_TOTAL_IGV:" + montoIgv.Value.ToString("0.00") + "|MONTO_PAGAR:" +
+                        totalVentaConIgv?.ToString("0.00") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:1001|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
+                        "|VALOR_VENTA:" + totalSinIgv?.ToString("0.00") + "|PRECIO_VENTA:" + totalVentaConIgv?.ToString("0.00") +
                         "|EXISTE_GRAVADA:" + EXISTE_GRAVADA + "|EXISTE_INAFECTA:" + EXISTE_INAFECTA + "|EXISTE_EXONERADA:" + EXISTE_EXONERADA + "|EXISTE_GRATUITA:" + EXISTE_GRATUITA + "|EXISTE_EXPORTACION:" + EXISTE_EXPORTACION +
-                        "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToString("yyyy-MM-dd") + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + montoPendientePago?.ToString("0.00000000") +
+                        "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToString("yyyy-MM-dd") + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + montoPendientePago?.ToString("0.00") +
                         "|IA_40:" + subscriber.Code + " - " + subscriber.Name + "|IA_41:" + obj.Address + "|IA_42:" + obj.AttendedBy + "|IA_43:" + "" + "|IA_44:PAGO POR TRANSFERENCIA BANCARIA" + "|IA_45:" + cuenta + "" + "|IA_46:" + obj.ExchangeRate +
-                        "|PORCENTAJE_DETRACC:" + "12.00" + "|MONTO_DETRACC:" + montoDetraccion?.ToString("0.00000000") + "|COD_SUNAT_PAGO_DETRACC:001" + "|TASA_IGV:18.00" + "|BB_SS_CODIGO_SUJETO_A_DETRACC:037|BB_SS_DESCRIPCION_SUJETO_A_DETRACC:DEMAS SERVICIOS GRAVADOS CON EL IGV|NUMERO_CTA_BANCO_NACION_DETRACC:00000812773" + "~";
+                        "|PORCENTAJE_DETRACC:" + "12.00" + "|MONTO_DETRACC:" + montoDetraccion?.ToString("0.00") + "|COD_SUNAT_PAGO_DETRACC:001" + "|TASA_IGV:18.00" + "|BB_SS_CODIGO_SUJETO_A_DETRACC:037|BB_SS_DESCRIPCION_SUJETO_A_DETRACC:DEMAS SERVICIOS GRAVADOS CON EL IGV|NUMERO_CTA_BANCO_NACION_DETRACC:00000812773" + "~";
                     }
                     else
                     {
@@ -1610,11 +1528,11 @@ namespace DRRCore.Application.Main.CoreApplication
                          "|UBIGEO_EMISOR:150120|DIRECCION_EMISOR:Jr. Tomas Ramsey Nro. 930 Dpto. 603|URBANIZACION_EMISOR:|DEPARTAMENTO_EMISOR:LIMA|PROVINCIA_EMISOR:LIMA" +
                          "|DISTRITO_EMISOR:MAGDALENA|CODIGO_PAIS_EMISOR:PE|NOMBRE_COMERCIAL_EMISOR:DEL RISCO REPORTS|TIP_DOC:01|NRO_SERIE:F005|NRO_DOC:" + obj.InvoiceCode +
                          "|NRO_DOC_ADQUIRIENTE:" + NRO_DOC_ADQUIRIENTE + "|TIP_DOC_ADQUIRIENTE:" + labTipo.Trim() + "|APAMNO_RAZON_SOCIAL_ADQUIRIENTE:" + subscriber.Name +
-                         "|MONEDA:" + Mone + "|TOTAL_OPERACIONES_GRAV:" + totalSinIgv.Value.ToString("0.00000000") + "|TOTAL_OPERACIONES_INF:0.00|TOTAL_OPERACIONES_EXONERADAS:0.00|TOTAL_OPERACIONES_EXPORTACION:0.00|MONTO_TOTAL_OPERACIONES_GRAT:0.00" + "|MONTO_DESCUENTOS_GLOBALES:0.00|MONTO_TOTAL_IGV:" + montoIgv.Value.ToString("0.00000000") + "|MONTO_PAGAR:" +
-                         totalVentaConIgv?.ToString("0.00000000") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:" + "1001" + "|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
-                         "|VALOR_VENTA:" + totalSinIgv?.ToString("0.00000000") + "|PRECIO_VENTA:" + totalVentaConIgv?.ToString("0.00000000") +
+                         "|MONEDA:" + Mone + "|TOTAL_OPERACIONES_GRAV:" + totalSinIgv.Value.ToString("0.00") + "|TOTAL_OPERACIONES_INF:0.00|TOTAL_OPERACIONES_EXONERADAS:0.00|TOTAL_OPERACIONES_EXPORTACION:0.00|MONTO_TOTAL_OPERACIONES_GRAT:0.00" + "|MONTO_DESCUENTOS_GLOBALES:0.00|MONTO_TOTAL_IGV:" + montoIgv.Value.ToString("0.00") + "|MONTO_PAGAR:" +
+                         totalVentaConIgv?.ToString("0.00") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:" + TIPO_OPERACION + "|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
+                         "|VALOR_VENTA:" + totalSinIgv?.ToString("0.00") + "|PRECIO_VENTA:" + totalVentaConIgv?.ToString("0.00") +
                          "|EXISTE_GRAVADA:" + EXISTE_GRAVADA + "|EXISTE_INAFECTA:" + EXISTE_INAFECTA + "|EXISTE_EXONERADA:" + EXISTE_EXONERADA + "|EXISTE_GRATUITA:" + EXISTE_GRATUITA + "|EXISTE_EXPORTACION:" + EXISTE_EXPORTACION +
-                         "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToString("yyyy-MM-dd") + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + montoPendientePago?.ToString("0.00000000") + "|TASA_IGV:18.00" +
+                         "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToString("yyyy-MM-dd") + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + montoPendientePago?.ToString("0.00") + "|TASA_IGV:18.00" +
                         "|IA_40:" + subscriber.Code + " - " + subscriber.Name + "|IA_41:" + obj.Address + "|IA_42:" + obj.AttendedBy + "|IA_43:" + "" + "|IA_44:PAGO POR TRANSFERENCIA BANCARIA" + "|IA_45:" + cuenta + "~";
 
                     }
@@ -1626,12 +1544,12 @@ namespace DRRCore.Application.Main.CoreApplication
                     "|DISTRITO_EMISOR:MAGDALENA|CODIGO_PAIS_EMISOR:PE|NOMBRE_COMERCIAL_EMISOR:DEL RISCO REPORTS|TIP_DOC:01|NRO_SERIE:F005|NRO_DOC:" + obj.InvoiceCode +
                     "|NRO_DOC_ADQUIRIENTE:" + NRO_DOC_ADQUIRIENTE + "|TIP_DOC_ADQUIRIENTE:" + labTipo.Trim() + "|APAMNO_RAZON_SOCIAL_ADQUIRIENTE:" + subscriber.Name +
                     "|MONEDA:" + Mone + "|TOTAL_OPERACIONES_GRAV: 0.00|TOTAL_OPERACIONES_INF:0.00|TOTAL_OPERACIONES_EXONERADAS:0.00|TOTAL_OPERACIONES_EXPORTACION:" +
-                    totalSinIgv?.ToString("0.00000000") + "|MONTO_TOTAL_OPERACIONES_GRAT:0.00" + "|MONTO_DESCUENTOS_GLOBALES:0.00|MONTO_TOTAL_IGV:0.00|MONTO_PAGAR:" +
-                    totalSinIgv?.ToString("0.00000000") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:" + TIPO_OPERACION + "|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
+                    totalSinIgv?.ToString("0.00") + "|MONTO_TOTAL_OPERACIONES_GRAT:0.00" + "|MONTO_DESCUENTOS_GLOBALES:0.00|MONTO_TOTAL_IGV:0.00|MONTO_PAGAR:" +
+                    totalSinIgv?.ToString("0.00") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:" + TIPO_OPERACION + "|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
                     "|VALOR_VENTA:" + totalSinIgv?.ToString("0.00") + "|PRECIO_VENTA:" + totalSinIgv?.ToString("0.00") +
                     "|EXISTE_GRAVADA:" + EXISTE_GRAVADA + "|EXISTE_INAFECTA:" + EXISTE_INAFECTA + "|EXISTE_EXONERADA:" + EXISTE_EXONERADA + "|EXISTE_GRATUITA:" + EXISTE_GRATUITA + "|EXISTE_EXPORTACION:" + EXISTE_EXPORTACION +
                     "|CODIGO_PAIS_EXPORTACION:" + CODIGO_PAIS_EXPORTACION +
-                    "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToString("yyyy-MM-dd") + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + totalSinIgv?.ToString("0.00000000") + "|TASA_IGV:18.00" +
+                    "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToString("yyyy-MM-dd") + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + totalSinIgv?.ToString("0.00") + "|TASA_IGV:18.00" +
                     "|IA_40:" + subscriber.Code + " - " + subscriber.Name + "|IA_41:" + obj.Address + "|IA_42:" + obj.AttendedBy + "|IA_43:" + "" + "|IA_44:PAGO POR TRANSFERENCIA BANCARIA" + "|IA_45:" + cuenta + "~";
                 }
 
@@ -1678,7 +1596,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     if (labTipo == "06")
                     {
                         precioUnitario = procedure.SumaPrecio/procedure.NoArticulos;
-                        precioUnitarioIgv=precioUnitario * 18 / 100;
+                        precioUnitarioIgv=precioUnitario * 118 / 100;
                         igvItem = procedure.SumaPrecio * 18 / 100;
                         totalItem = procedure.SumaPrecio * 118 / 100;
                        
@@ -1868,6 +1786,9 @@ namespace DRRCore.Application.Main.CoreApplication
                         TotalAmount = obj.TotalPrice,
                         Type = "CC"
                     });
+                    var number = await context.Numerations.Where(x => x.Name == "NUM_INVOICE").FirstOrDefaultAsync();
+                    number.Number = int.Parse(obj.InvoiceCode);
+                    context.Numerations.Update(number);
                     await context.SaveChangesAsync();
                     response.Data = true;
                 }
@@ -1921,13 +1842,27 @@ namespace DRRCore.Application.Main.CoreApplication
                 {
                     labTipo = "00";
                 }
-
+                bool existeDetraccion = false;
                 if (labTipo == "06")
                 {
                     totalVentaConIgv = totalSinIgv * 118 / 100;
                     montoIgv = totalVentaConIgv - totalSinIgv;
-                    montoDetraccion = totalVentaConIgv * 12 * obj.ExchangeRate / 100;
-                    montoPendientePago = totalVentaConIgv * (100 - 12) / 100;
+                    if (obj.IdCountry == 182)
+                    {
+                        if (obj.IdCurrency == 31)
+                        {
+                            montoDetraccion = totalVentaConIgv * 12 / 100;
+                            existeDetraccion = totalVentaConIgv > 700;
+                           
+                        }
+                        else
+                        {
+                            montoDetraccion = totalVentaConIgv * 12 * obj.ExchangeRate / 100;
+                            existeDetraccion = (totalVentaConIgv*obj.ExchangeRate) > 700;
+                        }
+                    }
+
+                    montoPendientePago = existeDetraccion ? (totalVentaConIgv * (100 - 12) / 100) : totalVentaConIgv;
 
                     INDICADOR_AFECTACION_ITEM = "10";
                     NRO_DOC_ADQUIRIENTE = obj.TaxTypeCode?.Trim();
@@ -2015,44 +1950,25 @@ namespace DRRCore.Application.Main.CoreApplication
                 }
 
 
-                decimal? EVALUAR = 0;
-                decimal? Monto_Detracc = 0;
+              
                 string Trama = "";
                 if (labTipo == "06")
-                {
-                    if (obj.IdCountry == 182 && obj.IdCurrency == 1)
+                {                  
+                    if (existeDetraccion)
                     {
-                        EVALUAR = PV * obj.ExchangeRate;
-                    }
-                    else
-                    {
-                        EVALUAR = PV;
-                    }
-
-                    if (PV > 700)
-                    {
-                        if (obj.IdCurrency == 1)
-                        {
-                            Monto_Detracc = PV * 0.12m * obj.ExchangeRate;
-                        }
-                        else
-                        {
-                            Monto_Detracc = PV * 0.12m * 1;
-                        }
-
+                   
                         Trama = "ACTION:Registrar~" +
                             "FEC_ED:" + obj.InvoiceDate.Value.ToString("yyyy-MM-dd") +
                             "|RUC_EMISOR:20504166318|TIP_DOC_EMISOR:06|APAMNO_RAZON_SOCIAL_EMISOR:DEL RISCO REPORTS E.I.R.L." +
                         "|UBIGEO_EMISOR:150120|DIRECCION_EMISOR:Jr. Tomas Ramsey Nro. 930 Dpto. 603|URBANIZACION_EMISOR:|DEPARTAMENTO_EMISOR:LIMA|PROVINCIA_EMISOR:LIMA" +
                         "|DISTRITO_EMISOR:MAGDALENA|CODIGO_PAIS_EMISOR:PE|NOMBRE_COMERCIAL_EMISOR:DEL RISCO REPORTS|TIP_DOC:01|NRO_SERIE:F005|NRO_DOC:" + obj.InvoiceCode +
                         "|NRO_DOC_ADQUIRIENTE:" + NRO_DOC_ADQUIRIENTE + "|TIP_DOC_ADQUIRIENTE:" + labTipo.Trim() + "|APAMNO_RAZON_SOCIAL_ADQUIRIENTE:" + subscriber.Name +
-                        "|MONEDA:" + Mone + "|TOTAL_OPERACIONES_GRAV:" + totalSinIgv.Value.ToString("0.00000000") + "|TOTAL_OPERACIONES_INF:0.00|TOTAL_OPERACIONES_EXONERADAS:0.00|TOTAL_OPERACIONES_EXPORTACION:0.00|MONTO_TOTAL_OPERACIONES_GRAT:0.00" + "|MONTO_DESCUENTOS_GLOBALES:0.00|MONTO_TOTAL_IGV:" + montoIgv.Value.ToString("0.00000000") + "|MONTO_PAGAR:" +
-                        totalVentaConIgv?.ToString("0.00000000") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:" + "1001" + "|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
-                        "|VALOR_VENTA:" + totalSinIgv?.ToString("0.00000000") + "|PRECIO_VENTA:" + totalVentaConIgv?.ToString("0.00000000") +
+                        "|MONEDA:" + Mone + "|TOTAL_OPERACIONES_GRAV:" + totalSinIgv.Value.ToString("0.00") + "|TOTAL_OPERACIONES_INF:0.00|TOTAL_OPERACIONES_EXONERADAS:0.00|TOTAL_OPERACIONES_EXPORTACION:0.00|MONTO_TOTAL_OPERACIONES_GRAT:0.00" + "|MONTO_DESCUENTOS_GLOBALES:0.00|MONTO_TOTAL_IGV:" + montoIgv.Value.ToString("0.00") + "|MONTO_PAGAR:" +
+                        totalVentaConIgv?.ToString("0.00") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:1001|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
+                        "|VALOR_VENTA:" + totalSinIgv?.ToString("0.00") + "|PRECIO_VENTA:" + totalVentaConIgv?.ToString("0.00") +
                         "|EXISTE_GRAVADA:" + EXISTE_GRAVADA + "|EXISTE_INAFECTA:" + EXISTE_INAFECTA + "|EXISTE_EXONERADA:" + EXISTE_EXONERADA + "|EXISTE_GRATUITA:" + EXISTE_GRATUITA + "|EXISTE_EXPORTACION:" + EXISTE_EXPORTACION +
-                        "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToString("yyyy-MM-dd") + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + montoPendientePago?.ToString("0.00000000") +
-                        "|IA_40:" + subscriber.Code + " - " + subscriber.Name + "|IA_41:" + obj.Address + "|IA_42:" + obj.AttendedBy + "|IA_43:" + "" + "|IA_44:PAGO POR TRANSFERENCIA BANCARIA" + "|IA_45:" + cuenta + "" + "|IA_46:" + obj.ExchangeRate +
-                        "|PORCENTAJE_DETRACC:" + "12.00" + "|MONTO_DETRACC:" + montoDetraccion?.ToString("0.00000000") + "|COD_SUNAT_PAGO_DETRACC:001" + "|TASA_IGV:18.00" + "|BB_SS_CODIGO_SUJETO_A_DETRACC:037|BB_SS_DESCRIPCION_SUJETO_A_DETRACC:DEMAS SERVICIOS GRAVADOS CON EL IGV|NUMERO_CTA_BANCO_NACION_DETRACC:00000812773" + "~";
+                        "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToString("yyyy-MM-dd") + "|TIPO_FORMA_PAGO:01|MONTO_PENDIENTE_PAGO:0.00|IA_40:" + subscriber.Code + " - " + subscriber.Name + "|IA_41:" + obj.Address + "|IA_42:" + obj.AttendedBy + "|IA_43:" + "" + "|IA_44:PAGO POR TRANSFERENCIA BANCARIA" + "|IA_45:" + cuenta + "" + "|IA_46:" + obj.ExchangeRate +
+                        "|PORCENTAJE_DETRACC:" + "12.00" + "|MONTO_DETRACC:" + montoDetraccion?.ToString("0.00") + "|COD_SUNAT_PAGO_DETRACC:001" + "|TASA_IGV:18.00" + "|BB_SS_CODIGO_SUJETO_A_DETRACC:037|BB_SS_DESCRIPCION_SUJETO_A_DETRACC:DEMAS SERVICIOS GRAVADOS CON EL IGV|NUMERO_CTA_BANCO_NACION_DETRACC:00000812773" + "~";
                     }
                     else
                     {
@@ -2062,11 +1978,11 @@ namespace DRRCore.Application.Main.CoreApplication
                          "|UBIGEO_EMISOR:150120|DIRECCION_EMISOR:Jr. Tomas Ramsey Nro. 930 Dpto. 603|URBANIZACION_EMISOR:|DEPARTAMENTO_EMISOR:LIMA|PROVINCIA_EMISOR:LIMA" +
                          "|DISTRITO_EMISOR:MAGDALENA|CODIGO_PAIS_EMISOR:PE|NOMBRE_COMERCIAL_EMISOR:DEL RISCO REPORTS|TIP_DOC:01|NRO_SERIE:F005|NRO_DOC:" + obj.InvoiceCode +
                          "|NRO_DOC_ADQUIRIENTE:" + NRO_DOC_ADQUIRIENTE + "|TIP_DOC_ADQUIRIENTE:" + labTipo.Trim() + "|APAMNO_RAZON_SOCIAL_ADQUIRIENTE:" + subscriber.Name +
-                         "|MONEDA:" + Mone + "|TOTAL_OPERACIONES_GRAV:" + totalSinIgv.Value.ToString("0.00000000") + "|TOTAL_OPERACIONES_INF:0.00|TOTAL_OPERACIONES_EXONERADAS:0.00|TOTAL_OPERACIONES_EXPORTACION:0.00|MONTO_TOTAL_OPERACIONES_GRAT:0.00" + "|MONTO_DESCUENTOS_GLOBALES:0.00|MONTO_TOTAL_IGV:" + montoIgv.Value.ToString("0.00000000") + "|MONTO_PAGAR:" +
-                         totalVentaConIgv?.ToString("0.00000000") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:" + "1001" + "|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
-                         "|VALOR_VENTA:" + totalSinIgv?.ToString("0.00000000") + "|PRECIO_VENTA:" + totalVentaConIgv?.ToString("0.00000000") +
+                         "|MONEDA:" + Mone + "|TOTAL_OPERACIONES_GRAV:" + totalSinIgv.Value.ToString("0.00") + "|TOTAL_OPERACIONES_INF:0.00|TOTAL_OPERACIONES_EXONERADAS:0.00|TOTAL_OPERACIONES_EXPORTACION:0.00|MONTO_TOTAL_OPERACIONES_GRAT:0.00" + "|MONTO_DESCUENTOS_GLOBALES:0.00|MONTO_TOTAL_IGV:" + montoIgv.Value.ToString("0.00") + "|MONTO_PAGAR:" +
+                         totalVentaConIgv?.ToString("0.00") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:" + TIPO_OPERACION + "|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
+                         "|VALOR_VENTA:" + totalSinIgv?.ToString("0.00") + "|PRECIO_VENTA:" + totalVentaConIgv?.ToString("0.00") +
                          "|EXISTE_GRAVADA:" + EXISTE_GRAVADA + "|EXISTE_INAFECTA:" + EXISTE_INAFECTA + "|EXISTE_EXONERADA:" + EXISTE_EXONERADA + "|EXISTE_GRATUITA:" + EXISTE_GRATUITA + "|EXISTE_EXPORTACION:" + EXISTE_EXPORTACION +
-                         "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToString("yyyy-MM-dd") + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + montoPendientePago?.ToString("0.00000000") + "|TASA_IGV:18.00" +
+                         "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToString("yyyy-MM-dd") + "|TIPO_FORMA_PAGO:01|MONTO_PENDIENTE_PAGO:0.00|TASA_IGV:18.00" +
                         "|IA_40:" + subscriber.Code + " - " + subscriber.Name + "|IA_41:" + obj.Address + "|IA_42:" + obj.AttendedBy + "|IA_43:" + "" + "|IA_44:PAGO POR TRANSFERENCIA BANCARIA" + "|IA_45:" + cuenta + "~";
 
                     }
@@ -2078,12 +1994,12 @@ namespace DRRCore.Application.Main.CoreApplication
                     "|DISTRITO_EMISOR:MAGDALENA|CODIGO_PAIS_EMISOR:PE|NOMBRE_COMERCIAL_EMISOR:DEL RISCO REPORTS|TIP_DOC:01|NRO_SERIE:F005|NRO_DOC:" + obj.InvoiceCode +
                     "|NRO_DOC_ADQUIRIENTE:" + NRO_DOC_ADQUIRIENTE + "|TIP_DOC_ADQUIRIENTE:" + labTipo.Trim() + "|APAMNO_RAZON_SOCIAL_ADQUIRIENTE:" + subscriber.Name +
                     "|MONEDA:" + Mone + "|TOTAL_OPERACIONES_GRAV: 0.00|TOTAL_OPERACIONES_INF:0.00|TOTAL_OPERACIONES_EXONERADAS:0.00|TOTAL_OPERACIONES_EXPORTACION:" +
-                    totalSinIgv?.ToString("0.00000000") + "|MONTO_TOTAL_OPERACIONES_GRAT:0.00" + "|MONTO_DESCUENTOS_GLOBALES:0.00|MONTO_TOTAL_IGV:0.00|MONTO_PAGAR:" +
-                    totalSinIgv?.ToString("0.00000000") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:" + TIPO_OPERACION + "|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
+                    totalSinIgv?.ToString("0.00") + "|MONTO_TOTAL_OPERACIONES_GRAT:0.00" + "|MONTO_DESCUENTOS_GLOBALES:0.00|MONTO_TOTAL_IGV:0.00|MONTO_PAGAR:" +
+                    totalSinIgv?.ToString("0.00") + "|MONTO_PERCEPCION:0.00|MONTO_TOTAL_PERCEP:0.00" + "|TIPO_OPERACION:" + TIPO_OPERACION + "|LEYENDA:" + Letras + "|CORREO_CLIENTE:" + "mail@del-risco.com" +
                     "|VALOR_VENTA:" + totalSinIgv?.ToString("0.00") + "|PRECIO_VENTA:" + totalSinIgv?.ToString("0.00") +
                     "|EXISTE_GRAVADA:" + EXISTE_GRAVADA + "|EXISTE_INAFECTA:" + EXISTE_INAFECTA + "|EXISTE_EXONERADA:" + EXISTE_EXONERADA + "|EXISTE_GRATUITA:" + EXISTE_GRATUITA + "|EXISTE_EXPORTACION:" + EXISTE_EXPORTACION +
                     "|CODIGO_PAIS_EXPORTACION:" + CODIGO_PAIS_EXPORTACION +
-                    "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToString("yyyy-MM-dd") + "|TIPO_FORMA_PAGO:02|MONTO_PENDIENTE_PAGO:" + totalSinIgv?.ToString("0.00000000") + "|TASA_IGV:18.00" +
+                    "|FECHA_VENCIMIENTO:" + DateTime.Now.AddDays(15).ToString("yyyy-MM-dd") + "|TIPO_FORMA_PAGO:01|MONTO_PENDIENTE_PAGO:0.00|TASA_IGV:18.00" +
                     "|IA_40:" + subscriber.Code + " - " + subscriber.Name + "|IA_41:" + obj.Address + "|IA_42:" + obj.AttendedBy + "|IA_43:" + "" + "|IA_44:PAGO POR TRANSFERENCIA BANCARIA" + "|IA_45:" + cuenta + "~";
                 }
 
@@ -2093,18 +2009,23 @@ namespace DRRCore.Application.Main.CoreApplication
                     decimal? precioUnitarioIgv = decimal.Zero;
                     decimal? igvItem = 0;
                     decimal? totalItem = 0;
+                    decimal? quantity = 0;
+                if (obj.Details.Count > 0)
+                {
+                    quantity = obj.Details[0].CouponAmount;
+                }
 
                     if (labTipo == "06")
                     {
-                        precioUnitario = obj.TotalPrice / obj.Quantity;
-                        precioUnitarioIgv = precioUnitario * 18 / 100;
+                        precioUnitario = obj.TotalPrice / quantity;
+                        precioUnitarioIgv = precioUnitario * 118 / 100;
                         igvItem = obj.TotalPrice * 18 / 100;
                         totalItem = obj.TotalPrice * 118 / 100;
 
                     }
                     else if (labTipo == "00")
                     {
-                        precioUnitario = obj.TotalPrice / obj.Quantity;
+                        precioUnitario = obj.TotalPrice / quantity;
                         igvItem = 0;
                         totalItem = obj.TotalPrice;
                         precioUnitarioIgv = precioUnitario;
@@ -2112,9 +2033,9 @@ namespace DRRCore.Application.Main.CoreApplication
 
                     }
 
-                    TramoDetail = "ID_ITEM:1|COD_PROD_SERV_ITEM:T1|DESRIP_ITEM:Cupones_pagados_por_adelantado_para_solicitar_Informes_Comerciales| COD_UNIDAD_MEDIDA_ITEM:NIU|INDICADOR_PS_ITEM:S|INDICADOR_TRANS_GRAT:0|INDICADOR_AFECTACION_ITEM:" +
+                    TramoDetail = "ID_ITEM:1|COD_PROD_SERV_ITEM:T1|DESRIP_ITEM:Cupones_pagados_por_adelantado_para_solicitar_Informes_Comerciales|COD_UNIDAD_MEDIDA_ITEM:NIU|INDICADOR_PS_ITEM:S|INDICADOR_TRANS_GRAT:0|INDICADOR_AFECTACION_ITEM:" +
                     INDICADOR_AFECTACION_ITEM + "|VALOR_VENTA_UNITARIA:" + precioUnitario?.ToString("0.00") +
-                    "|PRECIO_VENTA_UNITARIO_ITEM:" + precioUnitarioIgv?.ToString("0.00") + "|CANTIDAD_ITEM:" + obj.Quantity?.ToString("0.00") + "|DESCUENTO_ITEM:0.00|" +
+                    "|PRECIO_VENTA_UNITARIO_ITEM:" + precioUnitarioIgv?.ToString("0.00") + "|CANTIDAD_ITEM:" + quantity?.ToString("0.00") + "|DESCUENTO_ITEM:0.00|" +
                     "VALOR_ITEM:" + obj.TotalPrice?.ToString("0.00") +
                     "|IGV_TOTAL_ITEM:" + igvItem?.ToString("0.00") +
                     "|TOTAL_ITEM:" + totalItem?.ToString("0.00");
@@ -2132,14 +2053,14 @@ namespace DRRCore.Application.Main.CoreApplication
             
                 string fileDirectory = facSerie.Value + obj.InvoiceCode + ".txt";
 
-
+          
                 var ftpServerUrl = @"ftp://" + host.Value + ":" + port.Value + "/";
                 var username = user.Value;
                 var passwordv = password.Value;
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(new Uri(ftpServerUrl + fileDirectory));
                 request.Method = WebRequestMethods.Ftp.UploadFile;
                 request.Credentials = new NetworkCredential(username, passwordv);
-                request.UsePassive = false;
+               request.UsePassive = false;
                 try
                 {
                     byte[] bytes = null;
@@ -2180,7 +2101,7 @@ namespace DRRCore.Application.Main.CoreApplication
 
         private async Task<string> Codigo_Pais(SqlCoreContext context, string? oldCode)
         {
-            var country =await context.Countries.Where(x => x.Id == int.Parse(oldCode)).FirstOrDefaultAsync();
+            var country =await context.Countries.Where(x => x.OldCode == oldCode).FirstOrDefaultAsync();
             if (country== null)
             {
                 return ".";

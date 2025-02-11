@@ -291,9 +291,9 @@ namespace DRRCore.Application.Main
 
                 emailDataDto.EmailKey = obj.Language == "C" ? "DRR_WORKFLOW_ESP_0060" : "DRR_WORKFLOW_ENG_0060";
                 emailDataDto.BeAuthenticated = true;
-                emailDataDto.From = "diego.rodriguez@del-risco.com";//info@del-risco.com;
-                emailDataDto.UserName = "diego.rodriguez@del-risco.com"; //info@del-risco.com;
-                emailDataDto.Password = "w*@JHCr7mH";  // gD@rQKC0xN;
+                emailDataDto.From = "info@del-risco.com";
+                emailDataDto.UserName = "info@del-risco.com";
+                emailDataDto.Password = "UZT*q8cZEh/f6VKOLz@2NL";
 
                 if (obj.UserEmail.Contains(';'))
                 {
@@ -301,7 +301,7 @@ namespace DRRCore.Application.Main
                     foreach (var email in emails)
                     {
                         emailDataDto.To.Add(email);
-                        emailDataDto.CC.Add(email);
+                       // emailDataDto.CC.Add(email);
                     }
                 }
                 else
@@ -310,10 +310,7 @@ namespace DRRCore.Application.Main
                     emailDataDto.CC.Add(obj.UserEmail);
                 }
 
-                emailDataDto.To = new List<string>
-                {
-                    "jfernandez@del-risco.com"
-                };
+             
                 emailDataDto.CC = new List<string>
                 {
                     "diego.rodriguez@del-risco.com",
@@ -371,6 +368,7 @@ namespace DRRCore.Application.Main
                     ticket.IsComplement = false;
                     ticket.IdInvoiceState = 1;
                     ticket.Web = true;
+                    ticket.IdCompany = company.Id;
                     ticket.ReportType = "RV";
 
                     context.Numerations.Update(numeration);
