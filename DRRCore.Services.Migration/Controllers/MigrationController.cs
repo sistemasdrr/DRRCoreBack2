@@ -24,7 +24,12 @@ namespace DRRCore.Services.Migration.Controllers
         {
             return Ok(await _migraUser.AddOrUpdateCompany(migra,oldCode));
         }
-        
+        [HttpPost()]
+        [Route("AddOrUpdateTraduction")]
+        public async Task<ActionResult> AddOrUpdateTraduction(string oldCode)
+        {
+            return Ok(await _migraUser.AddOrUpdateTraductionCompany(oldCode));
+        }
         [HttpPost()]
         [Route("AddOrUpdatePerson")]
         public async Task<ActionResult> AddOrUpdatePerson(int migra)
@@ -181,6 +186,12 @@ namespace DRRCore.Services.Migration.Controllers
         public async Task<ActionResult> UpdatePersonJob()
         {
             return Ok(await _migraUser.UpdatePersonJob());
+        }
+        [HttpPost()]
+        [Route("MigratePercentage")]
+        public async Task<ActionResult> MigratePercentage()
+        {
+            return Ok(await _migraUser.MigratePercentage());
         }
         //[HttpPost()]
         //[Route("UpdateSubscriber")]

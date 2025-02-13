@@ -1,4 +1,6 @@
-﻿using DRRCore.Application.Interfaces.MigrationApplication;
+﻿using DocumentFormat.OpenXml.Drawing;
+using DocumentFormat.OpenXml.Vml.Office;
+using DRRCore.Application.Interfaces.MigrationApplication;
 using DRRCore.Domain.Entities.MYSQLContext;
 using DRRCore.Domain.Entities.MySqlContextFotos;
 using DRRCore.Domain.Entities.SqlContext;
@@ -8,6 +10,7 @@ using DRRCore.Domain.Interfaces.MysqlDomain;
 using DRRCore.Transversal.Common;
 using DRRCore.Transversal.Common.Interface;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using Microsoft.IdentityModel.Tokens;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
@@ -3928,6 +3931,44 @@ namespace DRRCore.Application.Main.MigrationApplication
             return true;
         }
 
+        public async Task<bool> AddOrUpdateTraductionCompany(string oldCode)
+        {
+            using var context = new SqlCoreContext();
+            using var mysqlContext = new MySqlContext();
+
+            try
+            {
+                var empresa = await mysqlContext.MEmpresas.Where(x => x.EmCodigo == oldCode).FirstOrDefaultAsync();
+
+                finanzas = await mysqlContext.REmpVsInfFins.Where(x => x.EmCodigo == oldCode).FirstOrDefaultAsync();
+                ramo = await mysqlContext.REmpVsRamNegs.Where(x => x.EmCodigo == oldCode).FirstOrDefaultAsync();
+                aval = await mysqlContext.TCabEmpAvals.Where(x => x.EmCodigo == oldCode).FirstOrDefaultAsync();
+                antecedentes = await mysqlContext.REmpVsAspLegs.Where(x => x.EmCodigo == oldCode).FirstOrDefaultAsync();
+
+              
+        var company = await context.Companies.Where(x => x.OldCode == empresa.EmCodigo)
+                            .Include(x => x.TraductionCompanies)                           
+                            .FirstOrDefaultAsync();
+                            if(company.TraductionCompanies!=null)   
+                            {
+                                 context.TraductionCompanies.Remove(company.TraductionCompanies.First());
+                             }
+                            company.TraductionCompanies = new List<TraductionCompany>();
+                            company.TraductionCompanies = await GetAllTraductions(empresa);
+
+                            context.Companies.Update(company);
+                            await context.SaveChangesAsync();
+
+                  }                       
+                
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                  
+                }
+
+            return true;
+        }
         public async Task<bool> AddOrUpdatePerson(int migra)
         {
             using var context = new SqlCoreContext();
@@ -4250,6 +4291,52 @@ namespace DRRCore.Application.Main.MigrationApplication
             }
           
             return true;
+        }
+
+        public async Task<bool> MigratePercentage()
+        {
+            using var context = new SqlCoreContext();
+            using var mysqlContext = new MySqlContext();
+            try
+            {
+             //   var partMysql = await mysqlContext.REmpVsPes.Where(x => x.EpPoracc != "").ToListAsync();
+                var partner = await context.CompanyPartners.Where(x => x.Enable == true && x.ParticipationStr!="" && x.Participation == null).ToListAsync();
+                foreach (var prt in partner) { 
+                
+                    if(prt.Participation == null && !string.IsNullOrEmpty(prt.ParticipationStr))
+                    {
+                        var porcentaje = prt.ParticipationStr.Replace("%", string.Empty);
+                        decimal newPercentage = 0;
+                        if (decimal.TryParse(porcentaje, out newPercentage))
+                        {
+                            prt.Participation = newPercentage; 
+                             context.CompanyPartners.Update(prt);
+                             await context.SaveChangesAsync();
+                        }
+                        else
+                        {
+                            prt.Participation = 0;
+                            context.CompanyPartners.Update(prt);
+                            await context.SaveChangesAsync();
+                        }
+                    }
+                        if (prt.Participation != null && string.IsNullOrEmpty(prt.ParticipationStr))
+                        {                           
+                                prt.ParticipationStr = prt.Participation?.ToString("0.00")+"%" ;
+                                context.CompanyPartners.Update(prt);
+                                await context.SaveChangesAsync();
+                            
+                        }
+                       }
+
+                   
+            }
+            catch (Exception ex)
+            {
+               
+
+            }
+             return true;
         }
     }
 }

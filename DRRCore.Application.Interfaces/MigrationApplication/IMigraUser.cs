@@ -33,5 +33,7 @@
         Task<bool> MigrateOccupation();
         Task<bool> arreglarNumeration();
         Task<bool> MigrationCountryOldCode();
+        Task<bool> MigratePercentage();
+        Task<bool> AddOrUpdateTraductionCompany(string oldCode);
     }
 }
