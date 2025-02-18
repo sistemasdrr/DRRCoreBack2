@@ -642,7 +642,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     if (list.Any())
                     {
                         getExist.TypeReport = "RV";
-                        list = list.OrderBy(x => x.DispatchtDate).ToList();
+                        list = list.OrderByDescending(x => x.DispatchtDate).ToList();
 
                         var firstTicket = list.FirstOrDefault();
 
@@ -652,7 +652,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         }
                         else
                         {
-                            if ((DateTime.Now - firstTicket.DispatchtDate).TotalDays <= 90)
+                            if ((DateTime.Now - firstTicket.DispatchtDate).Days <= 90)
                             {
                                 getExist.TypeReport ="EF";
                             }
@@ -4000,15 +4000,18 @@ namespace DRRCore.Application.Main.CoreApplication
                     if (ticket.IdCompanyNavigation.CompanyBackgrounds.FirstOrDefault() != null)
                     {
                         constitutionDate = ticket.IdCompanyNavigation.CompanyBackgrounds.FirstOrDefault()?.ConstitutionDate;
-                        if (constitutionDate.Length > 4)
+                        if (!string.IsNullOrEmpty(constitutionDate))
                         {
+                            if (constitutionDate.Length > 4)
+                            {
 
-                            sLDocument.SetCellValue("B32", DateTime.ParseExact(constitutionDate, "dd/MM/yyyy", ci).ToString("yyyyMMdd", ci).ToUpper());
+                                sLDocument.SetCellValue("B32", DateTime.ParseExact(constitutionDate, "dd/MM/yyyy", ci).ToString("yyyyMMdd", ci).ToUpper());
 
-                        }
-                        else
-                        {
-                            sLDocument.SetCellValue("B32", constitutionDate);
+                            }
+                            else
+                            {
+                                sLDocument.SetCellValue("B32", constitutionDate);
+                            }
                         }
                     }
                   

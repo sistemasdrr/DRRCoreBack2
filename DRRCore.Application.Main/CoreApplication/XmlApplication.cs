@@ -252,14 +252,17 @@ namespace DRRCore.Application.Main.CoreApplication
                     var registrationDate = string.Empty;
                     if (resultCompany != null)
                     {
-                        if (resultCompany.RegistrationDate!=null && resultCompany.RegistrationDate.Length > 4)
+                        if (resultCompany.RegistrationDate!=null && resultCompany.RegistrationDate.Length > 7)
                         {
-                            registrationDate = DateTime.ParseExact(resultCompany.RegistrationDate, "dd/MM/yyyy", ci).ToString("yyyy-MM-dd", ci).ToUpper();
+                            registrationDate = DateTime.ParseExact(resultCompany.RegistrationDate.Trim(), "dd/MM/yyyy", ci).ToString("yyyy-MM-dd", ci).ToUpper();
                             
+                        }else if (resultCompany.RegistrationDate != null && resultCompany.RegistrationDate.Length > 4)
+                        {
+                            registrationDate = DateTime.ParseExact(resultCompany.RegistrationDate.Trim(), "MM/yyyy", ci).ToString("yyyy-MM", ci).ToUpper();
                         }
                         else
                         {
-                            registrationDate = resultCompany.RegistrationDate;
+                            registrationDate = resultCompany.RegistrationDate.Trim();
                            
                         }
                     }
@@ -773,13 +776,18 @@ namespace DRRCore.Application.Main.CoreApplication
                     }
                     if (!companyBackground.ConstitutionDate.IsNullOrEmpty())
                     {
-                        if (companyBackground.ConstitutionDate.Length > 4)
+                        if (companyBackground.ConstitutionDate.Length > 7)
                         {
 
-                            AddCDataElement(xmlDoc, legalBackgElement, "Date_Of_Incorporation", DateTime.ParseExact(companyBackground.ConstitutionDate, "dd/MM/yyyy", ci).ToString("ddMMMyyyy", ci).ToUpper());
+                            AddCDataElement(xmlDoc, legalBackgElement, "Date_Of_Incorporation", DateTime.ParseExact(companyBackground.ConstitutionDate.Trim(), "dd/MM/yyyy", ci).ToString("ddMMMyyyy", ci).ToUpper());
+                        }
+                        else if(companyBackground.ConstitutionDate.Length > 4)
+                        {
+                            AddCDataElement(xmlDoc, legalBackgElement, "Date_Of_Incorporation", DateTime.ParseExact(companyBackground.ConstitutionDate.Trim(), "MM/yyyy", ci).ToString("MMMyyyy", ci).ToUpper());
+
                         }
                         else {
-                            AddCDataElement(xmlDoc, legalBackgElement, "Date_Of_Incorporation",companyBackground.ConstitutionDate);
+                            AddCDataElement(xmlDoc, legalBackgElement, "Date_Of_Incorporation",companyBackground.ConstitutionDate.Trim());
                         }
                     }
                     if (!companyBackground.StartFunctionYear.IsNullOrEmpty())
