@@ -492,7 +492,8 @@ namespace DRRCore.Application.Main.CoreApplication
                         }
                         else
                         {
-                            pendingTaskSupervisor.Code = supervisor.IdEmployeeNavigation.Personals.Where(x => x.Type == "SU").FirstOrDefault().Code;
+                            var pending = supervisor.IdEmployeeNavigation.Personals.Where(x => x.Type == "SU").FirstOrDefault();
+                            pendingTaskSupervisor.Code = pending==null?string.Empty:pending.Code;
                         }
                         foreach (var subordinate in subordinates)
                         {

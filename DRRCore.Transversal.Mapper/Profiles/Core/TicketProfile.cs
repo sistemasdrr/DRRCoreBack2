@@ -70,6 +70,9 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
                   .ForMember(dest => dest.Dispatch, opt => opt?.MapFrom(src => src.DispatchedName))
                   .ForMember(dest => dest.Subscriber, opt => opt?.MapFrom(src => src.IdSubscriberNavigation.Code))
                   .ForMember(dest => dest.Procedure, opt => opt?.MapFrom(src => src.ProcedureType))
+                  .ForMember(dest => dest.Id, opt => opt?.MapFrom(src => src.Id))
+                  .ForMember(dest => dest.Number, opt => opt?.MapFrom(src => src.Number))
+                   .ForMember(dest => dest.Quality, opt => opt?.MapFrom(src => src.Quality))
                   .ReverseMap(); 
 
             CreateMap<Ticket, GetTicketHistorySubscriberResponseDto>()

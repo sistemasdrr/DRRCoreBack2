@@ -19,5 +19,8 @@
         public string Subscriber { get; set; } = string.Empty;
         public string Procedure { get; set; } = string.Empty; 
         public string Status { get; set; } = string.Empty;
+        public int Id { get; set; }
+        public int Number { get; set; }
+        public string Quality { get; set;} = string.Empty;
     }
 }
