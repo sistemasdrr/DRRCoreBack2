@@ -41,8 +41,8 @@ public partial class SqlContext : DbContext
         if (!optionsBuilder.IsConfigured)
         {
             optionsBuilder.UseSqlServer(
-             // "Data Source=200.58.123.184,14331;Initial Catalog=admindrr;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
-             "Data Source=localhost\\DRRSQLSERVER;Initial Catalog=admindrr;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
+            "Data Source=200.58.123.184,14331;Initial Catalog=admindrr;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
+            // "Data Source=localhost\\DRRSQLSERVER;Initial Catalog=admindrr;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
             , sqlServerOptions => sqlServerOptions.EnableRetryOnFailure(
                 maxRetryCount: 18,
                 maxRetryDelay: TimeSpan.FromSeconds(60),
