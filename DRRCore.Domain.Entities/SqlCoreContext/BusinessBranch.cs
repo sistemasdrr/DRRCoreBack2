@@ -11,6 +11,10 @@ public partial class BusinessBranch
 
     public string? Name { get; set; }
 
+    public string? ApiCode { get; set; }
+
+    public int? OldCode { get; set; }
+
     public DateTime CreationDate { get; set; }
 
     public DateTime? UpdateDate { get; set; }
@@ -18,10 +22,6 @@ public partial class BusinessBranch
     public DateTime? DeleteDate { get; set; }
 
     public bool? Enable { get; set; }
-
-    public string? ApiCode { get; set; }
-
-    public int? OldCode { get; set; }
 
     public virtual ICollection<BusineesActivity> BusineesActivities { get; set; } = new List<BusineesActivity>();
 

@@ -260,7 +260,7 @@ namespace DRRCore.Application.Main.CoreApplication
                         {
                             registrationDate = DateTime.ParseExact(resultCompany.RegistrationDate.Trim(), "MM/yyyy", ci).ToString("yyyy-MM", ci).ToUpper();
                         }
-                        else
+                        else if(resultCompany.RegistrationDate != null)
                         {
                             registrationDate = resultCompany.RegistrationDate.Trim();
                            

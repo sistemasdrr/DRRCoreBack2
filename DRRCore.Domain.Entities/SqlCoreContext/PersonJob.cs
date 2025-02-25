@@ -23,6 +23,8 @@ public partial class PersonJob
 
     public string? JobDetails { get; set; }
 
+    public string? OldCode { get; set; }
+
     public DateTime? CreationDate { get; set; }
 
     public DateTime? UpdateDate { get; set; }
@@ -32,8 +34,6 @@ public partial class PersonJob
     public DateTime? DeleteDate { get; set; }
 
     public bool? Enable { get; set; }
-
-    public string? OldCode { get; set; }
 
     public virtual Company? IdCompanyNavigation { get; set; }
 

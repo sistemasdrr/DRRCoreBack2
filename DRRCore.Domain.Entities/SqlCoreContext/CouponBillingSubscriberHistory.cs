@@ -19,6 +19,12 @@ public partial class CouponBillingSubscriberHistory
 
     public decimal? TotalPrice { get; set; }
 
+    public string? Type { get; set; }
+
+    public int? IdTicket { get; set; }
+
+    public string? State { get; set; }
+
     public DateTime? CreationDate { get; set; }
 
     public DateTime? UpdateDate { get; set; }
@@ -28,12 +34,6 @@ public partial class CouponBillingSubscriberHistory
     public int? LastUpdateUser { get; set; }
 
     public bool? Enable { get; set; }
-
-    public string? Type { get; set; }
-
-    public int? IdTicket { get; set; }
-
-    public string? State { get; set; }
 
     public virtual CouponBillingSubscriber? IdCouponBillingNavigation { get; set; }
 }

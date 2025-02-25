@@ -5273,7 +5273,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 {
                    ticketFiles.Add(ticketFile);
                 }
-                var newTicket = new Ticket{ 
+                var newTicket = new Ticket {
                     Number = ticket.Number,
                     IdSubscriber = ticket.IdSubscriber,
                     IdCompany = ticket.IdCompany,
@@ -5307,8 +5307,13 @@ namespace DRRCore.Application.Main.CoreApplication
                     Telephone = ticket.Telephone,
                     WebPage = ticket.WebPage,
                     TicketFiles = ticketFiles,
+                    TicketAssignation = new TicketAssignation
+                    {
+                        IdUserLogin = idUser,
+                        IdEmployee=user.IdEmployeeNavigation.Id,
+                        Commentary=string.Empty
 
-
+                    },
                     IsComplement = true,
                     IdTicketComplement = ticket.Id,
                     NumberTicketComplement = ticket.Number.ToString("D6") + "*"
@@ -5337,6 +5342,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     Cycle = "",
                     StartDate = DateTime.Now,
                 };
+                
                
                 newTicket.TicketHistories.Add(ticketHistory1);
                 newTicket.TicketHistories.Add(ticketHistory2);

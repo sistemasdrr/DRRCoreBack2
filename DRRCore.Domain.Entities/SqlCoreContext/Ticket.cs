@@ -40,7 +40,6 @@ public partial class Ticket
     public string ReportType { get; set; } = null!;
 
     public string ProcedureType { get; set; } = null!;
-    public string? ProcedureTypeAgent { get; set; } 
 
     public int? IdCompany { get; set; }
 
@@ -63,14 +62,6 @@ public partial class Ticket
     public string? Telephone { get; set; }
 
     public int? Creditrisk { get; set; }
-
-    public DateTime CreationDate { get; set; }
-
-    public DateTime? UpdateDate { get; set; }
-
-    public DateTime? DeleteDate { get; set; }
-
-    public bool? Enable { get; set; }
 
     public DateTime? DispatchtDate { get; set; }
 
@@ -107,6 +98,16 @@ public partial class Ticket
     public int? IdSpecialAgentBalancePrice { get; set; }
 
     public int? IdTicketComplement { get; set; }
+
+    public DateTime CreationDate { get; set; }
+
+    public DateTime? UpdateDate { get; set; }
+
+    public DateTime? DeleteDate { get; set; }
+
+    public bool? Enable { get; set; }
+
+    public string? ProcedureTypeAgent { get; set; }
 
     public virtual Company? IdCompanyNavigation { get; set; }
 

@@ -21,6 +21,8 @@ public partial class FinancialSituacion
 
     public string? Observations { get; set; }
 
+    public string? ApiCode { get; set; }
+
     public DateTime? CreationDate { get; set; }
 
     public DateTime? UpdateDate { get; set; }
@@ -30,8 +32,6 @@ public partial class FinancialSituacion
     public int? LastUpdateUser { get; set; }
 
     public bool? Enable { get; set; }
-
-    public string? ApiCode { get; set; }
 
     public virtual ICollection<CompanyFinancialInformation> CompanyFinancialInformations { get; set; } = new List<CompanyFinancialInformation>();
 }

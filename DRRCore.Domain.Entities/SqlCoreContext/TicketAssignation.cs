@@ -9,6 +9,10 @@ public partial class TicketAssignation
 
     public string? Commentary { get; set; }
 
+    public int? IdUserLogin { get; set; }
+
+    public int? IdEmployee { get; set; }
+
     public DateTime CreationDate { get; set; }
 
     public DateTime? UpdateDate { get; set; }
@@ -16,10 +20,6 @@ public partial class TicketAssignation
     public DateTime? DeleteDate { get; set; }
 
     public bool? Enable { get; set; }
-
-    public int? IdUserLogin { get; set; }
-
-    public int? IdEmployee { get; set; }
 
     public virtual Employee? IdEmployeeNavigation { get; set; }
 

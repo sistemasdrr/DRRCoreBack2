@@ -15,6 +15,10 @@ public partial class SubscriberCategory
 
     public string? Observations { get; set; }
 
+    public int? OldCode { get; set; }
+
+    public string? RubCodigo { get; set; }
+
     public DateTime? CreationDate { get; set; }
 
     public DateTime? UpdateDate { get; set; }
@@ -24,10 +28,6 @@ public partial class SubscriberCategory
     public int? LastUpdateUser { get; set; }
 
     public bool? Enable { get; set; }
-
-    public int? OldCode { get; set; }
-
-    public string? RubCodigo { get; set; }
 
     public virtual ICollection<Subscriber> Subscribers { get; set; } = new List<Subscriber>();
 }

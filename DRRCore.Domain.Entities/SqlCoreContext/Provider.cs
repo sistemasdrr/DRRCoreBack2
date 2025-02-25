@@ -47,16 +47,6 @@ public partial class Provider
 
     public string? ReferentCommentary { get; set; }
 
-    public DateTime? CreationDate { get; set; }
-
-    public DateTime? UpdateDate { get; set; }
-
-    public DateTime? DeleteDate { get; set; }
-
-    public int? LastUpdateUser { get; set; }
-
-    public bool? Enable { get; set; }
-
     public string? QualificationEng { get; set; }
 
     public int? IdPerson { get; set; }
@@ -72,6 +62,16 @@ public partial class Provider
     public DateTime? DateReferent { get; set; }
 
     public string? Ticket { get; set; }
+
+    public DateTime? CreationDate { get; set; }
+
+    public DateTime? UpdateDate { get; set; }
+
+    public DateTime? DeleteDate { get; set; }
+
+    public int? LastUpdateUser { get; set; }
+
+    public bool? Enable { get; set; }
 
     public virtual Company? IdCompanyNavigation { get; set; }
 

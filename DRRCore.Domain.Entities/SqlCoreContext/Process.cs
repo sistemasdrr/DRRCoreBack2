@@ -13,14 +13,6 @@ public partial class Process
 
     public int? OrderItem { get; set; }
 
-    public DateTime CreationDate { get; set; }
-
-    public DateTime? UpdateDate { get; set; }
-
-    public DateTime? DeleteDate { get; set; }
-
-    public bool? Enable { get; set; }
-
     public string? Path { get; set; }
 
     public string? Icon { get; set; }
@@ -28,6 +20,14 @@ public partial class Process
     public int? Level { get; set; }
 
     public int? Father { get; set; }
+
+    public DateTime CreationDate { get; set; }
+
+    public DateTime? UpdateDate { get; set; }
+
+    public DateTime? DeleteDate { get; set; }
+
+    public bool? Enable { get; set; }
 
     public virtual Process? FatherNavigation { get; set; }
 

@@ -35,6 +35,10 @@ public partial class Agent
 
     public string? Observations { get; set; }
 
+    public bool? Internal { get; set; }
+
+    public bool? SpecialPrice { get; set; }
+
     public DateTime? CreationDate { get; set; }
 
     public DateTime? UpdateDate { get; set; }
@@ -44,10 +48,6 @@ public partial class Agent
     public int? LastUpdateUser { get; set; }
 
     public bool? Enable { get; set; }
-
-    public bool? Internal { get; set; }
-
-    public bool? SpecialPrice { get; set; }
 
     public virtual ICollection<AgentInvoice> AgentInvoices { get; set; } = new List<AgentInvoice>();
 

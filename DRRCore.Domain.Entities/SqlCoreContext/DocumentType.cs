@@ -23,6 +23,8 @@ public partial class DocumentType
 
     public bool? Flag3 { get; set; }
 
+    public string? EnglishName { get; set; }
+
     public DateTime CreationDate { get; set; }
 
     public DateTime? UpdateDate { get; set; }
@@ -30,8 +32,6 @@ public partial class DocumentType
     public DateTime? DeleteDate { get; set; }
 
     public bool? Enable { get; set; }
-
-    public string? EnglishName { get; set; }
 
     public virtual ICollection<Employee> Employees { get; set; } = new List<Employee>();
 

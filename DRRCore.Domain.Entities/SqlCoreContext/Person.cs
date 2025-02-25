@@ -82,16 +82,6 @@ public partial class Person
 
     public int? IdReputation { get; set; }
 
-    public DateTime? CreationDate { get; set; }
-
-    public DateTime? UpdateDate { get; set; }
-
-    public int? LastUpdateUser { get; set; }
-
-    public DateTime? DeleteDate { get; set; }
-
-    public bool? Enable { get; set; }
-
     public bool? OnWeb { get; set; }
 
     public int? IdPersonSituation { get; set; }
@@ -103,6 +93,16 @@ public partial class Person
     public bool? Print { get; set; }
 
     public bool? HaveReport { get; set; }
+
+    public DateTime? CreationDate { get; set; }
+
+    public DateTime? UpdateDate { get; set; }
+
+    public int? LastUpdateUser { get; set; }
+
+    public DateTime? DeleteDate { get; set; }
+
+    public bool? Enable { get; set; }
 
     public bool? MigratePersonRelation { get; set; }
 

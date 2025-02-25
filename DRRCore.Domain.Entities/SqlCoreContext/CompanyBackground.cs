@@ -47,6 +47,8 @@ public partial class CompanyBackground
 
     public string? History { get; set; }
 
+    public string? TradedByEng { get; set; }
+
     public DateTime CreationDate { get; set; }
 
     public DateTime? UpdateDate { get; set; }
@@ -54,8 +56,6 @@ public partial class CompanyBackground
     public DateTime? DeleteDate { get; set; }
 
     public bool? Enable { get; set; }
-
-    public string? TradedByEng { get; set; }
 
     public virtual Currency? CurrencyNavigation { get; set; }
 

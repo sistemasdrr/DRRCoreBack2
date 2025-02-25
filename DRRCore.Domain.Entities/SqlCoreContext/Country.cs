@@ -19,6 +19,10 @@ public partial class Country
 
     public int? IdContinent { get; set; }
 
+    public string? TaxTypeName { get; set; }
+
+    public string? CodePhone { get; set; }
+
     public DateTime CreationDate { get; set; }
 
     public DateTime? UpdateDate { get; set; }
@@ -26,10 +30,6 @@ public partial class Country
     public DateTime? DeleteDate { get; set; }
 
     public bool? Enable { get; set; }
-
-    public string? TaxTypeName { get; set; }
-
-    public string? CodePhone { get; set; }
 
     public string? OldCode { get; set; }
 

@@ -59,16 +59,6 @@ public partial class Company
 
     public int? IdReputation { get; set; }
 
-    public DateTime CreationDate { get; set; }
-
-    public DateTime? UpdateDate { get; set; }
-
-    public int? LastUpdaterUser { get; set; }
-
-    public DateTime? DeleteDate { get; set; }
-
-    public bool? Enable { get; set; }
-
     public string? ReputationComentary { get; set; }
 
     public string? NewsComentary { get; set; }
@@ -85,11 +75,20 @@ public partial class Company
 
     public string? Since { get; set; }
 
+    public DateTime CreationDate { get; set; }
+
+    public DateTime? UpdateDate { get; set; }
+
+    public int? LastUpdaterUser { get; set; }
+
+    public DateTime? DeleteDate { get; set; }
+
+    public bool? Enable { get; set; }
+
     public bool? MigrateCompanyRelation { get; set; }
 
     public bool? MigrateCompanyPerson { get; set; }
 
-    public virtual ICollection<Traduction> Traductions { get; set; } = new List<Traduction>();
     public virtual ICollection<BankDebt> BankDebts { get; set; } = new List<BankDebt>();
 
     public virtual ICollection<ComercialLatePayment> ComercialLatePayments { get; set; } = new List<ComercialLatePayment>();
@@ -153,4 +152,5 @@ public partial class Company
     public virtual ICollection<TraductionCompany> TraductionCompanies { get; set; } = new List<TraductionCompany>();
 
     public virtual ICollection<WorkersHistory> WorkersHistories { get; set; } = new List<WorkersHistory>();
+    public virtual ICollection<Traduction> Traductions { get; set; } = new List<Traduction>();
 }

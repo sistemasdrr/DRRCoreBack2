@@ -57,14 +57,6 @@ public partial class CompanyBranch
 
     public string? TabCommentary { get; set; }
 
-    public DateTime CreationDate { get; set; }
-
-    public DateTime? UpdateDate { get; set; }
-
-    public DateTime? DeleteDate { get; set; }
-
-    public bool? Enable { get; set; }
-
     public string? CountriesExport { get; set; }
 
     public string? CountriesImport { get; set; }
@@ -78,6 +70,14 @@ public partial class CompanyBranch
     public string? CountriesExportEng { get; set; }
 
     public string? MainAddress { get; set; }
+
+    public DateTime CreationDate { get; set; }
+
+    public DateTime? UpdateDate { get; set; }
+
+    public DateTime? DeleteDate { get; set; }
+
+    public bool? Enable { get; set; }
 
     public virtual ICollection<CompanyBusineesActivity> CompanyBusineesActivities { get; set; } = new List<CompanyBusineesActivity>();
 

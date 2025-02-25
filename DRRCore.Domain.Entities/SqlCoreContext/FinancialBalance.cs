@@ -75,6 +75,10 @@ public partial class FinancialBalance
 
     public decimal? WorkingCapital { get; set; }
 
+    public string? BalanceTypeEng { get; set; }
+
+    public string? DurationEng { get; set; }
+
     public DateTime? CreationDate { get; set; }
 
     public DateTime? UpdateDate { get; set; }
@@ -84,10 +88,6 @@ public partial class FinancialBalance
     public int? LastUpdateUser { get; set; }
 
     public bool? Enable { get; set; }
-
-    public string? BalanceTypeEng { get; set; }
-
-    public string? DurationEng { get; set; }
 
     public virtual Company? IdCompanyNavigation { get; set; }
 

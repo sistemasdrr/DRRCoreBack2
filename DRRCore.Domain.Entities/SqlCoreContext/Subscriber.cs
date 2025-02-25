@@ -73,16 +73,6 @@ public partial class Subscriber
 
     public bool? NormalPrice { get; set; }
 
-    public DateTime? CreationDate { get; set; }
-
-    public DateTime? UpdateDate { get; set; }
-
-    public int? LastUpdateUser { get; set; }
-
-    public DateTime? DeleteDate { get; set; }
-
-    public bool? Enable { get; set; }
-
     public string? PrefTelef { get; set; }
 
     public string? PrefFax { get; set; }
@@ -102,6 +92,16 @@ public partial class Subscriber
     public bool? ReportInXml { get; set; }
 
     public bool? ReportInXmlCredendo { get; set; }
+
+    public DateTime? CreationDate { get; set; }
+
+    public DateTime? UpdateDate { get; set; }
+
+    public int? LastUpdateUser { get; set; }
+
+    public DateTime? DeleteDate { get; set; }
+
+    public bool? Enable { get; set; }
 
     public virtual ICollection<CouponBillingSubscriber> CouponBillingSubscribers { get; set; } = new List<CouponBillingSubscriber>();
 

@@ -23,6 +23,10 @@ public partial class ComercialLatePayment
 
     public int? DaysLate { get; set; }
 
+    public string? DocumentTypeEng { get; set; }
+
+    public int? IdPerson { get; set; }
+
     public DateTime? CreationDate { get; set; }
 
     public DateTime? UpdateDate { get; set; }
@@ -32,10 +36,6 @@ public partial class ComercialLatePayment
     public int? LastUpdateUser { get; set; }
 
     public bool? Enable { get; set; }
-
-    public string? DocumentTypeEng { get; set; }
-
-    public int? IdPerson { get; set; }
 
     public virtual Company? IdCompanyNavigation { get; set; }
 

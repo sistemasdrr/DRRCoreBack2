@@ -29,6 +29,10 @@ public partial class CompanySb
 
     public string? CreditHistoryCommentary { get; set; }
 
+    public decimal? GuaranteesOfferedNc { get; set; }
+
+    public decimal? GuaranteesOfferedFc { get; set; }
+
     public DateTime? CreationDate { get; set; }
 
     public DateTime? UpdateDate { get; set; }
@@ -38,10 +42,6 @@ public partial class CompanySb
     public int? LastUpdateUser { get; set; }
 
     public bool? Enable { get; set; }
-
-    public decimal? GuaranteesOfferedNc { get; set; }
-
-    public decimal? GuaranteesOfferedFc { get; set; }
 
     public virtual Company? IdCompanyNavigation { get; set; }
 

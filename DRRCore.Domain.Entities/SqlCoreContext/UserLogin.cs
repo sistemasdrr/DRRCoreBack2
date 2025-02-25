@@ -13,6 +13,12 @@ public partial class UserLogin
 
     public string Password { get; set; } = null!;
 
+    public string? EmailPassword { get; set; }
+
+    public bool? HasHolder { get; set; }
+
+    public int? IdHolder { get; set; }
+
     public DateTime CreationDate { get; set; }
 
     public DateTime? UpdateDate { get; set; }
@@ -20,12 +26,6 @@ public partial class UserLogin
     public DateTime? DeleteDate { get; set; }
 
     public bool? Enable { get; set; }
-
-    public string? EmailPassword { get; set; }
-
-    public bool? HasHolder { get; set; }
-
-    public int? IdHolder { get; set; }
 
     public virtual Employee? IdEmployeeNavigation { get; set; }
 

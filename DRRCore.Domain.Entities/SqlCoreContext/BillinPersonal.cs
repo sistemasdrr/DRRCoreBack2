@@ -18,7 +18,6 @@ public partial class BillinPersonal
     public string? Quality { get; set; }
 
     public bool? IsComplement { get; set; }
-    public bool? DirectTranslate { get; set; }
 
     public decimal? Amount { get; set; }
 
@@ -29,6 +28,8 @@ public partial class BillinPersonal
     public DateTime? DeleteDate { get; set; }
 
     public bool? Enable { get; set; }
+
+    public bool? DirectTranslate { get; set; }
 
     public virtual Employee? IdEmployeeNavigation { get; set; }
 }

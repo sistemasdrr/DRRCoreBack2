@@ -17,16 +17,6 @@ public partial class CompanyShareHolder
 
     public DateTime? StartDate { get; set; }
 
-    public DateTime? CreationDate { get; set; }
-
-    public DateTime? UpdateDate { get; set; }
-
-    public int? LastUpdateUser { get; set; }
-
-    public DateTime? DeleteDate { get; set; }
-
-    public bool? Enable { get; set; }
-
     public string? RelationEng { get; set; }
 
     public string? ParticipacionStr { get; set; }
@@ -36,6 +26,16 @@ public partial class CompanyShareHolder
     public string? Commentary { get; set; }
 
     public string? CommentaryEng { get; set; }
+
+    public DateTime? CreationDate { get; set; }
+
+    public DateTime? UpdateDate { get; set; }
+
+    public int? LastUpdateUser { get; set; }
+
+    public DateTime? DeleteDate { get; set; }
+
+    public bool? Enable { get; set; }
 
     public virtual Company? IdCompanyNavigation { get; set; }
 

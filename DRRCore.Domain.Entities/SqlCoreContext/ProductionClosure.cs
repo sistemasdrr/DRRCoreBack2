@@ -13,6 +13,8 @@ public partial class ProductionClosure
 
     public string? Observations { get; set; }
 
+    public string? Title { get; set; }
+
     public DateTime? CreationDate { get; set; }
 
     public DateTime? UpdateDate { get; set; }
@@ -22,6 +24,4 @@ public partial class ProductionClosure
     public int? LastUpdateUser { get; set; }
 
     public bool? Enable { get; set; }
-
-    public string? Title { get; set; }
 }

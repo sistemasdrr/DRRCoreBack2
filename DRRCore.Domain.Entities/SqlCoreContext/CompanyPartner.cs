@@ -19,16 +19,6 @@ public partial class CompanyPartner
 
     public DateTime? StartDate { get; set; }
 
-    public DateTime? CreationDate { get; set; }
-
-    public DateTime? UpdateDate { get; set; }
-
-    public int? LastUpdateUser { get; set; }
-
-    public DateTime? DeleteDate { get; set; }
-
-    public bool? Enable { get; set; }
-
     public string? ProfessionEng { get; set; }
 
     public string? ParticipationStr { get; set; }
@@ -38,6 +28,16 @@ public partial class CompanyPartner
     public int? Numeration { get; set; }
 
     public bool? Print { get; set; }
+
+    public DateTime? CreationDate { get; set; }
+
+    public DateTime? UpdateDate { get; set; }
+
+    public int? LastUpdateUser { get; set; }
+
+    public DateTime? DeleteDate { get; set; }
+
+    public bool? Enable { get; set; }
 
     public virtual Company? IdCompanyNavigation { get; set; }
 

@@ -31,6 +31,8 @@ public partial class CompanyFinancialInformation
 
     public string? AnalystCommentary { get; set; }
 
+    public string? TabCommentary { get; set; }
+
     public DateTime? CreationDate { get; set; }
 
     public DateTime? UpdateDate { get; set; }
@@ -40,8 +42,6 @@ public partial class CompanyFinancialInformation
     public int? LastUpdateUser { get; set; }
 
     public bool? Enable { get; set; }
-
-    public string? TabCommentary { get; set; }
 
     public virtual CollaborationDegree? IdCollaborationDegreeNavigation { get; set; }
 

@@ -83,6 +83,8 @@ public partial class TraductionCompany
 
     public string? TIgeneral { get; set; }
 
+    public string? TRmainAddress { get; set; }
+
     public DateTime? CreationDate { get; set; }
 
     public DateTime? UploadDate { get; set; }
@@ -90,8 +92,6 @@ public partial class TraductionCompany
     public DateTime? DeleteDate { get; set; }
 
     public bool? Enable { get; set; }
-
-    public string? TRmainAddress { get; set; }
 
     public virtual Company? IdCompanyNavigation { get; set; }
 }

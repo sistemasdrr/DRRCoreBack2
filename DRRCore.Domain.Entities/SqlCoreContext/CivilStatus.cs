@@ -11,6 +11,8 @@ public partial class CivilStatus
 
     public int Level { get; set; }
 
+    public string? EnglishName { get; set; }
+
     public DateTime CreationDate { get; set; }
 
     public DateTime? UpdateDate { get; set; }
@@ -18,8 +20,6 @@ public partial class CivilStatus
     public DateTime? DeleteDate { get; set; }
 
     public bool? Enable { get; set; }
-
-    public string? EnglishName { get; set; }
 
     public virtual ICollection<Person> People { get; set; } = new List<Person>();
 }

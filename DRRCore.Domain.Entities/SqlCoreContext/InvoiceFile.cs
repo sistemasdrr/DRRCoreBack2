@@ -3,17 +3,17 @@ using System.Collections.Generic;
 
 namespace DRRCore.Domain.Entities.SqlCoreContext;
 
-public partial class BranchSector
+public partial class InvoiceFile
 {
     public int Id { get; set; }
 
-    public string? EnglishName { get; set; }
+    public int IdSubscriberInvoice { get; set; }
 
-    public string? Name { get; set; }
+    public string Name { get; set; } = null!;
 
-    public string? OldCode { get; set; }
+    public string Path { get; set; } = null!;
 
-    public string? ApiCode { get; set; }
+    public string? Extension { get; set; }
 
     public DateTime CreationDate { get; set; }
 
@@ -23,5 +23,5 @@ public partial class BranchSector
 
     public bool? Enable { get; set; }
 
-    public virtual ICollection<CompanyBranch> CompanyBranches { get; set; } = new List<CompanyBranch>();
+    public virtual SubscriberInvoice IdSubscriberInvoiceNavigation { get; set; } = null!;
 }

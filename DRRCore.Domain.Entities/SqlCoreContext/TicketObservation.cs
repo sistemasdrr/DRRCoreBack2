@@ -25,16 +25,6 @@ public partial class TicketObservation
 
     public string? Cc { get; set; }
 
-    public DateTime? CreationDate { get; set; }
-
-    public DateTime? UpdateDate { get; set; }
-
-    public int? LastUpdateUser { get; set; }
-
-    public DateTime? DeleteDate { get; set; }
-
-    public bool? Enable { get; set; }
-
     public DateTime? AsignedDate { get; set; }
 
     public DateTime? EndDate { get; set; }
@@ -48,6 +38,16 @@ public partial class TicketObservation
     public bool? RespAg { get; set; }
 
     public bool? RespCl { get; set; }
+
+    public DateTime? CreationDate { get; set; }
+
+    public DateTime? UpdateDate { get; set; }
+
+    public int? LastUpdateUser { get; set; }
+
+    public DateTime? DeleteDate { get; set; }
+
+    public bool? Enable { get; set; }
 
     public virtual ICollection<DetailsTicketObservation> DetailsTicketObservations { get; set; } = new List<DetailsTicketObservation>();
 

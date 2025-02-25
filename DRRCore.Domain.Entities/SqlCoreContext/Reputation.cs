@@ -13,14 +13,6 @@ public partial class Reputation
 
     public bool? Flag { get; set; }
 
-    public DateTime CreationDate { get; set; }
-
-    public DateTime? UpdateDate { get; set; }
-
-    public DateTime? DeleteDate { get; set; }
-
-    public bool? Enable { get; set; }
-
     public int? Level { get; set; }
 
     public string Type { get; set; } = null!;
@@ -28,6 +20,14 @@ public partial class Reputation
     public string OldCode { get; set; } = null!;
 
     public string? Color { get; set; }
+
+    public DateTime CreationDate { get; set; }
+
+    public DateTime? UpdateDate { get; set; }
+
+    public DateTime? DeleteDate { get; set; }
+
+    public bool? Enable { get; set; }
 
     public virtual ICollection<Company> Companies { get; set; } = new List<Company>();
 

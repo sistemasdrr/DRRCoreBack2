@@ -13,14 +13,6 @@ public partial class TicketHistory
 
     public string? UserTo { get; set; }
 
-    public DateTime CreationDate { get; set; }
-
-    public DateTime? UpdateDate { get; set; }
-
-    public DateTime? DeleteDate { get; set; }
-
-    public bool? Enable { get; set; }
-
     public int? IdStatusTicket { get; set; }
 
     public string? AsignedTo { get; set; }
@@ -50,6 +42,14 @@ public partial class TicketHistory
     public string? Cycle { get; set; }
 
     public bool? DirectTranslation { get; set; }
+
+    public DateTime CreationDate { get; set; }
+
+    public DateTime? UpdateDate { get; set; }
+
+    public DateTime? DeleteDate { get; set; }
+
+    public bool? Enable { get; set; }
 
     public virtual ICollection<AgentInvoiceDetail> AgentInvoiceDetails { get; set; } = new List<AgentInvoiceDetail>();
 

@@ -27,10 +27,15 @@ namespace DRRCore.Application.Main.CoreApplication
             {
                 using var context = new SqlCoreContext();
                 var ticketHistory = await context.TicketHistories
+                    .Include(x=>x.IdTicketNavigation)
                     .Where(x => x.UserTo == userTo && x.Flag == false
-                        && x.IdStatusTicket != (int?)TicketStatusEnum.Despachado
-                        && x.IdStatusTicket != (int)TicketStatusEnum.Observado
-                        && x.IdStatusTicket != (int)TicketStatusEnum.Rechazado)
+                        && x.IdTicketNavigation.IdStatusTicket != (int?)TicketStatusEnum.Despachado
+                        && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Observado
+                         && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Anulado_Por_Abonado
+                          && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Anulado_Por_DRR
+                           && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Anulado_Por_FaltaDatos
+                            && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Anulado_Por_Supervisor
+                        && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Rechazado)
                     .ToListAsync();
 
                 var groupedTickets = ticketHistory
@@ -62,7 +67,14 @@ namespace DRRCore.Application.Main.CoreApplication
                 var today = DateTime.Today;
                 using var context = new SqlCoreContext();
                 var ticketHistory = await context.TicketHistories
-                    .Where(x => x.UserTo.Contains(userTo) && x.Flag == true && x.ShippingDate.HasValue && x.ShippingDate.Value.Date == today)
+                     .Include(x => x.IdTicketNavigation)
+                    .Where(x => x.UserTo.Contains(userTo) && x.Flag == true && x.ShippingDate.HasValue && x.ShippingDate.Value.Date == today
+                           && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Observado
+                         && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Anulado_Por_Abonado
+                          && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Anulado_Por_DRR
+                           && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Anulado_Por_FaltaDatos
+                            && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Anulado_Por_Supervisor
+                        && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Rechazado)
                     .ToListAsync();
                 response.Data = ticketHistory?.Count();
             }
@@ -86,7 +98,14 @@ namespace DRRCore.Application.Main.CoreApplication
                 if (cycle != null)
                 {
                     var ticketHistory = await context.TicketHistories
-                    .Where(x => x.UserTo.Contains(userTo) && x.Flag == true && x.AsignedTo.Contains("CR") == false && x.Cycle == cycle.Code && x.ShippingDate.HasValue && (x.AsignationType == "RP" || x.AsignationType == "DI" || x.AsignationType == "TR" || x.AsignationType == "RF" || x.AsignationType == "AG"))
+                         .Include(x => x.IdTicketNavigation)
+                    .Where(x => x.UserTo.Contains(userTo) && x.Flag == true && x.AsignedTo.Contains("CR") == false && x.Cycle == cycle.Code && x.ShippingDate.HasValue && (x.AsignationType == "RP" || x.AsignationType == "DI" || x.AsignationType == "TR" || x.AsignationType == "RF" || x.AsignationType == "AG")
+                       && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Observado
+                         && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Anulado_Por_Abonado
+                          && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Anulado_Por_DRR
+                           && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Anulado_Por_FaltaDatos
+                            && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Anulado_Por_Supervisor
+                        && x.IdTicketNavigation.IdStatusTicket != (int)TicketStatusEnum.Rechazado)
                     .ToListAsync();
                     num = ticketHistory.Count();
                 }
@@ -112,9 +131,10 @@ namespace DRRCore.Application.Main.CoreApplication
                 foreach (var item in personal)
                 {
                     var listTicketObservations = await context.DetailsTicketObservations
-                        .Include(x => x.IdTicketObservationsNavigation)
+                                                .Include(x => x.IdTicketObservationsNavigation)
                         .Include(x => x.IdTicketObservationsNavigation.IdTicketNavigation)
-                        .Where(x => x.AssignedTo.Contains(item.Code) && x.IdTicketObservationsNavigation.IdStatusTicketObservations == 1).ToListAsync();
+                        .Where(x => x.AssignedTo.Contains(item.Code) && x.IdTicketObservationsNavigation.IdStatusTicketObservations == 1
+                         ).ToListAsync();
                     foreach (var item1 in listTicketObservations)
                     {
                         response.Data.Add(new ObservedTickets

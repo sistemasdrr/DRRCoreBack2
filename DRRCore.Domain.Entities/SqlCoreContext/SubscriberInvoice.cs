@@ -25,6 +25,8 @@ public partial class SubscriberInvoice
 
     public decimal? TotalAmount { get; set; }
 
+    public string? Type { get; set; }
+
     public DateTime? CreationDate { get; set; }
 
     public DateTime? UpdateDate { get; set; }
@@ -35,17 +37,17 @@ public partial class SubscriberInvoice
 
     public bool? Enable { get; set; }
 
-    public string? Type { get; set; }
+    public bool? IgvFlag { get; set; }
 
     public decimal? IgvAmount { get; set; }
-
-    public bool? IgvFlag { get; set; }
 
     public virtual Currency? IdCurrencyNavigation { get; set; }
 
     public virtual InvoiceState? IdInvoiceStateNavigation { get; set; }
 
     public virtual Subscriber? IdSubscriberNavigation { get; set; }
+
+    public virtual ICollection<InvoiceFile> InvoiceFiles { get; set; } = new List<InvoiceFile>();
 
     public virtual ICollection<SubscriberInvoiceDetail> SubscriberInvoiceDetails { get; set; } = new List<SubscriberInvoiceDetail>();
 }

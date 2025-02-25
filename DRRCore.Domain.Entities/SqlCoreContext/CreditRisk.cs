@@ -13,14 +13,6 @@ public partial class CreditRisk
 
     public bool? Flag { get; set; }
 
-    public DateTime CreationDate { get; set; }
-
-    public DateTime? UpdateDate { get; set; }
-
-    public DateTime? DeleteDate { get; set; }
-
-    public bool? Enable { get; set; }
-
     public int? Level { get; set; }
 
     public int? Rate { get; set; }
@@ -32,6 +24,14 @@ public partial class CreditRisk
     public string? Abreviation { get; set; }
 
     public string? ApiCode { get; set; }
+
+    public DateTime CreationDate { get; set; }
+
+    public DateTime? UpdateDate { get; set; }
+
+    public DateTime? DeleteDate { get; set; }
+
+    public bool? Enable { get; set; }
 
     public virtual ICollection<Company> Companies { get; set; } = new List<Company>();
 

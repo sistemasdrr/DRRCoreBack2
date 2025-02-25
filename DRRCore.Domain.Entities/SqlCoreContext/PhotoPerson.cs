@@ -13,6 +13,12 @@ public partial class PhotoPerson
 
     public string? Base64 { get; set; }
 
+    public string? Description { get; set; }
+
+    public string? DescriptionEng { get; set; }
+
+    public bool? PrintImg { get; set; }
+
     public DateTime? CreationDate { get; set; }
 
     public DateTime? UpdateDate { get; set; }
@@ -22,12 +28,6 @@ public partial class PhotoPerson
     public DateTime? DeleteDate { get; set; }
 
     public bool? Enable { get; set; }
-
-    public string? Description { get; set; }
-
-    public string? DescriptionEng { get; set; }
-
-    public bool? PrintImg { get; set; }
 
     public virtual Person? IdPersonNavigation { get; set; }
 }
