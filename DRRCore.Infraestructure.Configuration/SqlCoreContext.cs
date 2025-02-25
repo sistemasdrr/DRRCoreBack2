@@ -106,6 +106,8 @@ public partial class SqlCoreContext : DbContext
 
     public virtual DbSet<InternalInvoiceDetail> InternalInvoiceDetails { get; set; }
 
+    public virtual DbSet<InvoiceFile> InvoiceFiles { get; set; }
+
     public virtual DbSet<InvoiceState> InvoiceStates { get; set; }
 
     public virtual DbSet<Job> Jobs { get; set; }
@@ -159,8 +161,6 @@ public partial class SqlCoreContext : DbContext
     public virtual DbSet<PersonalPrice> PersonalPrices { get; set; }
 
     public virtual DbSet<PhotoPerson> PhotoPeople { get; set; }
-
-    public virtual DbSet<Probando> Probandos { get; set; }
 
     public virtual DbSet<Process> Processes { get; set; }
 
@@ -224,28 +224,14 @@ public partial class SqlCoreContext : DbContext
 
     public virtual DbSet<WorkersHistory> WorkersHistories { get; set; }
 
-    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    //{
-    //    if (!optionsBuilder.IsConfigured)
-    //    {
-    //        optionsBuilder.UseSqlServer(
-
-    //        //"Data Source=200.58.123.184,14330;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
-    //        "Data Source=SD-4154134-W;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
-
-    //        //migracion
-    //        //"Data Source=SD-4154134-W/DRRSQLSERVER;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True");
-
-    //    }
-    //}
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
         {
             optionsBuilder.UseSqlServer(
-         "Data Source=200.58.123.184,14331;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
-      //   "Data Source=localhost\\DRRSQLSERVER;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
-          //   "Data Source=SD-4154134-W;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
+          "Data Source=200.58.123.184,14331;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
+         //"Data Source=localhost\\DRRSQLSERVER;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
+            //   "Data Source=SD-4154134-W;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
             , sqlServerOptions => sqlServerOptions.EnableRetryOnFailure(
                 maxRetryCount: 18,
                 maxRetryDelay: TimeSpan.FromSeconds(60),
@@ -274,7 +260,7 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<Agent>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Agent__3213E83FAB71BE05");
+            entity.HasKey(e => e.Id).HasName("PK__Agent__3213E83F2D01908B");
 
             entity.ToTable("Agent");
 
@@ -345,12 +331,12 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdCountryNavigation).WithMany(p => p.Agents)
                 .HasForeignKey(d => d.IdCountry)
-                .HasConstraintName("FK__Agent__idCountry__59E54FE7");
+                .HasConstraintName("FK__Agent__idCountry__4C8B54C9");
         });
 
         modelBuilder.Entity<AgentInvoice>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__AgentInv__3213E83FA1227F51");
+            entity.HasKey(e => e.Id).HasName("PK__AgentInv__3213E83F0C549A17");
 
             entity.ToTable("AgentInvoice");
 
@@ -394,20 +380,20 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdAgentNavigation).WithMany(p => p.AgentInvoices)
                 .HasForeignKey(d => d.IdAgent)
-                .HasConstraintName("FK__AgentInvo__idAge__41399DAE");
+                .HasConstraintName("FK__AgentInvo__idAge__4D7F7902");
 
             entity.HasOne(d => d.IdCurrencyNavigation).WithMany(p => p.AgentInvoices)
                 .HasForeignKey(d => d.IdCurrency)
-                .HasConstraintName("FK__AgentInvo__idCur__422DC1E7");
+                .HasConstraintName("FK__AgentInvo__idCur__4E739D3B");
 
             entity.HasOne(d => d.IdInvoiceStateNavigation).WithMany(p => p.AgentInvoices)
                 .HasForeignKey(d => d.IdInvoiceState)
-                .HasConstraintName("FK__AgentInvo__idInv__40457975");
+                .HasConstraintName("FK__AgentInvo__idInv__4F67C174");
         });
 
         modelBuilder.Entity<AgentInvoiceDetail>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__AgentInv__3213E83F5C570B8E");
+            entity.HasKey(e => e.Id).HasName("PK__AgentInv__3213E83FC71F8436");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Amount)
@@ -432,16 +418,16 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdAgentInvoiceNavigation).WithMany(p => p.AgentInvoiceDetails)
                 .HasForeignKey(d => d.IdAgentInvoice)
-                .HasConstraintName("FK__AgentInvo__enabl__46F27704");
+                .HasConstraintName("FK__AgentInvo__idAge__505BE5AD");
 
             entity.HasOne(d => d.IdTicketHistoryNavigation).WithMany(p => p.AgentInvoiceDetails)
                 .HasForeignKey(d => d.IdTicketHistory)
-                .HasConstraintName("FK__AgentInvo__idTic__47E69B3D");
+                .HasConstraintName("FK__AgentInvo__idTic__515009E6");
         });
 
         modelBuilder.Entity<AgentPrice>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__AgentPri__3213E83F1515F0AA");
+            entity.HasKey(e => e.Id).HasName("PK__AgentPri__3213E83F1FEC9EDB");
 
             entity.ToTable("AgentPrice");
 
@@ -498,24 +484,24 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdAgentNavigation).WithMany(p => p.AgentPrices)
                 .HasForeignKey(d => d.IdAgent)
-                .HasConstraintName("FK__AgentPric__idAge__5EAA0504");
+                .HasConstraintName("FK__AgentPric__idAge__52442E1F");
 
             entity.HasOne(d => d.IdContinentNavigation).WithMany(p => p.AgentPrices)
                 .HasForeignKey(d => d.IdContinent)
-                .HasConstraintName("FK__AgentPric__idCon__5F9E293D");
+                .HasConstraintName("FK__AgentPric__idCon__53385258");
 
             entity.HasOne(d => d.IdCountryNavigation).WithMany(p => p.AgentPrices)
                 .HasForeignKey(d => d.IdCountry)
-                .HasConstraintName("FK__AgentPric__idCou__60924D76");
+                .HasConstraintName("FK__AgentPric__idCou__542C7691");
 
             entity.HasOne(d => d.IdCurrencyNavigation).WithMany(p => p.AgentPrices)
                 .HasForeignKey(d => d.IdCurrency)
-                .HasConstraintName("FK__AgentPric__idCur__618671AF");
+                .HasConstraintName("FK__AgentPric__idCur__55209ACA");
         });
 
         modelBuilder.Entity<Anniversary>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Annivers__3213E83FEB9CDB75");
+            entity.HasKey(e => e.Id).HasName("PK__Annivers__3213E83FE9431109");
 
             entity.ToTable("Anniversary");
 
@@ -559,7 +545,7 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<BankAccountType>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__BankAcco__3213E83F30664FC1");
+            entity.HasKey(e => e.Id).HasName("PK__BankAcco__3213E83F22A40BFC");
 
             entity.ToTable("BankAccountType");
 
@@ -585,7 +571,7 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<BankDebt>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__BankDebt__3213E83FCA14D7AD");
+            entity.HasKey(e => e.Id).HasName("PK__BankDebt__3213E83F9A2BC1D4");
 
             entity.ToTable("BankDebt");
 
@@ -640,7 +626,7 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.BankDebts)
                 .HasForeignKey(d => d.IdCompany)
-                .HasConstraintName("FK__BankDebt__idComp__3EFC4F81");
+                .HasConstraintName("FK__BankDebt__idComp__5614BF03");
 
             entity.HasOne(d => d.IdPersonNavigation).WithMany(p => p.BankDebts)
                 .HasForeignKey(d => d.IdPerson)
@@ -649,7 +635,7 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<BillinPersonal>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__BillinPe__3213E83F4EFF2BED");
+            entity.HasKey(e => e.Id).HasName("PK__BillinPe__3213E83F4DF4EC48");
 
             entity.ToTable("BillinPersonal");
 
@@ -669,12 +655,12 @@ public partial class SqlCoreContext : DbContext
             entity.Property(e => e.DeleteDate)
                 .HasColumnType("datetime")
                 .HasColumnName("deleteDate");
+            entity.Property(e => e.DirectTranslate).HasColumnName("directTranslate");
             entity.Property(e => e.Enable)
                 .HasDefaultValueSql("((1))")
                 .HasColumnName("enable");
             entity.Property(e => e.IdEmployee).HasColumnName("idEmployee");
             entity.Property(e => e.IsComplement).HasColumnName("isComplement");
-            entity.Property(e => e.DirectTranslate).HasColumnName("directTranslate");
             entity.Property(e => e.Quality)
                 .HasMaxLength(1)
                 .IsUnicode(false)
@@ -690,16 +676,16 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdEmployeeNavigation).WithMany(p => p.BillinPersonals)
                 .HasForeignKey(d => d.IdEmployee)
-                .HasConstraintName("FK__BillinPer__enabl__2DF1BF10");
+                .HasConstraintName("FK__BillinPer__idEmp__5708E33C");
         });
 
         modelBuilder.Entity<BranchSector>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__BranchSe__3213E83FD65301CA");
+            entity.HasKey(e => e.Id).HasName("PK__BranchSe__3213E83FE5398429");
 
             entity.ToTable("BranchSector");
 
-            entity.HasIndex(e => e.Name, "UQ__BranchSe__72E12F1BC914DA1A").IsUnique();
+            entity.HasIndex(e => e.Name, "UQ__BranchSe__72E12F1B6C4FC8D6").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.ApiCode)
@@ -736,7 +722,7 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<BusineesActivity>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Businees__3213E83F3B6533B9");
+            entity.HasKey(e => e.Id).HasName("PK__Businees__3213E83F75654C2E");
 
             entity.ToTable("BusineesActivity");
 
@@ -766,16 +752,16 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdBusinessBranchNavigation).WithMany(p => p.BusineesActivities)
                 .HasForeignKey(d => d.IdBusinessBranch)
-                .HasConstraintName("FK__BusineesA__idBus__0CA5D9DE");
+                .HasConstraintName("FK__BusineesA__idBus__57FD0775");
         });
 
         modelBuilder.Entity<BusinessBranch>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Business__3213E83F36843515");
+            entity.HasKey(e => e.Id).HasName("PK__Business__3213E83F969D05A7");
 
             entity.ToTable("BusinessBranch");
 
-            entity.HasIndex(e => e.Name, "UQ__Business__72E12F1B16C7234A").IsUnique();
+            entity.HasIndex(e => e.Name, "UQ__Business__72E12F1BCB3FB442").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.ApiCode)
@@ -808,7 +794,7 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<CivilStatus>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__CivilSta__3213E83F2E066409");
+            entity.HasKey(e => e.Id).HasName("PK__CivilSta__3213E83FA2DF4444");
 
             entity.ToTable("CivilStatus");
 
@@ -839,7 +825,7 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<CollaborationDegree>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Collabor__3213E83F97CBFADC");
+            entity.HasKey(e => e.Id).HasName("PK__Collabor__3213E83FF98A5673");
 
             entity.ToTable("CollaborationDegree");
 
@@ -877,7 +863,7 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<ComercialLatePayment>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Comercia__3213E83F2D7E7536");
+            entity.HasKey(e => e.Id).HasName("PK__Comercia__3213E83F4F3C941A");
 
             entity.ToTable("ComercialLatePayment");
 
@@ -928,7 +914,7 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.ComercialLatePayments)
                 .HasForeignKey(d => d.IdCompany)
-                .HasConstraintName("FK__Comercial__idCom__3A379A64");
+                .HasConstraintName("FK__Comercial__idCom__58F12BAE");
 
             entity.HasOne(d => d.IdPersonNavigation).WithMany(p => p.ComercialLatePayments)
                 .HasForeignKey(d => d.IdPerson)
@@ -937,7 +923,7 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<Company>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Company__3213E83F837E910E");
+            entity.HasKey(e => e.Id).HasName("PK__Company__3213E83F25E57F5A");
 
             entity.ToTable("Company");
 
@@ -1073,32 +1059,32 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdCountryNavigation).WithMany(p => p.Companies)
                 .HasForeignKey(d => d.IdCountry)
-                .HasConstraintName("FK__Company__idCount__60C757A0");
+                .HasConstraintName("FK__Company__idCount__59E54FE7");
 
             entity.HasOne(d => d.IdCreditRiskNavigation).WithMany(p => p.Companies)
                 .HasForeignKey(d => d.IdCreditRisk)
-                .HasConstraintName("FK__Company__idCredi__61BB7BD9");
+                .HasConstraintName("FK__Company__idCredi__5AD97420");
 
             entity.HasOne(d => d.IdLegalPersonTypeNavigation).WithMany(p => p.Companies)
                 .HasForeignKey(d => d.IdLegalPersonType)
-                .HasConstraintName("FK__Company__idLegal__5EDF0F2E");
+                .HasConstraintName("FK__Company__idLegal__5BCD9859");
 
             entity.HasOne(d => d.IdLegalRegisterSituationNavigation).WithMany(p => p.Companies)
                 .HasForeignKey(d => d.IdLegalRegisterSituation)
-                .HasConstraintName("FK__Company__idLegal__5FD33367");
+                .HasConstraintName("FK__Company__idLegal__5CC1BC92");
 
             entity.HasOne(d => d.IdPaymentPolicyNavigation).WithMany(p => p.Companies)
                 .HasForeignKey(d => d.IdPaymentPolicy)
-                .HasConstraintName("FK__Company__idPayme__62AFA012");
+                .HasConstraintName("FK__Company__idPayme__5DB5E0CB");
 
             entity.HasOne(d => d.IdReputationNavigation).WithMany(p => p.Companies)
                 .HasForeignKey(d => d.IdReputation)
-                .HasConstraintName("FK__Company__idReput__63A3C44B");
+                .HasConstraintName("FK__Company__idReput__5EAA0504");
         });
 
         modelBuilder.Entity<CompanyBackground>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__CompanyB__3213E83F6BF053B5");
+            entity.HasKey(e => e.Id).HasName("PK__CompanyB__3213E83F16204A37");
 
             entity.ToTable("CompanyBackground");
 
@@ -1198,12 +1184,12 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.CompanyBackgrounds)
                 .HasForeignKey(d => d.IdCompany)
-                .HasConstraintName("FK__CompanyBa__idCom__73DA2C14");
+                .HasConstraintName("FK__CompanyBa__idCom__5F9E293D");
         });
 
         modelBuilder.Entity<CompanyBranch>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__CompanyB__3213E83F25EE4BF5");
+            entity.HasKey(e => e.Id).HasName("PK__CompanyB__3213E83F3A295E9B");
 
             entity.ToTable("CompanyBranch");
 
@@ -1314,24 +1300,24 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdBranchSectorNavigation).WithMany(p => p.CompanyBranches)
                 .HasForeignKey(d => d.IdBranchSector)
-                .HasConstraintName("FK__CompanyBr__idBra__1AF3F935");
+                .HasConstraintName("FK__CompanyBr__idBra__60924D76");
 
             entity.HasOne(d => d.IdBusinessBranchNavigation).WithMany(p => p.CompanyBranches)
                 .HasForeignKey(d => d.IdBusinessBranch)
-                .HasConstraintName("FK__CompanyBr__idBus__1BE81D6E");
+                .HasConstraintName("FK__CompanyBr__idBus__618671AF");
 
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.CompanyBranches)
                 .HasForeignKey(d => d.IdCompany)
-                .HasConstraintName("FK__CompanyBr__idCom__19FFD4FC");
+                .HasConstraintName("FK__CompanyBr__idCom__627A95E8");
 
             entity.HasOne(d => d.IdLandOwnershipNavigation).WithMany(p => p.CompanyBranches)
                 .HasForeignKey(d => d.IdLandOwnership)
-                .HasConstraintName("FK__CompanyBr__idLan__1CDC41A7");
+                .HasConstraintName("FK__CompanyBr__idLan__636EBA21");
         });
 
         modelBuilder.Entity<CompanyBusineesActivity>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__CompanyB__3213E83F188717B4");
+            entity.HasKey(e => e.Id).HasName("PK__CompanyB__3213E83F4BF31B6F");
 
             entity.ToTable("CompanyBusineesActivity");
 
@@ -1359,12 +1345,12 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdCompanyBranchNavigation).WithMany(p => p.CompanyBusineesActivities)
                 .HasForeignKey(d => d.IdCompanyBranch)
-                .HasConstraintName("FK__CompanyBu__idCom__21A0F6C4");
+                .HasConstraintName("FK__CompanyBu__idCom__6462DE5A");
         });
 
         modelBuilder.Entity<CompanyCreditOpinion>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__CompanyC__3213E83F88C5A979");
+            entity.HasKey(e => e.Id).HasName("PK__CompanyC__3213E83F2A0E499E");
 
             entity.ToTable("CompanyCreditOpinion");
 
@@ -1402,12 +1388,12 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.CompanyCreditOpinions)
                 .HasForeignKey(d => d.IdCompany)
-                .HasConstraintName("FK__CompanyCr__idCom__520F23F5");
+                .HasConstraintName("FK__CompanyCr__idCom__00750D23");
         });
 
         modelBuilder.Entity<CompanyFinancialInformation>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__CompanyF__3213E83F794B1341");
+            entity.HasKey(e => e.Id).HasName("PK__CompanyF__3213E83F97814C1E");
 
             entity.ToTable("CompanyFinancialInformation");
 
@@ -1464,20 +1450,20 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdCollaborationDegreeNavigation).WithMany(p => p.CompanyFinancialInformations)
                 .HasForeignKey(d => d.IdCollaborationDegree)
-                .HasConstraintName("FK__CompanyFi__idCol__10416098");
+                .HasConstraintName("FK__CompanyFi__idCol__0169315C");
 
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.CompanyFinancialInformations)
                 .HasForeignKey(d => d.IdCompany)
-                .HasConstraintName("FK__CompanyFi__idCom__0F4D3C5F");
+                .HasConstraintName("FK__CompanyFi__idCom__025D5595");
 
             entity.HasOne(d => d.IdFinancialSituacionNavigation).WithMany(p => p.CompanyFinancialInformations)
                 .HasForeignKey(d => d.IdFinancialSituacion)
-                .HasConstraintName("FK__CompanyFi__idFin__113584D1");
+                .HasConstraintName("FK__CompanyFi__idFin__035179CE");
         });
 
         modelBuilder.Entity<CompanyGeneralInformation>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__CompanyG__3213E83FBCC6DE2F");
+            entity.HasKey(e => e.Id).HasName("PK__CompanyG__3213E83F1F4AFEF9");
 
             entity.ToTable("CompanyGeneralInformation");
 
@@ -1503,12 +1489,12 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.CompanyGeneralInformations)
                 .HasForeignKey(d => d.IdCompany)
-                .HasConstraintName("FK__CompanyGe__idCom__56D3D912");
+                .HasConstraintName("FK__CompanyGe__idCom__04459E07");
         });
 
         modelBuilder.Entity<CompanyImage>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__CompanyI__3213E83F77176D37");
+            entity.HasKey(e => e.Id).HasName("PK__CompanyI__3213E83F5E66C5DE");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CreationDate)
@@ -1577,12 +1563,12 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.CompanyImages)
                 .HasForeignKey(d => d.IdCompany)
-                .HasConstraintName("FK__CompanyIm__enabl__6F00685E");
+                .HasConstraintName("FK__CompanyIm__idCom__0539C240");
         });
 
         modelBuilder.Entity<CompanyPartner>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__CompanyP__3213E83FC9DD179E");
+            entity.HasKey(e => e.Id).HasName("PK__CompanyP__3213E83F4085FD3C");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CreationDate)
@@ -1629,16 +1615,16 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.CompanyPartners)
                 .HasForeignKey(d => d.IdCompany)
-                .HasConstraintName("FK__CompanyPa__idCom__457442E6");
+                .HasConstraintName("FK__CompanyPa__idCom__062DE679");
 
             entity.HasOne(d => d.IdPersonNavigation).WithMany(p => p.CompanyPartners)
                 .HasForeignKey(d => d.IdPerson)
-                .HasConstraintName("FK__CompanyPa__idPer__4668671F");
+                .HasConstraintName("FK__CompanyPa__idPer__07220AB2");
         });
 
         modelBuilder.Entity<CompanyRelation>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__CompanyR__3213E83FAA2CD575");
+            entity.HasKey(e => e.Id).HasName("PK__CompanyR__3213E83F4B3CFBD3");
 
             entity.ToTable("CompanyRelation");
 
@@ -1686,16 +1672,16 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.CompanyRelationIdCompanyNavigations)
                 .HasForeignKey(d => d.IdCompany)
-                .HasConstraintName("FK__CompanyRe__idCom__6AA5C795");
+                .HasConstraintName("FK__CompanyRe__idCom__08162EEB");
 
             entity.HasOne(d => d.IdCompanyRelationNavigation).WithMany(p => p.CompanyRelationIdCompanyRelationNavigations)
                 .HasForeignKey(d => d.IdCompanyRelation)
-                .HasConstraintName("FK__CompanyRe__idCom__6B99EBCE");
+                .HasConstraintName("FK__CompanyRe__idCom__090A5324");
         });
 
         modelBuilder.Entity<CompanySb>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__CompanyS__3213E83F150D6A9A");
+            entity.HasKey(e => e.Id).HasName("PK__CompanyS__3213E83F61DC745B");
 
             entity.ToTable("CompanySBS");
 
@@ -1753,16 +1739,16 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.CompanySbs)
                 .HasForeignKey(d => d.IdCompany)
-                .HasConstraintName("FK__CompanySB__idCom__47919582");
+                .HasConstraintName("FK__CompanySB__idCom__09FE775D");
 
             entity.HasOne(d => d.IdOpcionalCommentarySbsNavigation).WithMany(p => p.CompanySbs)
                 .HasForeignKey(d => d.IdOpcionalCommentarySbs)
-                .HasConstraintName("FK__CompanySB__idOpc__4885B9BB");
+                .HasConstraintName("FK__CompanySB__idOpc__0AF29B96");
         });
 
         modelBuilder.Entity<CompanyShareHolder>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__CompanyS__3213E83FBBB4A4F5");
+            entity.HasKey(e => e.Id).HasName("PK__CompanyS__3213E83F22A39EB7");
 
             entity.ToTable("CompanyShareHolder");
 
@@ -1814,16 +1800,16 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.CompanyShareHolderIdCompanyNavigations)
                 .HasForeignKey(d => d.IdCompany)
-                .HasConstraintName("FK__CompanySh__idCom__4C214075");
+                .HasConstraintName("FK__CompanySh__idCom__0BE6BFCF");
 
             entity.HasOne(d => d.IdCompanyShareHolderNavigation).WithMany(p => p.CompanyShareHolderIdCompanyShareHolderNavigations)
                 .HasForeignKey(d => d.IdCompanyShareHolder)
-                .HasConstraintName("FK__CompanySh__idCom__4D1564AE");
+                .HasConstraintName("FK__CompanySh__idCom__0CDAE408");
         });
 
         modelBuilder.Entity<Continent>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Continen__3213E83F1D74F7BC");
+            entity.HasKey(e => e.Id).HasName("PK__Continen__3213E83F1AA10E01");
 
             entity.ToTable("Continent");
 
@@ -1856,7 +1842,7 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<Country>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Country__3213E83F1BD5B3FF");
+            entity.HasKey(e => e.Id).HasName("PK__Country__3213E83F82E90AC5");
 
             entity.ToTable("Country");
 
@@ -1909,12 +1895,12 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdContinentNavigation).WithMany(p => p.Countries)
                 .HasForeignKey(d => d.IdContinent)
-                .HasConstraintName("FK__Country__idConti__79C80F94");
+                .HasConstraintName("FK__Country__idConti__0DCF0841");
         });
 
         modelBuilder.Entity<CouponBillingSubscriber>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__CouponBi__3213E83FF31869E3");
+            entity.HasKey(e => e.Id).HasName("PK__CouponBi__3213E83FB4F506DB");
 
             entity.ToTable("CouponBillingSubscriber");
 
@@ -1952,12 +1938,12 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdSubscriberNavigation).WithMany(p => p.CouponBillingSubscribers)
                 .HasForeignKey(d => d.IdSubscriber)
-                .HasConstraintName("FK__CouponBil__idSub__664B26CC");
+                .HasConstraintName("FK__CouponBil__idSub__0EC32C7A");
         });
 
         modelBuilder.Entity<CouponBillingSubscriberHistory>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__CouponBi__3213E83FA46C58FE");
+            entity.HasKey(e => e.Id).HasName("PK__CouponBi__3213E83FA8EDC74F");
 
             entity.ToTable("CouponBillingSubscriberHistory");
 
@@ -2003,12 +1989,12 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdCouponBillingNavigation).WithMany(p => p.CouponBillingSubscriberHistories)
                 .HasForeignKey(d => d.IdCouponBilling)
-                .HasConstraintName("FK__CouponBil__idCou__6B0FDBE9");
+                .HasConstraintName("FK__CouponBil__idCou__0FB750B3");
         });
 
         modelBuilder.Entity<CreditRisk>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__CreditRi__3213E83F1FBB14F4");
+            entity.HasKey(e => e.Id).HasName("PK__CreditRi__3213E83FD39B886C");
 
             entity.ToTable("CreditRisk");
 
@@ -2059,7 +2045,7 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<Currency>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Currency__3213E83FC807D727");
+            entity.HasKey(e => e.Id).HasName("PK__Currency__3213E83F817715DE");
 
             entity.ToTable("Currency");
 
@@ -2094,7 +2080,7 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<CurrentPersonJob>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__CurrentP__3213E83FBE345DC8");
+            entity.HasKey(e => e.Id).HasName("PK__CurrentP__3213E83F491E6D12");
 
             entity.ToTable("CurrentPersonJob");
 
@@ -2129,7 +2115,7 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<DetailsTicketObservation>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__DetailsT__3213E83F30F224C9");
+            entity.HasKey(e => e.Id).HasName("PK__DetailsT__3213E83FD6420A61");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.AssignedTo)
@@ -2154,16 +2140,16 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdTicketObservationsNavigation).WithMany(p => p.DetailsTicketObservations)
                 .HasForeignKey(d => d.IdTicketObservations)
-                .HasConstraintName("FK__DetailsTi__idTic__5C229E14");
+                .HasConstraintName("FK__DetailsTi__idTic__10AB74EC");
         });
 
         modelBuilder.Entity<DocumentType>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Document__3213E83F64930AF5");
+            entity.HasKey(e => e.Id).HasName("PK__Document__3213E83F2C3E5B30");
 
             entity.ToTable("DocumentType");
 
-            entity.HasIndex(e => e.Name, "UQ__Document__72E12F1B5F98605B").IsUnique();
+            entity.HasIndex(e => e.Name, "UQ__Document__72E12F1B66525C64").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Abreviation)
@@ -2213,7 +2199,7 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<Employee>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Employee__3213E83FE8D94EB9");
+            entity.HasKey(e => e.Id).HasName("PK__Employee__3213E83F337E8E01");
 
             entity.ToTable("Employee");
 
@@ -2321,20 +2307,20 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdDocumentTypeNavigation).WithMany(p => p.Employees)
                 .HasForeignKey(d => d.IdDocumentType)
-                .HasConstraintName("FK__Employee__idDocu__07220AB2");
+                .HasConstraintName("FK__Employee__idDocu__119F9925");
 
             entity.HasOne(d => d.IdJobNavigation).WithMany(p => p.Employees)
                 .HasForeignKey(d => d.IdJob)
-                .HasConstraintName("FK__Employee__idJob__090A5324");
+                .HasConstraintName("FK__Employee__idJob__1293BD5E");
 
             entity.HasOne(d => d.IdJobDepartmentNavigation).WithMany(p => p.Employees)
                 .HasForeignKey(d => d.IdJobDepartment)
-                .HasConstraintName("FK__Employee__idJobD__08162EEB");
+                .HasConstraintName("FK__Employee__idJobD__1387E197");
         });
 
         modelBuilder.Entity<Endorsement>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Endorsem__3213E83F4444C241");
+            entity.HasKey(e => e.Id).HasName("PK__Endorsem__3213E83FF6B7A88B");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.AmountNc)
@@ -2376,12 +2362,12 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.Endorsements)
                 .HasForeignKey(d => d.IdCompany)
-                .HasConstraintName("FK__Endorseme__idCom__4D4A6ED8");
+                .HasConstraintName("FK__Endorseme__idCom__147C05D0");
         });
 
         modelBuilder.Entity<FamilyBondType>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__FamilyBo__3213E83F51334919");
+            entity.HasKey(e => e.Id).HasName("PK__FamilyBo__3213E83F518CF3B0");
 
             entity.ToTable("FamilyBondType");
 
@@ -2407,7 +2393,7 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<FinancialBalance>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Financia__3213E83FBD3B434A");
+            entity.HasKey(e => e.Id).HasName("PK__Financia__3213E83FCEC3DAC8");
 
             entity.ToTable("FinancialBalance");
 
@@ -2537,16 +2523,16 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.FinancialBalances)
                 .HasForeignKey(d => d.IdCompany)
-                .HasConstraintName("FK__Financial__idCom__253C7D7E");
+                .HasConstraintName("FK__Financial__idCom__15702A09");
 
             entity.HasOne(d => d.IdCurrencyNavigation).WithMany(p => p.FinancialBalances)
                 .HasForeignKey(d => d.IdCurrency)
-                .HasConstraintName("FK__Financial__idCur__2630A1B7");
+                .HasConstraintName("FK__Financial__idCur__16644E42");
         });
 
         modelBuilder.Entity<FinancialSituacion>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Financia__3213E83F46832F2C");
+            entity.HasKey(e => e.Id).HasName("PK__Financia__3213E83F49E679D4");
 
             entity.ToTable("FinancialSituacion");
 
@@ -2598,7 +2584,7 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<HealthInsurance>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__HealthIn__3213E83F6FEAA16F");
+            entity.HasKey(e => e.Id).HasName("PK__HealthIn__3213E83F24E84593");
 
             entity.ToTable("HealthInsurance");
 
@@ -2629,16 +2615,16 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdEmployeeNavigation).WithMany(p => p.HealthInsurances)
                 .HasForeignKey(d => d.IdEmployee)
-                .HasConstraintName("FK__HealthIns__idEmp__0DCF0841");
+                .HasConstraintName("FK__HealthIns__idEmp__1758727B");
 
             entity.HasOne(d => d.IdFamilyBondTypeNavigation).WithMany(p => p.HealthInsurances)
                 .HasForeignKey(d => d.IdFamilyBondType)
-                .HasConstraintName("FK__HealthIns__idFam__0EC32C7A");
+                .HasConstraintName("FK__HealthIns__idFam__184C96B4");
         });
 
         modelBuilder.Entity<HistoryInfoChange>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__HistoryI__3213E83F663C27F2");
+            entity.HasKey(e => e.Id).HasName("PK__HistoryI__3213E83F36082371");
 
             entity.ToTable("HistoryInfoChange");
 
@@ -2668,7 +2654,7 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<ImportsAndExport>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__ImportsA__3213E83F7DA2D5CC");
+            entity.HasKey(e => e.Id).HasName("PK__ImportsA__3213E83F26C3215F");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Amount)
@@ -2705,12 +2691,12 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.ImportsAndExports)
                 .HasForeignKey(d => d.IdCompany)
-                .HasConstraintName("FK__ImportsAn__idCom__642DD430");
+                .HasConstraintName("FK__ImportsAn__idCom__1940BAED");
         });
 
         modelBuilder.Entity<InternalInvoice>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Internal__3213E83F2E05612A");
+            entity.HasKey(e => e.Id).HasName("PK__Internal__3213E83FCD8E15CF");
 
             entity.ToTable("InternalInvoice");
 
@@ -2750,7 +2736,7 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<InternalInvoiceDetail>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Internal__3213E83FEC855A2F");
+            entity.HasKey(e => e.Id).HasName("PK__Internal__3213E83F548B02D6");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CreationDate)
@@ -2764,6 +2750,7 @@ public partial class SqlCoreContext : DbContext
                 .HasDefaultValueSql("((1))")
                 .HasColumnName("enable");
             entity.Property(e => e.IdInternalInvoice).HasColumnName("idInternalInvoice");
+            entity.Property(e => e.IdTicketHistory).HasColumnName("idTicketHistory");
             entity.Property(e => e.IsComplement).HasColumnName("isComplement");
             entity.Property(e => e.Price)
                 .HasColumnType("decimal(6, 2)")
@@ -2778,16 +2765,53 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdInternalInvoiceNavigation).WithMany(p => p.InternalInvoiceDetails)
                 .HasForeignKey(d => d.IdInternalInvoice)
-                .HasConstraintName("FK__InternalI__idInt__3F1C4B12");
+                .HasConstraintName("FK__InternalI__idInt__1A34DF26");
+
             entity.HasOne(d => d.IdTicketHistoryNavigation).WithMany(p => p.InternalInvoiceDetails)
                 .HasForeignKey(d => d.IdTicketHistory)
-                .HasConstraintName("FK__InternalI__idTic__68DD7AB4");
+                .HasConstraintName("FK__InternalI__idTic__538D5813");
+        });
 
+        modelBuilder.Entity<InvoiceFile>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__InvoiceF__3213E83F7DB206D6");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.CreationDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("creationDate");
+            entity.Property(e => e.DeleteDate)
+                .HasColumnType("datetime")
+                .HasColumnName("deleteDate");
+            entity.Property(e => e.Enable)
+                .IsRequired()
+                .HasDefaultValueSql("((1))")
+                .HasColumnName("enable");
+            entity.Property(e => e.Extension)
+                .HasMaxLength(10)
+                .IsUnicode(false)
+                .HasColumnName("extension");
+            entity.Property(e => e.IdSubscriberInvoice).HasColumnName("idSubscriberInvoice");
+            entity.Property(e => e.Name)
+                .IsUnicode(false)
+                .HasColumnName("name");
+            entity.Property(e => e.Path)
+                .IsUnicode(false)
+                .HasColumnName("path");
+            entity.Property(e => e.UpdateDate)
+                .HasColumnType("datetime")
+                .HasColumnName("updateDate");
+
+            entity.HasOne(d => d.IdSubscriberInvoiceNavigation).WithMany(p => p.InvoiceFiles)
+                .HasForeignKey(d => d.IdSubscriberInvoice)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__InvoiceFi__idSub__1C0818FF");
         });
 
         modelBuilder.Entity<InvoiceState>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__InvoiceS__3213E83F3F9127AB");
+            entity.HasKey(e => e.Id).HasName("PK__InvoiceS__3213E83F6905FCD9");
 
             entity.ToTable("InvoiceState");
 
@@ -2818,7 +2842,7 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<Job>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Job__3213E83F6467DF61");
+            entity.HasKey(e => e.Id).HasName("PK__Job__3213E83F00D82A5A");
 
             entity.ToTable("Job");
 
@@ -2844,16 +2868,16 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdJobDepartmentNavigation).WithMany(p => p.Jobs)
                 .HasForeignKey(d => d.IdJobDepartment)
-                .HasConstraintName("FK__Job__idJobDepart__025D5595");
+                .HasConstraintName("FK__Job__idJobDepart__00FF1D08");
         });
 
         modelBuilder.Entity<JobDepartment>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__JobDepar__3213E83F24FE49F7");
+            entity.HasKey(e => e.Id).HasName("PK__JobDepar__3213E83FEBBE7FB3");
 
             entity.ToTable("JobDepartment");
 
-            entity.HasIndex(e => e.Name, "UQ__JobDepar__72E12F1BA279E52F").IsUnique();
+            entity.HasIndex(e => e.Name, "UQ__JobDepar__72E12F1B6DCC8D28").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CreationDate)
@@ -2877,11 +2901,11 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<LandOwnership>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__LandOwne__3213E83F9230256A");
+            entity.HasKey(e => e.Id).HasName("PK__LandOwne__3213E83F54F4823C");
 
             entity.ToTable("LandOwnership");
 
-            entity.HasIndex(e => e.Name, "UQ__LandOwne__72E12F1B89EB8C1A").IsUnique();
+            entity.HasIndex(e => e.Name, "UQ__LandOwne__72E12F1BBE281873").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CreationDate)
@@ -2909,7 +2933,7 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<Language>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Language__3213E83F725F06AB");
+            entity.HasKey(e => e.Id).HasName("PK__Language__3213E83FDF56A955");
 
             entity.ToTable("Language");
 
@@ -2939,11 +2963,11 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<LegalPersonType>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__LegalPer__3213E83FD6827A44");
+            entity.HasKey(e => e.Id).HasName("PK__LegalPer__3213E83FE218A60A");
 
             entity.ToTable("LegalPersonType");
 
-            entity.HasIndex(e => e.Name, "UQ__LegalPer__72E12F1B70DAC20F").IsUnique();
+            entity.HasIndex(e => e.Name, "UQ__LegalPer__72E12F1B1F5C2735").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.ApiCode)
@@ -2979,11 +3003,11 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<LegalRegisterSituation>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__LegalReg__3213E83FA67C6B82");
+            entity.HasKey(e => e.Id).HasName("PK__LegalReg__3213E83FEC211711");
 
             entity.ToTable("LegalRegisterSituation");
 
-            entity.HasIndex(e => e.Name, "UQ__LegalReg__72E12F1B64D96D4B").IsUnique();
+            entity.HasIndex(e => e.Name, "UQ__LegalReg__72E12F1BAA1E695F").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Abreviation)
@@ -3021,7 +3045,7 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<Numeration>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Numerati__3213E83F326B4CFF");
+            entity.HasKey(e => e.Id).HasName("PK__Numerati__3213E83FADD8DFC0");
 
             entity.ToTable("Numeration");
 
@@ -3055,7 +3079,7 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<Occupation>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Occupati__3213E83FD67977F6");
+            entity.HasKey(e => e.Id).HasName("PK__Occupati__3213E83F6D5B157E");
 
             entity.ToTable("Occupation");
 
@@ -3090,7 +3114,7 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<OldTicket>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__OldTicke__3213E83FD8E203AA");
+            entity.HasKey(e => e.Id).HasName("PK__OldTicke__3213E83F2C8784FC");
 
             entity.ToTable("OldTicket");
 
@@ -3143,7 +3167,7 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<OpcionalCommentarySb>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Opcional__3213E83F583A1BF6");
+            entity.HasKey(e => e.Id).HasName("PK__Opcional__3213E83F44975801");
 
             entity.ToTable("OpcionalCommentarySBS");
 
@@ -3174,7 +3198,7 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<Order>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Order__3213E83FCBF19D24");
+            entity.HasKey(e => e.Id).HasName("PK__Order__3213E83FF49EE72D");
 
             entity.ToTable("Order");
 
@@ -3239,20 +3263,20 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.IdCompany)
-                .HasConstraintName("FK__Order__idCompany__3F3159AB");
+                .HasConstraintName("FK__Order__idCompany__01F34141");
 
             entity.HasOne(d => d.IdPersonNavigation).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.IdPerson)
-                .HasConstraintName("FK__Order__idPerson__40257DE4");
+                .HasConstraintName("FK__Order__idPerson__02E7657A");
 
             entity.HasOne(d => d.IdSubscriberNavigation).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.IdSubscriber)
-                .HasConstraintName("FK__Order__idSubscri__3E3D3572");
+                .HasConstraintName("FK__Order__idSubscri__03DB89B3");
         });
 
         modelBuilder.Entity<Parameter>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Paramete__3213E83F35DA736A");
+            entity.HasKey(e => e.Id).HasName("PK__Paramete__3213E83FC10CB7C6");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CreationDate)
@@ -3284,7 +3308,7 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<PaymentPolicy>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__PaymentP__3213E83F0926C101");
+            entity.HasKey(e => e.Id).HasName("PK__PaymentP__3213E83FD310C01A");
 
             entity.ToTable("PaymentPolicy");
 
@@ -3485,27 +3509,27 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdCivilStatusNavigation).WithMany(p => p.People)
                 .HasForeignKey(d => d.IdCivilStatus)
-                .HasConstraintName("FK__Person__idCivilS__2D12A970");
+                .HasConstraintName("FK__Person__idCivilS__04CFADEC");
 
             entity.HasOne(d => d.IdCountryNavigation).WithMany(p => p.People)
                 .HasForeignKey(d => d.IdCountry)
-                .HasConstraintName("FK__Person__idCountr__2C1E8537");
+                .HasConstraintName("FK__Person__idCountr__05C3D225");
 
             entity.HasOne(d => d.IdCreditRiskNavigation).WithMany(p => p.People)
                 .HasForeignKey(d => d.IdCreditRisk)
-                .HasConstraintName("FK__Person__idCredit__2EFAF1E2");
+                .HasConstraintName("FK__Person__idCredit__06B7F65E");
 
             entity.HasOne(d => d.IdDocumentTypeNavigation).WithMany(p => p.PersonIdDocumentTypeNavigations)
                 .HasForeignKey(d => d.IdDocumentType)
-                .HasConstraintName("FK__Person__idDocume__2A363CC5");
+                .HasConstraintName("FK__Person__idDocume__07AC1A97");
 
             entity.HasOne(d => d.IdLegalRegisterSituationNavigation).WithMany(p => p.People)
                 .HasForeignKey(d => d.IdLegalRegisterSituation)
-                .HasConstraintName("FK__Person__idLegalR__2B2A60FE");
+                .HasConstraintName("FK__Person__idLegalR__08A03ED0");
 
             entity.HasOne(d => d.IdPaymentPolicyNavigation).WithMany(p => p.People)
                 .HasForeignKey(d => d.IdPaymentPolicy)
-                .HasConstraintName("FK__Person__idPaymen__2FEF161B");
+                .HasConstraintName("FK__Person__idPaymen__09946309");
 
             entity.HasOne(d => d.IdPersonSituationNavigation).WithMany(p => p.People)
                 .HasForeignKey(d => d.IdPersonSituation)
@@ -3513,16 +3537,16 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdReputationNavigation).WithMany(p => p.People)
                 .HasForeignKey(d => d.IdReputation)
-                .HasConstraintName("FK__Person__idReputa__30E33A54");
+                .HasConstraintName("FK__Person__idReputa__0A888742");
 
             entity.HasOne(d => d.RelationshipDocumentTypeNavigation).WithMany(p => p.PersonRelationshipDocumentTypeNavigations)
                 .HasForeignKey(d => d.RelationshipDocumentType)
-                .HasConstraintName("FK__Person__relation__2E06CDA9");
+                .HasConstraintName("FK__Person__relation__0B7CAB7B");
         });
 
         modelBuilder.Entity<PersonActivity>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__PersonAc__3213E83FA6A3F3E4");
+            entity.HasKey(e => e.Id).HasName("PK__PersonAc__3213E83F9423D1E1");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.ActivitiesCommentary)
@@ -3546,12 +3570,12 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdPersonNavigation).WithMany(p => p.PersonActivities)
                 .HasForeignKey(d => d.IdPerson)
-                .HasConstraintName("FK__PersonAct__idPer__1A89E4E1");
+                .HasConstraintName("FK__PersonAct__idPer__0C70CFB4");
         });
 
         modelBuilder.Entity<PersonGeneralInformation>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__PersonGe__3213E83F13C7AC44");
+            entity.HasKey(e => e.Id).HasName("PK__PersonGe__3213E83F86C33615");
 
             entity.ToTable("PersonGeneralInformation");
 
@@ -3577,12 +3601,12 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdPersonNavigation).WithMany(p => p.PersonGeneralInformations)
                 .HasForeignKey(d => d.IdPerson)
-                .HasConstraintName("FK__PersonGen__idPer__28D80438");
+                .HasConstraintName("FK__PersonGen__idPer__0F4D3C5F");
         });
 
         modelBuilder.Entity<PersonHistory>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__PersonHi__3213E83FF7F6F854");
+            entity.HasKey(e => e.Id).HasName("PK__PersonHi__3213E83F828FB1D7");
 
             entity.ToTable("PersonHistory");
 
@@ -3608,12 +3632,12 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdPersonNavigation).WithMany(p => p.PersonHistories)
                 .HasForeignKey(d => d.IdPerson)
-                .HasConstraintName("FK__PersonHis__idPer__24134F1B");
+                .HasConstraintName("FK__PersonHis__idPer__10416098");
         });
 
         modelBuilder.Entity<PersonHome>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__PersonHo__3213E83FEB0DE03E");
+            entity.HasKey(e => e.Id).HasName("PK__PersonHo__3213E83FAF839382");
 
             entity.ToTable("PersonHome");
 
@@ -3644,12 +3668,12 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdPersonNavigation).WithMany(p => p.PersonHomes)
                 .HasForeignKey(d => d.IdPerson)
-                .HasConstraintName("FK__PersonHom__idPer__15C52FC4");
+                .HasConstraintName("FK__PersonHom__idPer__113584D1");
         });
 
         modelBuilder.Entity<PersonImage>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__PersonIm__3213E83F05CB1C6A");
+            entity.HasKey(e => e.Id).HasName("PK__PersonIm__3213E83F333463D5");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CreationDate)
@@ -3691,12 +3715,12 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdPersonNavigation).WithMany(p => p.PersonImages)
                 .HasForeignKey(d => d.IdPerson)
-                .HasConstraintName("FK__PersonIma__idPer__335592AB");
+                .HasConstraintName("FK__PersonIma__idPer__1229A90A");
         });
 
         modelBuilder.Entity<PersonJob>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__PersonJo__3213E83F43751508");
+            entity.HasKey(e => e.Id).HasName("PK__PersonJo__3213E83F197BA9AD");
 
             entity.ToTable("PersonJob");
 
@@ -3747,16 +3771,16 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.PersonJobs)
                 .HasForeignKey(d => d.IdCompany)
-                .HasConstraintName("FK__PersonJob__idCom__2E90DD8E");
+                .HasConstraintName("FK__PersonJob__idCom__131DCD43");
 
             entity.HasOne(d => d.IdPersonNavigation).WithMany(p => p.PersonJobs)
                 .HasForeignKey(d => d.IdPerson)
-                .HasConstraintName("FK__PersonJob__idPer__2D9CB955");
+                .HasConstraintName("FK__PersonJob__idPer__1411F17C");
         });
 
         modelBuilder.Entity<PersonProperty>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__PersonPr__3213E83F81876EFB");
+            entity.HasKey(e => e.Id).HasName("PK__PersonPr__3213E83F887EF818");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CreationDate)
@@ -3780,12 +3804,12 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdPersonNavigation).WithMany(p => p.PersonProperties)
                 .HasForeignKey(d => d.IdPerson)
-                .HasConstraintName("FK__PersonPro__idPer__1F4E99FE");
+                .HasConstraintName("FK__PersonPro__idPer__150615B5");
         });
 
         modelBuilder.Entity<PersonSb>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__PersonSB__3213E83F0F206D6B");
+            entity.HasKey(e => e.Id).HasName("PK__PersonSB__3213E83F06B19523");
 
             entity.ToTable("PersonSBS");
 
@@ -3843,12 +3867,12 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdPersonNavigation).WithMany(p => p.PersonSbs)
                 .HasForeignKey(d => d.IdPerson)
-                .HasConstraintName("FK__PersonSBS__idPer__381A47C8");
+                .HasConstraintName("FK__PersonSBS__idPer__15FA39EE");
         });
 
         modelBuilder.Entity<PersonSituation>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__PersonSi__3213E83F2443D7D8");
+            entity.HasKey(e => e.Id).HasName("PK__PersonSi__3213E83FA8B9D2C1");
 
             entity.ToTable("PersonSituation");
 
@@ -3878,7 +3902,7 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<Personal>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Personal__3213E83F2DC8E8B8");
+            entity.HasKey(e => e.Id).HasName("PK__Personal__3213E83F775D145A");
 
             entity.ToTable("Personal");
 
@@ -3913,12 +3937,12 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdEmployeeNavigation).WithMany(p => p.Personals)
                 .HasForeignKey(d => d.IdEmployee)
-                .HasConstraintName("FK__Personal__enable__322C6448");
+                .HasConstraintName("FK__Personal__idEmpl__0D64F3ED");
         });
 
         modelBuilder.Entity<PersonalPrice>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Personal__3213E83F3A360349");
+            entity.HasKey(e => e.Id).HasName("PK__Personal__3213E83F87313BC3");
 
             entity.ToTable("PersonalPrice");
 
@@ -3958,12 +3982,12 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdPersonalNavigation).WithMany(p => p.PersonalPrices)
                 .HasForeignKey(d => d.IdPersonal)
-                .HasConstraintName("FK__PersonalP__enabl__3BB5CE82");
+                .HasConstraintName("FK__PersonalP__idPer__0E591826");
         });
 
         modelBuilder.Entity<PhotoPerson>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__PhotoPer__3213E83F81E0900D");
+            entity.HasKey(e => e.Id).HasName("PK__PhotoPer__3213E83FEA89F98D");
 
             entity.ToTable("PhotoPerson");
 
@@ -4001,132 +4025,12 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdPersonNavigation).WithMany(p => p.PhotoPeople)
                 .HasForeignKey(d => d.IdPerson)
-                .HasConstraintName("FK__PhotoPers__idPer__1B48FEF0");
-        });
-
-        modelBuilder.Entity<Probando>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToView("probando");
-
-            entity.Property(e => e.IdCompany).HasColumnName("idCompany");
-            entity.Property(e => e.LBHistory)
-                .IsUnicode(false)
-                .HasColumnName("L_B_HISTORY");
-            entity.Property(e => e.LBLegalback)
-                .IsUnicode(false)
-                .HasColumnName("L_B_LEGALBACK");
-            entity.Property(e => e.LBPaidcapital)
-                .IsUnicode(false)
-                .HasColumnName("L_B_PAIDCAPITAL");
-            entity.Property(e => e.LEComide)
-                .IsUnicode(false)
-                .HasColumnName("L_E_COMIDE");
-            entity.Property(e => e.LENew)
-                .IsUnicode(false)
-                .HasColumnName("L_E_NEW");
-            entity.Property(e => e.LEReputation)
-                .IsUnicode(false)
-                .HasColumnName("L_E_REPUTATION");
-            entity.Property(e => e.LFAnalistcom)
-                .IsUnicode(false)
-                .HasColumnName("L_F_ANALISTCOM");
-            entity.Property(e => e.LFComent)
-                .IsUnicode(false)
-                .HasColumnName("L_F_COMENT");
-            entity.Property(e => e.LFPrincactiv)
-                .IsUnicode(false)
-                .HasColumnName("L_F_PRINCACTIV");
-            entity.Property(e => e.LFSelectfin)
-                .IsUnicode(false)
-                .HasColumnName("L_F_SELECTFIN");
-            entity.Property(e => e.LFTabcomm)
-                .IsUnicode(false)
-                .HasColumnName("L_F_TABCOMM");
-            entity.Property(e => e.LIGeneral)
-                .IsUnicode(false)
-                .HasColumnName("L_I_GENERAL");
-            entity.Property(e => e.LOComentary)
-                .IsUnicode(false)
-                .HasColumnName("L_O_COMENTARY");
-            entity.Property(e => e.LRAdibus)
-                .IsUnicode(false)
-                .HasColumnName("L_R_ADIBUS");
-            entity.Property(e => e.LROtrherlocals)
-                .IsUnicode(false)
-                .HasColumnName("L_R_OTRHERLOCALS");
-            entity.Property(e => e.LRPrincact)
-                .IsUnicode(false)
-                .HasColumnName("L_R_PRINCACT");
-            entity.Property(e => e.LSAvales)
-                .IsUnicode(false)
-                .HasColumnName("L_S_AVALES");
-            entity.Property(e => e.LSBancarios)
-                .IsUnicode(false)
-                .HasColumnName("L_S_BANCARIOS");
-            entity.Property(e => e.LSComentary)
-                .IsUnicode(false)
-                .HasColumnName("L_S_COMENTARY");
-            entity.Property(e => e.LSCredhis)
-                .IsUnicode(false)
-                .HasColumnName("L_S_CREDHIS");
-            entity.Property(e => e.LSLitig)
-                .IsUnicode(false)
-                .HasColumnName("L_S_LITIG");
-            entity.Property(e => e.SBDuration)
-                .IsUnicode(false)
-                .HasColumnName("S_B_DURATION");
-            entity.Property(e => e.SBIncreasedate)
-                .IsUnicode(false)
-                .HasColumnName("S_B_INCREASEDATE");
-            entity.Property(e => e.SBPublicregis)
-                .IsUnicode(false)
-                .HasColumnName("S_B_PUBLICREGIS");
-            entity.Property(e => e.SBRegisterin)
-                .IsUnicode(false)
-                .HasColumnName("S_B_REGISTERIN");
-            entity.Property(e => e.SBTaxrate)
-                .IsUnicode(false)
-                .HasColumnName("S_B_TAXRATE");
-            entity.Property(e => e.SEDuration)
-                .IsUnicode(false)
-                .HasColumnName("S_E_DURATION");
-            entity.Property(e => e.SFJob)
-                .IsUnicode(false)
-                .HasColumnName("S_F_JOB");
-            entity.Property(e => e.SOQuerycredit)
-                .IsUnicode(false)
-                .HasColumnName("S_O_QUERYCREDIT");
-            entity.Property(e => e.SOSugcredit)
-                .IsUnicode(false)
-                .HasColumnName("S_O_SUGCREDIT");
-            entity.Property(e => e.SRCreditper)
-                .IsUnicode(false)
-                .HasColumnName("S_R_CREDITPER");
-            entity.Property(e => e.SRExtsales)
-                .IsUnicode(false)
-                .HasColumnName("S_R_EXTSALES");
-            entity.Property(e => e.SRInterbuy)
-                .IsUnicode(false)
-                .HasColumnName("S_R_INTERBUY");
-            entity.Property(e => e.SRNatibuy)
-                .IsUnicode(false)
-                .HasColumnName("S_R_NATIBUY");
-            entity.Property(e => e.SRSaleper)
-                .IsUnicode(false)
-                .HasColumnName("S_R_SALEPER");
-            entity.Property(e => e.SRTerritory)
-                .IsUnicode(false)
-                .HasColumnName("S_R_TERRITORY");
-            entity.Property(e => e.SRTotalarea)
-                .IsUnicode(false)
-                .HasColumnName("S_R_TOTALAREA");
+                .HasConstraintName("FK__PhotoPers__idPer__16EE5E27");
         });
 
         modelBuilder.Entity<Process>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Process__3213E83FBF838E86");
+            entity.HasKey(e => e.Id).HasName("PK__Process__3213E83F1C8653B3");
 
             entity.ToTable("Process");
 
@@ -4166,12 +4070,12 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.FatherNavigation).WithMany(p => p.InverseFatherNavigation)
                 .HasForeignKey(d => d.Father)
-                .HasConstraintName("FK__Process__father__705EA0EB");
+                .HasConstraintName("FK__Process__father__17E28260");
         });
 
         modelBuilder.Entity<ProductionClosure>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Producti__3213E83F7FC7F356");
+            entity.HasKey(e => e.Id).HasName("PK__Producti__3213E83FAB72F5FE");
 
             entity.ToTable("ProductionClosure");
 
@@ -4208,7 +4112,7 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<Profession>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Professi__3213E83FE0D980BE");
+            entity.HasKey(e => e.Id).HasName("PK__Professi__3213E83FA099D61B");
 
             entity.ToTable("Profession");
 
@@ -4238,7 +4142,7 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<Provider>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Provider__3213E83F034D41B8");
+            entity.HasKey(e => e.Id).HasName("PK__Provider__3213E83FFE92BBA1");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.AdditionalCommentary)
@@ -4347,15 +4251,15 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.Providers)
                 .HasForeignKey(d => d.IdCompany)
-                .HasConstraintName("FK__Providers__idCom__338A9CD5");
+                .HasConstraintName("FK__Providers__idCom__18D6A699");
 
             entity.HasOne(d => d.IdCountryNavigation).WithMany(p => p.Providers)
                 .HasForeignKey(d => d.IdCountry)
-                .HasConstraintName("FK__Providers__idCou__347EC10E");
+                .HasConstraintName("FK__Providers__idCou__19CACAD2");
 
             entity.HasOne(d => d.IdCurrencyNavigation).WithMany(p => p.Providers)
                 .HasForeignKey(d => d.IdCurrency)
-                .HasConstraintName("FK__Providers__idCur__3572E547");
+                .HasConstraintName("FK__Providers__idCur__1ABEEF0B");
 
             entity.HasOne(d => d.IdPersonNavigation).WithMany(p => p.Providers)
                 .HasForeignKey(d => d.IdPerson)
@@ -4364,7 +4268,7 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<Reason>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Reason__3213E83F08AD8373");
+            entity.HasKey(e => e.Id).HasName("PK__Reason__3213E83F04F90785");
 
             entity.ToTable("Reason");
 
@@ -4391,7 +4295,7 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<ReferencesHistory>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Referenc__3213E83FD4E36FCE");
+            entity.HasKey(e => e.Id).HasName("PK__Referenc__3213E83F05815CEE");
 
             entity.ToTable("ReferencesHistory");
 
@@ -4426,12 +4330,12 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdTicketNavigation).WithMany(p => p.ReferencesHistories)
                 .HasForeignKey(d => d.IdTicket)
-                .HasConstraintName("FK__Reference__cycle__349EBC9F");
+                .HasConstraintName("FK__Reference__idTic__1BB31344");
         });
 
         modelBuilder.Entity<Reputation>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Reputati__3213E83FDDE4BDE3");
+            entity.HasKey(e => e.Id).HasName("PK__Reputati__3213E83F0B48D062");
 
             entity.ToTable("Reputation");
 
@@ -4479,7 +4383,7 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<SalesHistory>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__SalesHis__3213E83FD100895D");
+            entity.HasKey(e => e.Id).HasName("PK__SalesHis__3213E83FAEA2DF94");
 
             entity.ToTable("SalesHistory");
 
@@ -4515,16 +4419,16 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.SalesHistories)
                 .HasForeignKey(d => d.IdCompany)
-                .HasConstraintName("FK__SalesHist__idCom__1F83A428");
+                .HasConstraintName("FK__SalesHist__idCom__1CA7377D");
 
             entity.HasOne(d => d.IdCurrencyNavigation).WithMany(p => p.SalesHistories)
                 .HasForeignKey(d => d.IdCurrency)
-                .HasConstraintName("FK__SalesHist__idCur__2077C861");
+                .HasConstraintName("FK__SalesHist__idCur__1D9B5BB6");
         });
 
         modelBuilder.Entity<SearchedName>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Searched__3213E83F468A62EA");
+            entity.HasKey(e => e.Id).HasName("PK__Searched__3213E83F209E3E99");
 
             entity.ToTable("SearchedName");
 
@@ -4542,16 +4446,16 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.SearchedNames)
                 .HasForeignKey(d => d.IdCompany)
-                .HasConstraintName("FK__SearchedN__idCom__5E74FADA");
+                .HasConstraintName("FK__SearchedN__idCom__1E8F7FEF");
 
             entity.HasOne(d => d.IdPersonNavigation).WithMany(p => p.SearchedNames)
                 .HasForeignKey(d => d.IdPerson)
-                .HasConstraintName("FK__SearchedN__idPer__5F691F13");
+                .HasConstraintName("FK__SearchedN__idPer__1F83A428");
         });
 
         modelBuilder.Entity<SpecialAgentBalancePrice>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__SpecialA__3213E83F9CCF7533");
+            entity.HasKey(e => e.Id).HasName("PK__SpecialA__3213E83F27828F21");
 
             entity.ToTable("SpecialAgentBalancePrice");
 
@@ -4586,12 +4490,12 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdAgentNavigation).WithMany(p => p.SpecialAgentBalancePrices)
                 .HasForeignKey(d => d.IdAgent)
-                .HasConstraintName("FK__SpecialAg__idAge__5AC46587");
+                .HasConstraintName("FK__SpecialAg__idAge__2077C861");
         });
 
         modelBuilder.Entity<SpecialPriceAgent>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__SpecialP__3213E83F6C4F55F5");
+            entity.HasKey(e => e.Id).HasName("PK__SpecialP__3213E83F47155ECA");
 
             entity.ToTable("SpecialPriceAgent");
 
@@ -4631,18 +4535,18 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdAgentNavigation).WithMany(p => p.SpecialPriceAgents)
                 .HasForeignKey(d => d.IdAgent)
-                .HasConstraintName("FK__SpecialPr__idAge__02D256E1");
+                .HasConstraintName("FK__SpecialPr__idAge__216BEC9A");
         });
 
         modelBuilder.Entity<StatusTicket>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__StatusTi__3213E83F548F6ACD");
+            entity.HasKey(e => e.Id).HasName("PK__StatusTi__3213E83F32A0646E");
 
             entity.ToTable("StatusTicket");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Abrev)
-                .HasMaxLength(20)
+                .HasMaxLength(40)
                 .IsUnicode(false)
                 .HasColumnName("abrev");
             entity.Property(e => e.Color)
@@ -4670,7 +4574,7 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<StatusTicketObservation>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__StatusTi__3213E83F968D16DE");
+            entity.HasKey(e => e.Id).HasName("PK__StatusTi__3213E83F6B12F718");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CreationDate)
@@ -4695,7 +4599,7 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<Subscriber>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Subscrib__3213E83FAAFFFEEC");
+            entity.HasKey(e => e.Id).HasName("PK__Subscrib__3213E83FBC08A881");
 
             entity.ToTable("Subscriber");
 
@@ -4854,24 +4758,24 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdContinentNavigation).WithMany(p => p.Subscribers)
                 .HasForeignKey(d => d.IdContinent)
-                .HasConstraintName("FK__Subscribe__idCon__369C13AA");
+                .HasConstraintName("FK__Subscribe__idCon__226010D3");
 
             entity.HasOne(d => d.IdCountryNavigation).WithMany(p => p.Subscribers)
                 .HasForeignKey(d => d.IdCountry)
-                .HasConstraintName("FK__Subscribe__idCou__379037E3");
+                .HasConstraintName("FK__Subscribe__idCou__2354350C");
 
             entity.HasOne(d => d.IdCurrencyNavigation).WithMany(p => p.Subscribers)
                 .HasForeignKey(d => d.IdCurrency)
-                .HasConstraintName("FK__Subscribe__idCur__38845C1C");
+                .HasConstraintName("FK__Subscribe__idCur__24485945");
 
             entity.HasOne(d => d.IdSubscriberCategoryNavigation).WithMany(p => p.Subscribers)
                 .HasForeignKey(d => d.IdSubscriberCategory)
-                .HasConstraintName("FK__Subscribe__idSub__02E7657A");
+                .HasConstraintName("FK__Subscribe__idSub__253C7D7E");
         });
 
         modelBuilder.Entity<SubscriberCategory>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Subscrib__3213E83F43854E36");
+            entity.HasKey(e => e.Id).HasName("PK__Subscrib__3213E83FDAC63659");
 
             entity.ToTable("SubscriberCategory");
 
@@ -4914,7 +4818,7 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<SubscriberInvoice>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Subscrib__3213E83FFC3759A6");
+            entity.HasKey(e => e.Id).HasName("PK__Subscrib__3213E83F6F748802");
 
             entity.ToTable("SubscriberInvoice");
 
@@ -4967,20 +4871,20 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdCurrencyNavigation).WithMany(p => p.SubscriberInvoices)
                 .HasForeignKey(d => d.IdCurrency)
-                .HasConstraintName("FK__Subscribe__idCur__5911273F");
+                .HasConstraintName("FK__Subscribe__idCur__2630A1B7");
 
             entity.HasOne(d => d.IdInvoiceStateNavigation).WithMany(p => p.SubscriberInvoices)
                 .HasForeignKey(d => d.IdInvoiceState)
-                .HasConstraintName("FK__Subscribe__idInv__5728DECD");
+                .HasConstraintName("FK__Subscribe__idInv__2724C5F0");
 
             entity.HasOne(d => d.IdSubscriberNavigation).WithMany(p => p.SubscriberInvoices)
                 .HasForeignKey(d => d.IdSubscriber)
-                .HasConstraintName("FK__Subscribe__idSub__581D0306");
+                .HasConstraintName("FK__Subscribe__idSub__2818EA29");
         });
 
         modelBuilder.Entity<SubscriberInvoiceDetail>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Subscrib__3213E83FFB923A13");
+            entity.HasKey(e => e.Id).HasName("PK__Subscrib__3213E83F6C07727C");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Amount)
@@ -5005,16 +4909,16 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdSubscriberInvoiceNavigation).WithMany(p => p.SubscriberInvoiceDetails)
                 .HasForeignKey(d => d.IdSubscriberInvoice)
-                .HasConstraintName("FK__Subscribe__idSub__5DD5DC5C");
+                .HasConstraintName("FK__Subscribe__idSub__290D0E62");
 
             entity.HasOne(d => d.IdTicketNavigation).WithMany(p => p.SubscriberInvoiceDetails)
                 .HasForeignKey(d => d.IdTicket)
-                .HasConstraintName("FK__Subscribe__idTic__5ECA0095");
+                .HasConstraintName("FK__Subscribe__idTic__2A01329B");
         });
 
         modelBuilder.Entity<SubscriberPrice>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Subscrib__3213E83F16E2D8E8");
+            entity.HasKey(e => e.Id).HasName("PK__Subscrib__3213E83F64B6711A");
 
             entity.ToTable("SubscriberPrice");
 
@@ -5058,24 +4962,24 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdContinentNavigation).WithMany(p => p.SubscriberPrices)
                 .HasForeignKey(d => d.IdContinent)
-                .HasConstraintName("FK__Subscribe__idCon__52442E1F");
+                .HasConstraintName("FK__Subscribe__idCon__2AF556D4");
 
             entity.HasOne(d => d.IdCountryNavigation).WithMany(p => p.SubscriberPrices)
                 .HasForeignKey(d => d.IdCountry)
-                .HasConstraintName("FK__Subscribe__idCou__53385258");
+                .HasConstraintName("FK__Subscribe__idCou__2BE97B0D");
 
             entity.HasOne(d => d.IdCurrencyNavigation).WithMany(p => p.SubscriberPrices)
                 .HasForeignKey(d => d.IdCurrency)
-                .HasConstraintName("FK__Subscribe__idCur__542C7691");
+                .HasConstraintName("FK__Subscribe__idCur__2CDD9F46");
 
             entity.HasOne(d => d.IdSubscriberNavigation).WithMany(p => p.SubscriberPrices)
                 .HasForeignKey(d => d.IdSubscriber)
-                .HasConstraintName("FK__Subscribe__idSub__515009E6");
+                .HasConstraintName("FK__Subscribe__idSub__2DD1C37F");
         });
 
         modelBuilder.Entity<Supervisor>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Supervis__3213E83FC6ED58FB");
+            entity.HasKey(e => e.Id).HasName("PK__Supervis__3213E83F3D3E72A2");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.AsignedTo)
@@ -5101,12 +5005,12 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdUserLoginNavigation).WithMany(p => p.Supervisors)
                 .HasForeignKey(d => d.IdUserLogin)
-                .HasConstraintName("FK__Superviso__enabl__2374309D");
+                .HasConstraintName("FK__Superviso__idUse__2EC5E7B8");
         });
 
         modelBuilder.Entity<Ticket>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Ticket__3213E83F4B33CE20");
+            entity.HasKey(e => e.Id).HasName("PK__Ticket__3213E83F72B1CB45");
 
             entity.ToTable("Ticket");
 
@@ -5117,7 +5021,6 @@ public partial class SqlCoreContext : DbContext
                 .IsFixedLength()
                 .HasColumnName("about");
             entity.Property(e => e.Address)
-                .HasMaxLength(4000)
                 .IsUnicode(false)
                 .HasColumnName("address");
             entity.Property(e => e.AditionalData)
@@ -5200,10 +5103,10 @@ public partial class SqlCoreContext : DbContext
                 .IsFixedLength()
                 .HasColumnName("procedureType");
             entity.Property(e => e.ProcedureTypeAgent)
-               .HasMaxLength(2)
-               .IsUnicode(false)
-               .IsFixedLength()
-               .HasColumnName("procedureTypeAgent");
+                .HasMaxLength(2)
+                .IsUnicode(false)
+                .IsFixedLength()
+                .HasColumnName("procedureTypeAgent");
             entity.Property(e => e.Quality)
                 .HasMaxLength(1)
                 .IsUnicode(false)
@@ -5276,15 +5179,15 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.Tickets)
                 .HasForeignKey(d => d.IdCompany)
-                .HasConstraintName("FK__Ticket__idCompan__6521F869");
+                .HasConstraintName("FK__Ticket__idCompan__2FBA0BF1");
 
             entity.HasOne(d => d.IdContinentNavigation).WithMany(p => p.Tickets)
                 .HasForeignKey(d => d.IdContinent)
-                .HasConstraintName("FK__Ticket__idContin__67FE6514");
+                .HasConstraintName("FK__Ticket__idContin__30AE302A");
 
             entity.HasOne(d => d.IdCountryNavigation).WithMany(p => p.Tickets)
                 .HasForeignKey(d => d.IdCountry)
-                .HasConstraintName("FK__Ticket__idCountr__670A40DB");
+                .HasConstraintName("FK__Ticket__idCountr__31A25463");
 
             entity.HasOne(d => d.IdInvoiceStateNavigation).WithMany(p => p.Tickets)
                 .HasForeignKey(d => d.IdInvoiceState)
@@ -5292,28 +5195,28 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdPersonNavigation).WithMany(p => p.Tickets)
                 .HasForeignKey(d => d.IdPerson)
-                .HasConstraintName("FK__Ticket__idPerson__66161CA2");
+                .HasConstraintName("FK__Ticket__idPerson__3296789C");
 
             entity.HasOne(d => d.IdSpecialAgentBalancePriceNavigation).WithMany(p => p.Tickets)
                 .HasForeignKey(d => d.IdSpecialAgentBalancePrice)
-                .HasConstraintName("FK__Ticket__idSpecia__03C67B1A");
+                .HasConstraintName("FK__Ticket__idSpecia__338A9CD5");
 
             entity.HasOne(d => d.IdStatusTicketNavigation).WithMany(p => p.Tickets)
                 .HasForeignKey(d => d.IdStatusTicket)
-                .HasConstraintName("FK__Ticket__idStatus__058EC7FB");
+                .HasConstraintName("FK__Ticket__idStatus__347EC10E");
 
             entity.HasOne(d => d.IdSubscriberNavigation).WithMany(p => p.Tickets)
                 .HasForeignKey(d => d.IdSubscriber)
-                .HasConstraintName("FK__Ticket__idSubscr__71BCD978");
+                .HasConstraintName("FK__Ticket__idSubscr__3572E547");
 
             entity.HasOne(d => d.IdTicketComplementNavigation).WithMany(p => p.InverseIdTicketComplementNavigation)
                 .HasForeignKey(d => d.IdTicketComplement)
-                .HasConstraintName("FK__Ticket__idTicket__088B3037");
+                .HasConstraintName("FK__Ticket__idTicket__36670980");
         });
 
         modelBuilder.Entity<TicketAssignation>(entity =>
         {
-            entity.HasKey(e => e.IdTicket).HasName("PK__TicketAs__22B1456F745AAD8A");
+            entity.HasKey(e => e.IdTicket).HasName("PK__TicketAs__22B1456F56CC7D3F");
 
             entity.ToTable("TicketAssignation");
 
@@ -5346,12 +5249,12 @@ public partial class SqlCoreContext : DbContext
             entity.HasOne(d => d.IdTicketNavigation).WithOne(p => p.TicketAssignation)
                 .HasForeignKey<TicketAssignation>(d => d.IdTicket)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__TicketAss__idTic__7CF981FA");
+                .HasConstraintName("FK__TicketAss__idTic__375B2DB9");
         });
 
         modelBuilder.Entity<TicketFile>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__TicketFi__3213E83F750F1F4A");
+            entity.HasKey(e => e.Id).HasName("PK__TicketFi__3213E83FD5858985");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CreationDate)
@@ -5381,12 +5284,12 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdTicketNavigation).WithMany(p => p.TicketFiles)
                 .HasForeignKey(d => d.IdTicket)
-                .HasConstraintName("FK__TicketFil__idTic__6ADAD1BF");
+                .HasConstraintName("FK__TicketFil__idTic__384F51F2");
         });
 
         modelBuilder.Entity<TicketHistory>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__TicketHi__3213E83F5A652818");
+            entity.HasKey(e => e.Id).HasName("PK__TicketHi__3213E83F4CC876F7");
 
             entity.ToTable("TicketHistory");
 
@@ -5454,16 +5357,16 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdStatusTicketNavigation).WithMany(p => p.TicketHistories)
                 .HasForeignKey(d => d.IdStatusTicket)
-                .HasConstraintName("FK__TicketHis__idSta__049AA3C2");
+                .HasConstraintName("FK__TicketHis__idSta__3943762B");
 
             entity.HasOne(d => d.IdTicketNavigation).WithMany(p => p.TicketHistories)
                 .HasForeignKey(d => d.IdTicket)
-                .HasConstraintName("FK__TicketHis__idTic__18D6A699");
+                .HasConstraintName("FK__TicketHis__idTic__3A379A64");
         });
 
         modelBuilder.Entity<TicketObservation>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__TicketOb__3213E83F14D8D395");
+            entity.HasKey(e => e.Id).HasName("PK__TicketOb__3213E83F115182AE");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.About)
@@ -5522,23 +5425,23 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.TicketObservations)
                 .HasForeignKey(d => d.IdCompany)
-                .HasConstraintName("FK__TicketObs__enabl__529933DA");
+                .HasConstraintName("FK__TicketObs__idCom__3B2BBE9D");
 
             entity.HasOne(d => d.IdPersonNavigation).WithMany(p => p.TicketObservations)
                 .HasForeignKey(d => d.IdPerson)
-                .HasConstraintName("FK__TicketObs__idPer__538D5813");
+                .HasConstraintName("FK__TicketObs__idPer__3C1FE2D6");
 
             entity.HasOne(d => d.IdReasonNavigation).WithMany(p => p.TicketObservations)
                 .HasForeignKey(d => d.IdReason)
-                .HasConstraintName("FK__TicketObs__idRea__5575A085");
+                .HasConstraintName("FK__TicketObs__idRea__3D14070F");
 
             entity.HasOne(d => d.IdStatusTicketObservationsNavigation).WithMany(p => p.TicketObservations)
                 .HasForeignKey(d => d.IdStatusTicketObservations)
-                .HasConstraintName("FK__TicketObs__idSta__5669C4BE");
+                .HasConstraintName("FK__TicketObs__idSta__3E082B48");
 
             entity.HasOne(d => d.IdSubscriberNavigation).WithMany(p => p.TicketObservations)
                 .HasForeignKey(d => d.IdSubscriber)
-                .HasConstraintName("FK__TicketObs__idSub__54817C4C");
+                .HasConstraintName("FK__TicketObs__idSub__3EFC4F81");
 
             entity.HasOne(d => d.IdTicketNavigation).WithMany(p => p.TicketObservations)
                 .HasForeignKey(d => d.IdTicket)
@@ -5547,7 +5450,7 @@ public partial class SqlCoreContext : DbContext
 
         modelBuilder.Entity<TicketQuery>(entity =>
         {
-            entity.HasKey(e => e.IdTicket).HasName("PK__TicketQu__22B1456FBA14309C");
+            entity.HasKey(e => e.IdTicket).HasName("PK__TicketQu__22B1456F3C893AD2");
 
             entity.ToTable("TicketQuery");
 
@@ -5590,21 +5493,21 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdEmployeeNavigation).WithMany(p => p.TicketQueries)
                 .HasForeignKey(d => d.IdEmployee)
-                .HasConstraintName("FK__TicketQue__idEmp__60283922");
+                .HasConstraintName("FK__TicketQue__idEmp__3FF073BA");
 
             entity.HasOne(d => d.IdSubscriberNavigation).WithMany(p => p.TicketQueries)
                 .HasForeignKey(d => d.IdSubscriber)
-                .HasConstraintName("FK__TicketQue__idSub__5F3414E9");
+                .HasConstraintName("FK__TicketQue__idSub__40E497F3");
 
             entity.HasOne(d => d.IdTicketNavigation).WithOne(p => p.TicketQuery)
                 .HasForeignKey<TicketQuery>(d => d.IdTicket)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__TicketQue__idTic__5E3FF0B0");
+                .HasConstraintName("FK__TicketQue__idTic__41D8BC2C");
         });
 
         modelBuilder.Entity<TicketReceptor>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__TicketRe__3213E83F9C977F5B");
+            entity.HasKey(e => e.Id).HasName("PK__TicketRe__3213E83F55541613");
 
             entity.ToTable("TicketReceptor");
 
@@ -5633,12 +5536,12 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdEmployeeNavigation).WithMany(p => p.TicketReceptors)
                 .HasForeignKey(d => d.IdEmployee)
-                .HasConstraintName("FK__TicketRec__idEmp__764C846B");
+                .HasConstraintName("FK__TicketRec__idEmp__42CCE065");
         });
 
         modelBuilder.Entity<TraductionCompany>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Traducti__3213E83F182F2812");
+            entity.HasKey(e => e.Id).HasName("PK__Traducti__3213E83F15423EFF");
 
             entity.ToTable("TraductionCompany");
 
@@ -5774,12 +5677,12 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.TraductionCompanies)
                 .HasForeignKey(d => d.IdCompany)
-                .HasConstraintName("FK__Traductio__idCom__68536ACF");
+                .HasConstraintName("FK__Traductio__idCom__43C1049E");
         });
 
         modelBuilder.Entity<TraductionPerson>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Traducti__3213E83F6C898614");
+            entity.HasKey(e => e.Id).HasName("PK__Traducti__3213E83FCFA26F1F");
 
             entity.ToTable("TraductionPerson");
 
@@ -5867,12 +5770,12 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdPersonNavigation).WithMany(p => p.TraductionPeople)
                 .HasForeignKey(d => d.IdPerson)
-                .HasConstraintName("FK__Traductio__idPer__638EB5B2");
+                .HasConstraintName("FK__Traductio__idPer__44B528D7");
         });
 
         modelBuilder.Entity<UserLogin>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__UserLogi__3213E83FECA40771");
+            entity.HasKey(e => e.Id).HasName("PK__UserLogi__3213E83F8222B22C");
 
             entity.ToTable("UserLogin");
 
@@ -5908,12 +5811,12 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdEmployeeNavigation).WithMany(p => p.UserLogins)
                 .HasForeignKey(d => d.IdEmployee)
-                .HasConstraintName("FK__UserLogin__idEmp__1387E197");
+                .HasConstraintName("FK__UserLogin__idEmp__45A94D10");
         });
 
         modelBuilder.Entity<UserProcess>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__UserProc__3213E83F1A12E4C8");
+            entity.HasKey(e => e.Id).HasName("PK__UserProc__3213E83FACC42523");
 
             entity.ToTable("UserProcess");
 
@@ -5936,16 +5839,16 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdProcessNavigation).WithMany(p => p.UserProcesses)
                 .HasForeignKey(d => d.IdProcess)
-                .HasConstraintName("FK__UserProce__idPro__184C96B4");
+                .HasConstraintName("FK__UserProce__idPro__469D7149");
 
             entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.UserProcesses)
                 .HasForeignKey(d => d.IdUser)
-                .HasConstraintName("FK__UserProce__idUse__1940BAED");
+                .HasConstraintName("FK__UserProce__idUse__47919582");
         });
 
         modelBuilder.Entity<WorkersHistory>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__WorkersH__3213E83F7C89E77E");
+            entity.HasKey(e => e.Id).HasName("PK__WorkersH__3213E83F2DB44BA9");
 
             entity.ToTable("WorkersHistory");
 
@@ -5971,7 +5874,7 @@ public partial class SqlCoreContext : DbContext
 
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.WorkersHistories)
                 .HasForeignKey(d => d.IdCompany)
-                .HasConstraintName("FK__WorkersHi__idCom__40AF8DC9");
+                .HasConstraintName("FK__WorkersHi__idCom__4885B9BB");
         });
 
         OnModelCreatingPartial(modelBuilder);
