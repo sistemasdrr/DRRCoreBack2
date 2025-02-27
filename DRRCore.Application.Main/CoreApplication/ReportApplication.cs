@@ -1231,6 +1231,38 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             return response;
         }
+        public async Task<Response<GetFileResponseDto>> DownloadListToCollect(string invoiceCode)
+        {
+            var response = new Response<GetFileResponseDto>();
+            try
+            {
+
+                string fileFormat = "{0}_{1}{2}";
+                string report = "REPORTES/ABONADOS/REPORTES_ABONADO_FACTURADO";
+                var reportRenderType = StaticFunctions.GetReportRenderType("excel");
+                var extension = StaticFunctions.FileExtension(reportRenderType);
+                var contentType = StaticFunctions.GetContentType(reportRenderType);
+
+                var dictionary = new Dictionary<string, string>
+                {
+                    { "invoiceCode", invoiceCode }
+                };
+
+                response.Data = new GetFileResponseDto
+                {
+                    File = await _reportingDownload.GenerateReportAsync(report, reportRenderType, dictionary),
+                    ContentType = contentType,
+                    Name = string.Format(fileFormat, "LISTA_FACTURA_", invoiceCode, extension)
+                };
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
         public async Task<Response<GetFileResponseDto>> DownloadReport6_3_100(string code, int year, string format)
         {
             var response = new Response<GetFileResponseDto>();

@@ -897,7 +897,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 if (productionClosure == null)
                 {
 
-                    DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1).AddDays(-1);
+                    DateTime lastDayOfCurrentMonth = DateTime.Now.AddDays(20);
                     await context.ProductionClosures.AddAsync(new ProductionClosure
                     {
                         EndDate = lastDayOfCurrentMonth,
@@ -916,7 +916,7 @@ namespace DRRCore.Application.Main.CoreApplication
                             var nextProductionClosureExistent = await context.ProductionClosures.Where(x => x.Code.Contains(code)).FirstOrDefaultAsync();
                             if (nextProductionClosureExistent == null)
                             {
-                                DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year + 1, 1, 1).AddMonths(1).AddDays(-1);
+                                DateTime lastDayOfCurrentMonth = DateTime.Now.AddDays(20);
                                 await context.ProductionClosures.AddAsync(new ProductionClosure
                                 {
                                     EndDate = lastDayOfCurrentMonth,
@@ -932,7 +932,7 @@ namespace DRRCore.Application.Main.CoreApplication
                             var nextProductionClosureExistent = await context.ProductionClosures.Where(x => x.Code.Contains(code)).FirstOrDefaultAsync();
                             if (nextProductionClosureExistent == null)
                             {
-                                DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1).AddDays(-1);
+                                DateTime lastDayOfCurrentMonth = DateTime.Now.AddDays(20);
                                 await context.ProductionClosures.AddAsync(new ProductionClosure
                                 {
                                     EndDate = lastDayOfCurrentMonth,
@@ -1635,7 +1635,7 @@ namespace DRRCore.Application.Main.CoreApplication
 
                 string fileDirectory = facSerie.Value+obj.InvoiceCode+".txt";
 
-                var ftpServerUrl = @"ftp://" + host.Value + ":" + port.Value + "/";
+                var ftpServerUrl = @"ftp://" + host.Value + ":" + port.Value + "/ENTRADA/";
                 var username = user.Value;
                 var passwordv = password.Value;
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(new Uri(ftpServerUrl + fileDirectory));
@@ -2054,7 +2054,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 string fileDirectory = facSerie.Value + obj.InvoiceCode + ".txt";
 
           
-                var ftpServerUrl = @"ftp://" + host.Value + ":" + port.Value + "/";
+                var ftpServerUrl = @"ftp://" + host.Value + ":" + port.Value + "/ENTRADA/";
                 var username = user.Value;
                 var passwordv = password.Value;
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(new Uri(ftpServerUrl + fileDirectory));

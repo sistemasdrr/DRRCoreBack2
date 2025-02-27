@@ -314,6 +314,7 @@ namespace DRRCore.Application.Main
                 emailDataDto.CC = new List<string>
                 {
                     "diego.rodriguez@del-risco.com",
+                    "myepez@del-risco.com"
                     
                 };
 

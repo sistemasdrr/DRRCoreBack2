@@ -43,6 +43,7 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<GetFileResponseDto>> DownloadReport6_6_1(string code, string format);
         Task<Response<GetFileResponseDto>> DownloadReport5_1_2(int year, string format);
         Task<Response<GetFileResponseDto>> DownloadReport6_1_7(string orderBy, string type, string format);
+        Task<Response<GetFileResponseDto>> DownloadListToCollect(string invoiceCode);
         Task<Response<GetFileResponseDto>> DownloadReport6_3_100(string code, int year, string format);
         Task<Response<GetFileResponseDto>> DownloadReport7_1(int start, int end, string format);
         Task<Response<GetFileResponseDto>> DownloadReport7_3(int year, string code, string format);
@@ -62,5 +63,6 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<GetFileResponseDto>> DownloadReport7_13_2(int year, string code, string format);
         Task<Response<GetFileResponseDto>> DownloadReport7_15(string format);       
         Task<Response<GetFileResponseDto>> DownloadReport_Realizado_Pendiente(int month, int year, string type, string format);
+      
     }
 }

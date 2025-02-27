@@ -2541,7 +2541,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 var productionClosure = await context.ProductionClosures.Where(x => x.Code.Contains(cycle)).FirstOrDefaultAsync();
                 if (productionClosure == null)
                 {
-                    DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1).AddDays(-1);
+                    DateTime lastDayOfCurrentMonth = DateTime.Now.AddDays(20);
                     await context.ProductionClosures.AddAsync(new ProductionClosure
                     {
                         EndDate = lastDayOfCurrentMonth,
@@ -2560,7 +2560,7 @@ namespace DRRCore.Application.Main.CoreApplication
                             var nextProductionClosureExistent = await context.ProductionClosures.Where(x => x.Code.Contains(cycle)).FirstOrDefaultAsync();
                             if (nextProductionClosureExistent == null)
                             {
-                                DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year + 1, 1, 1).AddMonths(1).AddDays(-1);
+                                DateTime lastDayOfCurrentMonth = DateTime.Now.AddDays(20);
                                 await context.ProductionClosures.AddAsync(new ProductionClosure
                                 {
                                     EndDate = lastDayOfCurrentMonth,
@@ -2576,7 +2576,7 @@ namespace DRRCore.Application.Main.CoreApplication
                             var nextProductionClosureExistent = await context.ProductionClosures.Where(x => x.Code.Contains(cycle)).FirstOrDefaultAsync();
                             if (nextProductionClosureExistent == null)
                             {
-                                DateTime lastDayOfCurrentMonth = new DateTime(DateTime.Today.Year, (DateTime.Today.Month + 1), 1).AddMonths(1).AddDays(-1);
+                                DateTime lastDayOfCurrentMonth = DateTime.Now.AddDays(20);
                                 await context.ProductionClosures.AddAsync(new ProductionClosure
                                 {
                                     EndDate = lastDayOfCurrentMonth,
