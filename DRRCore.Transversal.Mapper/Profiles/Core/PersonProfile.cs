@@ -12,6 +12,7 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
         public PersonProfile()
         {
             CreateMap<AddOrUpdatePersonRequestDto, Person>()
+                .ForMember(dest => dest.Fullname, opt => opt?.MapFrom(src => src.Fullname.ToUpper()))
                  .ForMember(dest => dest.IdCivilStatus, opt => opt?.MapFrom(src => src.IdCivilStatus == 0 ? null : src.IdCivilStatus))
                  .ForMember(dest => dest.IdLegalRegisterSituation, opt => opt?.MapFrom(src => src.IdLegalRegisterSituation == 0 ? null : src.IdLegalRegisterSituation))
                  .ForMember(dest => dest.IdCreditRisk, opt => opt?.MapFrom(src => src.IdCreditRisk == 0 ? null : src.IdCreditRisk))

@@ -14,6 +14,8 @@ namespace DRRCore.Transversal.Mapper.Profiles.Core
         public CompanyProfile() {
 
             CreateMap<AddOrUpdateCompanyRequestDto, Company>()
+                .ForMember(dest => dest.Name, opt => opt?.MapFrom(src => src.Name.ToUpper()))
+                .ForMember(dest => dest.SocialName, opt => opt?.MapFrom(src => src.SocialName.ToUpper()))
                    .ForMember(dest => dest.IdLegalPersonType, opt => opt?.MapFrom(src => src.IdLegalPersonType == 0 ? null : src.IdLegalPersonType))
                   .ForMember(dest => dest.IdLegalRegisterSituation, opt => opt?.MapFrom(src => src.IdLegalRegisterSituation == 0 ? null : src.IdLegalRegisterSituation))
                   .ForMember(dest => dest.IdCreditRisk, opt => opt?.MapFrom(src => src.IdCreditRisk == 0 ? null : src.IdCreditRisk))
