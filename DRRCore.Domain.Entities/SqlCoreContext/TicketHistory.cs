@@ -51,6 +51,10 @@ public partial class TicketHistory
 
     public bool? Enable { get; set; }
 
+    public bool HasBalance { get; set; }
+
+    public int? IdSpecialAgentBalance { get; set; }
+
     public virtual ICollection<AgentInvoiceDetail> AgentInvoiceDetails { get; set; } = new List<AgentInvoiceDetail>();
 
     public virtual StatusTicket? IdStatusTicketNavigation { get; set; }

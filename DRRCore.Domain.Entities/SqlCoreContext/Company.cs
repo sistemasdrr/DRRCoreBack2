@@ -152,5 +152,5 @@ public partial class Company
     public virtual ICollection<TraductionCompany> TraductionCompanies { get; set; } = new List<TraductionCompany>();
 
     public virtual ICollection<WorkersHistory> WorkersHistories { get; set; } = new List<WorkersHistory>();
-    public virtual ICollection<Traduction> Traductions { get; set; } = new List<Traduction>();
+    public List<Traduction> Traductions { get; set; }
 }
