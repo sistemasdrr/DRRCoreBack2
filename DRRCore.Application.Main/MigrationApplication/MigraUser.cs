@@ -2443,14 +2443,14 @@ namespace DRRCore.Application.Main.MigrationApplication
 
         public async Task<bool> MigrateOldTicket()
         {
-            int[] year = { 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013, 2012, 2011, 2010, 2009, 2007, 2006 };
+            int[] year = { 2024, 2023 };
 
             using (var mysqlContext = new MySqlContext())
             using (var context = new SqlCoreContext())
             {
                 for (int i = 0; i < year.Length; i++)
                 {
-                    var cupon = await mysqlContext.TCupons.Where(x => x.CupEstado == "J" &&
+                    var cupon = await mysqlContext.TCupons.Where(x => x.CupEstado == "J" && x.CupCodigo==335523 &&
                     x.EpCodigo != "" && !string.IsNullOrEmpty(x.EpCodigo) && x.Migra == 0 && x.CupFecped.Value.Year == year[i]).ToListAsync();
 
                     foreach (var item in cupon)

@@ -11,6 +11,8 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<int>> AddOrUpdateAsync(AddOrUpdateCompanyRequestDto obj);
         Task<Response<GetCompanyResponseDto>> GetCompanyById(int id);
         Task<Response<List<GetListCompanyResponseDto>>> GetAllCompanys(string name, string form, int idCountry, bool haveReport, string similar, string quality,int indicador);
+        Task<Response<List<GetListCompanyResponseDto>>> GetAllCompanysQuery(string name, string form, int idCountry, bool haveReport, string similar, string quality, int indicador);
+
         Task<Response<List<GetCompanySearchResponseDto>>> GetCompanySearch(string name, string taxCode, int idCountry);
         Task<Response<bool>> DeleteAsync(int id);
         Task<Response<int?>> AddOrUpdateCompanyBackGroundAsync(AddOrUpdateCompanyBackgroundRequestDto obj);
@@ -85,6 +87,6 @@ namespace DRRCore.Application.Interfaces.CoreApplication
         Task<Response<List<GetProviderHistoryResponseDto>>> GetProviderHistory(string type, int id);
 
         Task<Response<GetFileResponseDto>> DownloadSubReportCompany(int? idCompany, string section, string language, int idTicket);
-        
+        Task<Response<bool>> OrderPartnerNumeration(List<OrderPartnerNumerationRequestDto> list);
     }
 }

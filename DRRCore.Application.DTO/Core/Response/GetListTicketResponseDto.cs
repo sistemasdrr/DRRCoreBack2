@@ -173,6 +173,8 @@
         public string? ComplementQualityTypist { get; set; }
         public string? ComplementQualityTranslator { get; set; }
 
+        public string? LastReporterAgent { get; set; }
+
     }
     public class GetListTicketResponseDto3
     {

@@ -29,6 +29,7 @@
        Anulado_Por_Abonado=27,
         Anulado_Por_DRR=28,
         Anulado_Por_Supervisor=30,
-        Anulado_Por_FaltaDatos=29
+        Anulado_Por_FaltaDatos=29,
+        Por_Despachar_F_R=31
     }
 }

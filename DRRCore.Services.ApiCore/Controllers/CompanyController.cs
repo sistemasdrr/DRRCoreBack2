@@ -49,6 +49,14 @@ namespace DRRCore.Services.ApiCore.Controllers
             form ??= string.Empty;
             return Ok(await _companyApplication.GetAllCompanys(name, form, idCountry, haveReport, filterBy, quality,indicador));
         }
+        [HttpPost()]
+        [Route("getbynameQuery")]
+        public async Task<ActionResult> GetCompanyByNameQuery(string? name, string? form, int idCountry, bool haveReport, string filterBy, string quality, int indicador)
+        {
+            name ??= string.Empty;
+            form ??= string.Empty;
+            return Ok(await _companyApplication.GetAllCompanysQuery(name, form, idCountry, haveReport, filterBy, quality, indicador));
+        }
         [HttpGet()]
         [Route("getCompanySearch")]
         public async Task<ActionResult> getCompanySearch(string? name, string? taxCode, int idCountry)
@@ -542,6 +550,12 @@ namespace DRRCore.Services.ApiCore.Controllers
         public async Task<ActionResult> deleteCompanyRelation(int id)
         {
             return Ok(await _companyApplication.DeleteCompanyRelation(id));
+        }
+        [HttpPost()]
+        [Route("orderPartnerNumeration")]
+        public async Task<ActionResult> orderPartnerNumeration(List<OrderPartnerNumerationRequestDto> list)
+        {
+            return Ok(await _companyApplication.OrderPartnerNumeration(list));
         }
         [HttpGet()]
         [Route("getListCompanyRelation")]

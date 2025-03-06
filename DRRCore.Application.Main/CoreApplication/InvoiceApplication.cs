@@ -1458,7 +1458,7 @@ namespace DRRCore.Application.Main.CoreApplication
                 }
                 else
                 {
-                    if (obj.SubscriberCode == "0112" || obj.SubscriberCode == "0156" || obj.SubscriberCode == "0107")
+                    if (obj.SubscriberCode == "0112" || obj.SubscriberCode == "0156" || obj.SubscriberCode == "0107" || obj.SubscriberCode=="0101" || obj.SubscriberCode == "0180")
                     {
                         cuenta = "SCOTIABANK,No. Cuenta corriente Soles 000-1480324,CCI 009-213-000001480324-01,Beneficiario DEL RISCO REPORTS";
                     }

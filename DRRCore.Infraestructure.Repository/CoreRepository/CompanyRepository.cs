@@ -219,28 +219,35 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                 {
                     if (haveReport)
                     {
-                        companys = await context.Companies
-                        .Include(x => x.TraductionCompanies)
-                        .Include(x => x.IdCreditRiskNavigation)
-                        .Include(x => x.IdCountryNavigation)
-                        .Include(x => x.CompanyPartners.Where(x => x.MainExecutive == true)).ThenInclude(x => x.IdPersonNavigation)
+                        companys = await context.Tickets
+                            .Include(x => x.IdCompanyNavigation)
+                        .Include(x => x.IdCompanyNavigation.TraductionCompanies)
+                        .Include(x => x.IdCompanyNavigation.IdCreditRiskNavigation)
+                        .Include(x => x.IdCompanyNavigation.IdCountryNavigation)
+                        .Include(x => x.IdCompanyNavigation.CompanyPartners.Where(x => x.MainExecutive == true)).ThenInclude(x => x.IdPersonNavigation)
                         .Where(x => (idCountry == 0 || x.IdCountry == idCountry) &&
-                                    (form == "C" ? x.Name.Contains(name) : form == "I" ? x.Name.StartsWith(name) : false) &&
-                                    x.HaveReport == true)
-                        .Take(100)
+                                  
+                                    (form == "C" ? (x.IdCompanyNavigation.Name.Contains(name)||x.RequestedName.Contains(name)) : form == "I" ? (x.IdCompanyNavigation.Name.StartsWith(name)||x.RequestedName.StartsWith(name)) : false) &&
+                                    x.IdCompanyNavigation.HaveReport == true)
+                         .Select(x => x.IdCompanyNavigation)
+                        .Take(100)                       
                         .ToListAsync();
                     }
                     else
                     {
-                         companys = await context.Companies
-                        .Include(x => x.TraductionCompanies)
-                       .Include(x => x.IdCreditRiskNavigation)
-                       .Include(x => x.IdCountryNavigation)
-                       .Include(x => x.CompanyPartners.Where(x => x.MainExecutive == true)).ThenInclude(x => x.IdPersonNavigation)
-                       .Where(x => (idCountry == 0 || x.IdCountry == idCountry) &&
-                                   (form == "C" ? x.Name.Contains(name) : form == "I" ? x.Name.StartsWith(name) : false))
-                       .Take(100)
-                       .ToListAsync();
+
+                        companys = await context.Tickets
+                            .Include(x => x.IdCompanyNavigation)
+                        .Include(x => x.IdCompanyNavigation.TraductionCompanies)
+                        .Include(x => x.IdCompanyNavigation.IdCreditRiskNavigation)
+                        .Include(x => x.IdCompanyNavigation.IdCountryNavigation)
+                        .Include(x => x.IdCompanyNavigation.CompanyPartners.Where(x => x.MainExecutive == true)).ThenInclude(x => x.IdPersonNavigation)
+                        .Where(x => (idCountry == 0 || x.IdCountry == idCountry) &&
+
+                                    (form == "C" ? (x.IdCompanyNavigation.Name.Contains(name) || x.RequestedName.Contains(name)) : form == "I" ? (x.IdCompanyNavigation.Name.StartsWith(name) || x.RequestedName.StartsWith(name)) : false) )
+                         .Select(x => x.IdCompanyNavigation)
+                        .Take(100)
+                        .ToListAsync();
                     }
                 }
                 else if (filterBy == "C")
@@ -355,7 +362,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                         .ToListAsync();
                     }
                 }
-                return companys; 
+                return companys.Where(x=>x!=null).ToList(); 
             }
             catch (Exception ex)
             {

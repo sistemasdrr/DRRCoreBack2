@@ -312,6 +312,61 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             return response;
         }
+        public async Task<Response<List<GetListCompanyResponseDto>>> GetAllCompanysQuery(string name, string form, int idCountry, bool haveReport, string filterBy, string quality, int indicador)
+        {
+
+            var response = new Response<List<GetListCompanyResponseDto>>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                if (filterBy != "S")
+                {
+                    var query = context.Set<GetListCompanyQuery>()
+                                      .FromSqlRaw("EXECUTE SP_COMPANY_QUERY_ADV @name={0},@form={1},@idCountry={2},@haveReport={3},@filterBy={4},@quality={5},@indicador={6}", name, form, idCountry, haveReport, filterBy, quality, indicador)
+                                      .AsEnumerable()
+                                      .ToList();
+
+                    response.Data = _mapper.Map<List<GetListCompanyResponseDto>>(query);
+                }
+                else
+                {
+                    var ticket = await _ticketDomain.GetByNameAsync(name, "E");
+                    var mapper = _mapper.Map<List<GetListCompanyResponseDto>>(ticket);
+
+                    var oldTicket = await _ticketDomain.GetSimilarByNameAsync(name, "E");
+                    if (oldTicket.Any())
+                    {
+                        foreach (var item in oldTicket)
+                        {
+                            var company = await _companyDomain.GetByOldCode(item.Empresa);
+                            if (company != null)
+                            {
+                                mapper.Add(new GetListCompanyResponseDto
+                                {
+                                    Name = item.NombreSolicitado,
+                                    DispatchedName = item.NombreDespachado,
+                                    Language = item.Idioma,
+                                    Id = company.Id,
+                                    Country = company.IdCountryNavigation.Name,
+                                    IsoCountry = company.IdCountryNavigation.Iso,
+                                    FlagCountry = company.IdCountryNavigation.FlagIso,
+                                    Code = company.OldCode
+                                });
+                            }
+                        }
+                    }
+                    mapper = mapper.DistinctBy(x => x.Name).DistinctBy(x => x.Code).ToList();
+                    response.Data = mapper;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
 
         private async Task<bool> GetDuplicateTax(GetListCompanyResponseDto item)
         {
@@ -426,6 +481,36 @@ namespace DRRCore.Application.Main.CoreApplication
             }
             return response;
         }
+        public async Task<Response<bool>> OrderPartnerNumeration(List<OrderPartnerNumerationRequestDto> list)
+        {
+            var response = new Response<bool>();
+            try
+            {
+                using var context = new SqlCoreContext();
+                foreach (var item in list)
+                {
+                    var partner = await context.CompanyPartners.Where(x => x.Id == item.Id).FirstOrDefaultAsync();
+
+                    if (partner != null)
+                    {
+                        partner.Numeration= item.Numeration;
+                        partner.UpdateDate=DateTime.Now;
+                        context.CompanyPartners.Update(partner);
+                    }
+                   
+                }
+                await context.SaveChangesAsync();                
+                response.Data = true;
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = Messages.BadQuery;
+                _logger.LogError(response.Message, ex);
+            }
+            return response;
+        }
+
 
         public async Task<Response<bool>> DesactiveWebVisionAsync(int id)
         {

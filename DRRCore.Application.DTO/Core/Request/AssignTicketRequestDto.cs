@@ -25,7 +25,7 @@ namespace DRRCore.Application.DTO.Core.Request
         public string? QualityTranslator { get; set; }
         public bool Internal { get; set; }
         public bool Balance { get; set; }
-        public bool? HasBalance { get; set; }
+        public bool? HasBalance { get; set; }=false;
         public int? SpecialPriceBalance { get; set; }
         public string? StartDate { get; set; }
         public DateTime? StartDateD { get; set; }
