@@ -362,7 +362,7 @@ namespace DRRCore.Infraestructure.Repository.CoreRepository
                         .ToListAsync();
                     }
                 }
-                return companys.Where(x=>x!=null).ToList(); 
+                return companys.Where(x=>x!=null).Distinct().ToList(); 
             }
             catch (Exception ex)
             {

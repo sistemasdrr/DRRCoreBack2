@@ -1292,13 +1292,14 @@ namespace DRRCore.Application.Main.CoreApplication
                     {
                         if (item.About == "E")
                         {
-                            var reporter = await context.TicketHistories.Include(x => x.IdTicketNavigation).Where(x => x.IdTicketNavigation.IdCompany == item.IdCompany && (x.AsignationType == "AG" ||(x.AsignedTo.Substring(0,1)=="R" && x.AsignationType == "RP"))
+                            var reporter = await context.TicketHistories.Include(x => x.IdTicketNavigation)
+                                  .Include(x => x.IdTicketNavigation.IdSubscriberNavigation).Where(x => x.IdTicketNavigation.IdCompany == item.IdCompany && (x.AsignationType == "AG" ||(x.AsignedTo.Substring(0,1)=="R" && x.AsignationType == "RP"))
                               && (x.IdTicketNavigation.IdStatusTicket == (int)TicketStatusEnum.Despachado || x.IdTicketNavigation.IdStatusTicket == (int)TicketStatusEnum.Despachado_con_Observacion) && x.IdTicketNavigation.Id != item.IdTicket).OrderByDescending(x => x.IdTicketNavigation.DispatchtDate).ToListAsync();
 
                            var lastReport= string.Join("/", reporter.Select(x=>x.AsignedTo).Distinct().ToList());
                             if (reporter.Count > 0)
                             {
-                                item.LastReporterAgent =string.Format("{0}({1})", lastReport, reporter.First().IdTicketNavigation.Quality);
+                                item.LastReporterAgent = string.Format("{0}-{1}({2})", reporter.First().IdTicketNavigation.IdSubscriberNavigation.Code, lastReport, reporter.First().IdTicketNavigation.Quality);
                             }
                             else
                             {
@@ -1309,13 +1310,14 @@ namespace DRRCore.Application.Main.CoreApplication
 
                         }
                         else if (item.About == "P") {
-                            var reporter = await context.TicketHistories.Include(x => x.IdTicketNavigation).Where(x => x.IdTicketNavigation.IdPerson == item.IdPerson && (x.AsignationType == "AG" || (x.AsignedTo.Substring(0, 1) == "R" && x.AsignationType == "RP"))
+                            var reporter = await context.TicketHistories.Include(x => x.IdTicketNavigation)
+                                .Include(x => x.IdTicketNavigation.IdSubscriberNavigation).Where(x => x.IdTicketNavigation.IdPerson == item.IdPerson && (x.AsignationType == "AG" || (x.AsignedTo.Substring(0, 1) == "R" && x.AsignationType == "RP"))
                             && (x.IdTicketNavigation.IdStatusTicket == (int)TicketStatusEnum.Despachado || x.IdTicketNavigation.IdStatusTicket == (int)TicketStatusEnum.Despachado_con_Observacion) && x.IdTicketNavigation.Id != item.IdTicket).OrderByDescending(x => x.IdTicketNavigation.DispatchtDate).ToListAsync();
 
                             var lastReport = string.Join("/", reporter.Select(x => x.AsignedTo).Distinct().ToList());
                             if (reporter.Count > 0)
                             {
-                                item.LastReporterAgent = string.Format("{0}({1})", lastReport, reporter.First().IdTicketNavigation.Quality);
+                                item.LastReporterAgent = string.Format("{0}-{1}({2})", reporter.First().IdTicketNavigation.IdSubscriberNavigation.Code, lastReport, reporter.First().IdTicketNavigation.Quality);
                             }
                             else
                             {
@@ -2302,6 +2304,16 @@ namespace DRRCore.Application.Main.CoreApplication
                                         context.Tickets.Update(ticket);
                                         context.TicketHistories.Update(history);
 
+                                        if (item.SpecialPriceBalance != null || item.SpecialPriceBalance != 0)
+                                        {
+                                            context.TicketAgents.Add(new TicketAgent
+                                            {
+                                                IdTicket = ticket.Id,
+                                                IdSpecialAgentBalancePrice=item.SpecialPriceBalance
+
+                                            });
+                                        }
+                                        
                                         var newTicketHistory = new TicketHistory
                                         {
                                             IdTicket = ticket.Id,
@@ -2361,8 +2373,16 @@ namespace DRRCore.Application.Main.CoreApplication
                                         history.Cycle = code;
                                         history.ShippingDate = DateTime.Now;
                                         history.UpdateDate = DateTime.Now;
+                                        if (item.SpecialPriceBalance != null || item.SpecialPriceBalance != 0)
+                                        {
+                                            context.TicketAgents.Add(new TicketAgent
+                                            {
+                                                IdTicket = ticket.Id,
+                                                IdSpecialAgentBalancePrice = item.SpecialPriceBalance
 
-                                      
+                                            });
+                                        }
+
 
                                         if (item.Internal)
                                         {
@@ -2677,7 +2697,15 @@ namespace DRRCore.Application.Main.CoreApplication
                                         history.ShippingDate = DateTime.Now;
                                         history.UpdateDate = DateTime.Now;
                                         ticket.ProcedureTypeAgent = obj.Asignacion[0].ProcedureTypeAgent;
+                                        if (item.SpecialPriceBalance != null || item.SpecialPriceBalance != 0)
+                                        {
+                                            context.TicketAgents.Add(new TicketAgent
+                                            {
+                                                IdTicket = ticket.Id,
+                                                IdSpecialAgentBalancePrice = item.SpecialPriceBalance
 
+                                            });
+                                        }
                                         if (item.Internal)
                                         {
                                             if (item.AssignedToCode.Trim() == "A30") item.UserTo = "45";
@@ -3013,7 +3041,15 @@ namespace DRRCore.Application.Main.CoreApplication
 
                                         context.Tickets.Update(ticket);
                                         context.TicketHistories.Update(history);
+                                        if (item.SpecialPriceBalance != null || item.SpecialPriceBalance != 0)
+                                        {
+                                            context.TicketAgents.Add(new TicketAgent
+                                            {
+                                                IdTicket = ticket.Id,
+                                                IdSpecialAgentBalancePrice = item.SpecialPriceBalance
 
+                                            });
+                                        }
                                         await context.SaveChangesAsync();
                                     }
                                     if (item.Type == "RF")
@@ -3050,7 +3086,15 @@ namespace DRRCore.Application.Main.CoreApplication
                                         history.ShippingDate = DateTime.Now;
                                         history.UpdateDate = DateTime.Now;
 
+                                        if (item.SpecialPriceBalance != null || item.SpecialPriceBalance != 0)
+                                        {
+                                            context.TicketAgents.Add(new TicketAgent
+                                            {
+                                                IdTicket = ticket.Id,
+                                                IdSpecialAgentBalancePrice = item.SpecialPriceBalance
 
+                                            });
+                                        }
                                         ticket.IdStatusTicket = (int)TicketStatusEnum.Asig_Referencista;
                                             var newTicketHistory = new TicketHistory
                                             {
@@ -3132,6 +3176,15 @@ namespace DRRCore.Application.Main.CoreApplication
                                             history.ShippingDate = DateTime.Now;
                                             history.UpdateDate = DateTime.Now;
                                             await context.TicketHistories.AddAsync(newTicketHistory);
+                                            if (item.SpecialPriceBalance != null || item.SpecialPriceBalance != 0)
+                                            {
+                                                context.TicketAgents.Add(new TicketAgent
+                                                {
+                                                    IdTicket = ticket.Id,
+                                                    IdSpecialAgentBalancePrice = item.SpecialPriceBalance
+
+                                                });
+                                            }
 
                                         }
                                         else
@@ -3168,7 +3221,15 @@ namespace DRRCore.Application.Main.CoreApplication
                                             history.IdSpecialAgentBalance = item.SpecialPriceBalance;
                                             history.ShippingDate = DateTime.Now;
                                             history.UpdateDate = DateTime.Now;
+                                            if (item.SpecialPriceBalance != null || item.SpecialPriceBalance != 0)
+                                            {
+                                                context.TicketAgents.Add(new TicketAgent
+                                                {
+                                                    IdTicket = ticket.Id,
+                                                    IdSpecialAgentBalancePrice = item.SpecialPriceBalance
 
+                                                });
+                                            }
 
                                             ticket.IdStatusTicket = (int)TicketStatusEnum.Asig_Digitidor;
                                             var newTicketHistory = new TicketHistory
@@ -3240,7 +3301,16 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 AsignationType = "TR",
                                                 Cycle = code
                                             };
-                                           // ticket.HasBalance = item.HasBalance == null ? ticket.HasBalance : item.HasBalance;
+                                            if (item.SpecialPriceBalance != null || item.SpecialPriceBalance != 0)
+                                            {
+                                                context.TicketAgents.Add(new TicketAgent
+                                                {
+                                                    IdTicket = ticket.Id,
+                                                    IdSpecialAgentBalancePrice = item.SpecialPriceBalance
+
+                                                });
+                                            }
+                                            // ticket.HasBalance = item.HasBalance == null ? ticket.HasBalance : item.HasBalance;
                                             ticket.UpdateDate = DateTime.Now;
                                           //  ticket.IdSpecialAgentBalancePrice = (ticket.IdSpecialAgentBalancePrice == 0 || ticket.IdSpecialAgentBalancePrice == null) ? item.SpecialPriceBalance : ticket.IdSpecialAgentBalancePrice;
                                             history.Flag = true;
@@ -3308,7 +3378,15 @@ namespace DRRCore.Application.Main.CoreApplication
                                         history.IdSpecialAgentBalance = item.SpecialPriceBalance;
                                         history.ShippingDate = DateTime.Now;
                                         history.UpdateDate = DateTime.Now;
+                                        if (item.SpecialPriceBalance != null || item.SpecialPriceBalance != 0)
+                                        {
+                                            context.TicketAgents.Add(new TicketAgent
+                                            {
+                                                IdTicket = ticket.Id,
+                                                IdSpecialAgentBalancePrice = item.SpecialPriceBalance
 
+                                            });
+                                        }
                                         context.Tickets.Update(ticket);
                                         context.TicketHistories.Update(history);
 
@@ -3370,6 +3448,15 @@ namespace DRRCore.Application.Main.CoreApplication
                                             history.IdSpecialAgentBalance = item.SpecialPriceBalance;
                                             history.ShippingDate = DateTime.Now;
                                             history.UpdateDate = DateTime.Now;
+                                            if (item.SpecialPriceBalance != null || item.SpecialPriceBalance != 0)
+                                            {
+                                                context.TicketAgents.Add(new TicketAgent
+                                                {
+                                                    IdTicket = ticket.Id,
+                                                    IdSpecialAgentBalancePrice = item.SpecialPriceBalance
+
+                                                });
+                                            }
                                             await context.TicketHistories.AddAsync(newTicketHistory);
 
                                         }
@@ -3405,7 +3492,17 @@ namespace DRRCore.Application.Main.CoreApplication
                                             history.HasBalance = item.HasBalance == null ? false : item.HasBalance.Value;
                                             history.IdSpecialAgentBalance = item.SpecialPriceBalance;
                                             history.ShippingDate = DateTime.Now;
-                                            history.UpdateDate = DateTime.Now;  
+                                            history.UpdateDate = DateTime.Now;
+
+                                            if (item.SpecialPriceBalance != null || item.SpecialPriceBalance != 0)
+                                            {
+                                                context.TicketAgents.Add(new TicketAgent
+                                                {
+                                                    IdTicket = ticket.Id,
+                                                    IdSpecialAgentBalancePrice = item.SpecialPriceBalance
+
+                                                });
+                                            }
 
                                             ticket.IdStatusTicket = (int)TicketStatusEnum.Asig_Supervisor;
                                             var newTicketHistory = new TicketHistory
@@ -4639,7 +4736,16 @@ namespace DRRCore.Application.Main.CoreApplication
                                         HasBalance=obj.HasBalance.Value,
                                         IdSpecialAgentBalance=obj.SpecialPriceBalance
                                     };
-                                    await context.TicketHistories.AddAsync(newTicketHistory);
+                                if (obj.SpecialPriceBalance != null || obj.SpecialPriceBalance != 0)
+                                {
+                                    context.TicketAgents.Add(new TicketAgent
+                                    {
+                                        IdTicket = ticket.Id,
+                                        IdSpecialAgentBalancePrice = obj.SpecialPriceBalance
+
+                                    });
+                                }
+                                await context.TicketHistories.AddAsync(newTicketHistory);
 
                                 }
                                
@@ -4696,7 +4802,16 @@ namespace DRRCore.Application.Main.CoreApplication
                                     HasBalance = obj.HasBalance.Value,
                                     IdSpecialAgentBalance = obj.SpecialPriceBalance
                                 };
-                                await context.TicketHistories.AddAsync(newTicketHistory);
+                            if (obj.SpecialPriceBalance != null || obj.SpecialPriceBalance != 0)
+                            {
+                                context.TicketAgents.Add(new TicketAgent
+                                {
+                                    IdTicket = ticket.Id,
+                                    IdSpecialAgentBalancePrice = obj.SpecialPriceBalance
+
+                                });
+                            }
+                            await context.TicketHistories.AddAsync(newTicketHistory);
 
                                 await context.SaveChangesAsync();
                             }
@@ -5815,7 +5930,7 @@ namespace DRRCore.Application.Main.CoreApplication
             return response;
         }
 
-        public async Task<Response<List<GetSearchSituationResponseDto>>> GetNewSearchSituation(string about, string name, string form, int idCountry, bool haveReport, string filterBy)
+        public async Task<Response<List<GetSearchSituationResponseDto>>>    GetNewSearchSituation(string about, string name, string form, int idCountry, bool haveReport, string filterBy)
         {
             var response = new Response<List<GetSearchSituationResponseDto>>();
             try

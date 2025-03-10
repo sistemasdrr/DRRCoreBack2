@@ -133,6 +133,8 @@ public partial class Ticket
 
     public virtual ICollection<SubscriberInvoiceDetail> SubscriberInvoiceDetails { get; set; } = new List<SubscriberInvoiceDetail>();
 
+    public virtual ICollection<TicketAgent> TicketAgents { get; set; } = new List<TicketAgent>();
+
     public virtual TicketAssignation? TicketAssignation { get; set; }
 
     public virtual ICollection<TicketFile> TicketFiles { get; set; } = new List<TicketFile>();

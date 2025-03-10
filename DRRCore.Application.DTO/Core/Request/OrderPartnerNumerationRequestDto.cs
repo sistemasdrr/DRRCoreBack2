@@ -11,5 +11,6 @@ namespace DRRCore.Application.DTO.Core.Request
     {
         public int Id { get; set; }
         public int Numeration { get; set; }
+
     }
 }

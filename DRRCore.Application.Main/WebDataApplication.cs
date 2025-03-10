@@ -342,7 +342,7 @@ namespace DRRCore.Application.Main
 
                     var numeration = await context.Numerations.Where(x => x.Name == "NUM_TICKET").FirstOrDefaultAsync();
                     numeration.Number++;
-                    var subscriber = await context.Subscribers.Where(x => x.Code == "0001").FirstOrDefaultAsync();
+                    var subscriber = await context.Subscribers.Where(x => x.Code == "1027").FirstOrDefaultAsync();
                     var ticket = new Domain.Entities.SqlCoreContext.Ticket();
                     ticket.Number = (int)(numeration.Number);
                     ticket.IdSubscriber = subscriber.Id;
@@ -366,7 +366,7 @@ namespace DRRCore.Application.Main
                     ticket.IdInvoiceState = 1;
                     ticket.Web = true;
                     ticket.IdCompany = company.Id;
-                    ticket.ReportType = "RV";
+                    ticket.ReportType = "EF";
 
                     context.Numerations.Update(numeration);
                     context.Tickets.AddAsync(ticket);

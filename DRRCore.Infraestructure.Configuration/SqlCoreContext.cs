@@ -202,6 +202,8 @@ public partial class SqlCoreContext : DbContext
 
     public virtual DbSet<Ticket> Tickets { get; set; }
 
+    public virtual DbSet<TicketAgent> TicketAgents { get; set; }
+
     public virtual DbSet<TicketAssignation> TicketAssignations { get; set; }
 
     public virtual DbSet<TicketFile> TicketFiles { get; set; }
@@ -229,8 +231,8 @@ public partial class SqlCoreContext : DbContext
         if (!optionsBuilder.IsConfigured)
         {
             optionsBuilder.UseSqlServer(
-           // "Data Source=200.58.123.184,14331;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
-            "Data Source=localhost\\DRRSQLSERVER;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
+             "Data Source=200.58.123.184,14331;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
+           // "Data Source=localhost\\DRRSQLSERVER;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
             //   "Data Source=SD-4154134-W;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
             , sqlServerOptions => sqlServerOptions.EnableRetryOnFailure(
                 maxRetryCount: 18,
@@ -1584,7 +1586,9 @@ public partial class SqlCoreContext : DbContext
             entity.Property(e => e.IdPerson).HasColumnName("idPerson");
             entity.Property(e => e.LastUpdateUser).HasColumnName("lastUpdateUser");
             entity.Property(e => e.MainExecutive).HasColumnName("mainExecutive");
-            entity.Property(e => e.Numeration).HasColumnName("numeration");
+            entity.Property(e => e.Numeration)
+                .HasDefaultValueSql("((1))")
+                .HasColumnName("numeration");
             entity.Property(e => e.Participation)
                 .HasColumnType("decimal(5, 2)")
                 .HasColumnName("participation");
@@ -5211,6 +5215,25 @@ public partial class SqlCoreContext : DbContext
             entity.HasOne(d => d.IdTicketComplementNavigation).WithMany(p => p.InverseIdTicketComplementNavigation)
                 .HasForeignKey(d => d.IdTicketComplement)
                 .HasConstraintName("FK__Ticket__idTicket__36670980");
+        });
+
+        modelBuilder.Entity<TicketAgent>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__TicketAg__3213E83F298E94C2");
+
+            entity.ToTable("TicketAgent");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.IdSpecialAgentBalancePrice).HasColumnName("idSpecialAgentBalancePrice");
+            entity.Property(e => e.IdTicket).HasColumnName("idTicket");
+
+            entity.HasOne(d => d.IdSpecialAgentBalancePriceNavigation).WithMany(p => p.TicketAgents)
+                .HasForeignKey(d => d.IdSpecialAgentBalancePrice)
+                .HasConstraintName("FK__TicketAge__idSpe__35C7EB02");
+
+            entity.HasOne(d => d.IdTicketNavigation).WithMany(p => p.TicketAgents)
+                .HasForeignKey(d => d.IdTicket)
+                .HasConstraintName("FK__TicketAge__idTic__34D3C6C9");
         });
 
         modelBuilder.Entity<TicketAssignation>(entity =>

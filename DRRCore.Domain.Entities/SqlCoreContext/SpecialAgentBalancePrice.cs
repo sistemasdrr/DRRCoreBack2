@@ -25,5 +25,7 @@ public partial class SpecialAgentBalancePrice
 
     public virtual Agent? IdAgentNavigation { get; set; }
 
+    public virtual ICollection<TicketAgent> TicketAgents { get; set; } = new List<TicketAgent>();
+
     public virtual ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
 }
