@@ -2228,7 +2228,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                     newTicketHistory.Observations = ticketHistory.Observations;
                                     newTicketHistory.StartDate = ticketHistory.StartDate;
                                     newTicketHistory.EndDate = ticketHistory.EndDate;
-                                    newTicketHistory.AsignationType = ticketHistory.AsignationType;
+                                    newTicketHistory.AsignationType =GetAsignationType(item.Code,ticketHistory.AsignationType);
                                     newTicketHistory.Cycle = code;
                                     newTicketHistory.DirectTranslation = false;
 
@@ -2328,7 +2328,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                             DirectTranslation=item.Traduccion,
                                             Observations=item.Observations,
                                             Balance=item.Balance,
-                                            AsignationType = item.Type,
+                                            AsignationType = GetAsignationType(item.AssignedToCode, item.Type) ,
                                             Cycle = code
                                         };
                                         await context.TicketHistories.AddAsync(newTicketHistory);
@@ -2400,7 +2400,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
-                                                AsignationType = item.Type,
+                                                AsignationType  = GetAsignationType(item.AssignedToCode, item.Type),
                                                 Cycle = code,
                                                 DirectTranslation = item.Traduccion,
                                                 References = item.References
@@ -2517,7 +2517,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
-                                                AsignationType = item.Type,
+                                                AsignationType  = GetAsignationType(item.AssignedToCode, item.Type),
                                                 Cycle = code,
                                                 References = item.References
 
@@ -2651,7 +2651,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
-                                                AsignationType = item.Type,
+                                                AsignationType = GetAsignationType(item.AssignedToCode, item.Type),
                                                 Cycle = code,
                                                 References = item.References,
                                                 HasBalance=false,
@@ -2724,7 +2724,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 DirectTranslation = item.Traduccion,
                                                 StartDate = StaticFunctions.VerifyDate(item.StartDate),
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
-                                                AsignationType = item.Type,
+                                                AsignationType = GetAsignationType(item.AssignedToCode, item.Type),
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 References = item.References,
@@ -2760,7 +2760,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 References = item.References,
-                                                AsignationType = item.Type,
+                                                AsignationType = GetAsignationType(item.AssignedToCode, item.Type),
                                                 Cycle = code,
                                                 HasBalance = false,
                                                 IdSpecialAgentBalance = null
@@ -3021,7 +3021,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
                                                 References = item.References,
-                                                AsignationType = item.Type,
+                                                 AsignationType = GetAsignationType(item.AssignedToCode, item.Type) ,
                                                 Cycle = code,
                                                 HasBalance = false,
                                                 IdSpecialAgentBalance = null
@@ -3246,7 +3246,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 EndDate = StaticFunctions.VerifyDate(item.EndDate),
                                                 Observations = item.Observations,
                                                 Balance = item.Balance,
-                                                AsignationType = item.Type,
+                                                AsignationType = GetAsignationType(item.AssignedToCode, item.Type),
                                                 Cycle = code,
                                                 HasBalance = false,
                                                 IdSpecialAgentBalance = null
@@ -3545,6 +3545,43 @@ namespace DRRCore.Application.Main.CoreApplication
                 _logger.LogError(response.Message, ex);
             }
             return new Response<bool?>();
+        }
+
+        private string? GetAsignationType(string code,string assignationType)
+        {
+            string type = string.Empty;
+            if (code.Substring(0, 1) == "R")
+            {
+                if (code.Substring(0, 2) == "RC")
+                {
+                    type = "RF";
+                }
+                else
+                {
+                    type = "RP";
+                }
+            }else if(code.Substring(0, 1) == "S")
+            {
+                type = "SU";
+            }
+            else if (code.Substring(0, 1) == "A")
+            {
+                type = "AG";
+            }
+            else if (code.Substring(0, 1) == "D")
+            {
+                type = "DI";
+            }
+            else if (code.Substring(0, 1) == "T")
+            {
+                type = "TR";
+            }
+            else
+            {
+                type = assignationType;
+            }
+
+            return type;
         }
 
         public async Task<Response<List<GetListTicketResponseDto>>> GetTicketListToDispatchAsync()
@@ -4789,7 +4826,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                     IdTicket = ticket.Id,
                                     UserFrom = obj.UserFrom,
                                     UserTo = null,
-                                    AsignedTo = null,
+                                    AsignedTo = "PD1",
                                     IdStatusTicket = (int)TicketStatusEnum.Por_Despachar,
                                     NumberAssign = number,
                                     Flag = false,
@@ -4797,7 +4834,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                     EndDate = DateTime.Parse(obj.EndDate),
                                     Observations = obj.Observations,
                                     Balance = obj.Balance,
-                                    AsignationType = obj.Type,
+                                    AsignationType = "PD",
                                     Cycle = code,
                                     HasBalance = obj.HasBalance.Value,
                                     IdSpecialAgentBalance = obj.SpecialPriceBalance
@@ -5207,7 +5244,7 @@ namespace DRRCore.Application.Main.CoreApplication
                             {                                
                                 UserFrom = personal.IdEmployeeNavigation.UserLogins.FirstOrDefault().Id + "",
                                 UserTo = personal.IdEmployeeNavigation.UserLogins.FirstOrDefault().Id + "",
-                                AsignationType = item.Type,
+                                AsignationType = GetAsignationType(item.Code, item.Type),                              
                                 AsignedTo = item.Code,
                                 StartDate = DateTime.Now,
                                 EndDate = DateTime.Now,
@@ -5542,6 +5579,7 @@ namespace DRRCore.Application.Main.CoreApplication
                     UserFrom = user.Id.ToString(),
                     UserTo = user.Id.ToString(),
                     AsignedTo = asignedTo,
+                    AsignationType = GetAsignationType(ticketHistory.AsignedTo, ticketHistory.AsignationType),
                     IdStatusTicket = (int)TicketStatusEnum.Pendiente,
                     ShippingDate = DateTime.Now,
                     Flag = true,
@@ -5552,7 +5590,8 @@ namespace DRRCore.Application.Main.CoreApplication
                     UserFrom = user.Id.ToString(),
                     UserTo = ticketHistory.UserTo,
                     AsignedTo = ticketHistory.AsignedTo,
-                    AsignationType = ticketHistory.AsignationType,
+                    AsignationType = GetAsignationType(ticketHistory.AsignedTo, ticketHistory.AsignationType),
+               
                     IdStatusTicket = (int)TicketStatusEnum.Asig_Supervisor,
                     ShippingDate = DateTime.Now,
                     Flag = false,
