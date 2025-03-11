@@ -5,6 +5,8 @@ namespace DRRCore.Domain.Entities.SqlCoreContext;
 
 public partial class Company
 {
+    public List<Traduction> Traductions;
+
     public int Id { get; set; }
 
     public string? OldCode { get; set; }
@@ -152,5 +154,5 @@ public partial class Company
     public virtual ICollection<TraductionCompany> TraductionCompanies { get; set; } = new List<TraductionCompany>();
 
     public virtual ICollection<WorkersHistory> WorkersHistories { get; set; } = new List<WorkersHistory>();
-    public List<Traduction> Traductions { get; set; }
+   
 }

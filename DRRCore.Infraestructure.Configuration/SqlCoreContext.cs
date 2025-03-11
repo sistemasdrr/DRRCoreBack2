@@ -231,7 +231,7 @@ public partial class SqlCoreContext : DbContext
         if (!optionsBuilder.IsConfigured)
         {
             optionsBuilder.UseSqlServer(
-           //  "Data Source=200.58.123.184,14331;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
+            // "Data Source=200.58.123.184,14331;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
             "Data Source=localhost\\DRRSQLSERVER;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
             //   "Data Source=SD-4154134-W;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
             , sqlServerOptions => sqlServerOptions.EnableRetryOnFailure(
@@ -1107,7 +1107,7 @@ public partial class SqlCoreContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("currentExchangeRate");
             entity.Property(e => e.CurrentPaidCapital)
-                .HasColumnType("decimal(15, 2)")
+                .HasColumnType("decimal(30, 2)")
                 .HasColumnName("currentPaidCapital");
             entity.Property(e => e.CurrentPaidCapitalComentary)
                 .IsUnicode(false)
@@ -5224,6 +5224,9 @@ public partial class SqlCoreContext : DbContext
             entity.ToTable("TicketAgent");
 
             entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.HasBalance)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("hasBalance");
             entity.Property(e => e.IdSpecialAgentBalancePrice).HasColumnName("idSpecialAgentBalancePrice");
             entity.Property(e => e.IdTicket).HasColumnName("idTicket");
 

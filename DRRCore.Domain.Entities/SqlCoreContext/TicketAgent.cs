@@ -11,6 +11,8 @@ public partial class TicketAgent
 
     public int? IdSpecialAgentBalancePrice { get; set; }
 
+    public bool? HasBalance { get; set; }
+
     public virtual SpecialAgentBalancePrice? IdSpecialAgentBalancePriceNavigation { get; set; }
 
     public virtual Ticket? IdTicketNavigation { get; set; }
