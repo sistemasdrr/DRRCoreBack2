@@ -2310,7 +2310,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                             {
                                                 IdTicket = ticket.Id,
                                                 IdSpecialAgentBalancePrice=item.SpecialPriceBalance,
-                                                HasBalance=ticket.HasBalance
+                                                HasBalance=item.HasBalance
 
                                             });
                                         }
@@ -2380,7 +2380,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                             {
                                                 IdTicket = ticket.Id,
                                                 IdSpecialAgentBalancePrice = item.SpecialPriceBalance,
-                                                HasBalance = ticket.HasBalance
+                                                HasBalance = item.HasBalance
 
                                             });
                                         }
@@ -2440,7 +2440,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                             userFrom.IdEmployeeNavigation.Email
                                                            
                                                         };
-                                                        emailDataDto.Subject = "PRUEBA_" + ticket.ReportType + ": " + (numeration != null ? numeration.Number : 1) + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureType + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
+                                                        emailDataDto.Subject = "PRUEBA_" + ticket.ReportType + ": " + number + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureType + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
                                                     }
                                                     else
                                                     {
@@ -2457,7 +2457,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                             userFrom.IdEmployeeNavigation.Email,
                                                            
                                                         };
-                                                        emailDataDto.Subject = ticket.ReportType + ": " + (numeration != null ? numeration.Number : 1) + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureType + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
+                                                        emailDataDto.Subject = ticket.ReportType + ": " + number + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureType + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
                                                     }
 
                                                     emailDataDto.IsBodyHTML = true;
@@ -2466,7 +2466,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                     emailDataDto.BodyHTML = emailDataDto.IsBodyHTML ? await GetBodyHtml(emailDataDto) : emailDataDto.BodyHTML;
                                                     _logger.LogInformation(JsonConvert.SerializeObject(emailDataDto));
 
-                                                    var file = DownloadAssignReporter((int)ticket.Id, item.AssignedToCode, item.StartDate, item.EndDate, numeration.Number ?? 1, item.Observations).Result.Data;
+                                                    var file = DownloadAssignReporter((int)ticket.Id, item.AssignedToCode, item.StartDate, item.EndDate, number, item.Observations).Result.Data;
                                                     var attachment = new AttachmentDto();
                                                     attachment.FileName = file.Name + ".pdf";
                                                     attachment.Content = Convert.ToBase64String(file.File);
@@ -2556,7 +2556,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                             userFrom.IdEmployeeNavigation.Email,
                                                            
                                                         };
-                                                        emailDataDto.Subject = "PRUEBA_" + ticket.ReportType + ": " + (numeration != null ? numeration.Number : 1) + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureType + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
+                                                        emailDataDto.Subject = "PRUEBA_" + ticket.ReportType + ": " + number + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureType + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
                                                     }
                                                     else
                                                     {
@@ -2573,7 +2573,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                             userFrom.IdEmployeeNavigation.Email,
                                                            
                                                         };
-                                                        emailDataDto.Subject = ticket.ReportType + ": " + (numeration != null ? numeration.Number : 1) + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureType + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
+                                                        emailDataDto.Subject = ticket.ReportType + ": " + number + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureType + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
                                                     }
 
                                                     emailDataDto.IsBodyHTML = true;
@@ -2582,7 +2582,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                     emailDataDto.BodyHTML = emailDataDto.IsBodyHTML ? await GetBodyHtml(emailDataDto) : emailDataDto.BodyHTML;
                                                     _logger.LogInformation(JsonConvert.SerializeObject(emailDataDto));
 
-                                                    var file = DownloadAssignReporter((int)ticket.Id, item.AssignedToCode, item.StartDate, item.EndDate, numeration.Number ?? 1, item.Observations).Result.Data;
+                                                    var file = DownloadAssignReporter((int)ticket.Id, item.AssignedToCode, item.StartDate, item.EndDate, number, item.Observations).Result.Data;
                                                     var attachment = new AttachmentDto();
                                                     attachment.FileName = file.Name + ".pdf";
                                                     attachment.Content = Convert.ToBase64String(file.File);
@@ -2705,7 +2705,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                             {
                                                 IdTicket = ticket.Id,
                                                 IdSpecialAgentBalancePrice = item.SpecialPriceBalance,
-                                                HasBalance = ticket.HasBalance
+                                                HasBalance = item.HasBalance
 
                                             });
                                         }
@@ -2809,7 +2809,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                     {
                                                         emailDataDto.CC.Add("ccanevaro@del-risco.com");
                                                     }
-                                                    emailDataDto.Subject = "PRUEBA_" + ticket.ReportType + ": " + (numeration != null ? numeration.Number : 1) + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureType + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
+                                                    emailDataDto.Subject = "PRUEBA_" + ticket.ReportType + ": " + number + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureType + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
                                                 }
                                                 else
                                                 {
@@ -2834,7 +2834,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                     }
 
 
-                                                    emailDataDto.Subject = ticket.ReportType + ": " + (numeration != null ? numeration.Number : 1) + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureTypeAgent + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
+                                                    emailDataDto.Subject = ticket.ReportType + ": " + number + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureTypeAgent + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
                                                 }
 
 
@@ -2844,7 +2844,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 emailDataDto.BodyHTML = emailDataDto.IsBodyHTML ? await GetBodyHtml(emailDataDto) : emailDataDto.BodyHTML;
                                                 _logger.LogInformation(JsonConvert.SerializeObject(emailDataDto));
 
-                                                var file = DownloadAssignAgent((int)ticket.Id, item.AssignedToCode,item.StartDate,item.EndDate, numeration.Number ?? 1, item.Observations, obj.Asignacion[0].ProcedureTypeAgent).Result.Data;
+                                                var file = DownloadAssignAgent((int)ticket.Id, item.AssignedToCode,item.StartDate,item.EndDate, number, item.Observations, obj.Asignacion[0].ProcedureTypeAgent).Result.Data;
                                                 var attachment = new AttachmentDto();
                                                 attachment.FileName = file.Name + ".pdf";
                                                 attachment.Content = Convert.ToBase64String(file.File);
@@ -2906,7 +2906,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                     {
                                                         "prueba.sistemas@del-risco.com",                                                       
                                                     };
-                                                    emailDataDto.Subject = "PRUEBA_" + ticket.ReportType + ": " + (numeration != null ? numeration.Number : 1) + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureType + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
+                                                    emailDataDto.Subject = "PRUEBA_" + ticket.ReportType + ": " + number + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureType + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
                                                     emailDataDto.Parameters.Add(userFrom.IdEmployeeNavigation.FirstName + " " + userFrom.IdEmployeeNavigation.LastName);
                                                     emailDataDto.Parameters.Add(userFrom.IdEmployeeNavigation.Email);
                                                 }
@@ -2937,7 +2937,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                     emailDataDto.CC.Add("prueba.sistemas@del-risco.com");
                                                     emailDataDto.CC.Add(userFrom.IdEmployeeNavigation.Email);
                                                  
-                                                    emailDataDto.Subject = ticket.ReportType + ": " + (numeration != null ? numeration.Number : 1) + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureType + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
+                                                    emailDataDto.Subject = ticket.ReportType + ": " + number + " / " + ticket.RequestedName + " / Trámite : " + ticket.ProcedureType + " /F.vencimiento : " + item.EndDate + DateTime.Now.ToString("t");
                                                     emailDataDto.Parameters.Add(userFrom.IdEmployeeNavigation.FirstName + " " + userFrom.IdEmployeeNavigation.LastName); 
                                                     emailDataDto.Parameters.Add(userFrom.IdEmployeeNavigation.Email);
                                                 }
@@ -2946,7 +2946,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 emailDataDto.BodyHTML = emailDataDto.IsBodyHTML ? await GetBodyHtml(emailDataDto) : emailDataDto.BodyHTML;
                                                 //_logger.LogInformation(JsonConvert.SerializeObject(emailDataDto));
 
-                                                var file = DownloadAssignAgent((int)ticket.Id, item.AssignedToCode, item.StartDate, item.EndDate, numeration.Number ?? 1, item.Observations, obj.Asignacion[0].ProcedureTypeAgent).Result.Data;
+                                                var file = DownloadAssignAgent((int)ticket.Id, item.AssignedToCode, item.StartDate, item.EndDate, number, item.Observations, obj.Asignacion[0].ProcedureTypeAgent).Result.Data;
                                                 var attachment = new AttachmentDto();
                                                 attachment.FileName = file.Name + ".pdf";
                                                 attachment.Content = Convert.ToBase64String(file.File);
@@ -3050,7 +3050,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                             {
                                                 IdTicket = ticket.Id,
                                                 IdSpecialAgentBalancePrice = item.SpecialPriceBalance,
-                                                HasBalance = ticket.HasBalance
+                                                HasBalance = item.HasBalance
 
                                             });
                                         }
@@ -3095,7 +3095,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                             {
                                                 IdTicket = ticket.Id,
                                                 IdSpecialAgentBalancePrice = item.SpecialPriceBalance,
-                                                HasBalance = ticket.HasBalance
+                                                HasBalance = item.HasBalance
 
                                             });
                                         }
@@ -3186,7 +3186,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 {
                                                     IdTicket = ticket.Id,
                                                     IdSpecialAgentBalancePrice = item.SpecialPriceBalance,
-                                                    HasBalance = ticket.HasBalance
+                                                    HasBalance = item.HasBalance
 
                                                 });
                                             }
@@ -3232,7 +3232,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 {
                                                     IdTicket = ticket.Id,
                                                     IdSpecialAgentBalancePrice = item.SpecialPriceBalance,
-                                                    HasBalance = ticket.HasBalance
+                                                    HasBalance = item.HasBalance
 
                                                 });
                                             }
@@ -3313,7 +3313,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 {
                                                     IdTicket = ticket.Id,
                                                     IdSpecialAgentBalancePrice = item.SpecialPriceBalance,
-                                                    HasBalance = ticket.HasBalance
+                                                    HasBalance = item.HasBalance
 
                                                 });
                                             }
@@ -3391,7 +3391,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                             {
                                                 IdTicket = ticket.Id,
                                                 IdSpecialAgentBalancePrice = item.SpecialPriceBalance,
-                                                HasBalance = ticket.HasBalance
+                                                HasBalance = item.HasBalance
 
                                             });
                                         }
@@ -3462,7 +3462,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 {
                                                     IdTicket = ticket.Id,
                                                     IdSpecialAgentBalancePrice = item.SpecialPriceBalance,
-                                                    HasBalance = ticket.HasBalance
+                                                    HasBalance = item.HasBalance
 
                                                 });
                                             }
@@ -3509,7 +3509,7 @@ namespace DRRCore.Application.Main.CoreApplication
                                                 {
                                                     IdTicket = ticket.Id,
                                                     IdSpecialAgentBalancePrice = item.SpecialPriceBalance,
-                                                    HasBalance = ticket.HasBalance
+                                                    HasBalance = item.HasBalance
 
                                                 });
                                             }
