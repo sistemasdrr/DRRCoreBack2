@@ -231,8 +231,8 @@ public partial class SqlCoreContext : DbContext
         if (!optionsBuilder.IsConfigured)
         {
             optionsBuilder.UseSqlServer(
-            // "Data Source=200.58.123.184,14331;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
-            "Data Source=localhost\\DRRSQLSERVER;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
+             "Data Source=200.58.123.184,14331;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
+           // "Data Source=localhost\\DRRSQLSERVER;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
             //   "Data Source=SD-4154134-W;Initial Catalog=eecore;User ID=drfero2024x;Password=7KoHVN3ig7mZx;TrustServerCertificate=True"
             , sqlServerOptions => sqlServerOptions.EnableRetryOnFailure(
                 maxRetryCount: 18,
